@@ -3,6 +3,8 @@ Redaxtor is a JavaScript library for editing CMS pieces, pages and international
 Based on [React](https://facebook.github.io/react/) and [Redux](http://redux.js.org/).
 Built with [Webpack](https://webpack.github.io/).
 Written in ES2015.
+Created by [Alex Chepura](https://twitter.com/alexchepura) and [Zmicer Boksha](https://github.com/ZmicerBoksha).
+Open sourced by [SpiralScout](http://spiralscout.com).
 
 ## Installation
 ```
