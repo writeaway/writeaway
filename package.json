@@ -1,7 +1,7 @@
 {
   "name": "redaxtor",
-  "version": "0.1.1",
-  "description": "",
+  "version": "0.1.2",
+  "description": "Redaxtor is a JavaScript library for editing CMS pieces, pages and internationalisation on the client side.",
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
