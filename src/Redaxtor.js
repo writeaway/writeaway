@@ -1,4 +1,4 @@
-"use strict";
+"use strict"
 import React from "react"
 import ReactDOM from "react-dom"
 import {createStore, applyMiddleware} from 'redux'
@@ -8,7 +8,7 @@ import thunk from 'redux-thunk'
 import RedaxtorContainer from "./containers/RedaxtorContainer"
 import connectPieceContainer from "./containers/connectPieceContainer"
 import reducers from "./reducers"
-import {addPiece, updatePiece} from './actions'
+import {getPiece, addPiece, updatePiece} from './actions'
 
 class Redaxtor {
     constructor(options) {
@@ -24,10 +24,12 @@ class Redaxtor {
             this.pieces = {
                 attribute: "data-piece",
                 attributeId: "data-id",
-                attributeFetchURL: "data-fetch-url",
+                attributeGetURL: "data-get-url",
                 attributeSaveURL: "data-save-url",
+                attributeContentId: "data-content-id",
                 components: {},
                 initialState: {},
+                //other options: getURL, saveURL
                 ...options.pieces
             };
         }
@@ -67,8 +69,9 @@ class Redaxtor {
                 node: el,
                 type: el.getAttribute(this.pieces.attribute),
                 id: el.getAttribute(this.pieces.attributeId),
-                fetchURL: el.getAttribute(this.pieces.attributeFetchURL),
-                saveURL: el.getAttribute(this.pieces.attributeSaveURL)
+                contentId: el.getAttribute(this.pieces.contentId) || false,
+                getURL: el.getAttribute(this.pieces.attributeGetURL) || this.pieces.getURL,
+                saveURL: el.getAttribute(this.pieces.attributeSaveURL) || this.pieces.saveURL
             }))
         }
 
@@ -88,7 +91,7 @@ class Redaxtor {
         let previousEdit = this._edit;
         let state = this.store.getState();
         this._edit = state.edit
-        if (previousEdit !== undefined && previousEdit !== this._edit) {
+        if (previousEdit !== this._edit) {
             if (this._edit) {
                 Object.keys(state.pieces).forEach(id => {
                     const piece = state.pieces[id]
@@ -101,7 +104,7 @@ class Redaxtor {
                         this.pieces.initialState[piece.id].id = id;
                         this.store.dispatch(updatePiece(piece.id, this.pieces.initialState[piece.id]))
                     } else {
-                        //todo AJAX will be here? or in actions
+                        this.store.dispatch(getPiece(piece.id))
                     }
 
                     piece.node.style.width = "100%";

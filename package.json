@@ -1,6 +1,6 @@
 {
   "name": "redaxtor",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Redaxtor is a JavaScript library for editing CMS pieces, pages and internationalisation on the client side.",
   "main": "src/index.js",
   "scripts": {
@@ -15,8 +15,8 @@
     "material-ui": "^0.15.0-alpha.2",
     "react": "^15.0.0-rc.2",
     "react-dom": "^15.0.0-rc.2",
-    "react-redux": "^4.4.0",
     "react-portal": "^2.1.0",
+    "react-redux": "^4.4.0",
     "react-tap-event-plugin": "^0.2.2",
     "redux": "^3.3.1",
     "redux-thunk": "^2.0.1"

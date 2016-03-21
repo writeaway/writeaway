@@ -8,20 +8,16 @@ export const toggleHighlight = () => {
     return {type: C.TOGGLE_HIGHLIGHT}
 }
 
-/**
- * @param {string} id
- * @param {object} piece
- */
 export const updatePiece = (id, piece) => {
-    return {type: C.UPDATE_PIECE, id, piece}
+    return {type: C.PIECE_UPDATE, id, piece}
 }
 
 export const addPiece = piece => {
-    return {type: C.ADD_PIECE, id: piece.id, piece}
+    return {type: C.PIECE_ADD, id: piece.id, piece}
 }
 
-export const savingPiece = id => {
-    return {type: C.SAVING_PIECE, id}
+export const pieceSaving = id => {
+    return {type: C.PIECE_SAVING, id}
 }
 
 export const pieceSaved = (id, answer) => {
@@ -34,12 +30,21 @@ export const pieceSavingFailed = (id, error) => {
 
 export const savePiece = id => {
     return (dispatch, getState) => {
-        dispatch(savingPiece(id));
+        dispatch(pieceSaving(id));
         const piece = getState().pieces[id];
-        // console.log("savePiece", id, getState().pieces,piece);
+        let body = {
+            id: piece.id,
+            value: piece.data
+        }
+        if (piece.contentId) body.contentId = piece.contentId;
+
         fetch(piece.saveURL, {
             method: "POST",
-            body: JSON.stringify(piece.data)
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
         }).then(answer => {
             dispatch(pieceSaved(id, answer));
         }).catch(error => {
@@ -49,8 +54,43 @@ export const savePiece = id => {
 }
 
 export const savePieces = pieces => {
-    // console.log("savePieces", pieces)
     return dispatch => {
         Object.keys(pieces).forEach(id => dispatch(savePiece(id)))
+    }
+}
+
+export const pieceGetting = id => {
+    return {type: C.PIECE_GETTING, id}
+}
+
+export const pieceGot = (id, answer) => {
+    return {type: C.PIECE_GOT, id, answer}
+}
+
+export const pieceGettingFailed = (id, error) => {
+    return {type: C.PIECE_GETTING_FAILED, id, error}
+}
+
+export const pieceGet = id => {
+    return (dispatch, getState) => {
+        dispatch(pieceGetting(id));
+        const piece = getState().pieces[id];
+        let body = {
+            id: piece.id
+        }
+        if (piece.contentId) body.contentId = piece.contentId;
+
+        fetch(piece.getURL, {
+            method: "GET",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        }).then(answer => {
+            dispatch(pieceGot(id, answer));
+        }).catch(error => {
+            dispatch(pieceGettingFailed(id, error));
+        });
     }
 }
