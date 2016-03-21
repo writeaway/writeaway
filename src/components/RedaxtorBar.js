@@ -13,10 +13,11 @@ import React from "react"
 
 // import Tabs from 'material-ui/lib/tabs/tabs'
 // import Tab from 'material-ui/lib/tabs/tab'
-import {Tabs, Tab} from 'material-ui/src/tabs'
-import Toggle from 'material-ui/src/toggle'
+import {Tabs, Tab} from 'material-ui/lib/tabs'
+import Toggle from 'material-ui/lib/toggle'
 // import FlatButton from 'material-ui/src/flat-button'
-import RaisedButton from 'material-ui/src/raised-button'
+import RaisedButton from 'material-ui/lib/raised-button'
+import FontIcon from 'material-ui/lib/font-icon';
 import PiecesList from './PiecesList'
 
 export default class RedaxtorBar extends React.Component {
@@ -53,6 +54,8 @@ export default class RedaxtorBar extends React.Component {
     render() {
         return (
             <div className="redaxtor-bar">
+                <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"></link>
+
                 <Tabs value={this.state.value} onChange={this.handleTabChange.bind(this)}>
 
                     <Tab label="Pieces" value="pieces" onClick={()=>this.setState({value: "pieces"})}>
@@ -70,7 +73,9 @@ export default class RedaxtorBar extends React.Component {
 
                     <Tab label="Pages" value="pages" onClick={()=>this.setState({value: "pages"})}></Tab>
 
-                    <Tab label="Settings" value="settings" onClick={()=>this.setState({value: "settings"})}></Tab>
+                    <Tab value="settings" onClick={()=>this.setState({value: "settings"})}
+                         icon={<FontIcon className="material-icons">settings</FontIcon>}>
+                    </Tab>
                 </Tabs>
             </div>
         )

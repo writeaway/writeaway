@@ -1,10 +1,11 @@
 {
   "name": "redaxtor",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build:umd:watch": "NODE_ENV=development webpack -w src/index.js dist/redaxtor.js",
     "build:umd": "NODE_ENV=development webpack src/index.js dist/redaxtor.js",
     "build:umd:min": "NODE_ENV=production webpack src/index.js dist/redaxtor.min.js"
   },
