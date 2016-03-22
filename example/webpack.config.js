@@ -3,7 +3,7 @@ var path = require('path');
 
 module.exports = {
     entry: {
-        app : path.join(__dirname, 'index')
+        bundleRedaxtor : path.join(__dirname, 'index')
     },
     output: {
         // path: path.join(__dirname),
@@ -18,7 +18,13 @@ module.exports = {
                 test: /\.(js|jsx)$/,
                 loader: 'babel-loader',
                 query: {
-                    presets: ['es2015', 'stage-1', 'react']
+                    presets: [
+                        //https://github.com/babel/babel-loader/issues/166#issuecomment-160866946
+                        require.resolve('babel-preset-es2015'),
+                        require.resolve('babel-preset-react'),
+                        require.resolve('babel-preset-stage-1')
+                    ]
+                    // presets: ['es2015', 'stage-1', 'react']
                 }
             },
             { test: /\.json/, loader: "json" },
