@@ -24,7 +24,8 @@ var config = {
     module: {
         loaders: [
             {
-                test: /\.(js|jsx)$/,
+                test: /\.(js)$/,
+                exclude: /(node_modules)/,
                 loader: 'babel',
                 query: {
                     presets: ['es2015', 'react'],
@@ -38,14 +39,11 @@ var config = {
                 test: /\.less$/,
                 loader: "style!css?-url!less"//don't use loaders for urls
             }
-        ],
-        noParse: []
+        ]
     },
     resolve: {
-        extensions: ['', '.js', '.jsx']
+        extensions: ['', '.js']
     }
-    // devtool: "eval-source-map"
-    // devtool: "eval-cheap-source-map"
 }
 
 if (env === 'production') {

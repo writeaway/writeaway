@@ -1,6 +1,6 @@
 import React, {Component} from "react"
-import FontIcon from 'material-ui/src/font-icon'
-import IconButton from 'material-ui/src/icon-button';
+import FontIcon from 'material-ui/lib/font-icon'
+import IconButton from 'material-ui/lib/icon-button';
 
 class PiecesList extends Component {
     constructor() {

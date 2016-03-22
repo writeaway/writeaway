@@ -1,11 +1,11 @@
 "use strict";
-import Redaxtor from 'redaxtor'
-import RedaxtorMedium from 'redaxtor-medium'
+var Redaxtor = require('redaxtor');
+var RedaxtorMedium = require('redaxtor-medium');
+// require('redaxtor-medium/lib/styles.less');
 
-let components = {
+var components = {
     html: RedaxtorMedium
 }
-
 
 var redaxtor = new Redaxtor({
     pieces: {

@@ -15,7 +15,7 @@ module.exports = {
     module: {
         loaders: [
             {
-                test: /\.(js|jsx)$/,
+                test: /\.(js)$/,
                 loader: 'babel-loader',
                 query: {
                     presets: [
@@ -27,20 +27,20 @@ module.exports = {
                     // presets: ['es2015', 'stage-1', 'react']
                 }
             },
-            { test: /\.json/, loader: "json" },
             {
                 test: /\.less$/,
                 loader: "style!css?-url!less"//don't use loaders for urls
             }
         ]
-    },
-    node: {
-        fs: "empty",
-        child_process: 'empty'
-    },
-    resolve: {
-        extensions: ['','.js', '.jsx']
-    },
+    }
+    // ,
+    // node: {
+    //     fs: "empty",
+    //     child_process: 'empty'
+    // },
+    // resolve: {
+    //     extensions: ['','.js']
+    // }
     // devtool: "eval-source-map"
-    devtool: "eval-cheap-source-map"
+    // devtool: "eval-cheap-source-map"
 };
