@@ -106,7 +106,8 @@ export default class RedaxtorBar extends React.Component {
                         <Toggle label="Edit" defaultToggled={this.props.edit} onToggle={this.props.handleToggleEdit}/>
                         <div>Edit: {this.props.edit.toString()}</div>
                         <div>Pieces: {Object.keys(this.props.pieces).length}</div>
-                        <PiecesList edit={this.props.edit} pieces={this.props.pieces}/>
+                        <PiecesList edit={this.props.edit} pieces={this.props.pieces} components={this.props.components}
+                                    savePiece={this.props.savePiece} updatePiece={this.props.updatePiece}/>
                         <RaisedButton label="Save all pieces" secondary={true}
                                       onClick={()=>this.props.handleSavePieces(this.props.pieces)}/>
                     </Tab>

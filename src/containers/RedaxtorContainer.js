@@ -1,5 +1,5 @@
 import {connect} from 'react-redux'
-import {toggleEdit, toggleHighlight, savePieces} from '../actions'
+import {toggleEdit, toggleHighlight, savePieces, updatePiece, savePiece} from '../actions'
 import RedaxtorBarComponent from '../components/RedaxtorBar'
 
 const mapStateToProps = (state) => {
@@ -14,7 +14,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         handleToggleEdit: () => dispatch(toggleEdit()),
         handleToggleHighlight: () => dispatch(toggleHighlight()),
-        handleSavePieces: (pieces) => dispatch(savePieces(pieces))
+        handleSavePieces: (pieces) => dispatch(savePieces(pieces)),
+        updatePiece: (id, piece) => dispatch(updatePiece(id, piece)),
+        savePiece: (id) => dispatch(savePiece(id))
     }
 }
 

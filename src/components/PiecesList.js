@@ -1,14 +1,26 @@
 import React, {Component} from "react"
-import FontIcon from 'material-ui/lib/font-icon'
-import Colors from 'material-ui/lib/styles/colors'
-import IconButton from 'material-ui/lib/icon-button';
-
+import FontIcon from '../../node_modules/material-ui/src/font-icon'
+import IconButton from '../../node_modules/material-ui/src/icon-button';
 
 class PiecesList extends Component {
+    constructor() {
+        super();
+        this.state = {
+            showCodeMirror: false
+        };
+    }
     scrollToPiece (piece){
         piece.node.scrollIntoView();
     }
+
+    savePiece(html) {
+        let id = this.state.piece.id;
+        this.props.updatePiece(id, {data: {html: html}});
+        this.props.savePiece(id);
+        this.setState({showCodeMirror: false,piece: null});
+    }
     render() {
+        var that = this;
         const flexContainer = {
             display: 'flex',
             alignItems: 'center'
@@ -16,6 +28,14 @@ class PiecesList extends Component {
         const flexChild = {
             flexBasis: '50%'
         };
+        var sourceEditor;
+        if (this.props.components.source && this.state.showCodeMirror) {
+            sourceEditor = <this.props.components.source
+                html={this.state.piece.data.html} cb={{close:()=>this.setState({showCodeMirror: false,piece: null}),
+                save: this.savePiece.bind(this)}}/>
+        } else {
+            sourceEditor = null;
+        }
         return (
             <div>
                 {Object.keys(this.props.pieces).map(key => {
@@ -34,17 +54,21 @@ class PiecesList extends Component {
                             <div>
                                 <FontIcon className="material-icons">{(isPieceHidden)?'visibility_off':'visibility'}</FontIcon>
                             </div>
-                            <div>
+                            {this.props.components.source && <div>
                                 <IconButton
                                     iconClassName="material-icons"
-                                    tooltip="Edit Source" disabled={!this.props.edit} >
+                                    tooltip="Edit Source" disabled={!this.props.edit}
+                                    onClick={()=>that.setState({showCodeMirror: true, piece: this.props.pieces[key]})}
+                                >
                                     code
                                 </IconButton>
-                            </div>
+                            </div>}
                             {scrollButton}
                         </div>
+
                     )
                 })}
+                {sourceEditor}
             </div>
         );
     }

@@ -55,7 +55,7 @@ class Redaxtor {
 
     showBar() {
         this.barNode = document.createElement("DIV");
-        ReactDOM.render(<Provider store={this.store}><RedaxtorContainer/></Provider>, this.barNode);
+        ReactDOM.render(<Provider store={this.store}><RedaxtorContainer components={this.pieces.components}/></Provider>, this.barNode);
         document.body.appendChild(this.barNode);
     }
 
