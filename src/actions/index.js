@@ -79,9 +79,8 @@ export const pieceGet = id => {
             id: piece.id
         }
         if (piece.contentId) body.contentId = piece.contentId;
-
-        fetch(piece.getURL, {
-            method: "GET",
+        return fetch(piece.getURL, {
+            method: "POST",
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'

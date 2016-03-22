@@ -1,7 +1,9 @@
-import {connect} from 'react-redux'
-import {updatePiece, savePiece} from '../actions'
+import React, {Component} from "react"
+import ReactDOM from "react-dom"
+import {Provider, connect} from 'react-redux'
+import {updatePiece, savePiece, pieceGet} from '../actions'
 
-const connectPieceComponent = (Component, id) => {
+const connectPieceContainer = (Component, id) => {
     const mapStateToProps = state => {
         return {
             data: state.pieces[id].data,
@@ -19,4 +21,17 @@ const connectPieceComponent = (Component, id) => {
     return connect(mapStateToProps, mapDispatchToProps)(Component)
 }
 
-export default connectPieceComponent;
+export const initPiece = (store, PieceComponent, piece) => {
+
+    piece.node.style.width = "100%";
+    piece.node.style.height = "100%";
+
+    let PieceContainer = connectPieceContainer(PieceComponent, piece.id)
+
+    ReactDOM.render(
+        <Provider store={store}>
+            <PieceContainer id={piece.id} type={piece.type} node={piece.node}/>
+        </Provider>, piece.node);
+}
+
+export default connectPieceContainer

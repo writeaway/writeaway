@@ -6,9 +6,9 @@ import {Provider} from 'react-redux'
 import thunk from 'redux-thunk'
 
 import RedaxtorContainer from "./containers/RedaxtorContainer"
-import connectPieceContainer from "./containers/connectPieceContainer"
+import connectPieceContainer, {initPiece} from "./containers/connectPieceContainer"
 import reducers from "./reducers"
-import {getPiece, addPiece, updatePiece} from './actions'
+import {pieceGet, addPiece, updatePiece} from './actions'
 
 class Redaxtor {
     constructor(options) {
@@ -102,19 +102,13 @@ class Redaxtor {
 
                     if (this.pieces.initialState[piece.id]) {
                         this.pieces.initialState[piece.id].id = id;
-                        this.store.dispatch(updatePiece(piece.id, this.pieces.initialState[piece.id]))
+                        this.store.dispatch(updatePiece(piece.id, this.pieces.initialState[piece.id]));
+                        initPiece(this.store, this.pieces.components[piece.type], this.store.getState().pieces[piece.id]);
                     } else {
-                        this.store.dispatch(getPiece(piece.id))
+                        this.store.dispatch(pieceGet(piece.id)).then(() =>
+                            initPiece(this.store, this.pieces.components[piece.type], this.store.getState().pieces[piece.id])
+                        )
                     }
-
-                    piece.node.style.width = "100%";
-                    piece.node.style.height = "100%";
-                    let Component = connectPieceContainer(this.pieces.components[piece.type], id)
-
-                    ReactDOM.render(
-                        <Provider store={this.store}>
-                            <Component id={piece.id} type={piece.type} node={piece.node}/>
-                        </Provider>, piece.node);
 
                 });
             } else {
