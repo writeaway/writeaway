@@ -55,7 +55,8 @@ class Redaxtor {
 
     showBar() {
         this.barNode = document.createElement("DIV");
-        ReactDOM.render(<Provider store={this.store}><RedaxtorContainer components={this.pieces.components}/></Provider>, this.barNode);
+        ReactDOM.render(<Provider store={this.store}><RedaxtorContainer
+            components={this.pieces.components}/></Provider>, this.barNode);
         document.body.appendChild(this.barNode);
     }
 
@@ -100,13 +101,17 @@ class Redaxtor {
                         return;
                     }
 
-                    if (this.pieces.initialState[piece.id]) {
+                    if (this.pieces.initialState && this.pieces.initialState[piece.id]) {
                         this.pieces.initialState[piece.id].id = id;
                         this.store.dispatch(updatePiece(piece.id, this.pieces.initialState[piece.id]));
                         initPiece(this.store, this.pieces.components[piece.type], this.store.getState().pieces[piece.id]);
                     } else {
-                        this.store.dispatch(pieceGet(piece.id)).then(() =>
-                            initPiece(this.store, this.pieces.components[piece.type], this.store.getState().pieces[piece.id])
+                        this.store.dispatch(pieceGet(piece.id)).then(() => {
+                                const pieceState = this.store.getState().pieces[piece.id];
+                                if (pieceState.fetched) {
+                                    initPiece(this.store, this.pieces.components[piece.type], pieceState)
+                                }
+                            }
                         )
                     }
 

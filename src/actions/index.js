@@ -59,21 +59,25 @@ export const savePieces = pieces => {
     }
 }
 
-export const pieceGetting = id => {
-    return {type: C.PIECE_GETTING, id}
+export const pieceFetching = id => {
+    return {type: C.PIECE_FETCHING, id}
 }
 
-export const pieceGot = (id, answer) => {
-    return {type: C.PIECE_GOT, id, answer}
+export const pieceFetched = (id, answer) => {
+    return {type: C.PIECE_FETCHED, id, answer}
 }
 
-export const pieceGettingFailed = (id, error) => {
-    return {type: C.PIECE_GETTING_FAILED, id, error}
+export const pieceFetchingFailed = (id, answer) => {
+    return {type: C.PIECE_FETCHING_FAILED, id, answer}
+}
+
+export const pieceFetchingError = (id, error) => {
+    return {type: C.PIECE_FETCHING_ERROR, id, error}
 }
 
 export const pieceGet = id => {
     return (dispatch, getState) => {
-        dispatch(pieceGetting(id));
+        dispatch(pieceFetching(id));
         const piece = getState().pieces[id];
         let body = {
             id: piece.id
@@ -86,10 +90,22 @@ export const pieceGet = id => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(body)
-        }).then(answer => {
-            dispatch(pieceGot(id, answer));
-        }).catch(error => {
-            dispatch(pieceGettingFailed(id, error));
-        });
+        }).then(resp => typeof resp === "object" ? resp : resp.json())
+            .then(json => {
+                const status = json.status;
+                if (status >= 200 && status < 300 || status === 304) {
+                    dispatch(pieceFetched(id, json));
+                } else {
+                    //https://github.com/github/fetch/issues/155
+                    //var error = new Error(resp.statusText || resp.status)
+                    //     error.response = resp;
+                    //     dispatch(pieceGettingFailed(id, error));
+                    //     return Promise.reject(error)
+                    dispatch(pieceFetchingFailed(id, json));
+                }
+            }).catch(error => {
+                console.log(error);
+                dispatch(pieceFetchingError(id, error));
+            });
     }
 }

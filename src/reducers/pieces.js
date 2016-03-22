@@ -10,11 +10,15 @@ const piece = (piece = {}, action) => {
             return {...piece, changed: false, saving: false}
         case C.PIECE_SAVING_FAILED:
             return {...piece, error: action.error, saving: false}
-        
-        case C.PIECE_GETTING:
-            return {...piece, got: false, getting: true}
-        case C.PIECE_GOT:
-            return {...piece, ...action.value, got: true, getting: false}
+
+        case C.PIECE_FETCHING:
+            return {...piece, fetched: false, fetching: true}
+        case C.PIECE_FETCHED:
+            return {...piece, ...action.value, fetched: true, fetching: false}
+        case C.PIECE_FETCHING_FAILED:
+            return {...piece, fetched: false, fetching: false}
+        case C.PIECE_FETCHING_ERROR:
+            return {...piece, error: action.error, fetching: false}
         default:
             return piece
     }
@@ -27,8 +31,12 @@ const pieces = (pieces = {}, action) => {
         case C.PIECE_UPDATE:
         case C.PIECE_SAVING:
         case C.PIECE_SAVED:
-        case C.PIECE_GETTING:
-        case C.PIECE_GOT:
+        case C.PIECE_SAVING_FAILED:
+
+        case C.PIECE_FETCHING:
+        case C.PIECE_FETCHED:
+        case C.PIECE_FETCHING_FAILED:
+        case C.PIECE_FETCHING_ERROR:
             return {...pieces, ...{[action.id]: piece(pieces[action.id], action)}}
         default:
             return pieces
