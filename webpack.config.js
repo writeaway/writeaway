@@ -34,10 +34,6 @@ var config = {
                         'babel-plugin-transform-class-properties'//used in material-ui
                     ]
                 }
-            },
-            {
-                test: /\.less$/,
-                loader: "style!css?-url!less"//don't use loaders for urls
             }
         ]
     },

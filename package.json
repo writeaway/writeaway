@@ -1,6 +1,6 @@
 {
   "name": "redaxtor",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "Redaxtor is a JavaScript library for editing CMS pieces, pages and internationalisation on the client side.",
   "main": "lib/index.js",
   "files": [
@@ -12,7 +12,7 @@
     "lint": "eslint src test examples build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "check:src": "npm run lint",
-    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
+    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib && lessc src/styles/redaxtor.less lib/styles/redaxtor.css",
     "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
     "build:umd": "cross-env NODE_ENV=development webpack src/index.js dist/redaxtor.js",
     "build:umd:min": "cross-env NODE_ENV=production webpack src/index.js dist/redaxtor.min.js",
