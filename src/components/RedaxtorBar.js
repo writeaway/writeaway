@@ -79,7 +79,7 @@ export default class RedaxtorBar extends React.Component {
             verticalAlign: "top"
         }
         const barStyle = {
-            position: "fixed", top: 0, left: 0, background: "#eee", color: "#222", "zIndex": 100000, width: "320px"
+            position: "fixed", top: 0, left: 0, background: "#eee", color: "#222", "zIndex": 1000, width: "320px"
         }
         const handleStyle = {
             height: "20px",
