@@ -1,7 +1,7 @@
 import React, {Component} from "react"
 import ReactDOM from "react-dom"
 import {Provider, connect} from 'react-redux'
-import {updatePiece, savePiece, pieceGet} from '../actions'
+import {updatePiece, savePiece, pieceGet, setCurrentSourcePieceId} from '../actions'
 
 const connectPieceContainer = (Component, id) => {
     const mapStateToProps = state => {
@@ -14,7 +14,8 @@ const connectPieceContainer = (Component, id) => {
     const mapDispatchToProps = dispatch => {
         return {
             updatePiece: (id, piece) => dispatch(updatePiece(id, piece)),
-            savePiece: (id) => dispatch(savePiece(id))
+            savePiece: (id) => dispatch(savePiece(id)),
+            setCurrentSourcePieceId: id => dispatch(setCurrentSourcePieceId(id))
         }
     }
 
