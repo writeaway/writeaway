@@ -1,7 +1,7 @@
 "use strict";
 var Redaxtor = require('redaxtor');
 var RedaxtorMedium = require('redaxtor-medium');
-// require('redaxtor-medium/lib/styles.less');
+// require('redaxtor/lib/styles/redaxtor.css');
 
 var components = {
     html: RedaxtorMedium
@@ -14,7 +14,10 @@ var redaxtor = new Redaxtor({
         attributeGetURL: "data-get-url",//optional
         attributeSaveURL: "data-save-url",//optional
         components: components,
-        getURL: "lalala"
+        // getURL: "htmlMain.json",
+        initialState: {
+            main: {data: {html: "<h1>qwer asdf zxcv</h1>"}}
+        }
     }
 });
 

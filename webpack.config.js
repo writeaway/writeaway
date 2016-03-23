@@ -30,8 +30,7 @@ var config = {
                 query: {
                     presets: ['es2015', 'react'],
                     plugins: [
-                        'babel-plugin-transform-object-rest-spread',
-                        'babel-plugin-transform-class-properties'//used in material-ui
+                        'babel-plugin-transform-object-rest-spread'
                     ]
                 }
             }

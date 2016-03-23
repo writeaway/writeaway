@@ -6,8 +6,8 @@ module.exports = {
         bundleRedaxtor : path.join(__dirname, 'index')
     },
     output: {
-        // path: path.join(__dirname),
-        filename: '[name].js'
+        filename: '[name].js',
+        libraryTarget: 'umd'
     },
     plugins: [
 
@@ -18,8 +18,7 @@ module.exports = {
                 test: /\.(js)$/,
                 loader: 'babel-loader',
                 query: {
-                    presets: [
-                        //https://github.com/babel/babel-loader/issues/166#issuecomment-160866946
+                    presets: [//https://github.com/babel/babel-loader/issues/166#issuecomment-160866946
                         require.resolve('babel-preset-es2015'),
                         require.resolve('babel-preset-react'),
                         require.resolve('babel-preset-stage-1')
@@ -29,18 +28,13 @@ module.exports = {
             },
             {
                 test: /\.less$/,
-                loader: "style!css?-url!less"//don't use loaders for urls
+                loader: "style!css?-url!less"
+            },
+            {
+                test: /\.css/,
+                loader: "style!css?-url"
             }
         ]
-    }
-    // ,
-    // node: {
-    //     fs: "empty",
-    //     child_process: 'empty'
-    // },
-    // resolve: {
-    //     extensions: ['','.js']
-    // }
-    // devtool: "eval-source-map"
-    // devtool: "eval-cheap-source-map"
+    },
+    devtool: "eval"
 };

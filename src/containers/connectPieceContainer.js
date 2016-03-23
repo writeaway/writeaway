@@ -22,7 +22,6 @@ const connectPieceContainer = (Component, id) => {
 }
 
 export const initPiece = (store, PieceComponent, piece) => {
-
     piece.node.style.width = "100%";
     piece.node.style.height = "100%";
 

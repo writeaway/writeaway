@@ -1,22 +1,8 @@
 import React from "react"
 import ReactDOM from "react-dom"
-// import IconMenu from 'material-ui/lib/menus/icon-menu';
-// import IconButton from 'material-ui/lib/icon-button';
-// import FontIcon from 'material-ui/lib/font-icon';
-// import NavigationExpandMoreIcon from 'material-ui/lib/svg-icons/navigation/expand-more';
-// import MenuItem from 'material-ui/lib/menus/menu-item';
-// import DropDownMenu from 'material-ui/lib/DropDownMenu';
-// import RaisedButton from 'material-ui/lib/raised-button';
-// import Toolbar from 'material-ui/lib/toolbar/toolbar';
-// import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group';
-// import ToolbarSeparator from 'material-ui/lib/toolbar/toolbar-separator';
-// import ToolbarTitle from 'material-ui/lib/toolbar/toolbar-title';
 
-// import Tabs from 'material-ui/lib/tabs/tabs'
-// import Tab from 'material-ui/lib/tabs/tab'
 import {Tabs, Tab} from 'material-ui/lib/tabs'
 import Toggle from 'material-ui/lib/toggle'
-// import FlatButton from 'material-ui/src/flat-button'
 import RaisedButton from 'material-ui/lib/raised-button'
 import FontIcon from 'material-ui/lib/font-icon'
 import {indigo50} from 'material-ui/lib/styles/colors'
@@ -38,7 +24,7 @@ export default class RedaxtorBar extends React.Component {
         this._rel = {x: 0, y: 0}
     }
 
-    componentDidUpdate (props, state) {
+    componentDidUpdate(props, state) {
         if (this.state.dragging && !state.dragging) {
             document.addEventListener('mousemove', this.onMouseMove.bind(this))
             document.addEventListener('mouseup', this.onMouseUp.bind(this))
@@ -92,11 +78,20 @@ export default class RedaxtorBar extends React.Component {
             height: "30px",
             verticalAlign: "top"
         }
+        const barStyle = {
+            position: "fixed", top: 0, left: 0, background: "#eee", color: "#222", "zIndex": 100000, width: "320px"
+        }
+        const handleStyle = {
+            height: "20px",
+            cursor: "move",
+            backgroundColor: indigo50
+        }
         return (
-            <div ref="bar" className="redaxtor-bar">
+            <div ref="bar" className="redaxtor-bar" style={barStyle}>
 
                 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"></link>
-                <div className="redaxtor-bar-handler" style={{backgroundColor: indigo50}}
+                
+                <div className="redaxtor-bar-handler" style={handleStyle}
                      onMouseDown={this.onMouseDown.bind(this)}></div>
 
                 <Tabs value={this.state.value} onChange={this.handleTabChange.bind(this)}
