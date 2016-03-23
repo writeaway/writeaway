@@ -73,6 +73,13 @@ export default class RedaxtorBar extends React.Component {
         e.preventDefault()
     }
 
+    savePiece(html) {
+        let id = this.props.currentSourcePieceId;
+        this.props.updatePiece(id, {data: {html: html}});
+        this.props.savePiece(id);
+        this.props.setCurrentSourcePieceId(null);
+    }
+
     render() {
         const tabStyle = {
             height: "30px",
@@ -86,11 +93,18 @@ export default class RedaxtorBar extends React.Component {
             cursor: "move",
             backgroundColor: indigo50
         }
+        var sourceEditor = null;
+        if (this.props.components.source && this.props.currentSourcePieceId) {
+            sourceEditor = <this.props.components.source
+                html={this.props.pieces[this.props.currentSourcePieceId].data.html} onClose={()=>this.props.setCurrentSourcePieceId(null)}
+                onSave={(html)=>this.savePiece(html)}/>
+        }
         return (
             <div ref="bar" className="redaxtor-bar" style={barStyle}>
+                {sourceEditor}
 
                 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"></link>
-                
+
                 <div className="redaxtor-bar-handler" style={handleStyle}
                      onMouseDown={this.onMouseDown.bind(this)}></div>
 
@@ -102,7 +116,8 @@ export default class RedaxtorBar extends React.Component {
                         <div>Edit: {this.props.edit.toString()}</div>
                         <div>Pieces: {Object.keys(this.props.pieces).length}</div>
                         <PiecesList edit={this.props.edit} pieces={this.props.pieces} components={this.props.components}
-                                    savePiece={this.props.savePiece} updatePiece={this.props.updatePiece}/>
+                                    savePiece={this.props.savePiece} updatePiece={this.props.updatePiece}
+                                    setCurrentSourcePieceId={this.props.setCurrentSourcePieceId}/>
                         <RaisedButton label="Save all pieces" secondary={true}
                                       onClick={()=>this.props.handleSavePieces(this.props.pieces)}/>
                     </Tab>

@@ -13,12 +13,6 @@ class PiecesList extends Component {
         piece.node.scrollIntoView();
     }
 
-    savePiece(html) {
-        let id = this.state.piece.id;
-        this.props.updatePiece(id, {data: {html: html}});
-        this.props.savePiece(id);
-        this.setState({showCodeMirror: false,piece: null});
-    }
     render() {
         var that = this;
         const flexContainer = {
@@ -28,14 +22,6 @@ class PiecesList extends Component {
         const flexChild = {
             flexBasis: '50%'
         };
-        var sourceEditor;
-        if (this.props.components.source && this.state.showCodeMirror) {
-            sourceEditor = <this.props.components.source
-                html={this.state.piece.data.html} cb={{close:()=>this.setState({showCodeMirror: false,piece: null}),
-                save: this.savePiece.bind(this)}}/>
-        } else {
-            sourceEditor = null;
-        }
         return (
             <div>
                 {Object.keys(this.props.pieces).map(key => {
@@ -49,7 +35,7 @@ class PiecesList extends Component {
                             </IconButton>
                         </div>
                     return (
-                        <div style={flexContainer}>
+                        <div style={flexContainer} key={key}>
                             <div style={flexChild}>{this.props.pieces[key].node.dataset.name || key}</div>
                             <div>
                                 <FontIcon className="material-icons">{(isPieceHidden)?'visibility_off':'visibility'}</FontIcon>
@@ -58,7 +44,7 @@ class PiecesList extends Component {
                                 <IconButton
                                     iconClassName="material-icons"
                                     tooltip="Edit Source" disabled={!this.props.edit}
-                                    onClick={()=>that.setState({showCodeMirror: true, piece: this.props.pieces[key]})}
+                                    onClick={()=>that.props.setCurrentSourcePieceId(this.props.pieces[key].id)}
                                 >
                                     code
                                 </IconButton>
@@ -68,7 +54,6 @@ class PiecesList extends Component {
 
                     )
                 })}
-                {sourceEditor}
             </div>
         );
     }

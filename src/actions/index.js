@@ -59,6 +59,10 @@ export const savePieces = pieces => {
     }
 }
 
+export const setCurrentSourcePieceId = id => {
+    return {type: C.SET_PIECE_CURRENT_SOURCE_ID, id}
+}
+
 export const pieceFetching = id => {
     return {type: C.PIECE_FETCHING, id}
 }

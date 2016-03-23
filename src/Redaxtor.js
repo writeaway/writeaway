@@ -15,6 +15,7 @@ class Redaxtor {
         const defaultState = {
             edit: false,
             highlight: true,
+            currentSourcePieceId: null,
             pieces: {}
         }
 
