@@ -10,6 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "redaxtor": "^0.1.8",
+    "redaxtor-codemirror": "^0.0.2",
     "redaxtor-medium": "^0.0.4"
   },
   "devDependencies": {

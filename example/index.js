@@ -4,8 +4,12 @@ var RedaxtorMedium = require('redaxtor-medium');
 require('medium-editor/dist/css/medium-editor.css');
 require('redaxtor-medium/lib/redaxtor-medium.css');
 
+var RedaxtorCodemirror = require('redaxtor-codemirror');
+require('codemirror/lib/codemirror.css');
+
 var components = {
-    html: RedaxtorMedium
+    html: RedaxtorMedium,
+    source: RedaxtorCodemirror
 }
 
 var redaxtor = new Redaxtor({
