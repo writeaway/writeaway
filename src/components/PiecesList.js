@@ -19,11 +19,15 @@ class PiecesList extends Component {
             display: 'flex',
             alignItems: 'center'
         };
+        const piecesListStyle = {
+            maxHeight: '400px',
+            overflow: 'auto'
+        };
         const flexChild = {
             flexBasis: '50%'
         };
         return (
-            <div>
+            <div style={piecesListStyle}>
                 {Object.keys(this.props.pieces).map(key => {
                     var isPieceHidden = this.props.pieces[key].node.dataset.piece==='hiddenSource',
                         scrollButton = isPieceHidden ? null : <div>
