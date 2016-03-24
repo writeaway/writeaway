@@ -10,7 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "redaxtor": "^0.1.8",
-    "redaxtor-medium": "0.0.1"
+    "redaxtor-medium": "^0.0.4"
   },
   "devDependencies": {
     "babel-core": "^6.7.2",
