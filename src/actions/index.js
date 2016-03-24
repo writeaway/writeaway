@@ -34,12 +34,13 @@ export const savePiece = id => {
         const piece = getState().pieces[id];
         let body = {
             id: piece.id,
-            value: piece.data
+            data: piece.data
         }
         if (piece.contentId) body.contentId = piece.contentId;
 
         fetch(piece.saveURL, {
             method: "POST",
+            credentials: 'same-origin',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -67,8 +68,8 @@ export const pieceFetching = id => {
     return {type: C.PIECE_FETCHING, id}
 }
 
-export const pieceFetched = (id, answer) => {
-    return {type: C.PIECE_FETCHED, id, answer}
+export const pieceFetched = (id, piece) => {
+    return {type: C.PIECE_FETCHED, id, piece}
 }
 
 export const pieceFetchingFailed = (id, answer) => {
@@ -89,16 +90,24 @@ export const pieceGet = id => {
         if (piece.contentId) body.contentId = piece.contentId;
         return fetch(piece.getURL, {
             method: "POST",
+            credentials: 'same-origin',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(body)
-        }).then(resp => typeof resp === "object" ? resp : resp.json())
-            .then(json => {
+        }).then(res => {
+            if(res.headers.get("content-type") &&
+                res.headers.get("content-type").toLowerCase().indexOf("application/json") >= 0) {
+                return res.json()
+            } else {
+                dispatch(pieceFetchingError(id, error));
+                throw new TypeError()
+            }
+        }).then(json => {
                 const status = json.status;
                 if (status >= 200 && status < 300 || status === 304) {
-                    dispatch(pieceFetched(id, json));
+                    dispatch(pieceFetched(id, json.piece));
                 } else {
                     //https://github.com/github/fetch/issues/155
                     //var error = new Error(resp.statusText || resp.status)
@@ -108,7 +117,6 @@ export const pieceGet = id => {
                     dispatch(pieceFetchingFailed(id, json));
                 }
             }).catch(error => {
-                console.log(error);
                 dispatch(pieceFetchingError(id, error));
             });
     }

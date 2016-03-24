@@ -14,8 +14,9 @@ const piece = (piece = {}, action) => {
         case C.PIECE_FETCHING:
             return {...piece, fetched: false, fetching: true}
         case C.PIECE_FETCHED:
-            return {...piece, ...action.value, fetched: true, fetching: false}
+            return {...piece, ...action.piece, fetched: true, fetching: false}
         case C.PIECE_FETCHING_FAILED:
+            console.error(action.answer);
             return {...piece, fetched: false, fetching: false}
         case C.PIECE_FETCHING_ERROR:
             return {...piece, error: action.error, fetching: false}
