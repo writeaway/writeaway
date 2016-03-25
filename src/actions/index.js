@@ -107,6 +107,11 @@ export const pieceGet = id => {
         }).then(json => {
                 const status = json.status;
                 if (status >= 200 && status < 300 || status === 304) {
+                    if (!json.piece.data) json.piece.data = {};
+                    if (!json.piece.data.html) {
+                        json.piece.usedPageHTML = true;
+                        json.piece.data.html = getState().pieces[id].node.innerHTML;
+                    }
                     dispatch(pieceFetched(id, json.piece));
                 } else {
                     //https://github.com/github/fetch/issues/155
