@@ -6,7 +6,7 @@ import Toggle from 'material-ui/lib/toggle'
 import RaisedButton from 'material-ui/lib/raised-button'
 import IconButton from 'material-ui/lib/icon-button'
 import ActionSettings from 'material-ui/lib/svg-icons/action/settings'
-import {indigo50} from 'material-ui/lib/styles/colors'
+import {indigo50, cyan500} from 'material-ui/lib/styles/colors'
 
 import PiecesList from './PiecesList'
 
@@ -27,11 +27,13 @@ export default class RedaxtorBar extends React.Component {
 
     componentDidUpdate(props, state) {
         if (this.state.dragging && !state.dragging) {
-            document.addEventListener('mousemove', this.onMouseMove.bind(this))
-            document.addEventListener('mouseup', this.onMouseUp.bind(this))
+            this._onMouseMove = this.onMouseMove.bind(this);
+            this._onMouseUp = this.onMouseUp.bind(this);
+            document.addEventListener('mousemove', this._onMouseMove)
+            document.addEventListener('mouseup', this._onMouseUp)
         } else if (!this.state.dragging && state.dragging) {
-            document.removeEventListener('mousemove', this.onMouseMove.bind(this))
-            document.removeEventListener('mouseup', this.onMouseUp.bind(this))
+            document.removeEventListener('mousemove', this._onMouseMove)
+            document.removeEventListener('mouseup', this._onMouseUp)
         }
     }
 
@@ -90,7 +92,8 @@ export default class RedaxtorBar extends React.Component {
             ' "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif'
         }
         const handleStyle = {
-            padding: '0 5px', height: "20px", cursor: "move", backgroundColor: indigo50, borderRadius: "2px"
+            padding: '0 5px', height: "20px", cursor: "move", color: cyan500, backgroundColor: indigo50,
+            borderRadius: "2px"
         }
         var sourceEditor = null;
         if (this.props.components.source && this.props.currentSourcePieceId) {
@@ -104,8 +107,8 @@ export default class RedaxtorBar extends React.Component {
                 <div ref="bar" className="redaxtor-bar" style={barStyle}>
                     {sourceEditor}
 
-                    <div className="redaxtor-bar-handler" style={handleStyle}
-                         onMouseDown={this.onMouseDown.bind(this)}>
+                    <div style={handleStyle} onMouseDown={this.onMouseDown.bind(this)}>
+                        redaxtor
                         <IconButton style={{float: 'right', width: 20, height: 20, padding: 1}}
                                     iconStyle={{width: 18, height: 18}}>
                             <ActionSettings/>
