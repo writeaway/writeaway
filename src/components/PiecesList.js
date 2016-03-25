@@ -1,61 +1,40 @@
 import React, {Component} from "react"
-import FontIcon from 'material-ui/lib/font-icon'
-import IconButton from 'material-ui/lib/icon-button';
+import IconButton from 'material-ui/lib/icon-button'
+// import ActionVisibility from 'material-ui/lib/svg-icons/action/visibility'
+// import ActionVisibilityOff from 'material-ui/lib/svg-icons/action/visibility-off'
+import ActionFindInPage from 'material-ui/lib/svg-icons/action/find-in-page'
+import ActionCode from 'material-ui/lib/svg-icons/action/code'
 
 class PiecesList extends Component {
     constructor() {
         super();
-        this.state = {
-            showCodeMirror: false
-        };
-    }
-    scrollToPiece (piece){
-        piece.node.scrollIntoView();
     }
 
     render() {
         var that = this;
-        const flexContainer = {
-            display: 'flex',
-            alignItems: 'center'
-        };
-        const piecesListStyle = {
-            maxHeight: '400px',
-            overflow: 'auto'
-        };
-        const flexChild = {
-            flexBasis: '50%'
-        };
+        const height = 20;
+        const piecesListStyle = {maxHeight: '400px', overflow: 'auto'};
+        const buttonStyle = {float: 'right', width: 20, height: height, padding: 1};//note float right changes order
+        const iconStyle = {width: height - 2, height: height - 2};
         return (
             <div style={piecesListStyle}>
-                {Object.keys(this.props.pieces).map(key => {
-                    var isPieceHidden = this.props.pieces[key].node.dataset.piece==='hiddenSource',
-                        scrollButton = isPieceHidden ? null : <div>
-                            <IconButton
-                                iconClassName="material-icons"
-                                tooltip="Scroll to Piece" disabled={!this.props.edit}
-                                onClick={()=>this.scrollToPiece(this.props.pieces[key])}>
-                                keyboard_arrow_down
-                            </IconButton>
-                        </div>
+                {Object.keys(this.props.pieces).map(id => {
+                    const piece = this.props.pieces[id];
                     return (
-                        <div style={flexContainer} key={key}>
-                            <div style={flexChild}>{this.props.pieces[key].node.dataset.name || key}</div>
-                            <div>
-                                <FontIcon className="material-icons">{(isPieceHidden)?'visibility_off':'visibility'}</FontIcon>
-                            </div>
-                            {this.props.components.source && <div>
-                                <IconButton
-                                    iconClassName="material-icons"
-                                    tooltip="Edit Source" disabled={!this.props.edit}
-                                    onClick={()=>that.props.setCurrentSourcePieceId(this.props.pieces[key].id)}
-                                >
-                                    code
+                        <div key={id} style={{padding: '2px 0'}}>
+                            <span style={{display: 'inline-block', height: height}}>{piece.name || id}</span>
+                            {
+                                this.props.components.source &&
+                                <IconButton style={buttonStyle} iconStyle={iconStyle} disabled={!this.props.edit}
+                                            tooltipPosition="top-left" tooltip="Source"
+                                            onClick={()=>that.props.setCurrentSourcePieceId(id)}>
+                                    <ActionCode/>
                                 </IconButton>
-                            </div>}
-                            {scrollButton}
+                            }
+                            <IconButton style={buttonStyle} iconStyle={iconStyle}
+                                        tooltipPosition="top-left" tooltip="Scroll to element"
+                                        onClick={()=>piece.node.scrollIntoView()}><ActionFindInPage/></IconButton>
                         </div>
-
                     )
                 })}
             </div>
