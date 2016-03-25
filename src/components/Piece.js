@@ -4,18 +4,10 @@ class Piece extends Component {
     
     render() {
         let props = {...this.props};
-        var className = "redaxtor-piece";
-        if (this.props.highlight) className += " redaxtor-highlight";
-        if (this.props.edit && !this.props.click) className += " redaxtor-edit";
-        if (this.props.saving) className += " redaxtor-piece-saving";
-        props.className = className;
-
-        props.style = {
-            width: "100%",
-            height: "100%"
-        };
+        if (!props.style) props.style = {};
+        props.style = {...props.style, width: "100%", height: "100%"};
+        if (this.props.edit) props.style.outline = "2px dotted #3c93eb";
         
-        // console.log("render piece", props);
         return <div {...props}>{this.props.children}</div>
     }
 }
