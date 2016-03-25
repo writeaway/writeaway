@@ -1,6 +1,7 @@
 import {combineReducers} from 'redux'
 import C from '../constants'
 import pieces from './pieces'
+import i18n from './i18n'
 
 const edit = (edit = false, action) => {
     switch (action.type) {
@@ -30,10 +31,6 @@ const highlight = (highlight = true, action) => {
 }
 
 const pages = (state = {}, action) => {
-    return state
-}
-
-const i18n = (state = {}, action) => {
     return state
 }
 

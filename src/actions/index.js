@@ -8,6 +8,10 @@ export const toggleHighlight = () => {
     return {type: C.TOGGLE_HIGHLIGHT}
 }
 
+export const addI18n = i18n => {
+    return {type: C.I18N_ADD, id: i18n.id, i18n}
+}
+
 export const updatePiece = (id, piece) => {
     return {type: C.PIECE_UPDATE, id, piece}
 }
