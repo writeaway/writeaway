@@ -4,11 +4,9 @@ import ReactDOM from "react-dom"
 import {Tabs, Tab} from 'material-ui/lib/tabs'
 import Toggle from 'material-ui/lib/toggle'
 import RaisedButton from 'material-ui/lib/raised-button'
-import IconButton from 'material-ui/lib/icon-button'
-import ActionSettings from 'material-ui/lib/svg-icons/action/settings'
-import {indigo50, cyan500} from 'material-ui/lib/styles/colors'
 
 import PiecesList from './PiecesList'
+import PanelHandler from './PanelHandler'
 
 export default class RedaxtorBar extends React.Component {
 
@@ -16,7 +14,8 @@ export default class RedaxtorBar extends React.Component {
         super(props);
         this.state = {
             value: 'pieces',
-            dragging: false
+            dragging: false,
+            isOpen: false
         };
     }
 
@@ -83,6 +82,10 @@ export default class RedaxtorBar extends React.Component {
         this.props.setCurrentSourcePieceId(null);
     }
 
+    toggleOpen() {
+        this.setState({isOpen: !this.state.isOpen})
+    }
+
     render() {
         const tabStyle = {height: "30px", verticalAlign: "top"}
         const barStyle = {
@@ -91,10 +94,7 @@ export default class RedaxtorBar extends React.Component {
             fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",' +
             ' "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif'
         }
-        const handleStyle = {
-            padding: '0 5px', height: "20px", cursor: "move", color: cyan500, backgroundColor: indigo50,
-            borderRadius: "2px"
-        }
+
         var sourceEditor = null;
         if (this.props.components.source && this.props.currentSourcePieceId) {
             sourceEditor = <this.props.components.source
@@ -107,15 +107,11 @@ export default class RedaxtorBar extends React.Component {
                 <div ref="bar" className="redaxtor-bar" style={barStyle}>
                     {sourceEditor}
 
-                    <div style={handleStyle} onMouseDown={this.onMouseDown.bind(this)}>
-                        redaxtor
-                        <IconButton style={{float: 'right', width: 20, height: 20, padding: 1}}
-                                    iconStyle={{width: 18, height: 18}}>
-                            <ActionSettings/>
-                        </IconButton>
-                    </div>
+                    <PanelHandler isOpen={this.state.isOpen}
+                                  onMouseDown={this.onMouseDown.bind(this)}
+                                  toggleOpen={this.toggleOpen.bind(this)}/>
 
-                    <Tabs value={this.state.value} onChange={this.handleTabChange.bind(this)}
+                    { this.state.isOpen ? <Tabs value={this.state.value} onChange={this.handleTabChange.bind(this)}
                           tabItemContainerStyle={{height: "30px"}} contentContainerStyle={{padding: "10px"}}>
 
                         <Tab label={"Pieces: " + Object.keys(this.props.pieces).length} value="pieces"
@@ -138,7 +134,7 @@ export default class RedaxtorBar extends React.Component {
 
                         <Tab label="Pages" value="pages" onClick={()=>this.setState({value: "pages"})}
                              style={tabStyle}></Tab>
-                    </Tabs>
+                    </Tabs> : null}
                 </div>
             </div>
         )
