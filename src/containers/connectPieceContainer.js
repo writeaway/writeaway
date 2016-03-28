@@ -3,6 +3,12 @@ import ReactDOM from "react-dom"
 import {Provider, connect} from 'react-redux'
 import {updatePiece, savePiece, pieceGet, setCurrentSourcePieceId} from '../actions'
 
+const PieceContainer = (props) => {//https://facebook.github.io/react/docs/reusable-components.html#stateless-functions
+    let style = {width: "100%", height: "100%"};
+    if (props.edit) style.outline = "2px dotted #3c93eb";
+    return <props.component {...props} style={style} wrapper="div"/>
+}
+
 const connectPieceContainer = (Component, id) => {
     const mapStateToProps = state => {
         return {
@@ -23,14 +29,12 @@ const connectPieceContainer = (Component, id) => {
 }
 
 export const initPiece = (store, PieceComponent, piece) => {
-    piece.node.style.width = "100%";
-    piece.node.style.height = "100%";
 
-    let PieceContainer = connectPieceContainer(PieceComponent, piece.id)
+    let ConnectedPieceContainer = connectPieceContainer(PieceContainer, piece.id)
 
     ReactDOM.render(
         <Provider store={store}>
-            <PieceContainer id={piece.id} type={piece.type} node={piece.node}/>
+            <ConnectedPieceContainer id={piece.id} type={piece.type} node={piece.node} component={PieceComponent}/>
         </Provider>, piece.node);
 }
 
