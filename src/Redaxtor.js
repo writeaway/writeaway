@@ -1,14 +1,14 @@
-"use strict"
-import React from "react"
-import ReactDOM from "react-dom"
-import {createStore, applyMiddleware} from 'redux'
-import {Provider} from 'react-redux'
-import thunk from 'redux-thunk'
+"use strict";
+import React from "react";
+import ReactDOM from "react-dom";
+import {createStore, applyMiddleware} from 'redux';
+import {Provider} from 'react-redux';
+import thunk from 'redux-thunk';
 
-import RedaxtorContainer from "./containers/RedaxtorContainer"
-import connectPieceContainer, {initPiece} from "./containers/connectPieceContainer"
-import reducers from "./reducers"
-import {pieceGet, addPiece, updatePiece} from './actions'
+import RedaxtorContainer from "./containers/RedaxtorContainer";
+import {initPiece} from "./containers/connectPieceContainer";
+import reducers from "./reducers";
+import {pieceGet, addPiece, updatePiece} from './actions';
 
 class Redaxtor {
     constructor(options) {
@@ -17,7 +17,7 @@ class Redaxtor {
             highlight: true,
             currentSourcePieceId: null,
             pieces: {}
-        }
+        };
 
         if (options.pieces) {
             this._edit = false;
@@ -34,47 +34,17 @@ class Redaxtor {
             };
         }
 
-        if (!options.pages) {
-            defaultState.pages = {
-                list: [
-                {
-                    id: "1",
-                    data: {
-                        title: "Home Page",
-                        url: "home",
-                        meta: "meta 1"
-                    }
-                },
-                {
-                    id: "2",
-                    data: {
-                        title: "another Page",
-                        url: "home/page",
-                        meta: "meta 2",
-                        description: "description"
-                    }
-                },
-                {
-                    id: "3",
-                    data: {
-                        title: "another Page 2",
-                        url: "home/page2",
-                        meta: "meta 3",
-                        description: "description 1",
-                        data: "data"
-                    }
-                }]
-            };
-
-            //this.pages = options.pages;
+        if (options.pages) {
+            defaultState.pages = options.pages;
         }
 
         if (options.i18n) {
             defaultState.i18n = {};
-            this.i18n = options.i18n;
         }
 
-        this.store = createStore(reducers, {...defaultState, ...options.state}, applyMiddleware(thunk))
+        this.store = createStore(reducers,
+            {...defaultState, ...options.state},
+            applyMiddleware(thunk));
 
         options.pieces && this.initPieces();
         options.pages && this.initPages();
@@ -103,7 +73,7 @@ class Redaxtor {
                 getURL: el.getAttribute(this.pieces.attributeGetURL) || this.pieces.getURL,
                 saveURL: el.getAttribute(this.pieces.attributeSaveURL) || this.pieces.saveURL,
                 dataset: {}
-            }
+            };
 
             for (let data in el.dataset) {//can we use rest on DOMStringMap? pieceObj.dataset = {...el.dataset}
                 pieceObj.dataset[data] = el.dataset[data]
@@ -127,11 +97,11 @@ class Redaxtor {
     onStoreChange() {
         let previousEdit = this._edit;
         let state = this.store.getState();
-        this._edit = state.edit
+        this._edit = state.edit;
         if (previousEdit !== this._edit) {
             if (this._edit) {
                 Object.keys(state.pieces).forEach(id => {
-                    const piece = state.pieces[id]
+                    const piece = state.pieces[id];
                     if (!this.pieces.components[piece.type]) {
                         console.log("Not found component type", piece.type);
                         return;
