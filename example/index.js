@@ -14,10 +14,6 @@ var components = {
 
 var redaxtor = new Redaxtor({
     pieces: {
-        attribute: "data-piece",//optional
-        attributeId: "data-id",//optional
-        attributeGetURL: "data-get-url",//optional
-        attributeSaveURL: "data-save-url",//optional
         components: components,
         initialState: {
             main: {data: {html: "<h1>qwer asdf zxcv</h1>"}}

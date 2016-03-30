@@ -20,10 +20,9 @@ module.exports = {
                 query: {
                     presets: [//https://github.com/babel/babel-loader/issues/166#issuecomment-160866946
                         require.resolve('babel-preset-es2015'),
-                        require.resolve('babel-preset-react'),
-                        require.resolve('babel-preset-stage-1')
+                        require.resolve('babel-preset-react')
                     ]
-                    // presets: ['es2015', 'stage-1', 'react']
+                    // presets: ['es2015', 'react']
                 }
             },
             {
