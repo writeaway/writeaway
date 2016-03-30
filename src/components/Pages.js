@@ -8,13 +8,10 @@ import AddPage from 'material-ui/lib/svg-icons/action/note-add';
 export default class Pages extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {newPageActive: false, value: 2};
+        this.state = {newPageActive: false};
+        this.data = {};
     }
 
-    handleChange(event, index, value) {
-        debugger;
-        this.setState({value})
-    };
 
     onTextChange(value) {
         this.setState({text: value});
@@ -25,18 +22,30 @@ export default class Pages extends React.Component {
                 <FlatButton
                     label="Cancel"
                     secondary={true}
-                    onClick={()=>{console.log(this.state)}}
+                    onClick={()=>{this.setState({newPageActive: false})}}
                 />,
                 <FlatButton
                     label="Submit"
                     primary={true}
-                    onTouchTap={this.handleClose}
+                    onClick={()=>this.props.addPage&&this.props.addPage(this.data)}
                 />,
             ],
             customContentStyle = {
-                width: '90%',
-                maxWidth: 'none'
-            };
+                width: '420px',
+                left: 'calc(50% - 210px)'
+            },
+            SelectStyle = {
+                outline: "none",
+                border: "none",
+                color: "rgba(0, 0, 0, 0.870588)",
+                marginTop: "46px",
+                backgroundColor: "rgba(0, 0, 0, 0)",
+                borderBottom: "1px solid rgb(224, 224, 224)",
+                paddingBottom: "5px",
+                fontSize: "16px",
+                lineHeight: "24px",
+                width: "256px"
+            }
         return (
             <div>
                 <IconButton onClick={()=>this.setState({newPageActive: true})}>
@@ -48,17 +57,23 @@ export default class Pages extends React.Component {
                     actions={actions}
                     modal={true}
                     open={this.state.newPageActive}
-                    autoDetectWindowHeight={true} autoScrollBodyContent={true}
+                    autoDetectWindowHeight={true}
+                    autoScrollBodyContent={true}
                 >
 
-                    <TextField onChange={e=>this.setState({title:e.target.value})}
+                    <TextField onChange={e=>this.data.title=e.target.value}
                                hintText="Enter page title Here"
                                floatingLabelText="Page Title"
-                    />
-                    <TextField onChange={e=>this.setState({url:e.target.value})}
+                    /><br/>
+                    <TextField onChange={e=>this.data.url=e.target.value}
                                hintText="Enter page url here"
                                floatingLabelText="Page URL"
                     /><br/>
+                    <select onChange={e=>this.data.layout=e.target.value} style={SelectStyle}>
+                        <option value="main">Main</option>
+                        <option value="about">About</option>
+                        <option value="partners">Partners</option>
+                    </select>
                 </Dialog>
             </div>
         );

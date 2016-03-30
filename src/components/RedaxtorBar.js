@@ -135,7 +135,7 @@ export default class RedaxtorBar extends React.Component {
 
                         <Tab label="Pages" value="pages" onClick={()=>this.setState({value: "pages"})}
                              style={tabStyle}>
-                            <Pages/>
+                            <Pages addPage={data=>this.props.addPage(data)}/>
                         </Tab>
                     </Tabs> : null}
                 </div>
