@@ -1,5 +1,17 @@
 import C from "../constants";
 
+export const pageStartCreating = page => {
+    return {type: C.PAGE_START_CREATING, page}
+};
+
+export const pageCancelCreating = index => {
+    return {type: C.PAGE_START_CREATING, index}
+};
+
+export const pageUpdate = (index, page) => {
+    return {type: C.PAGE_UPDATE, index, page}
+};
+
 export const pageCreating = () => {
     return {type: C.PAGE_CREATING}
 };
@@ -9,14 +21,14 @@ export const pageCreateError = error => {
 };
 
 export const pageCreateFailed = res => {
-    return {type: C.PIECE_FETCHING_FAILED, res}
+    return {type: C.PAGE_CREATE_FAILED, res}
 };
 
 export const pageCreated = page => {
     return {type: C.PAGE_CREATED, page}
 };
 
-export const addPage = () => {
+export const addPage = (data) => {
     return (dispatch, getState) => {
         dispatch(pageCreating());
         const pages = getState().pages;
@@ -27,7 +39,7 @@ export const addPage = () => {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(pages.newPage)
+            body: JSON.stringify(data)
         }).then(res => {
             if (res.headers.get("content-type") &&
                 res.headers.get("content-type").toLowerCase().indexOf("application/json") >= 0) {
@@ -57,7 +69,7 @@ export const pageSaveError = (id, error) => {
 };
 
 export const pageSaveFailed = (id, res) => {
-    return {type: C.PIECE_SAVE_FAILED, id, res}
+    return {type: C.PAGE_SAVE_FAILED, id, res}
 };
 
 export const pageSaved = (id, res) => {
