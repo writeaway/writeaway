@@ -27,7 +27,6 @@ class Redaxtor {
                 attributeId: "data-id",
                 attributeGetURL: "data-get-url",
                 attributeSaveURL: "data-save-url",
-                attributeContentId: "data-content-id",
                 components: {},
                 initialState: {},
                 //other options: getURL, saveURL
@@ -63,18 +62,24 @@ class Redaxtor {
 
     initPieces() {
         const selector = this.pieces.attribute.indexOf("data-") === 0 ? "[" + this.pieces.attribute + "]" : this.pieces.attribute;
-        var nodes = document.querySelectorAll(selector);
+        let nodes = document.querySelectorAll(selector);
 
-        for (var i = 0; i < nodes.length; ++i) {
+        for (let i = 0; i < nodes.length; ++i) {
             let el = nodes[i];
-            this.store.dispatch(addPiece({
+            let pieceObj = {
                 node: el,
                 type: el.getAttribute(this.pieces.attribute),
                 id: el.getAttribute(this.pieces.attributeId),
-                contentId: el.getAttribute(this.pieces.contentId) || false,
                 getURL: el.getAttribute(this.pieces.attributeGetURL) || this.pieces.getURL,
-                saveURL: el.getAttribute(this.pieces.attributeSaveURL) || this.pieces.saveURL
-            }))
+                saveURL: el.getAttribute(this.pieces.attributeSaveURL) || this.pieces.saveURL,
+                dataset: {}
+            }
+
+            for (let data in el.dataset) {//can we use rest on DOMStringMap? pieceObj.dataset = {...el.dataset}
+                pieceObj.dataset[data] = el.dataset[data]
+            }
+
+            this.store.dispatch(addPiece(pieceObj))
         }
 
         this.unsubscribe = this.store.subscribe(this.onStoreChange.bind(this))

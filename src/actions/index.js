@@ -32,11 +32,7 @@ export const savePiece = id => {
     return (dispatch, getState) => {
         dispatch(pieceSaving(id));
         const piece = getState().pieces[id];
-        let body = {
-            id: piece.id,
-            data: piece.data
-        }
-        if (piece.contentId) body.contentId = piece.contentId;
+        let body = {...piece.dataset, data: piece.data}
 
         fetch(piece.saveURL, {
             method: "POST",
@@ -84,10 +80,6 @@ export const pieceGet = id => {
     return (dispatch, getState) => {
         dispatch(pieceFetching(id));
         const piece = getState().pieces[id];
-        let body = {
-            id: piece.id
-        }
-        if (piece.contentId) body.contentId = piece.contentId;
         return fetch(piece.getURL, {
             method: "POST",
             credentials: 'same-origin',
@@ -95,9 +87,9 @@ export const pieceGet = id => {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(body)
+            body: JSON.stringify(piece.dataset)
         }).then(res => {
-            if(res.headers.get("content-type") &&
+            if (res.headers.get("content-type") &&
                 res.headers.get("content-type").toLowerCase().indexOf("application/json") >= 0) {
                 return res.json()
             } else {
@@ -105,24 +97,24 @@ export const pieceGet = id => {
                 throw new TypeError()
             }
         }).then(json => {
-                const status = json.status;
-                if (status >= 200 && status < 300 || status === 304) {
-                    if (!json.piece.data) json.piece.data = {};
-                    if (!json.piece.data.html) {
-                        json.piece.usedPageHTML = true;
-                        json.piece.data.html = getState().pieces[id].node.innerHTML;
-                    }
-                    dispatch(pieceFetched(id, json.piece));
-                } else {
-                    //https://github.com/github/fetch/issues/155
-                    //var error = new Error(resp.statusText || resp.status)
-                    //     error.response = resp;
-                    //     dispatch(pieceGettingFailed(id, error));
-                    //     return Promise.reject(error)
-                    dispatch(pieceFetchingFailed(id, json));
+            const status = json.status;
+            if (status >= 200 && status < 300 || status === 304) {
+                if (!json.piece.data) json.piece.data = {};
+                if (!json.piece.data.html) {
+                    json.piece.usedPageHTML = true;
+                    json.piece.data.html = getState().pieces[id].node.innerHTML;
                 }
-            }).catch(error => {
-                dispatch(pieceFetchingError(id, error));
-            });
+                dispatch(pieceFetched(id, json.piece));
+            } else {
+                //https://github.com/github/fetch/issues/155
+                //var error = new Error(resp.statusText || resp.status)
+                //     error.response = resp;
+                //     dispatch(pieceGettingFailed(id, error));
+                //     return Promise.reject(error)
+                dispatch(pieceFetchingFailed(id, json));
+            }
+        }).catch(error => {
+            dispatch(pieceFetchingError(id, error));
+        });
     }
 }
