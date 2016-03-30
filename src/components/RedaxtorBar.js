@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/lib/raised-button'
 
 import PiecesList from './PiecesList'
 import PanelHandler from './PanelHandler'
-import Pages from './Pages'
+import Pages from './pages/Pages'
 
 export default class RedaxtorBar extends React.Component {
 
@@ -113,7 +113,8 @@ export default class RedaxtorBar extends React.Component {
                                   toggleOpen={this.toggleOpen.bind(this)}/>
 
                     { this.state.isOpen ? <Tabs value={this.state.value} onChange={this.handleTabChange.bind(this)}
-                          tabItemContainerStyle={{height: "30px"}} contentContainerStyle={{padding: "10px"}}>
+                                                tabItemContainerStyle={{height: "30px"}}
+                                                contentContainerStyle={{padding: "10px"}}>
 
                         <Tab label={"Pieces: " + Object.keys(this.props.pieces).length} value="pieces"
                              onClick={()=>this.setState({value: "pieces"})} style={tabStyle}>
@@ -135,7 +136,13 @@ export default class RedaxtorBar extends React.Component {
 
                         <Tab label="Pages" value="pages" onClick={()=>this.setState({value: "pages"})}
                              style={tabStyle}>
-                            <Pages addPage={data=>this.props.addPage(data)}/>
+                            <Pages
+                                pageCancelCreating={()=>this.props.pageCancelCreating()}
+                                pageSetCurrentIndex={this.props.pageSetCurrentIndex}
+                                pageStartCreating={this.props.pageStartCreating}
+                                pageDataUpdate={this.props.pageDataUpdate}
+                                savePage={this.props.savePage}
+                                pages={this.props.pages}/>
                         </Tab>
                     </Tabs> : null}
                 </div>

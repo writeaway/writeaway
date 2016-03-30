@@ -4,7 +4,8 @@ const page = (page = {}, action) => {
     switch (action.type) {
         case C.PAGE_UPDATE:
             return {...page, ...action.page, changed: true};
-
+        case C.PAGE_DATA_UPDATE:
+            return {...page, data: {...page.data, ...action.data}};
         case C.PAGE_CREATING:
             return {...page, creating: true, locked: true};
         case C.PAGE_CREATED:
@@ -32,6 +33,7 @@ const pages = (pages = {}, action) => {
         case C.PAGES_SET_CURRENT_INDEX:
             return {...pages, currentEditIndex: action.index};
         case C.PAGE_START_CREATING:
+            if (!Array.isArray(pages.list)) pages.list =[]
             return {
                 ...pages,
                 list: [...pages.list, action.page],
@@ -45,7 +47,7 @@ const pages = (pages = {}, action) => {
             };
 
         case C.PAGE_UPDATE:
-
+        case C.PAGE_DATA_UPDATE:
         case C.PAGE_CREATING:
         case C.PAGE_CREATED:
         case C.PAGE_CREATE_FAILED:

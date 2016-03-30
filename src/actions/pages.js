@@ -16,6 +16,10 @@ export const pageUpdate = (index, page) => {
     return {type: C.PAGE_UPDATE, index, page}
 };
 
+export const pageDataUpdate = (index, data) => {
+    return {type: C.PAGE_DATA_UPDATE, index, data}
+};
+
 export const pageCreating = () => {
     return {type: C.PAGE_CREATING}
 };
@@ -82,7 +86,7 @@ export const pageSaved = (id, res) => {
 
 export const savePage = (index) => {
     return (dispatch, getState) => {
-        dispatch(pageSaving(id));
+        dispatch(pageSaving(index));
         const pages = getState().pages;
         const page = pages.list[index > -1 ? index : pages.currentEditIndex];
         return fetch(page.saveURL || pages.saveURL, {
@@ -106,12 +110,12 @@ export const savePage = (index) => {
         }).then(res => {
             const status = res.status;
             if (status >= 200 && status < 300 || status === 304) {
-                dispatch(pageSaved(id, res));
+                dispatch(pageSaved(index, res));
             } else {
                 dispatch(pageSaveFailed(id, res));
             }
         }).catch(error => {
-            dispatch(pageSaveError(id, error));
+            dispatch(pageSaveError(index, error));
         });
     }
 };

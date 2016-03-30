@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import {toggleEdit, toggleHighlight, savePieces, updatePiece, savePiece, setCurrentSourcePieceId} from '../actions';
-import {savePage, pageUpdate, pageStartCreating, pageSetCurrentIndex, pageCancelCreating} from '../actions/pages';
+import {savePage, pageUpdate, pageStartCreating, pageSetCurrentIndex, pageCancelCreating, pageDataUpdate} from '../actions/pages';
 import RedaxtorBarComponent from '../components/RedaxtorBar';
 
 const mapStateToProps = (state) => {
@@ -26,7 +26,7 @@ const mapDispatchToProps = (dispatch) => {
         pageSetCurrentIndex: index => dispatch(pageSetCurrentIndex(index)),
         pageStartCreating: page => dispatch(pageStartCreating(page)),
         savePage: index => dispatch(savePage(index)),
-        pageUpdate: (index, page) => dispatch(pageUpdate(index, page)),
+        pageDataUpdate: (index, data) => dispatch(pageDataUpdate(index, data)),
         pageCancelCreating: () => dispatch(pageCancelCreating())
     }
 };
