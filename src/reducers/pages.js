@@ -4,6 +4,24 @@ const page = (page = {}, action) => {
     switch (action.type) {
         case C.PAGE_UPDATE:
             return {...page, ...action.page, changed: true};
+
+        case C.PAGE_CREATING:
+            return {...page, creating: true, locked: true};
+        case C.PAGE_CREATED:
+            return {...page, creating: false, locked: false, changed: false};
+        case C.PAGE_CREATE_FAILED:
+            return {...page, creating: false, locked: false};
+        case C.PAGE_CREATE_ERROR:
+            return {...page, error: action.error, creating: false, locked: false};
+
+        case C.PAGE_SAVING:
+            return {...page, saving: true, locked: true};
+        case C.PAGE_SAVED:
+            return {...page, saving: false, locked: false, changed: false};
+        case C.PAGE_SAVE_FAILED:
+            return {...page, saving: false, locked: false};
+        case C.PAGE_SAVE_ERROR:
+            return {...page, error: action.error, saving: false, locked: false};
         default:
             return page;
     }
