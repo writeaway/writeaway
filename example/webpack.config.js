@@ -16,11 +16,15 @@ module.exports = {
         loaders: [
             {
                 test: /\.(js)$/,
+                exclude: /(node_modules)/,
                 loader: 'babel-loader',
                 query: {
                     presets: [//https://github.com/babel/babel-loader/issues/166#issuecomment-160866946
                         require.resolve('babel-preset-es2015'),
                         require.resolve('babel-preset-react')
+                    ],
+                    plugins: [
+                        'babel-plugin-transform-object-rest-spread'
                     ]
                     // presets: ['es2015', 'react']
                 }
