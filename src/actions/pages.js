@@ -68,20 +68,20 @@ export const addPage = (data) => {
     }
 };
 
-export const pageSaving = () => {
-    return {type: C.PAGE_SAVING}
+export const pageSaving = (index) => {
+    return {type: C.PAGE_SAVING, index}
 };
 
-export const pageSaveError = (id, error) => {
-    return {type: C.PAGE_SAVE_ERROR, id, error}
+export const pageSaveError = (index, error) => {
+    return {type: C.PAGE_SAVE_ERROR, index, error}
 };
 
-export const pageSaveFailed = (id, res) => {
-    return {type: C.PAGE_SAVE_FAILED, id, res}
+export const pageSaveFailed = (index, res) => {
+    return {type: C.PAGE_SAVE_FAILED, index, res}
 };
 
-export const pageSaved = (id, res) => {
-    return {type: C.PAGE_SAVED, id, res}
+export const pageSaved = (index, res) => {
+    return {type: C.PAGE_SAVED, index, res}
 };
 
 export const savePage = (index) => {
@@ -112,7 +112,7 @@ export const savePage = (index) => {
             if (status >= 200 && status < 300 || status === 304) {
                 dispatch(pageSaved(index, res));
             } else {
-                dispatch(pageSaveFailed(id, res));
+                dispatch(pageSaveFailed(index, res));
             }
         }).catch(error => {
             dispatch(pageSaveError(index, error));

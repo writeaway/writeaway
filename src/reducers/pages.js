@@ -22,6 +22,7 @@ const page = (page = {}, action) => {
         case C.PAGE_SAVE_FAILED:
             return {...page, saving: false, locked: false};
         case C.PAGE_SAVE_ERROR:
+            debugger
             return {...page, error: action.error, saving: false, locked: false};
         default:
             return page;
@@ -57,12 +58,13 @@ const pages = (pages = {}, action) => {
         case C.PAGE_SAVED:
         case C.PAGE_SAVE_FAILED:
         case C.PAGE_SAVE_ERROR:
+            debugger
             return {
                 ...pages,
                 list: [
-                    ...pages.list.slice(0, action.index),
-                    page(pages.list[action.index], action),
-                    ...pages.list.slice(action.index + 1)
+                    ...pages.list.slice(0, +action.index),
+                    page(pages.list[+action.index], action),
+                    ...pages.list.slice(+action.index + 1)
                 ]
             };
         default:
