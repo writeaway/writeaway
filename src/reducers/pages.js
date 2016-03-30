@@ -29,6 +29,8 @@ const page = (page = {}, action) => {
 
 const pages = (pages = {}, action) => {
     switch (action.type) {
+        case C.PAGES_SET_CURRENT_INDEX:
+            return {...pages, currentEditIndex: action.index};
         case C.PAGE_START_CREATING:
             return {
                 ...pages,

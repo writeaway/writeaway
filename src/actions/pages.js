@@ -1,7 +1,7 @@
 import C from "../constants";
 
 export const pageSetCurrentIndex = index => {
-    return {type: C.PAGE_SET_CURRENT_INDEX, index}
+    return {type: C.PAGES_SET_CURRENT_INDEX, index}
 };
 
 export const pageStartCreating = page => {

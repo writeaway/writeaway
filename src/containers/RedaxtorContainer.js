@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import {toggleEdit, toggleHighlight, savePieces, updatePiece, savePiece, setCurrentSourcePieceId} from '../actions';
-import {savePage, pageUpdate, pageStartCreating, setCurrentPageIndex} from '../actions/pages';
+import {savePage, pageUpdate, pageStartCreating, pageSetCurrentIndex, pageCancelCreating} from '../actions/pages';
 import RedaxtorBarComponent from '../components/RedaxtorBar';
 
 const mapStateToProps = (state) => {
