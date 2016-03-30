@@ -76,11 +76,11 @@ export const pageSaved = (id, res) => {
     return {type: C.PAGE_SAVED, id, res}
 };
 
-export const savePage = (id) => {
+export const savePage = (index) => {
     return (dispatch, getState) => {
         dispatch(pageSaving(id));
         const pages = getState().pages;
-        const page = pages.list[id];
+        const page = pages.list[index > -1 ? index : pages.currentEditIndex];
         return fetch(page.saveURL || pages.saveURL, {
             method: "POST",
             credentials: 'same-origin',
