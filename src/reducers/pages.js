@@ -22,7 +22,6 @@ const page = (page = {}, action) => {
         case C.PAGE_SAVE_FAILED:
             return {...page, saving: false, locked: false};
         case C.PAGE_SAVE_ERROR:
-            debugger
             return {...page, error: action.error, saving: false, locked: false};
         default:
             return page;
@@ -58,7 +57,6 @@ const pages = (pages = {}, action) => {
         case C.PAGE_SAVED:
         case C.PAGE_SAVE_FAILED:
         case C.PAGE_SAVE_ERROR:
-            debugger
             return {
                 ...pages,
                 list: [

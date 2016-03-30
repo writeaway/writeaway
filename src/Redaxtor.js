@@ -34,9 +34,39 @@ class Redaxtor {
             };
         }
 
-        if (options.pages) {
-            defaultState.pages = {};
-            this.pages = options.pages;
+        if (!options.pages) {
+            defaultState.pages = {
+                list: [
+                {
+                    id: "1",
+                    data: {
+                        title: "Home Page",
+                        url: "home",
+                        meta: "meta 1"
+                    }
+                },
+                {
+                    id: "2",
+                    data: {
+                        title: "another Page",
+                        url: "home/page",
+                        meta: "meta 2",
+                        description: "description"
+                    }
+                },
+                {
+                    id: "3",
+                    data: {
+                        title: "another Page 2",
+                        url: "home/page2",
+                        meta: "meta 3",
+                        description: "description 1",
+                        data: "data"
+                    }
+                }]
+            };
+
+            //this.pages = options.pages;
         }
 
         if (options.i18n) {
