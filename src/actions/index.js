@@ -126,7 +126,3 @@ export const pieceGet = id => {
             });
     }
 }
-
-export const addPage = data => {
-    return {type: C.PAGE_ADD, data, error}
-}
