@@ -27,9 +27,6 @@ module.exports = RedaxtorBundle;
 var redaxtor = new RedaxtorBundle({
     pieces: {
         components: components,
-        initialState: {
-            main: {data: {html: "<h1>qwer asdf zxcv</h1>"}}
-        }
     },
     pages: {
         getAllURL: "api/pages.json",

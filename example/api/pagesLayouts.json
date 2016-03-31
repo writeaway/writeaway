@@ -1,0 +1,36 @@
+{
+  "simpleLayoutId": {
+    "name": "Simple",
+    "fields": {
+      "title": {
+        "title": "Title",
+        "type": "input",
+        "value": "some title",
+        "placeholder": "Enter title here..."
+      },
+      "description": {
+        "title": "Description",
+        "type": "textarea"
+      }
+    }
+  },
+  "complexLayoutId": {
+    "name": "Complex",
+    "fields": {
+      "title": {
+        "title": "Title complex",
+        "type": "input",
+        "value": "some title",
+        "placeholder": "Enter title here..."
+      },
+      "description": {
+        "title": "Description complex",
+        "type": "textarea"
+      },
+      "keywords": {
+        "title": "Keywords complex",
+        "type": "textarea"
+      }
+    }
+  }
+}

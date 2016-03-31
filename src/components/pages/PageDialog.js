@@ -17,16 +17,8 @@ export default class PageDialog extends React.Component {
 
     render() {
         const actions = [
-                <FlatButton
-                    label="Cancel"
-                    secondary={true}
-                    onClick={()=>{this.props.pageSetCurrentIndex('-1')}}
-                />,
-                <FlatButton
-                    label="Submit"
-                    primary={true}
-                    onClick={()=>this.props.savePage()}
-                />,
+                <FlatButton label="Cancel" secondary={true} onClick={()=>{this.props.pageSetCurrentIndex(-1)}}/>,
+                <FlatButton label="Submit" primary={true} onClick={this.props.savePage}/>
             ],
             customContentStyle = {
                 width: '420px',
@@ -43,25 +35,16 @@ export default class PageDialog extends React.Component {
                 fontSize: "16px",
                 lineHeight: "24px",
                 width: "256px"
-            }
+            };
         return (
-
-            <Dialog
-                style={customContentStyle}
-                title="Add new Page"
-                actions={actions}
-                modal={true}
-                open={true}
-                autoDetectWindowHeight={true}
-                autoScrollBodyContent={true}
-            >
+            <Dialog style={customContentStyle} title="Add new Page" actions={actions} modal={true}
+                open={true} autoDetectWindowHeight={true} autoScrollBodyContent={true}>
                 {Object.keys(this.props.page.data).map(key => {
                     return (
                         <div>
                             <TextField onChange={e=>{this.props.pageDataUpdate({[key]: e.target.value})}}
-                                value={this.props.page.data[key]}
-                                floatingLabelText={key}
-                            /><br/>
+                                       value={this.props.page.data[key]} floatingLabelText={key}/>
+                            <br/>
                         </div>
                     )
                 })}
