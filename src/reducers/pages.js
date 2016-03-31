@@ -56,6 +56,8 @@ const pages = (pages = {}, action) => {
         case C.PAGE_DATA_UPDATE:
         case C.PAGE_DATA_FIELDS_UPDATE:
 
+        case C.PAGE_DATA_FIELDS_SET:
+
         case C.PAGE_SAVING:
         case C.PAGE_SAVED:
         case C.PAGE_SAVE_ERROR:

@@ -9,7 +9,7 @@
             "type": "input",
             "value": "About Title"
           },
-          "URL": {
+          "url": {
             "type": "input",
             "value": "/about"
           },
@@ -17,6 +17,7 @@
             "type": "textarea",
             "value": "PAbout meta description"
           }
+
         },
         "layout": "simpleLayoutId"
       }
@@ -29,7 +30,7 @@
             "type": "input",
             "value": "Press Title"
           },
-          "URL": {
+          "url": {
             "type": "input",
             "value": "/press"
           },

@@ -15,7 +15,7 @@ export default class Pages extends React.Component {
         let page = this.props.pages.list[this.props.pages.currentEditIndex];
         let field;
         if (page.data.layout) {
-            field = {...this.props.pages.layouts[page.data.layout][fieldName], value: value}
+            field = {...this.props.pages.layouts[page.data.layout].data.fields[fieldName],value: value}
         } else {
             field = {value: value};
         }
