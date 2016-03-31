@@ -3,8 +3,8 @@
   "pages": [
     {
       "id": "about",
-      "data": {
-        "layout": "simple",
+      "layout": "simple",
+      "fields": {
         "title": "About Title",
         "URL": "/about",
         "metaDescription": "About meta description"
@@ -12,8 +12,8 @@
     },
     {
       "id": "press",
-      "data": {
-        "layout": "complex",
+      "layout": "complex",
+      "fields": {
         "title": "Press Title",
         "URL": "/press",
         "metaDescription": "Press meta description"
