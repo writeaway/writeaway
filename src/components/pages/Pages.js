@@ -32,6 +32,7 @@ export default class Pages extends React.Component {
                         pageSetCurrentIndex={this.props.pageSetCurrentIndex}
                         savePage={()=>this.props.savePage(this.props.pages.currentEditIndex)}
                         pageDataUpdate={data=>this.props.pageDataUpdate(this.props.pages.currentEditIndex, data)}
+                        pageDataFieldsSet={fields=>this.props.pageDataFieldsSet(this.props.pages.currentEditIndex, fields)}
                         pageFieldUpdate={this.pageFieldUpdate.bind(this)}
                         pageUpdate={data=>this.props.pageUpdate(this.props.pages.currentEditIndex, data)}
             />;

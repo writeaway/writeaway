@@ -8,6 +8,8 @@ const page = (page = {}, action) => {
             return {...page, data: {...page.data, ...action.data}};
         case C.PAGE_DATA_FIELDS_UPDATE:
             return {...page, data: {...page.data, fields: {...page.data.fields, ...action.fields}}};
+        case C.PAGE_DATA_FIELDS_SET:
+            return {...page, data: {...page.data, fields: action.fields}};
 
         case C.PAGE_SAVING:
             return {...page, saving: true, locked: true};

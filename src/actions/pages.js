@@ -24,6 +24,10 @@ export const pageDataFieldsUpdate = (index, fields) => {
     return {type: C.PAGE_DATA_FIELDS_UPDATE, index, fields}
 };
 
+export const pageDataFieldsSet = (index, fields) => {
+    return {type: C.PAGE_DATA_FIELDS_SET, index, fields}
+};
+
 export const pageSaving = index => {
     return {type: C.PAGE_SAVING, index}
 };

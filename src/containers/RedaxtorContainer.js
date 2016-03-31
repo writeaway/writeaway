@@ -1,7 +1,8 @@
 import {connect} from 'react-redux';
 import {toggleEdit, toggleHighlight, savePieces, updatePiece, savePiece, setCurrentSourcePieceId} from '../actions';
 import {pageDelete, savePage, pageUpdate, pageStartCreating, 
-    pageSetCurrentIndex, pageCancelCreating, pageDataUpdate, pageDataFieldsUpdate} from '../actions/pages';
+    pageSetCurrentIndex, pageCancelCreating,
+    pageDataUpdate, pageDataFieldsUpdate, pageDataFieldsSet} from '../actions/pages';
 import RedaxtorBarComponent from '../components/RedaxtorBar';
 
 const mapStateToProps = (state) => {
@@ -27,6 +28,7 @@ const mapDispatchToProps = (dispatch) => {
         pageStartCreating: page => dispatch(pageStartCreating(page)),
         savePage: index => dispatch(savePage(index)),
         pageDataUpdate: (index, data) => dispatch(pageDataUpdate(index, data)),
+        pageDataFieldsSet: (index, fields) => dispatch(pageDataFieldsSet(index, fields)),
         pageDataFieldsUpdate: (index, fields) => dispatch(pageDataFieldsUpdate(index, fields)),
         pageUpdate: (index, data) => dispatch(pageUpdate(index, data)),
         pageCancelCreating: () => dispatch(pageCancelCreating()),

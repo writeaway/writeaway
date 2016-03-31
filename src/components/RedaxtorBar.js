@@ -141,6 +141,7 @@ export default class RedaxtorBar extends React.Component {
                                 pageCancelCreating={this.props.pageCancelCreating}
                                 pageStartCreating={this.props.pageStartCreating}
                                 pageDataFieldsUpdate={this.props.pageDataFieldsUpdate}
+                                pageDataFieldsSet={this.props.pageDataFieldsSet}
                                 pageDataUpdate={this.props.pageDataUpdate}
                                 pageUpdate={this.props.pageUpdate}
                                 pageDelete={this.props.pageDelete}
