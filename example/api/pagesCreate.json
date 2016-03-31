@@ -4,7 +4,11 @@
   "page": {
     "id": "createdPageId",
     "data": {
-      "title": "new created title"
+      "fields": {
+        "title": {
+          "value": "new created title"
+        }
+      }
     }
   }
 }

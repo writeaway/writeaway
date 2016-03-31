@@ -2,9 +2,13 @@
   "status": 200,
   "message": "Page saved",
   "page": {
-    "id": "pageId",
+    "id": "savedPageId",
     "data": {
-      "title": "new title"
+      "fields": {
+        "title": {
+          "value": "new saved title"
+        }
+      }
     }
   }
 }
