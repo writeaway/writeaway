@@ -37,6 +37,7 @@ class Redaxtor {
 
         if (options.pages) {
             defaultState.pages = options.pages;
+            this.pages = options.pages;
         }
 
         if (options.i18n) {
@@ -83,13 +84,13 @@ class Redaxtor {
             this.store.dispatch(addPiece(pieceObj))
         }
 
-        this.unsubscribe = this.store.subscribe(this.onStoreChange.bind(this))
+        this.unsubscribe = this.store.subscribe(this.onStoreChange.bind(this));
         this.onStoreChange()
     }
 
     initPages() {
         this.store.dispatch(pagesGet());
-        this.store.dispatch(pagesGetLayouts());
+        this.pages.getLayoutsURL && this.store.dispatch(pagesGetLayouts());
     }
 
     initI18N() {
