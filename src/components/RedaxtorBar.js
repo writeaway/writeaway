@@ -137,10 +137,11 @@ export default class RedaxtorBar extends React.Component {
                         <Tab label="Pages" value="pages" onClick={()=>this.setState({value: "pages"})}
                              style={tabStyle}>
                             <Pages
-                                pageCancelCreating={()=>this.props.pageCancelCreating()}
                                 pageSetCurrentIndex={this.props.pageSetCurrentIndex}
+                                pageCancelCreating={this.props.pageCancelCreating}
                                 pageStartCreating={this.props.pageStartCreating}
                                 pageDataUpdate={this.props.pageDataUpdate}
+                                pageDelete={this.props.pageDelete}
                                 savePage={this.props.savePage}
                                 pages={this.props.pages}/>
                         </Tab>

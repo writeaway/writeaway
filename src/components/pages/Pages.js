@@ -1,10 +1,11 @@
 import React from 'react'
-import Dialog from 'material-ui/lib/dialog';
-import FlatButton from 'material-ui/lib/flat-button';
-import TextField from 'material-ui/lib/text-field';
+// import Dialog from 'material-ui/lib/dialog';
+// import FlatButton from 'material-ui/lib/flat-button';
+// import TextField from 'material-ui/lib/text-field';
 import IconButton from 'material-ui/lib/icon-button';
 import AddPage from 'material-ui/lib/svg-icons/action/note-add';
-import Edit from 'material-ui/lib/svg-icons/editor/mode-edit'
+import Edit from 'material-ui/lib/svg-icons/editor/mode-edit';
+import Delete from 'material-ui/lib/svg-icons/action/delete';
 
 import PageDialog from './PageDialog'
 
@@ -30,13 +31,14 @@ export default class Pages extends React.Component {
                             <span style={{display: 'inline-block', height: height}}>
                                 {this.props.pages.list[index].data.title}
                             </span>
-                            {
-                                <IconButton style={buttonStyle} iconStyle={iconStyle}
-                                            tooltipPosition="top-left" tooltip="edit"
-                                            onClick={()=>this.props.pageSetCurrentIndex(index)}>
-                                    <Edit/>
-                                </IconButton>
-                            }
+                            <IconButton style={buttonStyle} iconStyle={iconStyle} tooltipPosition="top-left"
+                                        tooltip="edit" onClick={()=>this.props.pageSetCurrentIndex(index)}>
+                                <Edit/>
+                            </IconButton>
+                            <IconButton style={buttonStyle} iconStyle={iconStyle} tooltipPosition="top-left"
+                                        tooltip="delete" onClick={()=>this.props.pageDelete(index)}>
+                                <Delete/>
+                            </IconButton>
                         </div>))
                 }
                 {pageDialog}

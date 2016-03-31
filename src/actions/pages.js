@@ -111,3 +111,52 @@ export const pagesGet = () => {
         });
     }
 };
+
+
+export const pageDeleteStarted = index => {
+    return {type: C.PAGE_DELETING, index}
+};
+
+export const pageDeleteError = (index, error) => {
+    return {type: C.PAGE_DELETE_ERROR, index, error}
+};
+
+export const pageDeleted = index => {
+    return {type: C.PAGE_DELETED, index}
+};
+
+export const pageDelete = (index) => {
+    return (dispatch, getState) => {
+        dispatch(pageDeleteStarted(index));
+        const pages = getState().pages;
+        const page = pages.list[index > -1 ? index : pages.currentEditIndex];
+        return fetch(pages.deleteURL, {
+            method: "POST",
+            credentials: 'same-origin',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: page.id
+            })
+        }).then(res => {
+            if (res.headers.get("content-type") &&
+                res.headers.get("content-type").toLowerCase().indexOf("application/json") >= 0) {
+                return res.json()
+            } else {
+                throw new TypeError()
+            }
+        }).then(res => {
+            const status = res.status;
+            if (status >= 200 && status < 300 || status === 304) {
+                dispatch(pageDeleted(index));
+                // res.message && dispatch(showMessage(res.message));
+            } else {
+                dispatch(pageDeleteError(index, res));
+            }
+        }).catch(error => {
+            dispatch(pageDeleteError(index, error));
+        });
+    }
+};
