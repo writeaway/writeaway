@@ -9,7 +9,6 @@ const mapStateToProps = (state) => {
         highlight: state.highlight,
         pieces: state.pieces,
         currentSourcePieceId: state.currentSourcePieceId,
-        
         pages: state.pages
     }
 };
@@ -27,6 +26,7 @@ const mapDispatchToProps = (dispatch) => {
         pageStartCreating: page => dispatch(pageStartCreating(page)),
         savePage: index => dispatch(savePage(index)),
         pageDataUpdate: (index, data) => dispatch(pageDataUpdate(index, data)),
+        pageUpdate: (index, data) => dispatch(pageUpdate(index, data)),
         pageCancelCreating: () => dispatch(pageCancelCreating()),
         pageDelete: index => dispatch(pageDelete(index))
     }

@@ -16,12 +16,15 @@ export default class Pages extends React.Component {
         const iconStyle = {width: height - 2, height: height - 2};
         var pageDialog = this.props.pages.currentEditIndex > -1 &&
             <PageDialog page={this.props.pages.list[this.props.pages.currentEditIndex]}
+                        layouts={this.props.pages.layouts}
                         pageSetCurrentIndex={this.props.pageSetCurrentIndex}
                         savePage={()=>this.props.savePage(this.props.pages.currentEditIndex)}
-                        pageDataUpdate={data=>this.props.pageDataUpdate(this.props.pages.currentEditIndex, data)}/>;
+                        pageDataUpdate={data=>this.props.pageDataUpdate(this.props.pages.currentEditIndex, data)}
+                        pageUpdate={data=>this.props.pageUpdate(this.props.pages.currentEditIndex, data)}
+            />;
         return (
             <div>
-                <IconButton onClick={()=>this.props.pageStartCreating({data:{title: 'New Page', url: ''}})}>
+                <IconButton onClick={()=>this.props.pageStartCreating({fields:{title: 'New Page', url: ''}})}>
                     <AddPage/>
                 </IconButton>
                 {this.props.pages.list &&
@@ -29,7 +32,7 @@ export default class Pages extends React.Component {
                     (
                         <div style={{padding: '2px 0'}}>
                             <span style={{display: 'inline-block', height: height}}>
-                                {this.props.pages.list[index].data.title}
+                                {this.props.pages.list[index].fields.title}
                             </span>
                             <IconButton style={buttonStyle} iconStyle={iconStyle} tooltipPosition="top-left"
                                         tooltip="edit" onClick={()=>this.props.pageSetCurrentIndex(index)}>

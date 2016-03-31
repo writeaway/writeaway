@@ -3,20 +3,42 @@
   "pages": [
     {
       "id": "about",
-      "layout": "simple",
-      "fields": {
-        "title": "About Title",
-        "URL": "/about",
-        "metaDescription": "About meta description"
+      "data": {
+        "fields": {
+          "title": {
+            "type": "input",
+            "value": "About Title"
+          },
+          "URL": {
+            "type": "input",
+            "value": "/about"
+          },
+          "description": {
+            "type": "textarea",
+            "value": "PAbout meta description"
+          }
+        },
+        "layout": "simpleLayoutId"
       }
     },
     {
       "id": "press",
-      "layout": "complex",
-      "fields": {
-        "title": "Press Title",
-        "URL": "/press",
-        "metaDescription": "Press meta description"
+      "data": {
+        "fields": {
+          "title": {
+            "type": "input",
+            "value": "Press Title"
+          },
+          "URL": {
+            "type": "input",
+            "value": "/press"
+          },
+          "description": {
+            "type": "textarea",
+            "value": "Press meta description"
+          }
+        },
+        "layout": "complexLayoutId"
       }
     }
   ]
