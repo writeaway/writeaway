@@ -160,3 +160,47 @@ export const pageDelete = (index) => {
         });
     }
 };
+
+
+export const pagesGetLayoutsStarted = () => {
+    return {type: C.PAGES_GET_LAYOUTS_STARTED}
+};
+
+export const pagesGetLayoutsFinished = layouts => {
+    return {type: C.PAGES_GET_LAYOUTS_FINISHED, layouts}
+};
+
+export const pagesGetLayoutsError = (error) => {
+    return {type: C.PAGES_GET_LAYOUTS_ERROR, error}
+};
+
+export const pagesGetLayouts = () => {
+    return (dispatch, getState) => {
+        dispatch(pagesGetLayoutsStarted());
+        const pages = getState().pages;
+        return fetch(pages.getLayoutsURL, {
+            method: "POST",
+            credentials: 'same-origin',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }).then(res => {
+            if (res.headers.get("content-type") &&
+                res.headers.get("content-type").toLowerCase().indexOf("application/json") >= 0) {
+                return res.json()
+            } else {
+                throw new TypeError()
+            }
+        }).then(res => {
+            const status = res.status;
+            if (status >= 200 && status < 300 || status === 304) {
+                dispatch(pagesGetLayoutsFinished(res.layouts));
+            } else {
+                dispatch(pagesGetLayoutsError(res));
+            }
+        }).catch(error => {
+            dispatch(pagesGetLayoutsError(error));
+        });
+    }
+};

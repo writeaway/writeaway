@@ -71,6 +71,11 @@ const pages = (pages = {}, action) => {
                 ...pages,
                 list: [...pages.list.slice(0, +action.index), ...pages.list.slice(+action.index + 1)]
             };
+        case C.PAGES_GET_LAYOUTS_STARTED:
+        case C.PAGES_GET_LAYOUTS_FINISHED:
+            return {...pages, layouts: action.layouts};
+        case C.PAGES_GET_LAYOUTS_ERROR:
+            return pages;
         default:
             return pages;
     }
