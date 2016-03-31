@@ -12,13 +12,29 @@ var components = {
     source: RedaxtorCodemirror
 };
 
-var redaxtor = new Redaxtor({
+//PER PROJECT BUNDLE - includes components needed for particular projects
+class RedaxtorBundle extends Redaxtor {
+    constructor(options) {
+        options.pieces.components = components;
+        super(options);
+    }
+}
+
+module.exports = RedaxtorBundle;
+
+//Other way is to bundle and init right here
+/*
+var redaxtor = new RedaxtorBundle({
     pieces: {
         components: components,
         initialState: {
             main: {data: {html: "<h1>qwer asdf zxcv</h1>"}}
         }
+    },
+    pages: {
+        getAllURL: "api/pages.json",
+        createURL: "api/pagesCreate.json",//optional, if not provided - saveURL will be used
+        saveURL: "api/pagesSave.json",
+        deleteURL: "api/pagesDelete.json"
     }
-});
-
-window.redaxtor = redaxtor;
+});*/

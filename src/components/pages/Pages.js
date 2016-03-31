@@ -25,18 +25,20 @@ export default class Pages extends React.Component {
                 </IconButton>
                 {this.props.pages.list &&
                 Object.keys(this.props.pages.list).map(index=>
-                     (
-                            <div style={{padding: '2px 0'}}>
-                                <span style={{display: 'inline-block', height: height}}>{this.props.pages.list[index].data.title}</span>
-                                {
-                                    <IconButton style={buttonStyle} iconStyle={iconStyle}
-                                                tooltipPosition="top-left" tooltip="edit"
-                                                onClick={()=>this.props.pageSetCurrentIndex(index)}>
-                                        <Edit/>
-                                    </IconButton>
-                                }
-                            </div>))
-                    }
+                    (
+                        <div style={{padding: '2px 0'}}>
+                            <span style={{display: 'inline-block', height: height}}>
+                                {this.props.pages.list[index].data.title}
+                            </span>
+                            {
+                                <IconButton style={buttonStyle} iconStyle={iconStyle}
+                                            tooltipPosition="top-left" tooltip="edit"
+                                            onClick={()=>this.props.pageSetCurrentIndex(index)}>
+                                    <Edit/>
+                                </IconButton>
+                            }
+                        </div>))
+                }
                 {pageDialog}
             </div>
         );

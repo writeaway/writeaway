@@ -9,6 +9,7 @@ import RedaxtorContainer from "./containers/RedaxtorContainer";
 import {initPiece} from "./containers/connectPieceContainer";
 import reducers from "./reducers";
 import {pieceGet, addPiece, updatePiece} from './actions';
+import {pagesGet} from './actions/pages';
 
 class Redaxtor {
     constructor(options) {
@@ -87,7 +88,7 @@ class Redaxtor {
     }
 
     initPages() {
-
+        this.store.dispatch(pagesGet());
     }
 
     initI18N() {

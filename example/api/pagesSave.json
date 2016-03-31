@@ -1,0 +1,10 @@
+{
+  "status": 200,
+  "message": "Page saved",
+  "page": {
+    "id": "pageId",
+    "data": {
+      "title": "new title"
+    }
+  }
+}

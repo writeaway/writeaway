@@ -6,7 +6,8 @@ module.exports = {
         bundleRedaxtor : path.join(__dirname, 'index')
     },
     output: {
-        filename: '[name].js',
+        filename: 'RedaxtorBundle.js',
+        library: 'RedaxtorBundle',
         libraryTarget: 'umd'
     },
     plugins: [

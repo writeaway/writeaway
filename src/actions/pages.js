@@ -20,55 +20,7 @@ export const pageDataUpdate = (index, data) => {
     return {type: C.PAGE_DATA_UPDATE, index, data}
 };
 
-export const pageCreating = () => {
-    return {type: C.PAGE_CREATING}
-};
-
-export const pageCreateError = error => {
-    return {type: C.PAGE_CREATE_ERROR, error}
-};
-
-export const pageCreateFailed = res => {
-    return {type: C.PAGE_CREATE_FAILED, res}
-};
-
-export const pageCreated = page => {
-    return {type: C.PAGE_CREATED, page}
-};
-
-export const addPage = (data) => {
-    return (dispatch, getState) => {
-        dispatch(pageCreating());
-        const pages = getState().pages;
-        return fetch(pages.createURL, {
-            method: "POST",
-            credentials: 'same-origin',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        }).then(res => {
-            if (res.headers.get("content-type") &&
-                res.headers.get("content-type").toLowerCase().indexOf("application/json") >= 0) {
-                return res.json()
-            } else {
-                throw new TypeError()
-            }
-        }).then(res => {
-            const status = res.status;
-            if (status >= 200 && status < 300 || status === 304) {
-                dispatch(pageCreated(res.page));
-            } else {
-                dispatch(pageCreateFailed(res));
-            }
-        }).catch(error => {
-            dispatch(pageCreateError(error));
-        });
-    }
-};
-
-export const pageSaving = (index) => {
+export const pageSaving = index => {
     return {type: C.PAGE_SAVING, index}
 };
 
@@ -76,12 +28,8 @@ export const pageSaveError = (index, error) => {
     return {type: C.PAGE_SAVE_ERROR, index, error}
 };
 
-export const pageSaveFailed = (index, res) => {
-    return {type: C.PAGE_SAVE_FAILED, index, res}
-};
-
-export const pageSaved = (index, res) => {
-    return {type: C.PAGE_SAVED, index, res}
+export const pageSaved = (index, page) => {
+    return {type: C.PAGE_SAVED, index, page}
 };
 
 export const savePage = (index) => {
@@ -89,7 +37,7 @@ export const savePage = (index) => {
         dispatch(pageSaving(index));
         const pages = getState().pages;
         const page = pages.list[index > -1 ? index : pages.currentEditIndex];
-        return fetch(page.saveURL || pages.saveURL, {
+        return fetch(!page.id && pages.createURL || pages.saveURL, {
             method: "POST",
             credentials: 'same-origin',
             headers: {
@@ -110,12 +58,56 @@ export const savePage = (index) => {
         }).then(res => {
             const status = res.status;
             if (status >= 200 && status < 300 || status === 304) {
-                dispatch(pageSaved(index, res));
+                dispatch(pageSaved(index, res.page));
+                // res.message && dispatch(showMessage(res.message));
             } else {
-                dispatch(pageSaveFailed(index, res));
+                dispatch(pageSaveError(index, res));
             }
         }).catch(error => {
             dispatch(pageSaveError(index, error));
+        });
+    }
+};
+
+export const pagesGetStarted = () => {
+    return {type: C.PAGES_GET_STARTED}
+};
+
+export const pagesGetFinished = list => {
+    return {type: C.PAGES_GET_FINISHED, list}
+};
+
+export const pagesGetError = (error) => {
+    return {type: C.PAGES_GET_ERROR, error}
+};
+
+export const pagesGet = () => {
+    return (dispatch, getState) => {
+        dispatch(pagesGetStarted());
+        const pages = getState().pages;
+        return fetch(pages.getAllURL, {
+            method: "POST",
+            credentials: 'same-origin',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }).then(res => {
+            if (res.headers.get("content-type") &&
+                res.headers.get("content-type").toLowerCase().indexOf("application/json") >= 0) {
+                return res.json()
+            } else {
+                throw new TypeError()
+            }
+        }).then(res => {
+            const status = res.status;
+            if (status >= 200 && status < 300 || status === 304) {
+                dispatch(pagesGetFinished(res.pages));
+            } else {
+                dispatch(pagesGetError(res));
+            }
+        }).catch(error => {
+            dispatch(pagesGetError(error));
         });
     }
 };

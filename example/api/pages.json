@@ -1,0 +1,23 @@
+{
+  "status": 200,
+  "pages": [
+    {
+      "id": "about",
+      "data": {
+        "layout": "simple",
+        "title": "About Title",
+        "URL": "/about",
+        "metaDescription": "About meta description"
+      }
+    },
+    {
+      "id": "press",
+      "data": {
+        "layout": "complex",
+        "title": "Press Title",
+        "URL": "/press",
+        "metaDescription": "Press meta description"
+      }
+    }
+  ]
+}

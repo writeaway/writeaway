@@ -6,21 +6,11 @@ const page = (page = {}, action) => {
             return {...page, ...action.page, changed: true};
         case C.PAGE_DATA_UPDATE:
             return {...page, data: {...page.data, ...action.data}};
-        case C.PAGE_CREATING:
-            return {...page, creating: true, locked: true};
-        case C.PAGE_CREATED:
-            return {...page, creating: false, locked: false, changed: false};
-        case C.PAGE_CREATE_FAILED:
-            return {...page, creating: false, locked: false};
-        case C.PAGE_CREATE_ERROR:
-            return {...page, error: action.error, creating: false, locked: false};
 
         case C.PAGE_SAVING:
             return {...page, saving: true, locked: true};
         case C.PAGE_SAVED:
-            return {...page, saving: false, locked: false, changed: false};
-        case C.PAGE_SAVE_FAILED:
-            return {...page, saving: false, locked: false};
+            return {...(action.page || page), saving: false, locked: false, changed: false};
         case C.PAGE_SAVE_ERROR:
             return {...page, error: action.error, saving: false, locked: false};
         default:
@@ -32,8 +22,16 @@ const pages = (pages = {}, action) => {
     switch (action.type) {
         case C.PAGES_SET_CURRENT_INDEX:
             return {...pages, currentEditIndex: action.index};
+        
+        case C.PAGES_GET_STARTED:
+            return {...pages, loading: true};
+        case C.PAGES_GET_FINISHED:
+            return {...pages, list: action.list, loading: false};
+        case C.PAGES_GET_ERROR:
+            return {...pages, error: action.error, loading: false};
+        
         case C.PAGE_START_CREATING:
-            if (!Array.isArray(pages.list)) pages.list =[]
+            if (!Array.isArray(pages.list)) pages.list =[];
             return {
                 ...pages,
                 list: [...pages.list, action.page],
@@ -48,14 +46,9 @@ const pages = (pages = {}, action) => {
 
         case C.PAGE_UPDATE:
         case C.PAGE_DATA_UPDATE:
-        case C.PAGE_CREATING:
-        case C.PAGE_CREATED:
-        case C.PAGE_CREATE_FAILED:
-        case C.PAGE_CREATE_ERROR:
 
         case C.PAGE_SAVING:
         case C.PAGE_SAVED:
-        case C.PAGE_SAVE_FAILED:
         case C.PAGE_SAVE_ERROR:
             return {
                 ...pages,

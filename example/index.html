@@ -25,7 +25,7 @@
             <a href="#contact">Contact</a>
         </nav>
     </header>
-    <h1>TODO example</h1>
+    <h1>Redaxtor usage example</h1>
     <main data-piece="html" data-id="main">
         <h1>Hello</h1>
         <p>I'm HTML</p>
@@ -35,6 +35,21 @@
         <a href="https://fb.com">Facebook</a>
     </footer>
 
-    <script src="bundleRedaxtor.js"></script>
+    <script src="RedaxtorBundle.js"></script>
+    <script>
+        var redaxtor = new RedaxtorBundle({
+            pieces: {
+                initialState: {
+                    main: {data: {html: "<h1>qwer asdf zxcv</h1>"}}
+                }
+            },
+            pages: {
+                getAllURL: "api/pages.json",
+                createURL: "api/pagesCreate.json",//optional, if not provided - saveURL will be used
+                saveURL: "api/pagesSave.json",
+                deleteURL: "api/pagesDelete.json"
+            }
+        });
+    </script>
 </body>
 </html>
