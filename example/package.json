@@ -9,8 +9,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "redaxtor": "^0.1.16",
-    "redaxtor-codemirror": "^0.0.2",
+    "redaxtor": "^0.2.0",
+    "redaxtor-codemirror": "^0.1.0",
     "redaxtor-medium": "^0.1.1"
   },
   "devDependencies": {

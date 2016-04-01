@@ -26,15 +26,18 @@ export default class Pages extends React.Component {
         const height = 20;
         const buttonStyle = {float: 'right', width: 20, height: height, padding: 1};//note float right changes order
         const iconStyle = {width: height - 2, height: height - 2};
-        var pageDialog = this.props.pages.currentEditIndex > -1 &&
-            <PageDialog page={this.props.pages.list[this.props.pages.currentEditIndex]}
+        let list = this.props.pages.list;
+        let currenIndex = this.props.pages.currentEditIndex;
+        
+        var pageDialog = currenIndex > -1 &&
+            <PageDialog page={list[currenIndex]}
                         layouts={this.props.pages.layouts}
                         pageSetCurrentIndex={this.props.pageSetCurrentIndex}
-                        savePage={()=>this.props.savePage(this.props.pages.currentEditIndex)}
-                        pageDataUpdate={data=>this.props.pageDataUpdate(this.props.pages.currentEditIndex, data)}
-                        pageDataFieldsSet={fields=>this.props.pageDataFieldsSet(this.props.pages.currentEditIndex, fields)}
+                        savePage={()=>this.props.savePage(currenIndex)}
+                        pageDataUpdate={data=>this.props.pageDataUpdate(currenIndex, data)}
+                        pageDataFieldsSet={fields=>this.props.pageDataFieldsSet(currenIndex, fields)}
                         pageFieldUpdate={this.pageFieldUpdate.bind(this)}
-                        pageUpdate={data=>this.props.pageUpdate(this.props.pages.currentEditIndex, data)}
+                        pageUpdate={data=>this.props.pageUpdate(currenIndex, data)}
             />;
         return (
             <div>
@@ -45,12 +48,12 @@ export default class Pages extends React.Component {
                 })}>
                     <AddPage/>
                 </IconButton>
-                {this.props.pages.list &&
-                Object.keys(this.props.pages.list).map(index=>
+                {list &&
+                Object.keys(list).map(index=>
                     (
                         <div style={{padding: '2px 0'}}>
                             <span style={{display: 'inline-block', height: height}}>
-                                {this.props.pages.list[index].data.fields.title.value}
+                                {list[index].data.fields.title.value}
                             </span>
                             <IconButton style={buttonStyle} iconStyle={iconStyle} tooltipPosition="top-left"
                                         tooltip="edit" onClick={()=>this.props.pageSetCurrentIndex(index)}>

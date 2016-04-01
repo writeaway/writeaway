@@ -8,7 +8,7 @@ import thunk from 'redux-thunk';
 import RedaxtorContainer from "./containers/RedaxtorContainer";
 import {initPiece} from "./containers/connectPieceContainer";
 import reducers from "./reducers";
-import {pieceGet, addPiece, updatePiece} from './actions';
+import {pieceGet, addPiece, updatePiece} from './actions/pieces';
 import {pagesGet, pagesGetLayouts} from './actions/pages';
 
 class Redaxtor {

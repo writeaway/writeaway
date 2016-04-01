@@ -2,11 +2,10 @@ import React from "react"
 import ReactDOM from "react-dom"
 
 import {Tabs, Tab} from 'material-ui/lib/tabs'
-import Toggle from 'material-ui/lib/toggle'
 import RaisedButton from 'material-ui/lib/raised-button'
 
-import PiecesList from './PiecesList'
 import PanelHandler from './PanelHandler'
+import Pieces from './pieces/PiecesContainer'
 import Pages from './pages/PagesContainer'
 
 export default class RedaxtorBar extends React.Component {
@@ -76,13 +75,6 @@ export default class RedaxtorBar extends React.Component {
         e.preventDefault()
     }
 
-    savePiece(html) {
-        let id = this.props.currentSourcePieceId;
-        this.props.updatePiece(id, {data: {html: html}});
-        this.props.savePiece(id);
-        this.props.setCurrentSourcePieceId(null);
-    }
-
     toggleOpen() {
         this.setState({isOpen: !this.state.isOpen})
     }
@@ -95,19 +87,9 @@ export default class RedaxtorBar extends React.Component {
             fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",' +
             ' "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif'
         }
-
-        var sourceEditor = null;
-        if (this.props.components.source && this.props.currentSourcePieceId) {
-            sourceEditor = <this.props.components.source
-                html={this.props.pieces[this.props.currentSourcePieceId].data.html}
-                onClose={()=>this.props.setCurrentSourcePieceId(null)}
-                onSave={(html)=>this.savePiece(html)}/>
-        }
         return (
             <div style={{all: 'initial'}}>
                 <div ref="bar" className="redaxtor-bar" style={barStyle}>
-                    {sourceEditor}
-
                     <PanelHandler isOpen={this.state.isOpen}
                                   onMouseDown={this.onMouseDown.bind(this)}
                                   toggleOpen={this.toggleOpen.bind(this)}/>
@@ -116,18 +98,9 @@ export default class RedaxtorBar extends React.Component {
                                                 tabItemContainerStyle={{height: "30px"}}
                                                 contentContainerStyle={{padding: "10px"}}>
 
-                        <Tab label={"Pieces: " + Object.keys(this.props.pieces).length} value="pieces"
+                        <Tab label={"Pieces"} value="pieces"
                              onClick={()=>this.setState({value: "pieces"})} style={tabStyle}>
-
-                            <Toggle label="Edit" defaultToggled={this.props.edit}
-                                    onToggle={this.props.handleToggleEdit}/>
-
-                            <PiecesList edit={this.props.edit} pieces={this.props.pieces}
-                                        components={this.props.components}
-                                        savePiece={this.props.savePiece} updatePiece={this.props.updatePiece}
-                                        setCurrentSourcePieceId={this.props.setCurrentSourcePieceId}/>
-                            <RaisedButton label="Save all pieces" secondary={true}
-                                          onClick={()=>this.props.handleSavePieces(this.props.pieces)}/>
+                            <Pieces components={this.props.components}/>
                         </Tab>
 
                         <Tab label="i18n" value="i18n" onClick={()=>this.setState({value: "i18n"})} style={tabStyle}>
