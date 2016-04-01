@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/lib/raised-button'
 
 import PiecesList from './PiecesList'
 import PanelHandler from './PanelHandler'
-import Pages from './pages/Pages'
+import Pages from './pages/PagesContainer'
 
 export default class RedaxtorBar extends React.Component {
 
@@ -136,17 +136,7 @@ export default class RedaxtorBar extends React.Component {
 
                         <Tab label="Pages" value="pages" onClick={()=>this.setState({value: "pages"})}
                              style={tabStyle}>
-                            <Pages
-                                pageSetCurrentIndex={this.props.pageSetCurrentIndex}
-                                pageCancelCreating={this.props.pageCancelCreating}
-                                pageStartCreating={this.props.pageStartCreating}
-                                pageDataFieldsUpdate={this.props.pageDataFieldsUpdate}
-                                pageDataFieldsSet={this.props.pageDataFieldsSet}
-                                pageDataUpdate={this.props.pageDataUpdate}
-                                pageUpdate={this.props.pageUpdate}
-                                pageDelete={this.props.pageDelete}
-                                savePage={this.props.savePage}
-                                pages={this.props.pages}/>
+                            <Pages/>
                         </Tab>
                     </Tabs> : null}
                 </div>
