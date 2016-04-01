@@ -1,5 +1,6 @@
 'use strict';
 var path = require('path');
+var node_modules_dir = path.resolve(__dirname, 'node_modules');
 
 module.exports = {
     entry: {
@@ -39,6 +40,12 @@ module.exports = {
                 loader: "style!css?-url"
             }
         ]
+    },
+    resolve: {
+        alias: {
+            react: path.resolve(node_modules_dir, 'react'),
+            "material-ui": path.resolve(node_modules_dir, 'material-ui')
+        }
     },
     devtool: "eval"
 };

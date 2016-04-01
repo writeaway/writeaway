@@ -30,6 +30,9 @@
         <h1>Hello</h1>
         <p>I'm HTML</p>
     </main>
+    <main data-piece="source" data-id="main1">
+        <h1>Source Editor</h1>
+    </main>
     <footer>
         <a href="https://twitter.com">Twitter</a>
         <a href="https://fb.com">Facebook</a>
@@ -40,7 +43,8 @@
         var redaxtor = new RedaxtorBundle({
             pieces: {
                 initialState: {
-                    main: {data: {html: "<h1>qwer asdf zxcv</h1>"}}
+                    main: {data: {html: "<h1>qwer asdf zxcv</h1>"}},
+                    main1: {data: {html: "<h1>Source Editor</h1>"}},
                 }
             },
             pages: {
