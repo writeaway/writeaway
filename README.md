@@ -42,6 +42,24 @@ Each piece should have:
 * url to fetch data and options - ```data-get-url```
 
 After enabling edit mode - each piece will fetch data from the server
+### Ajax
+##### field {message} in response will show bar with message content
+ *minimal example*
+ ```bash
+  { ...
+    message: 'Message text'
+  ... }
+  ```
+
+  *full example*
+  ```bash
+    { ...
+      message: {
+        content: 'Message text',
+        type: 'error',
+        durationTime: 5000    //default 4000
+    ... }
+   ```
 
 ## Developing and building
 Clone the repository.

@@ -118,7 +118,7 @@ export default class RedaxtorBar extends React.Component {
                 <Snackbar
                     open={!!this.props.message}
                     message={this.props.message&&this.props.message.content||""}
-                    autoHideDuration={4000}
+                    autoHideDuration={this.props.message&&this.props.message.durationTime||4000}
                     onRequestClose={()=>{this.props.hideMessage()}}
                 />
 
