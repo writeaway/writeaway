@@ -16,9 +16,11 @@ export default class PageDialog extends React.Component {
     }
 
     onLayoutChange(layoutId) {
-        var newFields = {...this.props.layouts[layoutId].data.fields, ...{url: this.props.page.data.fields.url}, ...{title: this.props.page.data.fields.title}}
+        if (this.props.layouts[layoutId].data && this.props.layouts[layoutId].data.fields) {
+            var newFields = {...this.props.layouts[layoutId].data.fields, ...{url: this.props.page.data.fields.url}, ...{title: this.props.page.data.fields.title}}
+            this.props.pageDataFieldsSet(newFields)
+        }
         this.props.pageDataUpdate({layout: layoutId})
-        this.props.pageDataFieldsSet(newFields)
     }
 
     renderNodes(options, key) {
