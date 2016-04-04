@@ -3,6 +3,7 @@ import ReactDOM from "react-dom"
 
 import {Tabs, Tab} from 'material-ui/lib/tabs'
 import RaisedButton from 'material-ui/lib/raised-button'
+import Snackbar from 'material-ui/lib/snackbar';
 
 import PanelHandler from './PanelHandler'
 import Pieces from './pieces/PiecesContainer'
@@ -87,6 +88,7 @@ export default class RedaxtorBar extends React.Component {
             fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",' +
             ' "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif'
         }
+
         return (
             <div style={{all: 'initial'}}>
                 <div ref="bar" className="redaxtor-bar" style={barStyle}>
@@ -113,6 +115,13 @@ export default class RedaxtorBar extends React.Component {
                         </Tab>
                     </Tabs> : null}
                 </div>
+                <Snackbar
+                    open={!!this.props.message}
+                    message={this.props.message&&this.props.message.content||""}
+                    autoHideDuration={4000}
+                    onRequestClose={()=>{this.props.hideMessage()}}
+                />
+
             </div>
         )
     }

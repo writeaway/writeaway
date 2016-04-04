@@ -36,6 +36,7 @@ const pages = (pages = {}, action) => {
         case C.PAGES_GET_FINISHED:
             return {...pages, list: action.list, loading: false};
         case C.PAGES_GET_ERROR:
+            debugger
             return {...pages, error: action.error, loading: false};
 
         case C.PAGE_START_CREATING:

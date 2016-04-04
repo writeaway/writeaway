@@ -1,4 +1,5 @@
 import C from "../constants";
+import callFetch from '../helpers/fetch'
 
 export const pageSetCurrentIndex = index => {
     return {type: C.PAGES_SET_CURRENT_INDEX, index}
@@ -45,32 +46,8 @@ export const savePage = (index) => {
         dispatch(pageSaving(index));
         const pages = getState().pages;
         const page = pages.list[index > -1 ? index : pages.currentEditIndex];
-        return fetch(!page.id && pages.createURL || pages.saveURL, {
-            method: "POST",
-            credentials: 'same-origin',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                id: page.id,
-                data: page.data
-            })
-        }).then(res => {
-            if (res.headers.get("content-type") &&
-                res.headers.get("content-type").toLowerCase().indexOf("application/json") >= 0) {
-                return res.json()
-            } else {
-                throw new TypeError()
-            }
-        }).then(res => {
-            const status = res.status;
-            if (status >= 200 && status < 300 || status === 304) {
-                dispatch(pageSaved(index, res.page));
-                // res.message && dispatch(showMessage(res.message));
-            } else {
-                dispatch(pageSaveError(index, res));
-            }
+        return callFetch({url: !page.id && pages.createURL || pages.saveURL, data: {id: page.id, data: page.data}}).then(res => {
+            dispatch(pageSaved(index, res.page));
         }).catch(error => {
             dispatch(pageSaveError(index, error));
         });
@@ -93,27 +70,8 @@ export const pagesGet = () => {
     return (dispatch, getState) => {
         dispatch(pagesGetStarted());
         const pages = getState().pages;
-        return fetch(pages.getAllURL, {
-            method: "POST",
-            credentials: 'same-origin',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        }).then(res => {
-            if (res.headers.get("content-type") &&
-                res.headers.get("content-type").toLowerCase().indexOf("application/json") >= 0) {
-                return res.json()
-            } else {
-                throw new TypeError()
-            }
-        }).then(res => {
-            const status = res.status;
-            if (status >= 200 && status < 300 || status === 304) {
-                dispatch(pagesGetFinished(res.pages));
-            } else {
-                dispatch(pagesGetError(res));
-            }
+        return callFetch({url: pages.getAllURL}).then(res => {
+            dispatch(pagesGetFinished(res.pages));
         }).catch(error => {
             dispatch(pagesGetError(error));
         });
@@ -138,31 +96,8 @@ export const pageDelete = (index) => {
         dispatch(pageDeleteStarted(index));
         const pages = getState().pages;
         const page = pages.list[index > -1 ? index : pages.currentEditIndex];
-        return fetch(pages.deleteURL, {
-            method: "POST",
-            credentials: 'same-origin',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                id: page.id
-            })
-        }).then(res => {
-            if (res.headers.get("content-type") &&
-                res.headers.get("content-type").toLowerCase().indexOf("application/json") >= 0) {
-                return res.json()
-            } else {
-                throw new TypeError()
-            }
-        }).then(res => {
-            const status = res.status;
-            if (status >= 200 && status < 300 || status === 304) {
-                dispatch(pageDeleted(index));
-                // res.message && dispatch(showMessage(res.message));
-            } else {
-                dispatch(pageDeleteError(index, res));
-            }
+        return callFetch({url: pages.deleteURL, data: {id: page.id}}).then(res => {
+            dispatch(pageDeleted(index));
         }).catch(error => {
             dispatch(pageDeleteError(index, error));
         });
@@ -186,29 +121,10 @@ export const pagesGetLayouts = () => {
     return (dispatch, getState) => {
         dispatch(pagesGetLayoutsStarted());
         const pages = getState().pages;
-        return fetch(pages.getLayoutsURL, {
-            method: "POST",
-            credentials: 'same-origin',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        }).then(res => {
-            if (res.headers.get("content-type") &&
-                res.headers.get("content-type").toLowerCase().indexOf("application/json") >= 0) {
-                return res.json()
-            } else {
-                throw new TypeError()
-            }
-        }).then(res => {
-            const status = res.status;
-            if (status >= 200 && status < 300 || status === 304) {
-                dispatch(pagesGetLayoutsFinished(res.layouts));
-            } else {
-                dispatch(pagesGetLayoutsError(res));
-            }
+        return callFetch({url: pages.getLayoutsURL}).then(res => {
+            dispatch(pagesGetLayoutsFinished(res.layouts));
         }).catch(error => {
-            dispatch(pagesGetLayoutsError(error));
+            dispatch(pagesGetLayoutsError(res));
         });
     }
 };

@@ -10,6 +10,7 @@ import {initPiece} from "./containers/connectPieceContainer";
 import reducers from "./reducers";
 import {pieceGet, addPiece, updatePiece} from './actions/pieces';
 import {pagesGet, pagesGetLayouts} from './actions/pages';
+import callFetch from './helpers/fetch'
 
 class Redaxtor {
     constructor(options) {
@@ -51,6 +52,8 @@ class Redaxtor {
         options.pieces && this.initPieces();
         options.pages && this.initPages();
         options.i18n && this.initI18N();
+
+        callFetch({store: this.store});
 
         this.showBar();
     }

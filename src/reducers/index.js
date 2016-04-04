@@ -30,12 +30,21 @@ const highlight = (highlight = true, action) => {
     }
 }
 
+const message = (message = null, action) => {
+    switch (action.type) {
+        case C.SHOW_MESSAGE:
+            return action.options
+        default:
+            return message
+    }
+}
+
 const i18n = (state = {}, action) => {
     return state
 }
 
 const reducers = combineReducers({
-    edit, highlight, pieces, pages, i18n, currentSourcePieceId
+    edit, highlight, pieces, pages, i18n, currentSourcePieceId, message
 })
 
 export default reducers

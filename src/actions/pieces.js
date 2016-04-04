@@ -1,5 +1,5 @@
 import C from "../constants"
-
+import callFetch from '../helpers/fetch'
 export const updatePiece = (id, piece) => {
     return {type: C.PIECE_UPDATE, id, piece}
 }
@@ -25,18 +25,9 @@ export const savePiece = id => {
         dispatch(pieceSaving(id));
         const piece = getState().pieces[id];
         let body = {...piece.dataset, data: piece.data}
-
-        fetch(piece.saveURL, {
-            method: "POST",
-            credentials: 'same-origin',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(body)
-        }).then(answer => {
+        callFetch({url: piece.saveURL, data: body}).then(answer => {
             dispatch(pieceSaved(id, answer));
-        }).catch(error => {
+        }, error => {
             dispatch(pieceSavingFailed(id, error));
         });
     }
@@ -69,44 +60,20 @@ export const pieceFetchingError = (id, error) => {
 }
 
 export const pieceGet = id => {
+    debugger
     return (dispatch, getState) => {
         dispatch(pieceFetching(id));
         const piece = getState().pieces[id];
-        return fetch(piece.getURL, {
-            method: "POST",
-            credentials: 'same-origin',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(piece.dataset)
-        }).then(res => {
-            if (res.headers.get("content-type") &&
-                res.headers.get("content-type").toLowerCase().indexOf("application/json") >= 0) {
-                return res.json()
-            } else {
-                dispatch(pieceFetchingError(id, error));
-                throw new TypeError()
+        return callFetch({url: piece.getURL, data: piece.dataset}).then(json => {
+            if (!json.piece.data) json.piece.data = {};
+            if (!json.piece.data.html) {
+                json.piece.usedPageHTML = true;
+                json.piece.data.html = getState().pieces[id].node.innerHTML;
             }
-        }).then(json => {
-            const status = json.status;
-            if (status >= 200 && status < 300 || status === 304) {
-                if (!json.piece.data) json.piece.data = {};
-                if (!json.piece.data.html) {
-                    json.piece.usedPageHTML = true;
-                    json.piece.data.html = getState().pieces[id].node.innerHTML;
-                }
-                dispatch(pieceFetched(id, json.piece));
-            } else {
-                //https://github.com/github/fetch/issues/155
-                //var error = new Error(resp.statusText || resp.status)
-                //     error.response = resp;
-                //     dispatch(pieceGettingFailed(id, error));
-                //     return Promise.reject(error)
-                dispatch(pieceFetchingFailed(id, json));
-            }
-        }).catch(error => {
+            dispatch(pieceFetched(id, json.piece));
+        }, error => {
             dispatch(pieceFetchingError(id, error));
-        });
+        })
+
     }
 }
