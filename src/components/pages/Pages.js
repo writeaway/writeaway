@@ -15,7 +15,7 @@ export default class Pages extends React.Component {
         let page = this.props.pages.list[this.props.pages.currentEditIndex];
         let field;
         if (page.data.layout && page.data.layout.data) {
-            field = {...this.props.pages.layouts[page.data.layout].data.fields[fieldName],value: value}
+            field = {...this.props.pages.layouts[page.data.layout].data.fields[fieldName], value: value}
         } else {
             field = {value: value};
         }
@@ -28,7 +28,7 @@ export default class Pages extends React.Component {
         const iconStyle = {width: height - 2, height: height - 2};
         let list = this.props.pages.list;
         let currenIndex = this.props.pages.currentEditIndex;
-        
+
         var pageDialog = currenIndex > -1 &&
             <PageDialog page={list[currenIndex]}
                         layouts={this.props.pages.layouts}
@@ -39,17 +39,13 @@ export default class Pages extends React.Component {
                         pageFieldUpdate={this.pageFieldUpdate.bind(this)}
                         pageUpdate={data=>this.props.pageUpdate(currenIndex, data)}
             />;
+        var createPage = this.props.disallowCreate && <IconButton onClick={()=>this.props.pageStartCreating({data: {fields: {title: {value: 'New Page'}, url: {value: ''}}}})}>
+                <AddPage/>
+            </IconButton>
         return (
             <div>
-                <IconButton onClick={()=>this.props.pageStartCreating(
-                {data: {
-                    fields: {title: {value: 'New Page'}, url: {value: ''}}
-                    }
-                })}>
-                    <AddPage/>
-                </IconButton>
-                {list &&
-                Object.keys(list).map(index=>
+                {createPage}
+                {list && Object.keys(list).map(index=>
                     (
                         <div style={{padding: '2px 0'}}>
                             <span style={{display: 'inline-block', height: height}}>
