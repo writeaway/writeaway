@@ -32,6 +32,25 @@ var callFetch = function (options) {
                     typeof message !== 'object' && (message = {content: message});
                     store.dispatch(showMessage(message));
                 }
+                if (answer.actions) {
+                    var action = (Object.prototype.toString.call(answer.actions) === "[object Object]") ? answer.actions.type : answer.actions;
+                    switch (action) {
+                        case "redirect":
+                            var url = answer.actions.url;
+                            //http://stackoverflow.com/questions/10687099/how-to-test-if-a-url-string-is-absolute-or-relative
+                            self.location[/^(?:[a-z]+:)?\/\//i.test(url) ? 'href' : 'pathname'] = url;
+                            break;
+
+                        case 'reload':
+                        case 'refresh':
+                            location.reload();
+                            break;
+
+                        case 'close':
+                            self.close();
+                            break;
+                    }
+                }
                 return Promise.resolve(answer)
             } else {
                 throw new TypeError()
