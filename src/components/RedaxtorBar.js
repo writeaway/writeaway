@@ -88,7 +88,18 @@ export default class RedaxtorBar extends React.Component {
             fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",' +
             ' "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif'
         }
-
+        var tabs = [];
+        this.props.piecesTabVisible && tabs.push(<Tab label={"Pieces"} value="pieces"
+                       onClick={()=>this.setState({value: "pieces"})} style={tabStyle}>
+            <Pieces components={this.props.components}/>
+        </Tab>)
+        this.props.i18nTabVisible && tabs.push(<Tab label="i18n" value="i18n" onClick={()=>this.setState({value: "i18n"})} style={tabStyle}>
+            <RaisedButton label="Save all I18N" secondary={true} onClick={()=>this.handleSaveI18N()}/>
+        </Tab>)
+        this.props.pagesTabVisible && tabs.push(<Tab label="Pages" value="pages" onClick={()=>this.setState({value: "pages"})}
+                       style={tabStyle}>
+            <Pages/>
+        </Tab>)
         return (
             <div style={{all: 'initial'}}>
                 <div ref="bar" className="redaxtor-bar" style={barStyle}>
@@ -99,20 +110,7 @@ export default class RedaxtorBar extends React.Component {
                     { this.state.isOpen ? <Tabs value={this.state.value} onChange={this.handleTabChange.bind(this)}
                                                 tabItemContainerStyle={{height: "30px"}}
                                                 contentContainerStyle={{padding: "10px"}}>
-
-                        <Tab label={"Pieces"} value="pieces"
-                             onClick={()=>this.setState({value: "pieces"})} style={tabStyle}>
-                            <Pieces components={this.props.components}/>
-                        </Tab>
-
-                        <Tab label="i18n" value="i18n" onClick={()=>this.setState({value: "i18n"})} style={tabStyle}>
-                            <RaisedButton label="Save all I18N" secondary={true} onClick={()=>this.handleSaveI18N()}/>
-                        </Tab>
-
-                        <Tab label="Pages" value="pages" onClick={()=>this.setState({value: "pages"})}
-                             style={tabStyle}>
-                            <Pages/>
-                        </Tab>
+                        {tabs}
                     </Tabs> : null}
                 </div>
                 <Snackbar

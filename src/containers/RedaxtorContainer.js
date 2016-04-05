@@ -4,7 +4,11 @@ import RedaxtorBarComponent from '../components/RedaxtorBar';
 
 const mapStateToProps = (state) => {
     return {
-        message: state.message
+        message: state.message,
+        i18nTabVisible: Object.getOwnPropertyNames(state.i18n).length !== 0,
+        piecesTabVisible: Object.getOwnPropertyNames(state.pieces).length !== 0,
+        pagesTabVisible: (state.pages.list && state.pages.list.length) || state.pages.allowCreate,
+        statement: state
     }
 };
 
