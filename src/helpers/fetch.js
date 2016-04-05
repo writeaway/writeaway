@@ -1,7 +1,7 @@
 var store = null;
 import {showMessage} from '../actions'
 var callFetch = function (options) {
-    var noUrlMessage = 'undefined URL'
+    var noUrlMessage = 'undefined URL';
     if (!store && options.store) {
         store = options.store
     } else {
@@ -24,19 +24,20 @@ var callFetch = function (options) {
             } else {
                 throw new TypeError()
             }
-        }).then(answer => {
-            const status = answer.status;
+        }).then(res => {
+            const status = res.status;
             if (status >= 200 && status < 300 || status === 304) {
-                if (answer.message) {
-                    var message = answer.message;
+                if (res.message) {
+                    var message = res.message;
                     typeof message !== 'object' && (message = {content: message});
                     store.dispatch(showMessage(message));
                 }
-                if (answer.actions) {
-                    var action = (Object.prototype.toString.call(answer.actions) === "[object Object]") ? answer.actions.type : answer.actions;
-                    switch (action) {
+                let action = res.action || res.actions;
+                if (action) {
+                    var actionName = (Object.prototype.toString.call(res.actions) === "[object Object]") ? action.type : action;
+                    switch (actionName) {
                         case "redirect":
-                            var url = answer.actions.url;
+                            var url = action.url;
                             //http://stackoverflow.com/questions/10687099/how-to-test-if-a-url-string-is-absolute-or-relative
                             self.location[/^(?:[a-z]+:)?\/\//i.test(url) ? 'href' : 'pathname'] = url;
                             break;
@@ -51,7 +52,7 @@ var callFetch = function (options) {
                             break;
                     }
                 }
-                return Promise.resolve(answer)
+                return Promise.resolve(res)
             } else {
                 throw new TypeError()
             }
