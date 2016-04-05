@@ -37,8 +37,11 @@ class Redaxtor {
         }
 
         if (options.pages) {
-            defaultState.pages = options.pages;
-            this.pages = options.pages;
+            this.pages = {
+                allowCreate: true,
+                ...options.pages
+            };
+            defaultState.pages = this.pages;
         }
 
         if (options.i18n) {

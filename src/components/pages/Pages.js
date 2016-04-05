@@ -39,7 +39,8 @@ export default class Pages extends React.Component {
                         pageFieldUpdate={this.pageFieldUpdate.bind(this)}
                         pageUpdate={data=>this.props.pageUpdate(currenIndex, data)}
             />;
-        var createPage = this.props.disallowCreate && <IconButton onClick={()=>this.props.pageStartCreating({data: {fields: {title: {value: 'New Page'}, url: {value: ''}}}})}>
+        var createPage = !this.props.allowCreate && 
+            <IconButton onClick={()=>this.props.pageStartCreating({data: {fields: {title: {value: 'New Page'}, url: {value: ''}}}})}>
                 <AddPage/>
             </IconButton>
         return (
