@@ -1,0 +1,46 @@
+{
+  "status": 200,
+  "pages": [
+    {
+      "id": "about",
+      "data": {
+        "fields": {
+          "title": {
+            "type": "input",
+            "value": "About Title"
+          },
+          "url": {
+            "type": "input",
+            "value": "/about"
+          },
+          "description": {
+            "type": "textarea",
+            "value": "About meta description"
+          }
+
+        },
+        "layout": "simpleLayoutId"
+      }
+    },
+    {
+      "id": "press",
+      "data": {
+        "fields": {
+          "title": {
+            "type": "input",
+            "value": "Press Title"
+          },
+          "url": {
+            "type": "input",
+            "value": "/press"
+          },
+          "description": {
+            "type": "textarea",
+            "value": "Press meta description"
+          }
+        },
+        "layout": "complexLayoutId"
+      }
+    }
+  ]
+}

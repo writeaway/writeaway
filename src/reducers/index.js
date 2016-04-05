@@ -1,7 +1,7 @@
 import {combineReducers} from 'redux'
 import C from '../constants'
 import pieces from './pieces'
-import i18n from './i18n'
+import pages from './pages'
 
 const edit = (edit = false, action) => {
     switch (action.type) {
@@ -30,12 +30,21 @@ const highlight = (highlight = true, action) => {
     }
 }
 
-const pages = (state = {}, action) => {
+const message = (message = null, action) => {
+    switch (action.type) {
+        case C.SHOW_MESSAGE:
+            return action.options
+        default:
+            return message
+    }
+}
+
+const i18n = (state = {}, action) => {
     return state
 }
 
 const reducers = combineReducers({
-    edit, highlight, pieces, pages, i18n, currentSourcePieceId
+    edit, highlight, pieces, pages, i18n, currentSourcePieceId, message
 })
 
 export default reducers

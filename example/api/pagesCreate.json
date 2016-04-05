@@ -1,0 +1,14 @@
+{
+  "status": 200,
+  "message": "Page created",
+  "page": {
+    "id": "createdPageId",
+    "data": {
+      "fields": {
+        "title": {
+          "value": "new created title"
+        }
+      }
+    }
+  }
+}

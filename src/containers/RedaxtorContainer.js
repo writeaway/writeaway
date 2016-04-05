@@ -1,30 +1,26 @@
-import {connect} from 'react-redux'
-import {toggleEdit, toggleHighlight, savePieces, updatePiece, savePiece, setCurrentSourcePieceId} from '../actions'
-import RedaxtorBarComponent from '../components/RedaxtorBar'
+import {connect} from 'react-redux';
+import {showMessage} from '../actions';
+import RedaxtorBarComponent from '../components/RedaxtorBar';
 
 const mapStateToProps = (state) => {
     return {
-        edit: state.edit,
-        highlight: state.highlight,
-        pieces: state.pieces,
-        currentSourcePieceId: state.currentSourcePieceId
+        message: state.message,
+        i18nTabVisible: Object.getOwnPropertyNames(state.i18n).length !== 0,
+        piecesTabVisible: Object.getOwnPropertyNames(state.pieces).length !== 0,
+        pagesTabVisible: (state.pages.list && state.pages.list.length) || state.pages.allowCreate,
+        statement: state
     }
-}
+};
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        handleToggleEdit: () => dispatch(toggleEdit()),
-        handleToggleHighlight: () => dispatch(toggleHighlight()),
-        handleSavePieces: (pieces) => dispatch(savePieces(pieces)),
-        updatePiece: (id, piece) => dispatch(updatePiece(id, piece)),
-        savePiece: (id) => dispatch(savePiece(id)),
-        setCurrentSourcePieceId: id => dispatch(setCurrentSourcePieceId(id))
+        hideMessage: () => dispatch(showMessage(null))
     }
-}
+};
 
 const RedaxtorBar = connect(
     mapStateToProps,
     mapDispatchToProps
-)(RedaxtorBarComponent)
+)(RedaxtorBarComponent);
 
 export default RedaxtorBar

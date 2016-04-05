@@ -25,16 +25,75 @@
             <a href="#contact">Contact</a>
         </nav>
     </header>
-    <h1>TODO example</h1>
+    <h1>Redaxtor usage example</h1>
     <main data-piece="html" data-id="main">
         <h1>Hello</h1>
         <p>I'm HTML</p>
+    </main>
+    <main data-piece="source" data-id="main1">
+        <h1>Source Editor</h1>
     </main>
     <footer>
         <a href="https://twitter.com">Twitter</a>
         <a href="https://fb.com">Facebook</a>
     </footer>
 
-    <script src="bundleRedaxtor.js"></script>
+    <script src="RedaxtorBundle.js"></script>
+    <script>
+        var redaxtor = new RedaxtorBundle({
+            pieces: {
+                initialState: {
+                    main: {data: {html: "<h1>qwer asdf zxcv</h1>"}},
+                    main1: {data: {html: "<h1>Source Editor</h1>"}},
+                }
+            },
+            pages: {
+                "layouts": {
+                    "simpleLayoutId": {
+                        "name": "Simple",
+
+                    },
+                    "complexLayoutId": {
+                        "name": "Complex",
+                        "data": {
+                            "fields": {
+                                "custom": {
+                                    "title": "Title complex",
+                                    "type": "input",
+                                    "value": "some title",
+                                    "placeholder": "Enter title here..."
+                                },
+                                "description": {
+                                    "title": "Description complex",
+                                    "type": "textarea"
+                                },
+                                "keywords": {
+                                    "title": "Keywords complex",
+                                    "type": "textarea"
+                                },
+                                "selectExample": {
+                                    "type": "select",
+                                    "value": "",
+                                    "title" : "Select Example",
+                                    "options": {
+                                        "valueId1": "Value 1",
+                                        "valueId2": "Value 2",
+                                        "valueId3": "Value 3"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                //Or use this URL to load layouts
+                //getLayoutsURL: "api/pagesLayouts.json",
+                getAllURL: "api/pages.json",
+                createURL: "api/pagesCreate.json",//optional, if not provided - saveURL will be used
+                saveURL: "api/pagesSave.json",
+                deleteURL: "api/pagesDelete.json",
+                allowCreate: false//default true
+            }
+        });
+    </script>
 </body>
 </html>

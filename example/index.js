@@ -1,5 +1,5 @@
 "use strict";
-var Redaxtor = require('redaxtor');
+var Redaxtor = require('../src');
 var RedaxtorMedium = require('redaxtor-medium');
 require('medium-editor/dist/css/medium-editor.css');
 require('redaxtor-medium/lib/redaxtor-medium.css');
@@ -10,19 +10,28 @@ require('codemirror/lib/codemirror.css');
 var components = {
     html: RedaxtorMedium,
     source: RedaxtorCodemirror
+};
+
+//PER PROJECT BUNDLE - includes components needed for particular projects
+class RedaxtorBundle extends Redaxtor {
+    constructor(options) {
+        options.pieces.components = components;
+        super(options);
+    }
 }
 
-var redaxtor = new Redaxtor({
-    pieces: {
-        attribute: "data-piece",//optional
-        attributeId: "data-id",//optional
-        attributeGetURL: "data-get-url",//optional
-        attributeSaveURL: "data-save-url",//optional
-        components: components,
-        initialState: {
-            main: {data: {html: "<h1>qwer asdf zxcv</h1>"}}
-        }
-    }
-});
+module.exports = RedaxtorBundle;
 
-window.redaxtor = redaxtor;
+//Other way is to bundle and init right here
+/*
+var redaxtor = new RedaxtorBundle({
+    pieces: {
+        components: components,
+    },
+    pages: {
+        getAllURL: "api/pages.json",
+        createURL: "api/pagesCreate.json",//optional, if not provided - saveURL will be used
+        saveURL: "api/pagesSave.json",
+        deleteURL: "api/pagesDelete.json"
+    }
+});*/
