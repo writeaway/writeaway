@@ -34,7 +34,7 @@ var callFetch = function (options) {
                 }
                 let action = res.action || res.actions;
                 if (action) {
-                    var actionName = (Object.prototype.toString.call(res.actions) === "[object Object]") ? action.type : action;
+                    var actionName = (Object.prototype.toString.call(action) === "[object Object]") ? action.type : action;
                     switch (actionName) {
                         case "redirect":
                             var url = action.url;
