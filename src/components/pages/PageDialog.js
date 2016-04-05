@@ -17,27 +17,33 @@ export default class PageDialog extends React.Component {
 
     onLayoutChange(layoutId) {
         if (this.props.layouts[layoutId].data && this.props.layouts[layoutId].data.fields) {
-            var newFields = {...this.props.layouts[layoutId].data.fields, ...{url: this.props.page.data.fields.url}, ...{title: this.props.page.data.fields.title}}
+            let newFields = {
+                ...this.props.layouts[layoutId].data.fields,
+                url: this.props.page.data.fields.url,
+                title: this.props.page.data.fields.title
+            };
             this.props.pageDataFieldsSet(newFields)
         }
         this.props.pageDataUpdate({layout: layoutId})
     }
 
     renderNodes(options, key) {
-        if (key === 'title' || key === 'url') return null
+        if (key === 'title' || key === 'url') return null;
         var nodeToReturn = null;
         switch (options.type) {
             case 'textarea':
                 nodeToReturn =
-                    <TextField onChange={e=>{this.props.pageFieldUpdate(key, e.target.value)}}
+                    <TextField key={key} id={"field" + key}
+                               onChange={e=>{this.props.pageFieldUpdate(key, e.target.value)}}
                                value={options.value||""}
                                floatingLabelText={options.title||""} hintText={options.placeholder||""} rows={2}
                                rowsMax={4} multiLine={true}/>
                 break;
             case 'input':
                 nodeToReturn =
-                    <TextField onChange={e=>{this.props.pageFieldUpdate(key, e.target.value)}} value={options.value||""}
-                               floatingLabelText={options.title||""} hintText={options.placeholder||""}/>
+                    <TextField key={key} id={"field" + key}
+                        onChange={e=>{this.props.pageFieldUpdate(key, e.target.value)}} value={options.value||""}
+                        floatingLabelText={options.title||""} hintText={options.placeholder||""}/>;
                 break
             case 'select':
                 const SelectStyle = {
@@ -61,12 +67,12 @@ export default class PageDialog extends React.Component {
                         color: "rgba(0, 0, 0, 0.498039)",
                         top: "38px"
                     };
-                var emptyNode = !options.value?<option value='empty' hidden>Select Layout</option>:null
+                var emptyNode = !options.value ? <option value='empty' hidden>Select Layout</option> : null;
                 nodeToReturn =
-                    <div style={{height: "72px", position: "relative"}}>
-                        <label style={SelectLabelStyle}>{options.title||""}</label>
+                    <div key={key} style={{height: "72px", position: "relative"}}>
+                        <label style={SelectLabelStyle}>{options.title || ""}</label>
                         <select onChange={e=>{this.props.pageFieldUpdate(key, e.target.value)}} style={SelectStyle}
-                        value={options.value||""}>
+                                value={options.value||""}>
                             {emptyNode}
                             {Object.keys(options.options).map(key =><option
                                 value={key}>{options.options[key]}</option>)}
@@ -123,8 +129,8 @@ export default class PageDialog extends React.Component {
                     <label style={SelectLabelStyle}>Select Layout</label>
                     <select onChange={e=>{this.onLayoutChange(e.target.value)}} style={SelectStyle}>
                         <option value='empty' hidden>Select Layout</option>
-                        {Object.keys(this.props.layouts).map(key =><option
-                            value={key}>{this.props.layouts[key].name}</option>)}
+                        {Object.keys(this.props.layouts).map(key =>
+                            <option key={key} value={key}>{this.props.layouts[key].name}</option>)}
                     </select>
                 </div>
                 {Object.keys(fields).map(key=>this.renderNodes(fields[key], key))}

@@ -12,26 +12,26 @@ import PageDialog from './PageDialog'
 export default class Pages extends React.Component {
 
     pageFieldUpdate(fieldName, value) {
-        let page = this.props.pages.list[this.props.pages.currentEditIndex];
+        let page = this.props.list[this.props.currentEditIndex];
         let field;
         if (page.data.layout && page.data.layout.data) {
-            field = {...this.props.pages.layouts[page.data.layout].data.fields[fieldName], value: value}
+            field = {...this.props.layouts[page.data.layout].data.fields[fieldName], value: value}
         } else {
             field = {value: value};
         }
-        this.props.pageDataFieldsUpdate(this.props.pages.currentEditIndex, {...page.fields, [fieldName]: field});
+        this.props.pageDataFieldsUpdate(this.props.currentEditIndex, {...page.fields, [fieldName]: field});
     }
 
     render() {
         const height = 20;
         const buttonStyle = {float: 'right', width: 20, height: height, padding: 1};//note float right changes order
         const iconStyle = {width: height - 2, height: height - 2};
-        let list = this.props.pages.list;
-        let currenIndex = this.props.pages.currentEditIndex;
+        let list = this.props.list;
+        let currenIndex = this.props.currentEditIndex;
 
         var pageDialog = currenIndex > -1 &&
             <PageDialog page={list[currenIndex]}
-                        layouts={this.props.pages.layouts}
+                        layouts={this.props.layouts}
                         pageSetCurrentIndex={this.props.pageSetCurrentIndex}
                         savePage={()=>this.props.savePage(currenIndex)}
                         pageDataUpdate={data=>this.props.pageDataUpdate(currenIndex, data)}
@@ -40,24 +40,25 @@ export default class Pages extends React.Component {
                         pageUpdate={data=>this.props.pageUpdate(currenIndex, data)}
             />;
         var createPage = this.props.allowCreate &&
-            <IconButton onClick={()=>this.props.pageStartCreating({data: {fields: {title: {value: 'New Page'}, url: {value: ''}}}})}>
+            <IconButton
+                onClick={()=>this.props.pageStartCreating({data: {fields: {title: {value: 'New Page'}, url: {value: ''}}}})}>
                 <AddPage/>
-            </IconButton>
+            </IconButton>;
         return (
             <div>
                 {createPage}
-                {list && Object.keys(list).map(index=>
+                {list && Object.keys(list).map(id =>
                     (
-                        <div style={{padding: '2px 0'}}>
+                        <div key={id} style={{padding: '2px 0'}}>
                             <span style={{display: 'inline-block', height: height}}>
-                                {list[index].data.fields.title.value}
+                                {list[id].data.fields.title.value}
                             </span>
                             <IconButton style={buttonStyle} iconStyle={iconStyle} tooltipPosition="top-left"
-                                        tooltip="edit" onClick={()=>this.props.pageSetCurrentIndex(index)}>
+                                        tooltip="edit" onClick={()=>this.props.pageSetCurrentIndex(id)}>
                                 <Edit/>
                             </IconButton>
                             <IconButton style={buttonStyle} iconStyle={iconStyle} tooltipPosition="top-left"
-                                        tooltip="delete" onClick={()=>this.props.pageDelete(index)}>
+                                        tooltip="delete" onClick={()=>this.props.pageDelete(id)}>
                                 <Delete/>
                             </IconButton>
                         </div>))
@@ -68,3 +69,7 @@ export default class Pages extends React.Component {
 
     }
 }
+
+Pages.propTypes = {
+    allowCreate: React.PropTypes.bool.isRequired
+};

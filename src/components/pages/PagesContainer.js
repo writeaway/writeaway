@@ -3,9 +3,7 @@ import Pages from './Pages';
 import * as pagesActions from '../../actions/pages';
 
 const mapStateToProps = (state) => {
-    return {
-        pages: state.pages
-    }
+    return state.pages
 };
 
 const PagesContainer = connect(

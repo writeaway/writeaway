@@ -15,7 +15,7 @@
           },
           "description": {
             "type": "textarea",
-            "value": "PAbout meta description"
+            "value": "About meta description"
           }
 
         },
