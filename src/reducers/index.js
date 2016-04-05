@@ -2,6 +2,7 @@ import {combineReducers} from 'redux'
 import C from '../constants'
 import pieces from './pieces'
 import pages from './pages'
+import i18n from './i18n'
 
 const edit = (edit = false, action) => {
     switch (action.type) {
@@ -37,10 +38,6 @@ const message = (message = null, action) => {
         default:
             return message
     }
-}
-
-const i18n = (state = {}, action) => {
-    return state
 }
 
 const reducers = combineReducers({

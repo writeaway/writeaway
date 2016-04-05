@@ -8,6 +8,7 @@ import thunk from 'redux-thunk';
 import RedaxtorContainer from "./containers/RedaxtorContainer";
 import {initPiece} from "./containers/connectPieceContainer";
 import reducers from "./reducers";
+import {initI18N} from './actions/i18n';
 import {pieceGet, addPiece, updatePiece} from './actions/pieces';
 import {pagesGet, pagesGetLayouts} from './actions/pages';
 import callFetch from './helpers/fetch'
@@ -45,7 +46,9 @@ class Redaxtor {
         }
 
         if (options.i18n) {
-            defaultState.i18n = {};
+            defaultState.i18n = {
+                data: options.i18n
+            };
         }
 
         this.store = createStore(reducers,
@@ -100,7 +103,18 @@ class Redaxtor {
     }
 
     initI18N() {
-
+        this.store.dispatch(initI18N());
+            
+        // let result = i18n();
+        //
+        // for (let id in result){
+        //     this.store.dispatch(addI18n({
+        //         nodes: result[id].nodes||null,
+        //         attributes: result[id].attributes||null,
+        //         id: id,
+        //         translate: this.i18n[id]
+        //     }))
+        // }
     }
 
     onStoreChange() {
