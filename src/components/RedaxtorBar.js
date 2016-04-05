@@ -8,6 +8,7 @@ import Snackbar from 'material-ui/lib/snackbar';
 import PanelHandler from './PanelHandler'
 import Pieces from './pieces/PiecesContainer'
 import Pages from './pages/PagesContainer'
+import I18N from './i18n/I18NContainer'
 
 export default class RedaxtorBar extends React.Component {
 
@@ -94,7 +95,7 @@ export default class RedaxtorBar extends React.Component {
             <Pieces components={this.props.components}/>
         </Tab>)
         this.props.i18nTabVisible && tabs.push(<Tab label="i18n" value="i18n" onClick={()=>this.setState({value: "i18n"})} style={tabStyle}>
-            <RaisedButton label="Save all I18N" secondary={true} onClick={()=>this.handleSaveI18N()}/>
+            <I18N/>
         </Tab>)
         this.props.pagesTabVisible && tabs.push(<Tab label="Pages" value="pages" onClick={()=>this.setState({value: "pages"})}
                        style={tabStyle}>

@@ -44,11 +44,13 @@ class Redaxtor {
             };
             defaultState.pages = this.pages;
         }
-
+        
         if (options.i18n) {
-            defaultState.i18n = {
-                data: options.i18n
+            this.i18n = {
+                edit: false,
+                ...options.i18n
             };
+            defaultState.i18n = this.i18n;
         }
 
         this.store = createStore(reducers,
@@ -104,17 +106,6 @@ class Redaxtor {
 
     initI18N() {
         this.store.dispatch(initI18N());
-            
-        // let result = i18n();
-        //
-        // for (let id in result){
-        //     this.store.dispatch(addI18n({
-        //         nodes: result[id].nodes||null,
-        //         attributes: result[id].attributes||null,
-        //         id: id,
-        //         translate: this.i18n[id]
-        //     }))
-        // }
     }
 
     onStoreChange() {

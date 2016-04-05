@@ -36,6 +36,7 @@
 
     <div>first i18n text</div>
     <div>second i18n text</div>
+    <div data-some-attr="third i18n text data attribute"></div>
 
     <footer>
         <a href="https://twitter.com">Twitter</a>
@@ -52,8 +53,12 @@
                 }
             },
             i18n: {
-                "first": "first i18n text",
-                "second": "second i18n text"
+                data: {
+                    "first": "first i18n text",
+                    "second": "second i18n text",
+                    "data attribute": "third i18n text data attribute"
+                },
+                saveURL: "api/saveI18N.json"
             },
             pages: {
                 "layouts": {

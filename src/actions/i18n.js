@@ -1,4 +1,5 @@
 import C from "../constants"
+import callFetch from '../helpers/fetch'
 
 export const initI18N = () => {
     return (dispatch, getState) => {
@@ -39,7 +40,6 @@ export const initI18N = () => {
                 });
             },
             findString = (node, key, string) => {
-                //if (node.nodeType === 1 && node.dataset.component) return;
                 switch (node.nodeType) {
                     case 1:
                         if (ignoredTags[node.tagName.toLowerCase()]) break;
@@ -83,9 +83,7 @@ export const initI18N = () => {
                     }
                 }
             };
-        var result = {},
-            array = [],
-            activeLanguage = 'en';
+        var result = {};
         var i = 0;
         while (i < 1) {
             for (var key in i18n.data) {
@@ -95,27 +93,37 @@ export const initI18N = () => {
         }
 
         dispatch(setI18Nelements(result));
-
-
-        // console.log(result);
-        // for (let id in result) {
-        //     dispatch(addI18n(id, {
-        //         nodes: result[id].nodes || null,
-        //         attributes: result[id].attributes || null,
-        //         id: id,
-        //         translate: this.i18n[id]
-        //     }))
-        // }
-
     };
-    // return {type: C.I18N_INIT}
 };
 
 export const setI18Nelements = (elements) => {
     return {type: C.I18N_SET_ELEMENTS, elements}
 };
 
-
 export const findI18N = () => {
     return {type: C.I18N_FIND}
+};
+
+export const i18nToggleEdit = () => {
+    return {type: C.I18N_TOGGLE_EDIT}
+};
+
+export const updateI18NData = (id, value) => {
+    return {type: C.I18N_UPDATE_DATA, id, value}
+};
+
+export const i18nSave = () => {
+    return (dispatch, getState) => {
+        const i18n = getState().i18n;
+        const data = i18n.data;
+        return callFetch({url: i18n.saveURL, data: data}).then(res => {
+            dispatch(i18nSaved());
+        }).catch(error => {
+            // dispatch(i18nSaveError(error));
+        });
+    }
+};
+
+export const i18nSaved = () => {
+    return {type: C.I18N_SAVED}
 };
