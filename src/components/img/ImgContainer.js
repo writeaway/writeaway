@@ -1,13 +1,13 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 
+//todo img component
+
 class ImgComponent extends Component {
     render() {
-        debugger;
-        return (
-            <div>
-            </div>
-        )
+        return <this.props.wrapper>
+            <img src={this.props.src} alt={this.props.alt}/>
+        </this.props.wrapper>
     }
 }
 
