@@ -5,6 +5,8 @@ import {createStore, applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
 
+import {setStore} from './store';
+
 import RedaxtorContainer from "./containers/RedaxtorContainer";
 import {initPiece} from "./containers/connectPieceContainer";
 import reducers from "./reducers";
@@ -44,7 +46,7 @@ class Redaxtor {
             };
             defaultState.pages = this.pages;
         }
-        
+
         if (options.i18n) {
             this.i18n = {
                 edit: false,
@@ -56,6 +58,8 @@ class Redaxtor {
         this.store = createStore(reducers,
             {...defaultState, ...options.state},
             applyMiddleware(thunk));
+
+        setStore(this.store);
 
         options.pieces && this.initPieces();
         options.pages && this.initPages();

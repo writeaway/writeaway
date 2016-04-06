@@ -1,5 +1,12 @@
+import React from "react"
+import ReactDOM from "react-dom"
+import {Provider} from 'react-redux'
+
 import C from "../constants"
 import callFetch from '../helpers/fetch'
+import {getStore} from '../store'
+
+import I18NElementContainer from '../containers/I18NElementContainer'
 
 export const initI18N = () => {
     return (dispatch, getState) => {
@@ -104,8 +111,36 @@ export const findI18N = () => {
     return {type: C.I18N_FIND}
 };
 
+export const i18nEnableEdit = () => {
+    return {type: C.I18N_ENABLE_EDIT}
+};
+
+export const i18nDisableEdit = () => {
+    return {type: C.I18N_DISABLE_EDIT}
+};
+
 export const i18nToggleEdit = () => {
-    return {type: C.I18N_TOGGLE_EDIT}
+    return (dispatch, getState) => {
+        const i18n = getState().i18n, edit = !i18n.edit;
+        if (edit) {
+            if (i18n.initialized) {
+
+            } else {
+                Object.keys(i18n.elements).forEach(id => {
+                    let el = i18n.elements[id];
+                    el.nodes && el.nodes.forEach(node => {
+                        ReactDOM.render(
+                            <Provider store={getStore()}>
+                                <I18NElementContainer i18nId={id}/>
+                            </Provider>, node.node);
+                    });
+                });
+            }
+            dispatch(i18nEnableEdit());
+        } else {
+            dispatch(i18nDisableEdit());
+        }
+    };
 };
 
 export const updateI18NData = (id, value) => {
