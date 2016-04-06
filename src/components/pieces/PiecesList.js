@@ -49,7 +49,7 @@ class PiecesList extends Component {
                 {Object.keys(this.props.pieces).map(id =>
                     <PieceLine key={id} piece={this.props.pieces[id]}
                                setCurrentSourcePieceId={this.props.setCurrentSourcePieceId}
-                               source={this.props.source}
+                               source={this.props.components.source}
                                edit={this.props.edit}/>
                 )}
             </div>
