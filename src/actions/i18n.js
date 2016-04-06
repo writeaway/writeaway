@@ -131,7 +131,7 @@ export const i18nToggleEdit = () => {
                     el.nodes && el.nodes.forEach(node => {
                         ReactDOM.render(
                             <Provider store={getStore()}>
-                                <I18NElementContainer i18nId={id}/>
+                                <I18NElementContainer id={id}/>
                             </Provider>, node.node);
                     });
                 });

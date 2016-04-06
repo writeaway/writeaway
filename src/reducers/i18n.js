@@ -6,9 +6,8 @@ const i18n = (i18n = {}, action) => {
         //     return {...i18n, ...{[action.id]: action.i18n}};
         case C.I18N_SET_ELEMENTS:
             return {...i18n, elements: action.elements};
-        case C.I18N_TOGGLE_EDIT:
-            debugger;
-            return {...i18n, edit: !i18n.edit};
+        // case C.I18N_TOGGLE_EDIT:
+        //     return {...i18n, edit: !i18n.edit};
         case C.I18N_ENABLE_EDIT:
             return {...i18n, edit: true};
         case C.I18N_DISABLE_EDIT:
