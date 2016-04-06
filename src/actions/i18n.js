@@ -70,7 +70,7 @@ export const initI18N = () => {
                     case 3:
                         if (node.nodeValue.indexOf(string) > -1) {
                             let parent = node.parentElement,
-                                isVisible = !(parent.tagName.toLowerCase() === "title");
+                                isVisible = !!parent.offsetParent;
                             if (ignoredTags[parent.tagName.toLowerCase()]) break;//script for example
 
                             isVisible && (parent.innerHTML = parent.innerHTML.replace(escapeHtmlEntities(string), '<span class="i18n">' + string + '</span>'));
