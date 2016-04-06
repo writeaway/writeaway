@@ -8,6 +8,8 @@ import thunk from 'redux-thunk';
 import {setStore} from './store';
 
 import RedaxtorContainer from "./containers/RedaxtorContainer";
+// import Img from "./components/img/ImgContainer";
+
 import {initPiece} from "./containers/connectPieceContainer";
 import reducers from "./reducers";
 import {initI18N} from './actions/i18n';
@@ -25,6 +27,11 @@ class Redaxtor {
         };
 
         if (options.pieces) {
+            options.pieces.components = {
+                // img: Img,
+                ...options.pieces.components
+            };
+
             this._edit = false;
             defaultState.pieces = {};
             this.pieces = {

@@ -60,7 +60,6 @@ export const pieceFetchingError = (id, error) => {
 }
 
 export const pieceGet = id => {
-    debugger
     return (dispatch, getState) => {
         dispatch(pieceFetching(id));
         const piece = getState().pieces[id];
