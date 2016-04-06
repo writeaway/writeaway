@@ -1,10 +1,12 @@
 'use strict';
 var path = require('path');
 var node_modules_dir = path.resolve(__dirname, 'node_modules');
+var env = process.env.NODE_ENV;
+var webpack = require(path.resolve(node_modules_dir,'webpack'));
 
-module.exports = {
+var config = {
     entry: {
-        bundleRedaxtor : path.join(__dirname, 'index')
+        bundleRedaxtor: path.join(__dirname, 'index')
     },
     output: {
         filename: 'RedaxtorBundle.js',
@@ -12,7 +14,9 @@ module.exports = {
         libraryTarget: 'umd'
     },
     plugins: [
-
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify(env)
+        })
     ],
     module: {
         loaders: [
@@ -42,10 +46,24 @@ module.exports = {
         ]
     },
     resolve: {
-        alias: {
-            react: path.resolve(node_modules_dir, 'react'),
-            "material-ui": path.resolve(node_modules_dir, 'material-ui')
-        }
+        root: path.join(__dirname, "node_modules")
     },
+    resolveLoader: { root: path.join(__dirname, "node_modules") },
     devtool: "eval"
 };
+
+if (env === 'production') {
+    config.plugins.push(
+        new webpack.optimize.UglifyJsPlugin({
+            compressor: {
+                pure_getters: true,
+                unsafe: true,
+                unsafe_comps: true,
+                screw_ie8: true,
+                warnings: false
+            }
+        })
+    )
+}
+
+module.exports = config;

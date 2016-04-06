@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:min": "NODE_ENV=production webpack -d"
   },
   "author": "",
   "license": "MIT",
@@ -22,6 +23,7 @@
     "css-loader": "^0.23.1",
     "less": "^2.6.1",
     "less-loader": "^2.2.3",
-    "style-loader": "^0.13.1"
+    "style-loader": "^0.13.1",
+    "webpack": "^1.12.14"
   }
 }
