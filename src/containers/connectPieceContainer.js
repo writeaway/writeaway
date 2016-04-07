@@ -2,6 +2,7 @@ import React, {Component} from "react"
 import ReactDOM from "react-dom"
 import {Provider, connect} from 'react-redux'
 import {updatePiece, savePiece, setCurrentSourcePieceId} from '../actions/pieces'
+import {toggleImagePopup, setCancelCallback, setSaveCallback, saveImageData, resetImageData} from '../actions/insertImage'
 
 const PieceContainer = (props) => {//https://facebook.github.io/react/docs/reusable-components.html#stateless-functions
     let style = {width: "100%", height: "100%"};
@@ -14,14 +15,20 @@ const connectPieceContainer = (Component, id) => {
         return {
             data: state.pieces[id].data,
             highlight: state.highlight,
-            edit: state.edit
+            edit: state.edit,
+            imageInsert: state.imageInsert
         }
     };
     const mapDispatchToProps = dispatch => {
         return {
             updatePiece: (id, piece) => dispatch(updatePiece(id, piece)),
             savePiece: (id) => dispatch(savePiece(id)),
-            setCurrentSourcePieceId: id => dispatch(setCurrentSourcePieceId(id))
+            setCurrentSourcePieceId: id => dispatch(setCurrentSourcePieceId(id)),
+            toggleImagePopup: () => dispatch(toggleImagePopup()),
+            setCancelCallback: callback => dispatch(setCancelCallback(callback)),
+            setSaveCallback: callback => dispatch(setSaveCallback(callback)),
+            saveImageData: data => dispatch(saveImageData(data)),
+            resetImageData: () => dispatch(resetImageData())
         }
     };
 

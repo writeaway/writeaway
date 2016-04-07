@@ -9,6 +9,7 @@ import PanelHandler from './PanelHandler'
 import Pieces from './pieces/PiecesContainer'
 import Pages from './pages/PagesContainer'
 import I18N from './i18n/I18NContainer'
+import ImageInsert from './imageInsert'
 
 export default class RedaxtorBar extends React.Component {
 
@@ -120,6 +121,7 @@ export default class RedaxtorBar extends React.Component {
                     autoHideDuration={this.props.message&&this.props.message.durationTime||4000}
                     onRequestClose={()=>{this.props.hideMessage()}}
                 />
+                <ImageInsert/>
 
             </div>
         )
