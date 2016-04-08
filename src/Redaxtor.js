@@ -95,7 +95,8 @@ class Redaxtor {
                 id: el.getAttribute(this.pieces.attributeId),
                 getURL: el.getAttribute(this.pieces.attributeGetURL) || this.pieces.getURL,
                 saveURL: el.getAttribute(this.pieces.attributeSaveURL) || this.pieces.saveURL,
-                dataset: {}
+                dataset: {},
+                changed: false
             };
 
             for (let data in el.dataset) {//can we use rest on DOMStringMap? pieceObj.dataset = {...el.dataset}
@@ -133,7 +134,7 @@ class Redaxtor {
 
                     if (this.pieces.initialState && this.pieces.initialState[piece.id]) {
                         this.pieces.initialState[piece.id].id = id;
-                        this.store.dispatch(updatePiece(piece.id, this.pieces.initialState[piece.id]));
+                        this.store.dispatch(updatePiece(piece.id, this.pieces.initialState[piece.id], true));
                         initPiece(this.store, this.pieces.components[piece.type], this.store.getState().pieces[piece.id]);
                     } else {
                         this.store.dispatch(pieceGet(piece.id)).then(() => {

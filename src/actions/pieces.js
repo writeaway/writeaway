@@ -1,7 +1,7 @@
 import C from "../constants"
 import callFetch from '../helpers/fetch'
-export const updatePiece = (id, piece) => {
-    return {type: C.PIECE_UPDATE, id, piece}
+export const updatePiece = (id, piece, notChanged) => {
+    return {type: C.PIECE_UPDATE, id, piece, notChanged}
 }
 
 export const addPiece = piece => {

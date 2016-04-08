@@ -3,7 +3,7 @@ import C from '../constants'
 const piece = (piece = {}, action) => {
     switch (action.type) {
         case C.PIECE_UPDATE:
-            return {...piece, ...action.piece, changed: true};
+            return {...piece, ...action.piece, changed: !(action.notChanged || (action.piece.data.html === piece.data.html)) || piece.changed};
         case C.PIECE_SAVING:
             return {...piece, saving: true};
         case C.PIECE_SAVED:
