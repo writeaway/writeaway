@@ -6,6 +6,10 @@ import ActionSettings from 'material-ui/lib/svg-icons/action/settings'
 import ArrowDropDown from 'material-ui/lib/svg-icons/navigation/arrow-drop-down'
 import ArrowDropUp from 'material-ui/lib/svg-icons/navigation/arrow-drop-up'
 
+// <IconButton style={handleButtonStyle} iconStyle={{width: 18, height: 18}}>
+// <ActionSettings/>
+// </IconButton>
+
 class PanelHandler extends Component {
 
     render() {
@@ -17,9 +21,6 @@ class PanelHandler extends Component {
         return (
             <div style={handleStyle} onMouseDown={this.props.onMouseDown}>
                 redaxtor
-                <IconButton style={handleButtonStyle} iconStyle={{width: 18, height: 18}}>
-                    <ActionSettings/>
-                </IconButton>
                 <IconButton style={handleButtonStyle} iconStyle={{width: 18, height: 18}}
                             onClick={this.props.toggleOpen}>
                     {this.props.isOpen ? <ArrowDropUp/> : <ArrowDropDown/>}

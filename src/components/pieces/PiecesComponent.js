@@ -31,7 +31,7 @@ export default class PiecesComponent extends React.Component {
                             components={this.props.components}
                             savePiece={this.props.savePiece} updatePiece={this.props.updatePiece}
                             setCurrentSourcePieceId={this.props.setCurrentSourcePieceId}/>
-                <RaisedButton label="Save all pieces" secondary={true}
+                <RaisedButton label="Save all" secondary={true}
                               onClick={()=>this.props.savePieces(this.props.pieces)}/>
             </div>
         )
