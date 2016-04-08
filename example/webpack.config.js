@@ -9,8 +9,8 @@ var config = {
         bundleRedaxtor: path.join(__dirname, 'index')
     },
     output: {
-        filename: 'RedaxtorBundle.js',
-        library: 'RedaxtorBundle',
+        filename: 'Redaxtor.js',
+        library: 'Redaxtor',
         libraryTarget: 'umd'
     },
     plugins: [

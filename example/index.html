@@ -47,14 +47,20 @@
         <a href="https://fb.com">Facebook</a>
     </footer>
 
-    <script src="RedaxtorBundle.js"></script>
+    <script src="Redaxtor.js"></script>
     <script>
-        var redaxtor = new RedaxtorBundle({
+        var redaxtor = new Redaxtor({
+            ajax: {
+                headers: {
+                    "X-CSRF-TOKEN": "xcsrftoken"
+                }
+            },
             pieces: {
                 initialState: {
                     main: {data: {html: "<h1>qwer asdf zxcv</h1>"}},
-                    main1: {data: {html: "<h1>Source Editor</h1>"}},
-                }
+                    main1: {data: {html: "<h1>Source Editor</h1>"}}
+                },
+                saveURL: "api/save.json"
             },
             i18n: {
                 data: {

@@ -30,6 +30,8 @@ var components = {
 var redaxtor = new Redaxtor({
     pieces: {
         components: components,
+        getURL: "api/pieces/get",//will be overwritten by data-get-url
+        saveURL: "api/pieces/save"//will be overwritten by data-save-url
     }
 });
 ```

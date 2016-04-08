@@ -15,7 +15,7 @@ import reducers from "./reducers";
 import {initI18N} from './actions/i18n';
 import {pieceGet, addPiece, updatePiece} from './actions/pieces';
 import {pagesGet, pagesGetLayouts} from './actions/pages';
-import callFetch from './helpers/fetch'
+import {configureFetch} from './helpers/fetch'
 
 class Redaxtor {
     constructor(options) {
@@ -67,12 +67,11 @@ class Redaxtor {
             applyMiddleware(thunk));
 
         setStore(this.store);
+        if (options.ajax) configureFetch(options.ajax);
 
         options.pieces && this.initPieces();
         options.pages && this.initPages();
         options.i18n && this.initI18N();
-
-        callFetch({store: this.store});
 
         this.showBar();
     }
