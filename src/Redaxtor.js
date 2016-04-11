@@ -15,6 +15,7 @@ import reducers from "./reducers";
 import {initI18N} from './actions/i18n';
 import {pieceGet, addPiece, updatePiece} from './actions/pieces';
 import {pagesGet, pagesGetLayouts} from './actions/pages';
+import {getImages} from './actions/images';
 import {configureFetch} from './helpers/fetch'
 
 class Redaxtor {
@@ -62,6 +63,14 @@ class Redaxtor {
             defaultState.i18n = this.i18n;
         }
 
+        if (options.images) {
+            this.images = {
+                isVisible: false,
+                ...options.images
+            };
+            defaultState.images = this.images;
+        }
+
         this.store = createStore(reducers,
             {...defaultState, ...options.state},
             applyMiddleware(thunk));
@@ -72,6 +81,7 @@ class Redaxtor {
         options.pieces && this.initPieces();
         options.pages && this.initPages();
         options.i18n && this.initI18N();
+        options.images && this.initImages()
 
         this.showBar();
     }
@@ -127,6 +137,10 @@ class Redaxtor {
 
     initI18N() {
         this.store.dispatch(initI18N());
+    }
+
+    initImages() {
+        this.store.dispatch(getImages());
     }
 
     onStoreChange() {

@@ -1,6 +1,6 @@
 import C from '../constants'
 
-const imageInsert = (image = {isVisible: false}, action) => {
+const images = (image = {}, action) => {
     switch (action.type) {
         case C.SET_IMAGE_DATA:
             return {...image,...action.data};
@@ -11,11 +11,17 @@ const imageInsert = (image = {isVisible: false}, action) => {
         case C.IMAGE_SET_SAVE_CALLBACK:
             return {...image, onSave: action.callback};
         case C.RESET_IMAGE_DATA:
-            return {isVisible: false};
+            return {...image, isVisible: false, url:"", alt:"",width:"",height:""};
+        case C.IMAGES_GET_STARTED:
+            return {...image, loading: true};
+        case C.IMAGES_GET_FINISHED:
+            return {...image, gallery: action.list, loading: false};
+        case C.PAGES_GET_ERROR:
+            return {...image, error: action.error, loading: false};
         default:
             return image
     }
 }
 
-export default imageInsert;
+export default images;
 

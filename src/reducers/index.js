@@ -3,7 +3,7 @@ import C from '../constants'
 import pieces from './pieces'
 import pages from './pages'
 import i18n from './i18n'
-import imageInsert from './imageInsert'
+import images from './images'
 
 const edit = (edit = false, action) => {
     switch (action.type) {
@@ -42,7 +42,7 @@ const message = (message = null, action) => {
 }
 
 const reducers = combineReducers({
-    edit, highlight, pieces, pages, i18n, currentSourcePieceId, message, imageInsert
+    edit, highlight, pieces, pages, i18n, currentSourcePieceId, message, images
 })
 
 export default reducers
