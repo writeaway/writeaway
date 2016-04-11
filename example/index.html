@@ -26,13 +26,14 @@
         </nav>
     </header>
     <h1>Redaxtor usage example</h1>
-    <main data-piece="html" data-id="main">
-        <h1>Hello</h1>
-        <p>I'm HTML</p>
-    </main>
-    <main data-piece="source" data-id="main1">
-        <h1>Source Editor</h1>
-    </main>
+
+    <div data-piece="html" data-id="pieceHTML">
+        <h1>This is an example for the 'HTML' piece</h1>
+    </div>
+
+    <div data-piece="source" data-id="pieceSource" data-get-url="api/pieceSource.json">
+        <h1>This is an example for the 'SOURCE' piece</h1>
+    </div>
 
     <div>First i18n element</div>
     <div>An example of second i18n element inside another text</div>
@@ -56,10 +57,7 @@
                 }
             },
             pieces: {
-                initialState: {
-                    main: {data: {html: "<h1>qwer asdf zxcv</h1>"}},
-                    main1: {data: {html: "<h1>Source Editor</h1>"}}
-                },
+                getURL: "api/pieceHTML.json",
                 saveURL: "api/save.json"
             },
             i18n: {
@@ -74,8 +72,7 @@
             pages: {
                 "layouts": {
                     "simpleLayoutId": {
-                        "name": "Simple",
-
+                        "name": "Simple"
                     },
                     "complexLayoutId": {
                         "name": "Complex",
