@@ -2,7 +2,6 @@ import React from "react"
 import ReactDOM from "react-dom"
 
 import {Tabs, Tab} from 'material-ui/lib/tabs'
-import RaisedButton from 'material-ui/lib/raised-button'
 import Snackbar from 'material-ui/lib/snackbar';
 
 import PanelHandler from './PanelHandler'
@@ -23,7 +22,7 @@ export default class RedaxtorBar extends React.Component {
     }
 
     componentDidMount() {
-        this._node = ReactDOM.findDOMNode(this.refs["bar"])
+        this._node = ReactDOM.findDOMNode(this.refs["bar"]);
         this._rel = {x: 0, y: 0}
     }
 
@@ -31,11 +30,11 @@ export default class RedaxtorBar extends React.Component {
         if (this.state.dragging && !state.dragging) {
             this._onMouseMove = this.onMouseMove.bind(this);
             this._onMouseUp = this.onMouseUp.bind(this);
-            document.addEventListener('mousemove', this._onMouseMove)
-            document.addEventListener('mouseup', this._onMouseUp)
+            document.addEventListener('mousemove', this._onMouseMove);
+            document.addEventListener('mouseup', this._onMouseUp);
         } else if (!this.state.dragging && state.dragging) {
-            document.removeEventListener('mousemove', this._onMouseMove)
-            document.removeEventListener('mouseup', this._onMouseUp)
+            document.removeEventListener('mousemove', this._onMouseMove);
+            document.removeEventListener('mouseup', this._onMouseUp);
         }
     }
 
@@ -56,26 +55,26 @@ export default class RedaxtorBar extends React.Component {
 
     onMouseDown(e) {
         // only left mouse button
-        if (e.button !== 0) return
+        if (e.button !== 0) return;
         this._rel.x = e.pageX - this._node.offsetLeft;
         this._rel.y = e.pageY - this._node.offsetTop;
-        this.setState({dragging: true})
-        e.stopPropagation()
-        e.preventDefault()
+        this.setState({dragging: true});
+        e.stopPropagation();
+        e.preventDefault();
     }
 
     onMouseMove(e) {
-        if (!this.state.dragging) return
+        if (!this.state.dragging) return;
         this._node.style.left = e.pageX - this._rel.x + "px";
         this._node.style.top = e.pageY - this._rel.y + "px";
-        e.stopPropagation()
-        e.preventDefault()
+        e.stopPropagation();
+        e.preventDefault();
     }
 
     onMouseUp(e) {
-        this.setState({dragging: false})
-        e.stopPropagation()
-        e.preventDefault()
+        this.setState({dragging: false});
+        e.stopPropagation();
+        e.preventDefault();
     }
 
     toggleOpen() {
@@ -83,25 +82,32 @@ export default class RedaxtorBar extends React.Component {
     }
 
     render() {
-        const tabStyle = {height: "30px", verticalAlign: "top"}
+        const tabStyle = {height: "30px", verticalAlign: "top"};
         const barStyle = {
             position: "fixed", top: 0, left: 0, background: "#eee", color: "#222", "zIndex": 1000, width: "320px",
             borderRadius: "2px",
             fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",' +
             ' "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif'
-        }
+        };
+
         var tabs = [];
-        this.props.piecesTabVisible && tabs.push(<Tab label={"Pieces"} value="pieces"
-                       onClick={()=>this.setState({value: "pieces"})} style={tabStyle}>
+        this.props.tabs.pieces &&
+        tabs.push(<Tab key="pieces" label="Pieces" value="pieces" style={tabStyle}
+                       onClick={()=>this.setState({value: "pieces"})}>
             <Pieces components={this.props.components}/>
-        </Tab>)
-        this.props.i18nTabVisible && tabs.push(<Tab label="i18n" value="i18n" onClick={()=>this.setState({value: "i18n"})} style={tabStyle}>
+        </Tab>);
+
+        this.props.tabs.i18n &&
+        tabs.push(<Tab key="i18n" label="I18N" value="i18n" style={tabStyle}
+                       onClick={()=>this.setState({value: "i18n"})}>
             <I18N/>
-        </Tab>)
-        this.props.pagesTabVisible && tabs.push(<Tab label="Pages" value="pages" onClick={()=>this.setState({value: "pages"})}
-                       style={tabStyle}>
+        </Tab>);
+
+        this.props.tabs.pages &&
+        tabs.push(<Tab key="pages" label="Pages" value="pages" style={tabStyle}
+                       onClick={()=>this.setState({value: "pages"})}>
             <Pages/>
-        </Tab>)
+        </Tab>);
         return (
             <div style={{all: 'initial'}}>
                 <div ref="bar" className="redaxtor-bar" style={barStyle}>
@@ -109,11 +115,12 @@ export default class RedaxtorBar extends React.Component {
                                   onMouseDown={this.onMouseDown.bind(this)}
                                   toggleOpen={this.toggleOpen.bind(this)}/>
 
-                    { this.state.isOpen ? <Tabs value={this.state.value} onChange={this.handleTabChange.bind(this)}
-                                                tabItemContainerStyle={{height: "30px"}}
-                                                contentContainerStyle={{padding: "10px"}}>
-                        {tabs}
-                    </Tabs> : null}
+                    {this.state.isOpen ?
+                        <Tabs value={this.state.value} onChange={this.handleTabChange.bind(this)}
+                              tabItemContainerStyle={{height: "30px"}}
+                              contentContainerStyle={{padding: "10px"}}>
+                            {tabs}
+                        </Tabs> : null}
                 </div>
                 <Snackbar
                     open={!!this.props.message}
