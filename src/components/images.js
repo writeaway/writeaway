@@ -80,7 +80,7 @@ export default class Images extends Component {
                                        floatingLabelText="height" value={this.props.image.height||""}
                                        style={{width: "50px", marginLeft: "10px"}}/>
                             <Checkbox onCheck={(e, status)=>this.setState({proportions: status})}
-                                      label="Constrain proportions" checked={this.state.proportions}
+                                      label="Constrain proportions" defaultChecked={this.state.proportions}
                             />
                         </div>
                         <div style={{flex: "1 1 200px", height: "200px"}}>
@@ -90,12 +90,12 @@ export default class Images extends Component {
                     </div>
                     {
                         this.props.image.gallery &&
-
                         <div>
                             <h2>Uploaded images</h2>
                             <div style={{display: "flex", flexWrap: "wrap", justifyContent: "space-between"}}>
                                 {Object.keys(this.props.image.gallery).map(index =>
-                                    <Paper style={{width: "200px", height: "200px", cursor: "pointer", marginBottom: "10px"}}
+                                    <Paper key={this.props.image.gallery[index]}
+                                           style={{width: "200px", height: "200px", cursor: "pointer", marginBottom: "10px"}}
                                            onClick={()=> {this.onUrlChange.call(this, this.props.image.gallery[index])}}>
                                         <div style={{height: "100%", width: "100%", backgroundImage: "url("+this.props.image.gallery[index]+")",
                                         backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center"}}>
