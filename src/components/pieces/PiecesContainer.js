@@ -1,20 +1,14 @@
 import {connect} from 'react-redux';
 import PiecesComponent from './PiecesComponent';
-import * as actions from '../../actions/pieces';
-import {toggleEdit, toggleHighlight} from '../../actions';
+import * as piecesActions from '../../actions/pieces';
 
 const mapStateToProps = (state) => {
-    return {
-        edit: state.edit,
-        highlight: state.highlight,
-        pieces: state.pieces,
-        currentSourcePieceId: state.currentSourcePieceId
-    }
+    return state.pieces
 };
 
 const PiecesContainer = connect(
     mapStateToProps,
-    {...actions, toggleEdit, toggleHighlight}
+    piecesActions
 )(PiecesComponent);
 
 export default PiecesContainer;

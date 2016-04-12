@@ -25,10 +25,27 @@ const piece = (piece = {}, action) => {
     }
 };
 
-const pieces = (pieces = {}, action) => {
+const piecesDefault = {
+    edit: false,
+    highlight: true,
+    sourceId: null
+};
+
+const pieces = (pieces = piecesDefault, action) => {
     switch (action.type) {
+        case C.PIECES_ENABLE_EDIT:
+            return {...pieces, edit: true, initialized: true};
+        case C.PIECES_DISABLE_EDIT:
+            return {...pieces, edit: false};
+        case C.PIECES_SET_SOURCE_ID:
+            return {...pieces, sourceId: action.id};
+
         case C.PIECE_ADD:
-            return {...pieces, ...{[action.id]: action.piece}};
+            return {
+                ...pieces,
+                byId: {...pieces.byId, [action.id]: action.piece}
+            };
+
         case C.PIECE_UPDATE:
         case C.PIECE_SAVING:
         case C.PIECE_SAVED:
@@ -38,7 +55,10 @@ const pieces = (pieces = {}, action) => {
         case C.PIECE_FETCHED:
         case C.PIECE_FETCHING_FAILED:
         case C.PIECE_FETCHING_ERROR:
-            return {...pieces, ...{[action.id]: piece(pieces[action.id], action)}};
+            return {
+                ...pieces,
+                byId: {...pieces.byId, [action.id]: piece(pieces.byId[action.id], action)}
+            };
         default:
             return pieces
     }

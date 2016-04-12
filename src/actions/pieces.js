@@ -1,5 +1,44 @@
+import React from "react"
+import ReactDOM from "react-dom"
+import {Provider} from 'react-redux'
+
 import C from "../constants"
 import callFetch from '../helpers/fetch'
+import {getStore} from '../store'
+import {getConfig} from '../config'
+
+import Container from '../containers/connectPieceContainer';
+
+export const piecesEnableEdit = () => {
+    return {type: C.PIECES_ENABLE_EDIT}
+};
+
+export const piecesDisableEdit = () => {
+    return {type: C.PIECES_DISABLE_EDIT}
+};
+
+export const piecesToggleEdit = () => {
+    return (dispatch, getState) => {
+        const pieces = getState().pieces, edit = !pieces.edit;
+        if (edit) {
+            if (pieces.initialized) {
+
+            } else {
+                Object.keys(pieces.byId).forEach(id => {
+                    dispatch(pieceGet(id))
+                });
+            }
+            dispatch(piecesEnableEdit());
+        } else {
+            dispatch(piecesDisableEdit());
+        }
+    };
+};
+
+export const setSourceId = id => {
+    return {type: C.PIECES_SET_SOURCE_ID, id}
+};
+
 export const updatePiece = (id, piece, notChanged) => {
     return {type: C.PIECE_UPDATE, id, piece, notChanged}
 }
@@ -23,8 +62,8 @@ export const pieceSavingFailed = (id, error) => {
 export const savePiece = id => {
     return (dispatch, getState) => {
         dispatch(pieceSaving(id));
-        const piece = getState().pieces[id];
-        let body = {...piece.dataset, data: piece.data}
+        const piece = getState().pieces.byId[id];
+        let body = {...piece.dataset, data: piece.data};
         callFetch({url: piece.saveURL, data: body}).then(answer => {
             dispatch(pieceSaved(id, answer));
         }, error => {
@@ -37,10 +76,6 @@ export const savePieces = pieces => {
     return dispatch => {
         Object.keys(pieces).forEach(id => dispatch(savePiece(id)))
     }
-}
-
-export const setCurrentSourcePieceId = id => {
-    return {type: C.SET_PIECE_CURRENT_SOURCE_ID, id}
 }
 
 export const pieceFetching = id => {
@@ -62,14 +97,25 @@ export const pieceFetchingError = (id, error) => {
 export const pieceGet = id => {
     return (dispatch, getState) => {
         dispatch(pieceFetching(id));
-        const piece = getState().pieces[id];
-        return callFetch({url: piece.getURL, data: piece.dataset}).then(json => {
+        const piece = getState().pieces.byId[id];
+        return callFetch({
+            url: piece.getURL,
+            data: piece.dataset
+        }).then(json => {
             if (!json.piece.data) json.piece.data = {};
             if (!json.piece.data.html) {
                 json.piece.usedPageHTML = true;
-                json.piece.data.html = getState().pieces[id].node.innerHTML;
+                json.piece.data.html = getState().pieces.byId[id].node.innerHTML;
             }
             dispatch(pieceFetched(id, json.piece));
+
+            const piece = getState().pieces.byId[id];
+            ReactDOM.render(
+                <Provider store={getStore()}>
+                    <Container id={id}
+                               component={getConfig().pieces.components[piece.type]}
+                    />
+                </Provider>, piece.node);
         }, error => {
             dispatch(pieceFetchingError(id, error));
         })

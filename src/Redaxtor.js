@@ -6,6 +6,7 @@ import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
 
 import {setStore} from './store';
+import {setConfig, getConfig} from './config';
 
 import RedaxtorContainer from "./containers/RedaxtorContainer";
 // import Img from "./components/img/ImgContainer";
@@ -18,14 +19,11 @@ import {pagesGet, pagesGetLayouts} from './actions/pages';
 import {getImages} from './actions/images';
 import {configureFetch} from './helpers/fetch'
 
+let config = getConfig();
+
 class Redaxtor {
     constructor(options) {
-        const defaultState = {
-            edit: false,
-            highlight: true,
-            currentSourcePieceId: null,
-            pieces: {}
-        };
+        const defaultState = {};
 
         if (options.pieces) {
             options.pieces.components = {
@@ -34,7 +32,6 @@ class Redaxtor {
             };
 
             this._edit = false;
-            defaultState.pieces = {};
             this.pieces = {
                 attribute: "data-piece",
                 attributeId: "data-id",
@@ -44,6 +41,10 @@ class Redaxtor {
                 initialState: {},
                 //other options: getURL, saveURL
                 ...options.pieces
+            };
+
+            config.pieces = {
+                components: options.pieces.components
             };
         }
 
@@ -125,9 +126,6 @@ class Redaxtor {
 
             this.store.dispatch(addPiece(pieceObj))
         }
-
-        this.unsubscribe = this.store.subscribe(this.onStoreChange.bind(this));
-        this.onStoreChange()
     }
 
     initPages() {
@@ -141,44 +139,6 @@ class Redaxtor {
 
     initImages() {
         this.store.dispatch(getImages());
-    }
-
-    onStoreChange() {
-        let previousEdit = this._edit;
-        let state = this.store.getState();
-        this._edit = state.edit;
-        if (previousEdit !== this._edit) {
-            if (this._edit) {
-                Object.keys(state.pieces).forEach(id => {
-                    const piece = state.pieces[id];
-                    if (!this.pieces.components[piece.type]) {
-                        console.log("Not found component type", piece.type);
-                        return;
-                    }
-
-                    if (this.pieces.initialState && this.pieces.initialState[piece.id]) {
-                        this.pieces.initialState[piece.id].id = id;
-                        this.store.dispatch(updatePiece(piece.id, this.pieces.initialState[piece.id], true));
-                        initPiece(this.store, this.pieces.components[piece.type], this.store.getState().pieces[piece.id]);
-                    } else {
-                        this.store.dispatch(pieceGet(piece.id)).then(() => {
-                                const pieceState = this.store.getState().pieces[piece.id];
-                                if (pieceState.fetched) {
-                                    initPiece(this.store, this.pieces.components[piece.type], pieceState)
-                                }
-                            }
-                        )
-                    }
-
-                });
-            } else {
-                //todo it deletes HTML
-                // Object.keys(state.pieces).forEach(id => {
-                //     const piece = state.pieces[id]
-                //     ReactDOM.unmountComponentAtNode(piece.node);
-                // });
-            }
-        }
     }
 }
 

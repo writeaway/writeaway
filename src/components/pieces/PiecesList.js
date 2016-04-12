@@ -1,7 +1,5 @@
 import React, {Component} from "react"
 import IconButton from 'material-ui/lib/icon-button'
-// import ActionVisibility from 'material-ui/lib/svg-icons/action/visibility'
-// import ActionVisibilityOff from 'material-ui/lib/svg-icons/action/visibility-off'
 import ActionFindInPage from 'material-ui/lib/svg-icons/action/find-in-page'
 import ActionCode from 'material-ui/lib/svg-icons/action/code'
 import ContentSave from 'material-ui/lib/svg-icons/content/save'
@@ -14,7 +12,7 @@ class PieceLine extends Component {
     render() {
 
         const height = 20;
-        const {piece, edit, setCurrentSourcePieceId, source} = this.props;
+        const {piece, edit, setSourceId, source} = this.props;
         const id = piece.id;
         const buttonStyle = {float: 'right', width: 20, height: height, padding: 1};//note float right changes order
         const iconStyle = {width: height - 2, height: height - 2};
@@ -25,7 +23,7 @@ class PieceLine extends Component {
                     source &&
                     <IconButton style={buttonStyle} iconStyle={iconStyle} disabled={!edit}
                                 tooltipPosition="top-left" tooltip="Source"
-                                onClick={()=>setCurrentSourcePieceId(id)}>
+                                onClick={()=>setSourceId(id)}>
                         <ActionCode/>
                     </IconButton>
                 }
@@ -58,9 +56,9 @@ class PiecesList extends Component {
             <div style={piecesListStyle}>
                 {Object.keys(this.props.pieces).map(id =>
                     <PieceLine key={id} piece={this.props.pieces[id]}
-                               setCurrentSourcePieceId={this.props.setCurrentSourcePieceId}
-                               savePiece = {()=>this.props.savePiece(id)}
-                               source={this.props.components.source}
+                               setSourceId={this.props.setSourceId}
+                               savePiece={()=>this.props.savePiece(id)}
+                               source={this.props.source}
                                edit={this.props.edit}/>
                 )}
             </div>
