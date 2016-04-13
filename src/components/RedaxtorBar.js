@@ -1,7 +1,8 @@
 import React from "react"
 import ReactDOM from "react-dom"
 
-import {Tabs, Tab} from 'material-ui/lib/tabs'
+import classNames from 'classnames';
+
 import Snackbar from 'material-ui/lib/snackbar';
 
 import PanelHandler from './PanelHandler'
@@ -82,45 +83,41 @@ export default class RedaxtorBar extends React.Component {
     }
 
     render() {
-        const tabStyle = {height: "30px", verticalAlign: "top"};
-        const barStyle = {
-            position: "fixed", top: 0, left: 0, background: "#eee", color: "#222", "zIndex": 1000, width: "320px",
-            borderRadius: "2px",
-            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",' +
-            ' "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif'
-        };
-
         var tabs = [];
         this.props.tabs.pieces &&
-        tabs.push(<Tab key="pieces" label="Pieces" value="pieces" style={tabStyle}
-                       onClick={()=>this.setState({value: "pieces"})}>
-            <Pieces components={this.props.components}/>
-        </Tab>);
+        tabs.push(<div className={classNames({"redaxtor-tab": true, "active": this.state.value === "pieces"})}
+                       key="pieces" value="pieces"
+                       onClick={()=>this.setState({value: "pieces"})}>Pieces
+
+        </div>);
 
         this.props.tabs.i18n &&
-        tabs.push(<Tab key="i18n" label="I18N" value="i18n" style={tabStyle}
-                       onClick={()=>this.setState({value: "i18n"})}>
-            <I18N/>
-        </Tab>);
+        tabs.push(<div className="redaxtor-tab" key="i18n" value="i18n"
+                       onClick={()=>this.setState({value: "i18n"})}>I18N
+        </div>);
 
         this.props.tabs.pages &&
-        tabs.push(<Tab key="pages" label="Pages" value="pages" style={tabStyle}
-                       onClick={()=>this.setState({value: "pages"})}>
-            <Pages/>
-        </Tab>);
+        tabs.push(<div className="redaxtor-tab" key="pages" value="pages"
+                       onClick={()=>this.setState({value: "pages"})}>Pages
+        </div>);
         return (
             <div style={{all: 'initial'}}>
-                <div ref="bar" className="redaxtor-bar" style={barStyle}>
+                <div ref="bar" className="redaxtor-bar">
                     <PanelHandler isOpen={this.state.isOpen}
                                   onMouseDown={this.onMouseDown.bind(this)}
                                   toggleOpen={this.toggleOpen.bind(this)}/>
 
                     {this.state.isOpen ?
-                        <Tabs value={this.state.value} onChange={this.handleTabChange.bind(this)}
-                              tabItemContainerStyle={{height: "30px"}}
-                              contentContainerStyle={{padding: "10px"}}>
+                        <div className="redaxtor-tabs" value={this.state.value}>
+                            <div className="tabs-header" onChange={this.handleTabChange.bind(this)}>
                             {tabs}
-                        </Tabs> : null}
+                            </div>
+                            <div className="tab-content">
+                                {this.state.value === "pieces" && <Pieces components={this.props.components}/>}
+                                {this.state.value === "i18n" && <I18N/>}
+                                {this.state.value === "pages" && <Pages/>}
+                            </div>
+                        </div> : null}
                 </div>
                 <Snackbar
                     open={!!this.props.message}

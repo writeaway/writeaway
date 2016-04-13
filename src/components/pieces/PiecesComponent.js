@@ -1,7 +1,7 @@
 import React from 'react'
 import PiecesList from './PiecesList'
 
-import Toggle from 'material-ui/lib/toggle'
+import Toggle from 'react-toggle'
 
 export default class PiecesComponent extends React.Component {
 
@@ -23,9 +23,11 @@ export default class PiecesComponent extends React.Component {
         return (
             <div>
                 {sourceEditor}
-                <Toggle label="Edit" defaultToggled={this.props.edit}
-                        onToggle={this.props.piecesToggleEdit}/>
-
+                <div className="toggle-wrapper">
+                    <label>Edit</label>
+                    <Toggle defaultChecked={this.props.edit}
+                            onChange={this.props.piecesToggleEdit}/>
+                </div>
                 <PiecesList edit={this.props.edit} pieces={this.props.byId}
                             source={this.props.components.source}
                             savePiece={this.props.savePiece} updatePiece={this.props.updatePiece}

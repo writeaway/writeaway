@@ -1,13 +1,8 @@
 import React, {Component} from "react"
 import {connect} from 'react-redux'
-
 import * as actions from '../actions/images'
+import Modal from 'react-modal'
 
-import Dialog from 'material-ui/lib/dialog'
-import FlatButton from 'material-ui/lib/flat-button'
-import TextField from 'material-ui/lib/text-field';
-import Checkbox from 'material-ui/lib/checkbox';
-import Paper from 'material-ui/lib/paper';
 
 export default class Images extends Component {
     constructor(props) {
@@ -53,60 +48,61 @@ export default class Images extends Component {
     }
 
     render() {
-        const actions = [
-            <FlatButton label="Cancel" secondary={true}
-                        onClick={this.onClose.bind(this)}/>,
-            <FlatButton label="Save" primary={true} keyboardFocused={true}
-                        onClick={this.onSave.bind(this)}/>
-        ]
         return (
             <div>
-                <Dialog title="" actions={actions} modal={true} open={this.props.image.isVisible}
-                        autoScrollBodyContent={true}>
-                    <div style={{display: "flex"}}>
-                        <div style={{flex: "1 1 100%", marginRight: "20px"}}>
-                            <TextField
-                                onChange={e=>this.onUrlChange.call(this, e.target.value)}
-                                floatingLabelText="Enter image URL" value={this.props.image.url||""}
-                                style={{display: "block"}} fullWidth={true}/>
-                            <TextField onChange={e=>this.props.saveImageData({alt: e.target.value})}
-                                       floatingLabelText="Enter image alt" value={this.props.image.alt||""}
-                                       style={{display: "block"}} fullWidth={true}/>
-                            <TextField onChange={this.onWidthChange.bind(this)}
-                                       floatingLabelText="width" value={this.props.image.width||""}
-                                       style={{width: "50px", marginRight: "10px"}}/>
-                            x
-                            <TextField onChange={this.onHeightChange.bind(this)}
-                                       floatingLabelText="height" value={this.props.image.height||""}
-                                       style={{width: "50px", marginLeft: "10px"}}/>
-                            <Checkbox onCheck={(e, status)=>this.setState({proportions: status})}
-                                      label="Constrain proportions" defaultChecked={this.state.proportions}
-                            />
+                <Modal isOpen={this.props.image.isVisible} overlayClassName="modal-overlay" className="modal-content"
+                       onRequestClose={this.onClose.bind(this)}>
+                    <div className="image-inputs-container">
+                        <div className="image-left-part">
+                            <div className="input-container">
+                                <input onChange={e=>this.onUrlChange.call(this, e.target.value)}
+                                       placeholder="Enter image URL" value={this.props.image.url||""}/>
+                            </div>
+                            <div className="input-container">
+                                <input onChange={e=>this.props.saveImageData({alt: e.target.value})}
+                                       placeholder="Enter image alt" value={this.props.image.alt||""}/>
+                            </div>
+                            <div className="sizes">
+                                <div className="input-container">
+                                    <input onChange={this.onWidthChange.bind(this)}
+                                           placeholder="width" value={this.props.image.width||""}
+                                           style={{width: "50px", marginRight: "10px"}}/>
+                                </div>
+                                px x
+                                <div className="input-container">
+                                    <input onChange={this.onHeightChange.bind(this)}
+                                           placeholder="height" value={this.props.image.height||""}
+                                           style={{width: "50px", marginLeft: "10px"}}/>
+                                </div>
+                                px
+                                <label class="checkbox-label"><input type="checkbox"
+                                                                     onChange={e=>{this.setState({proportions: e.target.checked})}}
+                                                                     defaultChecked={this.state.proportions}/><span>blabla</span></label>
+
+                            </div>
                         </div>
-                        <div style={{flex: "1 1 200px", height: "200px"}}>
-                            <img src={this.props.image.url} alt={this.props.image.alt}
-                                 style={{maxWidth: "100%", maxHeight: "100%"}}/>
+                        <div className="image-right-part">
+                            <img src={this.props.image.url} alt={this.props.image.alt}/>
                         </div>
                     </div>
                     {
                         this.props.image.gallery &&
-                        <div>
+                        <div className="gallery-wrapper">
                             <h2>Uploaded images</h2>
-                            <div style={{display: "flex", flexWrap: "wrap", justifyContent: "space-between"}}>
+                            <div className="gallery-container">
                                 {Object.keys(this.props.image.gallery).map(index =>
-                                    <Paper key={this.props.image.gallery[index]}
-                                           style={{width: "200px", height: "200px", cursor: "pointer", marginBottom: "10px"}}
-                                           onClick={()=> {this.onUrlChange.call(this, this.props.image.gallery[index])}}>
-                                        <div style={{height: "100%", width: "100%", backgroundImage: "url("+this.props.image.gallery[index]+")",
-                                        backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center"}}>
-
-                                        </div>
-                                    </Paper>
+                                    <div key={this.props.image.gallery[index]} className="gallery-item-container">
+                                        <div className="gallery-item" style={{backgroundImage: "url("+this.props.image.gallery[index]+")"}}/>
+                                    </div>
                                 )}
                             </div>
                         </div>
                     }
-                </Dialog>
+                    <div className="actions-bar">
+                        <div className="button button-cancel" onClick={this.onClose.bind(this)}>Cancel</div>
+                        <div className="button button-save" onClick={this.onSave.bind(this)}>Save</div>
+                    </div>
+                </Modal>
             </div>
         )
     }

@@ -1,13 +1,12 @@
 import React, {Component} from "react"
 import ReactDOM from "react-dom"
 import {Provider, connect} from 'react-redux'
+import classNames from 'classnames';
 import {updatePiece, savePiece, setSourceId} from '../actions/pieces'
 import {toggleImagePopup, setCancelCallback, setSaveCallback, saveImageData, resetImageData} from '../actions/images'
 
 const PieceContainer = (props) => {
-    let style = {width: "100%", height: "100%"};
-    if (props.edit) style.outline = "2px dotted #3c93eb";
-    return <props.component {...props} style={style} wrapper="div"/>
+    return <props.component {...props} className={classNames({"contenteditable": true, "edit": props.edit})} wrapper="div"/>
 };
 
 const mapStateToProps = (state, ownProps) => {
