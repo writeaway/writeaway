@@ -1,5 +1,6 @@
 import {showMessage} from '../actions'
 import {getStore} from '../store'
+import {toastr} from 'react-redux-toastr'
 
 let defaults = {
     method: "POST",
@@ -37,9 +38,12 @@ const callFetch = (options) => {
         const status = res.status;
         if (status >= 200 && status < 300 || status === 304) {
             if (res.message) {
-                var message = res.message;
-                typeof message !== 'object' && (message = {content: message});
-                store.dispatch(showMessage(message));
+                var message = res.message,
+                    timeOut = message.timeout,
+                    settings = {};
+                typeof message === 'object' && (message = message.content);
+                timeOut && (settings.timeOut = timeOut);
+                toastr.success("",message,settings);
             }
             let action = res.action || res.actions;
             if (action) {

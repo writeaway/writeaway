@@ -3,8 +3,6 @@ import ReactDOM from "react-dom"
 
 import classNames from 'classnames';
 
-import Snackbar from 'material-ui/lib/snackbar';
-
 import PanelHandler from './PanelHandler'
 import Pieces from './pieces/PiecesContainer'
 import Pages from './pages/PagesContainer'
@@ -119,12 +117,6 @@ export default class RedaxtorBar extends React.Component {
                             </div>
                         </div> : null}
                 </div>
-                <Snackbar
-                    open={!!this.props.message}
-                    message={this.props.message&&this.props.message.content||""}
-                    autoHideDuration={this.props.message&&this.props.message.durationTime||4000}
-                    onRequestClose={()=>{this.props.hideMessage()}}
-                />
                 <Images/>
 
             </div>

@@ -1,4 +1,7 @@
 {
   "status": 200,
-  "message": "OK"
+  "message": {
+    "content": "OK",
+    "timeout": 1000
+  }
 }

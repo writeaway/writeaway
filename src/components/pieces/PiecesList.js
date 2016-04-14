@@ -1,5 +1,5 @@
 import React, {Component} from "react"
-
+import {toastr} from 'react-redux-toastr'
 class PieceLine extends Component {
     shouldComponentUpdate(nextProps) {
         return this.props.edit !== nextProps.edit || this.props.piece.changed !== nextProps.piece.changed;

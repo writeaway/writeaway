@@ -51,6 +51,7 @@
     "eslint": "^2.4.0",
     "eslint-plugin-react": "^4.2.3",
     "react-modal": "^1.1.0",
+    "react-redux-toastr": "^3.0.8",
     "react-toggle": "^2.0.1",
     "rimraf": "^2.5.2",
     "webpack": "^1.12.14"

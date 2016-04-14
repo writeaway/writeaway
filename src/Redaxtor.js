@@ -4,6 +4,7 @@ import ReactDOM from "react-dom";
 import {createStore, applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
+import ReduxToastr from 'react-redux-toastr'
 
 import {setStore} from './store';
 import {setConfig, getConfig} from './config';
@@ -91,13 +92,19 @@ class Redaxtor {
         this.barNode = document.createElement("DIV");
         ReactDOM.render(
             <Provider store={this.store}>
-                <RedaxtorContainer
-                    components={this.pieces.components}
-                    tabs={{
+                <div>
+                    <RedaxtorContainer
+                        components={this.pieces.components}
+                        tabs={{
                         pieces: !!this.pieces,
                         i18n: !!this.i18n,
                         pages: !!this.pages
-                    }}/>
+                    }}>
+                    </RedaxtorContainer>
+                    <ReduxToastr
+                        timeOut={4000}
+                        position="top-right"/>
+                </div>
             </Provider>,
             this.barNode
         );
