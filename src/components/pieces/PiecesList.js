@@ -1,5 +1,7 @@
 import React, {Component} from "react"
 import {toastr} from 'react-redux-toastr'
+import classNames from 'classnames';
+
 class PieceLine extends Component {
     shouldComponentUpdate(nextProps) {
         return this.props.edit !== nextProps.edit || this.props.piece.changed !== nextProps.piece.changed;
@@ -13,7 +15,7 @@ class PieceLine extends Component {
                 <span className="piece-name">{piece.name || id}</span>
                 {
                     source &&
-                    <div className="icon-button" disabled={!edit} title="Source" onClick={()=>setSourceId(id)}>
+                    <div className={classNames({"icon-button":true, "disabled": !edit})} title="Source" onClick={()=>setSourceId(id)}>
                         <i className="material-icons">code</i>
                     </div>
                 }
