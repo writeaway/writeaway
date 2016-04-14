@@ -77,7 +77,7 @@ export default class Images extends Component {
                                 px
                                 <label class="checkbox-label"><input type="checkbox"
                                                                      onChange={e=>{this.setState({proportions: e.target.checked})}}
-                                                                     defaultChecked={this.state.proportions}/><span>blabla</span></label>
+                                                                     defaultChecked={this.state.proportions}/><span>Constrain proportions</span></label>
 
                             </div>
                         </div>
