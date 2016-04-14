@@ -1,17 +1,19 @@
 import React from 'react'
 import I18NList from './I18NList'
 
-import Toggle from 'material-ui/lib/toggle'
-import RaisedButton from 'material-ui/lib/raised-button'
+import Toggle from 'react-toggle'
 
 export default class PiecesComponent extends React.Component {
     render() {
         return (
             <div>
-                <Toggle label="Edit & Highlight on the page" defaultToggled={this.props.edit}
-                        onToggle={this.props.i18nToggleEdit}/>
+                <div className="toggle-wrapper">
+                    <label>Edit & Highlight on the page</label>
+                    <Toggle defaultChecked={this.props.edit}
+                            onChange={this.props.i18nToggleEdit}/>
+                </div>
                 <I18NList {...this.props}/>
-                <RaisedButton label="Save all" secondary={true} onClick={this.props.i18nSave}/>
+                <div className="button button-save" onClick={this.props.i18nSave}>Save all</div>
             </div>
         )
     }

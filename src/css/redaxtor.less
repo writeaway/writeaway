@@ -107,11 +107,23 @@
     }
   }
 
-  .pieces-list {
+  .pieces-list, .i18n-list {
     max-height: 400px;
     overflow: auto;
-    .piece-row {
+    .piece-row, .i18n-row {
       padding: 2px 0px;
+      .i18n-item-id {
+        display: inline-block;
+        height: 20px;
+      }
+      .i18n-item-value-disabled {
+        float: right;
+        color: gray;
+        font-size: 0.8em;
+      }
+      .input-wrapper {
+        float: right;
+      }
       .piece-name {
         display: inline-block;
         height: 20px;
@@ -230,4 +242,11 @@
   text-align: center;
   -webkit-user-select: none;
   background: none rgba(0, 0, 0, 0);
+}
+
+.portal {
+  border: 1px solid gray;
+  background: #fff;
+  z-index: 100000;
+  padding: 10px;
 }

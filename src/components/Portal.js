@@ -12,11 +12,7 @@ export default class FormPortal extends React.Component {
             position: this.props.position || 'absolute',
             top: this.props.top,
             left: this.props.left,
-            width: this.props.width || "auto",
-            border: '1px solid gray',
-            background: '#fff',
-            zIndex: 100000,
-            padding: 10
+            width: this.props.width || "auto"
         };
 
         // var Children = React.Children.map(this.children.map, child => {
@@ -26,7 +22,7 @@ export default class FormPortal extends React.Component {
         // var Child = React.Children.toArray(this.props.children)[0];
         var Child = this.props.children;//https://facebook.github.io/react/tips/children-props-type.html
         return (
-            <Portal closeOnOutsideClick isOpened={this.state.isOpened} style={style}
+            <Portal closeOnOutsideClick isOpened={this.state.isOpened} style={style} className="portal"
                     onClose={() => {this.onClose();}}>
                 {Child}
             </Portal>

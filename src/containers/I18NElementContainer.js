@@ -2,8 +2,6 @@ import React, {Component} from "react"
 import {connect} from 'react-redux'
 import {updateI18NData} from '../actions/i18n'
 
-import TextField from 'material-ui/lib/text-field';
-
 import Portal from '../components/Portal'
 
 class Element extends Component {
@@ -27,8 +25,8 @@ class Element extends Component {
             portal =
                 <Portal top={rect.top + rect.height} left={rect.left} position="fixed"
                         onClose={()=>this.setState({edit: false})}>
-                    <div>
-                        <TextField value={text} floatingLabelText="text"
+                    <div className="input-container">
+                        <input value={text} placeholder="text"
                                    onChange={e => updateI18NData(id, e.target.value)}/>
                     </div>
                 </Portal>;
