@@ -7,9 +7,12 @@ require('redaxtor-medium/lib/redaxtor-medium.css');
 var RedaxtorCodemirror = require('redaxtor-codemirror');
 require('codemirror/lib/codemirror.css');
 
+var Menu = require('./Menu');
+
 var components = {
     html: RedaxtorMedium,
-    source: RedaxtorCodemirror
+    source: RedaxtorCodemirror,
+    menu: Menu
 };
 
 //PER PROJECT BUNDLE - includes components needed for particular projects

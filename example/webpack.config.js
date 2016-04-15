@@ -46,7 +46,10 @@ var config = {
         ]
     },
     resolve: {
-        root: path.join(__dirname, "node_modules")
+        root: path.join(__dirname, "node_modules"),
+        // alias: {
+        //     react: "../node_modules/react"
+        // }
     },
     resolveLoader: { root: path.join(__dirname, "node_modules") },
     devtool: "eval"

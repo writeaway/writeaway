@@ -110,6 +110,7 @@ export const pieceGet = id => {
             dispatch(pieceFetched(id, json.piece));
 
             const piece = getState().pieces.byId[id];
+            // piece.node.style.position = "relative";
             ReactDOM.render(
                 <Provider store={getStore()}>
                     <Container id={id}
