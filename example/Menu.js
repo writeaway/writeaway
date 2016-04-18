@@ -82,22 +82,82 @@ class MultipleElement extends Component {
     }
 }
 
+MultipleElement.options = {
+    validateDebounce: 500,
+    validateOn: "change" || "save",
+    validatePreventSave: true
+};
+
 
 ///////////////////////////
 
 const Item = props => <a href={props.item.href} className="js-anchor">{props.item.text}</a>;
 
+//React.createElement(el)
+const el = [
+    //element
+    "a",//can be html element or react component
+
+    //attributes
+    {
+        href: "#asdf",
+        "data-anyattr": "ertyuio"
+    },
+
+    //children
+    "This is a text, but can be any children: html element or react component"
+];
+
 class Menu extends MultipleElement {
 
     formJSON() {
-        return {
-            text: {
-                type: "text"
+        return [
+            {
+                type: "email",//input[type], checkbox, radio, select, textarea, html-editor, source-editor
+                label: "Text",
+                name: "text",
+                options: []//for select
             },
-            href: {
-                type: "text"
+            {
+                type: "checkbox",
+                label: "Is featured",
+                name: "featured"
+            },
+            {
+                label: "Color",
+                direction: "row",//for flex-direction: row | row-reverse | column | column-reverse
+                styles: {},
+                group: [//or group
+                    {
+                        type: "radio",
+                        name: "color",
+                        label: "Red",
+                        value: "red"
+                    },
+                    {
+                        type: "radio",
+                        name: "color",
+                        label: "Blue",
+                        value: "blue"
+                    }
+                ]
+            },
+            {
+                label: "User",
+                direction: "row",
+                group: [
+                    {
+                        // label: "",//optional
+                        name: "firstName",
+                        placeholder: "First Name"
+                    },
+                    {
+                        name: "lastName",
+                        placeholder: "Last Name"
+                    }
+                ]
             }
-        }
+        ];
     }
 
     buildForm() {
