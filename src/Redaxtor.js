@@ -35,6 +35,7 @@ class Redaxtor {
             this.pieces = {
                 attribute: "data-piece",
                 attributeId: "data-id",
+                attributeUseHTML: "data-use-html",
                 attributeGetURL: "data-get-url",
                 attributeSaveURL: "data-save-url",
                 components: {},
@@ -114,6 +115,7 @@ class Redaxtor {
                 node: el,
                 type: el.getAttribute(this.pieces.attribute),
                 id: el.getAttribute(this.pieces.attributeId),
+                useHTML: el.getAttribute(this.pieces.attributeUseHTML) || this.pieces.useHTML,
                 getURL: el.getAttribute(this.pieces.attributeGetURL) || this.pieces.getURL,
                 saveURL: el.getAttribute(this.pieces.attributeSaveURL) || this.pieces.saveURL,
                 dataset: {},
