@@ -90,12 +90,12 @@ export default class RedaxtorBar extends React.Component {
         </div>);
 
         this.props.tabs.i18n &&
-        tabs.push(<div className="redaxtor-tab" key="i18n" value="i18n"
+        tabs.push(<div className={classNames({"redaxtor-tab": true, "active": this.state.value === "i18n"})} key="i18n" value="i18n"
                        onClick={()=>this.setState({value: "i18n"})}>I18N
         </div>);
 
         this.props.tabs.pages &&
-        tabs.push(<div className="redaxtor-tab" key="pages" value="pages"
+        tabs.push(<div className={classNames({"redaxtor-tab": true, "active": this.state.value === "pages"})} key="pages" value="pages"
                        onClick={()=>this.setState({value: "pages"})}>Pages
         </div>);
         return (
