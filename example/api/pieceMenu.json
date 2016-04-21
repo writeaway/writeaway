@@ -12,22 +12,33 @@
           "text": "Contact"
         }
       ],
-      "children": [
-        [
-          "a",
-          {
-            "href": "#about"
-          },
-          "About"
-        ],
-        [
-          "a",
-          {
-            "href": "#contact"
-          },
-          "Contact"
-        ]
-      ]
+      "schema": {
+        "multiple": true,
+        "maxItems": 8,
+        "item": {
+          "fields": [
+            {
+              "name": "href",
+              "title": "Link",
+              "placeholder": "Enter URL here"
+            },
+            {
+              "name": "text",
+              "title": "Text",
+              "placeholder": "Enter URL text here"
+            },
+            {
+              "name": "target",
+              "title": "Select target",
+              "options": {
+                "blank": "In new tab",
+                "self": "in current tab"
+              },
+              "type": "select"
+            }
+          ]
+        }
+      }
     }
   }
 }

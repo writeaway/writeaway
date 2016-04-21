@@ -16,15 +16,99 @@ const tabStyle = {
 
 
 class Form extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            index: null,
+            currentItem: {}
+        };
+    }
+
+    buildList() {
+        var that = this;
+        return (
+            <div>
+                <div onClick={()=>{that.setState({index: -1})}}>Add new item</div>
+                {this.props.data.items.map((item, index) =>
+                    <div><span> item-{index}</span> <span
+                        onClick={()=>{that.setCurrentPiece.call(that, index)}}>Edit</span></div>
+                )}
+            </div>
+        )
+        //const {text, href} = this.props.data.items[this.state.index];
+        //return (
+        //    <div>
+        //        <input value={text} onChange={e=>this.change("text", e.target.value)}/>
+        //        <input value={href}/>
+        //    </div>
+        //)
+    }
+
+    setCurrentPiece(index) {
+        this.setState({index: index})
+    }
+
+    buildForm() {
+        var that = this;
+        return (
+            <div>
+                {this.props.data.schema.item.fields.map((item, index) =>
+                    that.buildFormElement(item, index)
+                )}
+                <div>
+                    <span onClick={()=>this.setState({index: null})}>Cancel</span>
+                    <span onClick={this.savePiece.bind(this)}>Save</span>
+                </div>
+            </div>
+        )
+    }
+
+    savePiece() {
+        let data = this.props.data;
+        for (var key in this.state.currentItem){
+            data.items[this.state.index][key] = this.state.currentItem[key]
+        }
+        this.props.updatePiece(this.props.id, {data: data});
+        this.props.savePiece(this.props.id);
+        this.setState({index: null,currentItem: {}});
+    }
+
+    buildFormElement(element, index) {
+        let newItem = this.state.index === -1;
+        let value = (!newItem && this.props.data.items[this.state.index][element.name]) ? this.props.data.items[this.state.index][element.name] : "";
+        let label = element.title || element.label ?
+            <label for={element.name}>{element.title || element.label}</label> : null;
+        switch (element.type) {
+            case "input":
+            case undefined:
+                return (
+                    <div>{label}<input name={element.name} defaultValue={value} placeholder={element.placeholder}
+                                       onBlur={e=>this.state.currentItem[element.name]=e.target.value}/></div>
+                )
+            case "select":
+                return (
+                    <div>
+                        {label}
+                        <select onChange={e=>this.state.currentItem[element.name]=e.target.value} defaultValue={value}>
+                            <option value='empty' hidden>Select Layout</option>
+                            {Object.keys(element.options).map(key =>
+                                <option key={key} value={key}>{element.options[key]}</option>)}
+                        </select>
+                    </div>
+                )
+        }
+    }
+
     render() {
+        var innerElement = null;
+        if (this.state.index === null) {
+            innerElement = this.buildList();
+        } else {
+            innerElement = this.buildForm();
+        }
         return (
             <div style={formStyle}>
-                <div style={tabsStyle}>
-                    {this.props.tabs}
-                </div>
-                <div>
-                    {this.props.children}
-                </div>
+                {innerElement}
             </div>
         )
     }
@@ -62,13 +146,10 @@ class MultipleElement extends Component {
 
     mountForm() {
         this.formPanel = document.createElement("DIV");
-        this.setState({
-            index: 0
-        });
+        var ItemForm = null;
         ReactDOM.render(
-            <Form tabs={this.buildTabs()}>
-                {this.buildForm()}
-            </Form>,
+            <Form data={this.props.data} savePiece={this.props.savePiece} updatePiece={this.props.updatePiece}
+                  id={this.props.id}/>,
             this.formPanel);
         const rect = this.props.node.getBoundingClientRect();
         this.formPanel.style.position = "fixed";
@@ -80,6 +161,8 @@ class MultipleElement extends Component {
     change() {
         debugger;
     }
+
+
 }
 
 MultipleElement.options = {
@@ -160,15 +243,6 @@ class Menu extends MultipleElement {
         ];
     }
 
-    buildForm() {
-        const {text, href} = this.props.data.items[this.state.index];
-        return (
-            <div>
-                <input value={text} onChange={e=>this.change("text", e.target.value)}/>
-                <input value={href}/>
-            </div>
-        )
-    }
 
     render() {
         return (
