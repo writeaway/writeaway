@@ -35,6 +35,18 @@
                 "self": "in current tab"
               },
               "type": "select"
+            },
+            {
+              "type": "textarea",
+              "name": "textarea",
+              "height": 300,
+              "title": "Textarea",
+              "placeholder": "textarea example"
+            },
+            {
+              "type": "checkbox",
+              "name": "checkbox",
+              "label": "Checkbox Example"
             }
           ]
         }

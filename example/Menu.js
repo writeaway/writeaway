@@ -65,12 +65,12 @@ class Form extends Component {
 
     savePiece() {
         let data = this.props.data;
-        for (var key in this.state.currentItem){
+        for (var key in this.state.currentItem) {
             data.items[this.state.index][key] = this.state.currentItem[key]
         }
         this.props.updatePiece(this.props.id, {data: data});
         this.props.savePiece(this.props.id);
-        this.setState({index: null,currentItem: {}});
+        this.setState({index: null, currentItem: {}});
     }
 
     buildFormElement(element, index) {
@@ -95,6 +95,20 @@ class Form extends Component {
                                 <option key={key} value={key}>{element.options[key]}</option>)}
                         </select>
                     </div>
+                )
+            case "textarea":
+                let textareaStyle = {
+                    height: (element.height || 300) + 'px'
+                }
+                return (
+                    <div>{label}<textarea name={element.name} defaultValue={value} placeholder={element.placeholder}
+                                          style={textareaStyle}
+                                          onBlur={e=>this.state.currentItem[element.name]=e.target.value}/></div>
+                )
+            case "checkbox":
+                return (
+                    <div>{label}<input type="checkbox" name={element.name} defaultChecked={value}
+                                       onChange={e=>this.state.currentItem[element.name]=e.target.checked}/></div>
                 )
         }
     }
