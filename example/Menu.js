@@ -30,8 +30,13 @@ class Form extends Component {
             <div>
                 <div onClick={()=>{that.setState({index: -1})}}>Add new item</div>
                 {this.props.data.items.map((item, index) =>
-                    <div><span> item-{index}</span> <span
-                        onClick={()=>{that.setCurrentPiece.call(that, index)}}>Edit</span></div>
+                    <div>
+                        <span> item-{index}</span>
+                        <span onClick={()=>{that.setCurrentPiece.call(that, index)}}>Edit</span>
+                        <span onClick={()=>{that.deleteItem.call(that, index)}}>[x]</span>
+                        {(index>0)&&<span onClick={()=>{that.swapItemsElements.call(that, index, index-1)}}>[up]</span>}
+                        {(index!==that.props.data.items.length-1)&&<span onClick={()=>{that.swapItemsElements.call(that, index, index+1)}}>[down]</span>}
+                    </div>
                 )}
             </div>
         )
@@ -46,6 +51,23 @@ class Form extends Component {
 
     setCurrentPiece(index) {
         this.setState({index: index})
+    }
+
+    deleteItem(index) {
+        let data = this.props.data;
+        data.items = data.items.slice(index, 1);
+        this.props.updatePiece(this.props.id, {data: data});
+        this.props.savePiece(this.props.id);
+        this.setState({index: null, currentItem: {}});
+    }
+    swapItemsElements(firstIndex, secondIndex) {
+        let data = this.props.data;
+        var temp = data.items[secondIndex];
+        data.items[secondIndex] = data.items[firstIndex];
+        data.items[firstIndex] = temp;
+        this.props.updatePiece(this.props.id, {data: data});
+        this.props.savePiece(this.props.id);
+        this.setState({index: null, currentItem: {}});
     }
 
     buildForm() {
@@ -65,8 +87,12 @@ class Form extends Component {
 
     savePiece() {
         let data = this.props.data;
-        for (var key in this.state.currentItem) {
-            data.items[this.state.index][key] = this.state.currentItem[key]
+        if (this.state.index > -1) {
+            for (var key in this.state.currentItem) {
+                data.items[this.state.index][key] = this.state.currentItem[key]
+            }
+        } else {
+            data.items.push(this.state.currentItem)
         }
         this.props.updatePiece(this.props.id, {data: data});
         this.props.savePiece(this.props.id);
