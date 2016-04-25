@@ -5,22 +5,22 @@ class I18NList extends Component {
         const {edit, data, elements, updateI18NData} = this.props;
 
         return (
-            <div className="items-list">
+            <div className="r_list">
                 {Object.keys(data).map(id => {
                     const element = elements[id];
                     const translate = data[id];
                     return (
-                        <div key={id} className="item-row">
+                        <div key={id} className="r_item-row">
                             <span>{id}</span>
-                            <span className="item-right">
+                            <span className="r_item-right">
                                 {(()=> {
                                     if (edit) {
-                                        return <span className="input-wrapper">
+                                        return <span className="r_input-wrapper">
                                             <input type="text" value={translate}
                                                    onChange={(e)=>updateI18NData(id, e.target.value)}/>
                                         </span>
                                     } else {
-                                        return <span className="item-value">{translate}</span>;
+                                        return <span className="r_item-value">{translate}</span>;
                                     }
                                 })()}
                             </span>

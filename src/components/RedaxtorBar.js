@@ -76,34 +76,34 @@ export default class RedaxtorBar extends React.Component {
     render() {
         var tabs = [];
         this.props.tabs.pieces &&
-        tabs.push(<div className={classNames({"redaxtor-tab": true, "active": this.state.value === "pieces"})}
+        tabs.push(<div className={classNames({"r_tab": true, "r_active": this.state.value === "pieces"})}
                        key="pieces" value="pieces"
                        onClick={()=>this.setState({value: "pieces"})}>Pieces
 
         </div>);
 
         this.props.tabs.i18n &&
-        tabs.push(<div className={classNames({"redaxtor-tab": true, "active": this.state.value === "i18n"})} key="i18n"
+        tabs.push(<div className={classNames({"r_tab": true, "r_active": this.state.value === "i18n"})} key="i18n"
                        value="i18n"
                        onClick={()=>this.setState({value: "i18n"})}>I18N
         </div>);
 
         this.props.tabs.pages &&
-        tabs.push(<div className={classNames({"redaxtor-tab": true, "active": this.state.value === "pages"})}
+        tabs.push(<div className={classNames({"r_tab": true, "r_active": this.state.value === "pages"})}
                        key="pages" value="pages"
                        onClick={()=>this.setState({value: "pages"})}>Pages
         </div>);
         return (
             <div style={{all: 'initial'}}>
-                <div ref="bar" className="redaxtor-bar">
+                <div ref="bar" className="r_bar">
                     <PanelHandler isOpen={this.state.isOpen}
                                   onMouseDown={this.onMouseDown.bind(this)}
                                   toggleOpen={this.toggleOpen.bind(this)}/>
 
                     {this.state.isOpen ?
-                        <div className="redaxtor-tabs" value={this.state.value}>
-                            <div className="tabs-header">{tabs}</div>
-                            <div className="tab-content">
+                        <div className="r_tabs" value={this.state.value}>
+                            <div className="r_tabs-header">{tabs}</div>
+                            <div className="r_tab-content">
                                 {this.state.value === "pieces" && <Pieces components={this.props.components}/>}
                                 {this.state.value === "i18n" && <I18N/>}
                                 {this.state.value === "pages" && <Pages/>}

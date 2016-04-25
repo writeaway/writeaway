@@ -9,11 +9,11 @@ class PieceLine extends Component {
         const {piece, edit, setSourceId, source} = this.props;
         const id = piece.id;
         return (
-            <div className="item-row">
-                <span className="piece-name">{piece.name || id}</span>
-                <span className="item-right">
-                    {source && edit && <span className="piece-icon" onClick={()=>setSourceId(id)}>code</span>}
-                    {piece.changed && <span className="piece-icon" onClick={this.props.savePiece}>save</span>}
+            <div className="r_item-row">
+                <span>{piece.name || id}</span>
+                <span className="r_item-right">
+                    {source && edit && <span onClick={()=>setSourceId(id)}>code</span>}
+                    {piece.changed && <span onClick={this.props.savePiece}>save</span>}
                 </span>
             </div>
         )
@@ -27,7 +27,7 @@ class PiecesList extends Component {
 
     render() {
         return (
-            <div className="items-list">
+            <div className="r_list">
                 {Object.keys(this.props.pieces).map(id =>
                     <PieceLine key={id} piece={this.props.pieces[id]}
                                setSourceId={this.props.setSourceId}
