@@ -1,4 +1,4 @@
-"use strict"
-import Redaxtor from './Redaxtor'
+import Redaxtor from './Redaxtor';
+require('./styles/redaxtor.less');
 
-module.exports = Redaxtor
+module.exports = Redaxtor;

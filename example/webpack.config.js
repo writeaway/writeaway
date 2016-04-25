@@ -1,5 +1,6 @@
 'use strict';
 var path = require('path');
+var autoprefixer = require('autoprefixer');
 var node_modules_dir = path.resolve(__dirname, 'node_modules');
 var env = process.env.NODE_ENV;
 var webpack = require(path.resolve(node_modules_dir,'webpack'));
@@ -37,11 +38,11 @@ var config = {
             },
             {
                 test: /\.less$/,
-                loader: "style!css?-url!less"
+                loader: "style!css?-url&sourceMap!postcss!less?sourceMap"
             },
             {
-                test: /\.css/,
-                loader: "style!css?-url"
+                test: /\.css$/,
+                loader: "style!css?-url&sourceMap!postcss"
             }
         ]
     },
@@ -49,7 +50,8 @@ var config = {
         root: path.join(__dirname, "node_modules")
     },
     resolveLoader: { root: path.join(__dirname, "node_modules") },
-    devtool: "eval"
+    devtool: "eval",
+    postcss: [ autoprefixer({ browsers: ['last 2 versions'] }) ]
 };
 
 if (env === 'production') {

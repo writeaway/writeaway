@@ -1,8 +1,9 @@
 'use strict';
 
-var path = require('path')
-var webpack = require('webpack')
-var env = process.env.NODE_ENV
+var path = require('path');
+var webpack = require('webpack');
+var autoprefixer = require('autoprefixer');
+var env = process.env.NODE_ENV;
 // var node_modules_dir = path.resolve(__dirname, 'node_modules');
 
 var config = {
@@ -33,6 +34,14 @@ var config = {
                         'babel-plugin-transform-object-rest-spread'
                     ]
                 }
+            },
+            {
+                test: /\.less$/,
+                loader: "style!css?-url&sourceMap!postcss!less?sourceMap"
+            },
+            {
+                test: /\.css$/,
+                loader: "style!css?-url&sourceMap!postcss"
             }
         ]
     },

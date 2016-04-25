@@ -1,6 +1,4 @@
-import React, {Component} from "react"
-import {toastr} from 'react-redux-toastr'
-import classNames from 'classnames';
+import React, {Component} from "react";
 
 class PieceLine extends Component {
     shouldComponentUpdate(nextProps) {
@@ -11,24 +9,12 @@ class PieceLine extends Component {
         const {piece, edit, setSourceId, source} = this.props;
         const id = piece.id;
         return (
-            <div className="piece-row">
+            <div className="item-row">
                 <span className="piece-name">{piece.name || id}</span>
-                {
-                    source &&
-                    <div className={classNames({"icon-button":true, "disabled": !edit})} title="Source" onClick={()=>setSourceId(id)}>
-                        <i className="material-icons">code</i>
-                    </div>
-                }
-                <div className="icon-button" onClick={()=>piece.node.scrollIntoView()} title="Scroll to element">
-                    <i className="material-icons">find_in_page</i>
-                </div>
-                {
-                    piece.changed &&
-                    <div className="icon-button need-save" title="Save piece" onClick={this.props.savePiece}>
-                        <i className="material-icons">save</i>
-                    </div>
-                }
-
+                <span className="item-right">
+                    {source && edit && <span className="piece-icon" onClick={()=>setSourceId(id)}>code</span>}
+                    {piece.changed && <span className="piece-icon" onClick={this.props.savePiece}>save</span>}
+                </span>
             </div>
         )
     }
@@ -41,7 +27,7 @@ class PiecesList extends Component {
 
     render() {
         return (
-            <div className="pieces-list">
+            <div className="items-list">
                 {Object.keys(this.props.pieces).map(id =>
                     <PieceLine key={id} piece={this.props.pieces[id]}
                                setSourceId={this.props.setSourceId}

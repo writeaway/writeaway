@@ -36,6 +36,7 @@
     "redux-thunk": "^2.0.1"
   },
   "devDependencies": {
+    "autoprefixer": "^6.3.6",
     "babel": "^6.5.2",
     "babel-cli": "^6.6.5",
     "babel-loader": "^6.2.4",
@@ -50,6 +51,9 @@
     "cross-env": "^1.0.7",
     "eslint": "^2.4.0",
     "eslint-plugin-react": "^4.2.3",
+    "less-loader": "^2.2.3",
+    "postcss": "^5.0.19",
+    "postcss-loader": "^0.8.2",
     "react-modal": "^1.1.0",
     "react-redux-toastr": "^3.0.8",
     "react-toggle": "^2.0.1",

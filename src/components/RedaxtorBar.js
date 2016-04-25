@@ -37,13 +37,6 @@ export default class RedaxtorBar extends React.Component {
         }
     }
 
-    handleTabChange(e) {
-        //todo doesn't work - bug in mui 15 alpha
-        this.setState({
-            value: e.value
-        });
-    };
-
     handleSaveI18N() {
         console.log("handleSaveI18N", this.props.I18N);
         // Object.keys(this.props.I18N).forEach(id => {
@@ -90,12 +83,14 @@ export default class RedaxtorBar extends React.Component {
         </div>);
 
         this.props.tabs.i18n &&
-        tabs.push(<div className={classNames({"redaxtor-tab": true, "active": this.state.value === "i18n"})} key="i18n" value="i18n"
+        tabs.push(<div className={classNames({"redaxtor-tab": true, "active": this.state.value === "i18n"})} key="i18n"
+                       value="i18n"
                        onClick={()=>this.setState({value: "i18n"})}>I18N
         </div>);
 
         this.props.tabs.pages &&
-        tabs.push(<div className={classNames({"redaxtor-tab": true, "active": this.state.value === "pages"})} key="pages" value="pages"
+        tabs.push(<div className={classNames({"redaxtor-tab": true, "active": this.state.value === "pages"})}
+                       key="pages" value="pages"
                        onClick={()=>this.setState({value: "pages"})}>Pages
         </div>);
         return (
@@ -107,9 +102,7 @@ export default class RedaxtorBar extends React.Component {
 
                     {this.state.isOpen ?
                         <div className="redaxtor-tabs" value={this.state.value}>
-                            <div className="tabs-header" onChange={this.handleTabChange.bind(this)}>
-                            {tabs}
-                            </div>
+                            <div className="tabs-header">{tabs}</div>
                             <div className="tab-content">
                                 {this.state.value === "pieces" && <Pieces components={this.props.components}/>}
                                 {this.state.value === "i18n" && <I18N/>}

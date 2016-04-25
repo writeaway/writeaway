@@ -15,6 +15,7 @@
     "redaxtor-medium": "^0.1.1"
   },
   "devDependencies": {
+    "autoprefixer": "^6.3.6",
     "babel-core": "^6.7.4",
     "babel-loader": "^6.2.4",
     "babel-plugin-transform-object-rest-spread": "^6.6.5",
@@ -23,6 +24,7 @@
     "css-loader": "^0.23.1",
     "less": "^2.6.1",
     "less-loader": "^2.2.3",
+    "postcss-loader": "^0.8.2",
     "style-loader": "^0.13.1",
     "webpack": "^1.12.14"
   }
