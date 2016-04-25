@@ -25,7 +25,13 @@ export const piecesToggleEdit = () => {
 
             } else {
                 Object.keys(pieces.byId).forEach(id => {
-                    dispatch(pieceGet(id))
+                    const piece = pieces.byId[id];
+                    if (piece.useHTML) {
+                        dispatch(pieceFetched(id, {data: {html: piece.node.innerHTML}}));
+                        pieceRender(piece);
+                    } else {
+                        dispatch(pieceGet(id))
+                    }
                 });
             }
             dispatch(piecesEnableEdit());
@@ -110,15 +116,19 @@ export const pieceGet = id => {
             dispatch(pieceFetched(id, json.piece));
 
             const piece = getState().pieces.byId[id];
-            ReactDOM.render(
-                <Provider store={getStore()}>
-                    <Container id={id}
-                               component={getConfig().pieces.components[piece.type]}
-                    />
-                </Provider>, piece.node);
+            pieceRender(piece);
         }, error => {
             dispatch(pieceFetchingError(id, error));
         })
 
     }
 }
+
+const pieceRender = piece => {
+    ReactDOM.render(
+        <Provider store={getStore()}>
+            <Container id={piece.id}
+                       component={getConfig().pieces.components[piece.type]}
+            />
+        </Provider>, piece.node);
+};
