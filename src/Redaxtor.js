@@ -12,7 +12,6 @@ import {setConfig, getConfig} from './config';
 import RedaxtorContainer from "./containers/RedaxtorContainer";
 // import Img from "./components/img/ImgContainer";
 
-import {initPiece} from "./containers/connectPieceContainer";
 import reducers from "./reducers";
 import {initI18N} from './actions/i18n';
 import {pieceGet, addPiece, updatePiece} from './actions/pieces';

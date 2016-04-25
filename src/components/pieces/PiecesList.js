@@ -12,8 +12,8 @@ class PieceLine extends Component {
             <div className="r_item-row">
                 <span>{piece.name || id}</span>
                 <span className="r_item-right">
-                    {source && edit && <span onClick={()=>setSourceId(id)}>code</span>}
-                    {piece.changed && <span onClick={this.props.savePiece}>save</span>}
+                    {source && edit && <i className="r_icon-code r_btn" onClick={()=>setSourceId(id)}></i>}
+                    {piece.changed && <i className="r_icon-floppy r_btn" onClick={this.props.savePiece}></i>}
                 </span>
             </div>
         )

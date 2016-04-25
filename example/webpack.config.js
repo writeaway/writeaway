@@ -3,7 +3,7 @@ var path = require('path');
 var autoprefixer = require('autoprefixer');
 var node_modules_dir = path.resolve(__dirname, 'node_modules');
 var env = process.env.NODE_ENV;
-var webpack = require(path.resolve(node_modules_dir,'webpack'));
+var webpack = require(path.resolve(node_modules_dir, 'webpack'));
 
 var config = {
     entry: {
@@ -22,8 +22,7 @@ var config = {
     module: {
         loaders: [
             {
-                test: /\.(js)$/,
-                exclude: /(node_modules)/,
+                test: /\.(js)$/, exclude: /(node_modules)/,
                 loader: 'babel-loader',
                 query: {
                     presets: [//https://github.com/babel/babel-loader/issues/166#issuecomment-160866946
@@ -37,21 +36,25 @@ var config = {
                 }
             },
             {
-                test: /\.less$/,
-                loader: "style!css?-url&sourceMap!postcss!less?sourceMap"
+                test: /\.less$/, exclude: /(node_modules)/,
+                loader: "style!css?sourceMap!postcss!less?sourceMap"
             },
             {
-                test: /\.css$/,
-                loader: "style!css?-url&sourceMap!postcss"
+                test: /\.css$/, exclude: /(node_modules|medium)/,
+                loader: "style!css?sourceMap!postcss"
+            },
+            {
+                test: /\.(woff)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, exclude: /(node_modules)/,
+                loaders: ["url-loader?limit=10000"]
             }
         ]
     },
     resolve: {
         root: path.join(__dirname, "node_modules")
     },
-    resolveLoader: { root: path.join(__dirname, "node_modules") },
+    resolveLoader: {root: path.join(__dirname, "node_modules")},
     devtool: "eval",
-    postcss: [ autoprefixer({ browsers: ['last 2 versions'] }) ]
+    postcss: [autoprefixer({browsers: ['last 2 versions']})]
 };
 
 if (env === 'production') {

@@ -5,8 +5,8 @@ import classNames from 'classnames';
 
 import PanelHandler from './PanelHandler'
 import Pieces from './pieces/PiecesContainer'
-import Pages from './pages/PagesContainer'
-import I18N from './i18n/I18NContainer'
+// import Pages from './pages/PagesContainer'
+// import I18N from './i18n/I18NContainer'
 import Images from './images'
 
 export default class RedaxtorBar extends React.Component {
@@ -82,17 +82,17 @@ export default class RedaxtorBar extends React.Component {
 
         </div>);
 
-        this.props.tabs.i18n &&
-        tabs.push(<div className={classNames({"r_tab": true, "r_active": this.state.value === "i18n"})} key="i18n"
-                       value="i18n"
-                       onClick={()=>this.setState({value: "i18n"})}>I18N
-        </div>);
+        // this.props.tabs.i18n &&
+        // tabs.push(<div className={classNames({"r_tab": true, "r_active": this.state.value === "i18n"})} key="i18n"
+        //                value="i18n"
+        //                onClick={()=>this.setState({value: "i18n"})}>I18N
+        // </div>);
 
-        this.props.tabs.pages &&
-        tabs.push(<div className={classNames({"r_tab": true, "r_active": this.state.value === "pages"})}
-                       key="pages" value="pages"
-                       onClick={()=>this.setState({value: "pages"})}>Pages
-        </div>);
+        // this.props.tabs.pages &&
+        // tabs.push(<div className={classNames({"r_tab": true, "r_active": this.state.value === "pages"})}
+        //                key="pages" value="pages"
+        //                onClick={()=>this.setState({value: "pages"})}>Pages
+        // </div>);
         return (
             <div style={{all: 'initial'}}>
                 <div ref="bar" className="r_bar">

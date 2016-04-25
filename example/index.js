@@ -1,11 +1,11 @@
 "use strict";
 var Redaxtor = require('../src');
 var RedaxtorMedium = require('redaxtor-medium');
-require('medium-editor/dist/css/medium-editor.css');
-require('redaxtor-medium/lib/redaxtor-medium.css');
+require('style!css?-url!medium-editor/dist/css/medium-editor.css');
+require('style!css?-import!redaxtor-medium/lib/redaxtor-medium.css');
 
 var RedaxtorCodemirror = require('redaxtor-codemirror');
-require('codemirror/lib/codemirror.css');
+require('style!css?-url!codemirror/lib/codemirror.css');
 
 var components = {
     html: RedaxtorMedium,
