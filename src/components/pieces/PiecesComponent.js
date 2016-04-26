@@ -23,7 +23,7 @@ export default class PiecesComponent extends React.Component {
         return (
             <div>
                 {sourceEditor}
-                <div className="toggle-wrapper">
+                <div className="r_list-header">
                     <label>Edit</label>
                     <Toggle defaultChecked={this.props.edit}
                             onChange={this.props.piecesToggleEdit}/>

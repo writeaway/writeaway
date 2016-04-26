@@ -21,6 +21,7 @@ export const piecesToggleEdit = () => {
     return (dispatch, getState) => {
         const pieces = getState().pieces, edit = !pieces.edit;
         if (edit) {
+            dispatch(piecesEnableEdit());
             if (pieces.initialized) {
 
             } else {
@@ -34,7 +35,6 @@ export const piecesToggleEdit = () => {
                     }
                 });
             }
-            dispatch(piecesEnableEdit());
         } else {
             dispatch(piecesDisableEdit());
         }

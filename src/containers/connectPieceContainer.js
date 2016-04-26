@@ -6,7 +6,11 @@ import {updatePiece, savePiece, setSourceId} from '../actions/pieces'
 import {toggleImagePopup, setCancelCallback, setSaveCallback, saveImageData, resetImageData} from '../actions/images'
 
 const PieceContainer = (props) => {
-    return <props.component {...props} className={classNames({"contenteditable": true, "edit": props.edit})} wrapper="div"/>
+    return <props.component {...props} className={classNames({
+        "r_editable": true,
+        "r_edit": props.edit,
+        "r_highlight": props.edit
+      })} wrapper="div"/>
 };
 
 const mapStateToProps = (state, ownProps) => {

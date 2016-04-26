@@ -7,7 +7,7 @@ export default class PiecesComponent extends React.Component {
     render() {
         return (
             <div>
-                <div className="toggle-wrapper">
+                <div className="r_list-header">
                     <label>Edit & Highlight on the page</label>
                     <Toggle defaultChecked={this.props.edit}
                             onChange={this.props.i18nToggleEdit}/>
