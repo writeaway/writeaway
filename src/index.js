@@ -1,5 +1,5 @@
 import Redaxtor from './Redaxtor';
 require('./styles/redaxtor.less');
-require('style!css?-url!react-redux-toastr/lib/css/react-redux-toastr.min.css');
+require('./styles/react-redux-toastr.css');
 
 module.exports = Redaxtor;
