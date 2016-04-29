@@ -264,6 +264,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _superagent2.default.post(that.state.imageUploadUrl).send(formdata).end(function (err, res) {
 	                var response = JSON.parse(res.text);
 	                that.onUrlChange(response.data.url);
+	                if (that.state.gallery) {
+	                    that.state.gallery.push(response.data.url);
+	                    that.setState({ file: null });
+	                }
 	            });
 	        }
 	    }, {
