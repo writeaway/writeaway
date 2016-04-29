@@ -1,6 +1,7 @@
 "use strict";
 var Redaxtor = require('../src');
 var RedaxtorMedium = require('redaxtor-medium');
+var ImageManager = require('./ImageManager')
 require('style!css?-url!medium-editor/dist/css/medium-editor.css');
 require('style!css?-import!redaxtor-medium/lib/redaxtor-medium.css');
 
@@ -16,6 +17,7 @@ var components = {
 class RedaxtorBundle extends Redaxtor {
     constructor(options) {
         options.pieces.components = components;
+        options.images.imageManager = ImageManager;
         super(options);
     }
 }
