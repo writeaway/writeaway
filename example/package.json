@@ -5,11 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:min": "NODE_ENV=production webpack -d"
+    "build:min": "cross-env NODE_ENV=production webpack -d"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "cross-env": "^1.0.7",
     "redaxtor": "^0.2.0",
     "redaxtor-codemirror": "^0.1.0",
     "redaxtor-medium": "^0.1.1"

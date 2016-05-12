@@ -44,7 +44,8 @@ var config = {
                 loader: "style!css?sourceMap!postcss"
             },
             {
-                test: /\.(woff)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, exclude: /(node_modules)/,
+                test: /\.(woff)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                exclude: /(node_modules)/,
                 loaders: ["url-loader?limit=10000"]
             }
         ]

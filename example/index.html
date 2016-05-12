@@ -29,10 +29,13 @@
 
     <div data-piece="html" data-id="pieceHTML">
         <h1>This is an example for the 'HTML' piece</h1>
+        <img src="http://www.w3schools.com/tags/smiley.gif" alt="Happy smile">
     </div>
 
     <div data-piece="html" data-id="pieceHTMLFromPage" data-use-html="1">
         <h1>An example for the 'HTML' piece with data-use-html="1"</h1>
+        <img src="https://files4.adme.ru/files/news/part_85/856410/13381310-R3L8T8D-650-1280px-Kodak_disposable_camera_front_view_-_IMG_0992.JPG" alt="Happy smile">
+
     </div>
 
     <div data-piece="source" data-id="pieceSource" data-get-url="api/pieceSource.json">
@@ -116,11 +119,7 @@
                 createURL: "api/pagesCreate.json",//optional, if not provided - saveURL will be used
                 saveURL: "api/pagesSave.json",
                 deleteURL: "api/pagesDelete.json",
-                allowCreate: false//default true
-            },
-            images: {
-                galleryGetUrl: "api/images.json",
-                imageUploadUrl: "api/imageUploadUrl.json"
+                allowCreate: false//default true,
             }
         });
     </script>

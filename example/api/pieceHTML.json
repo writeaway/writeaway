@@ -2,7 +2,7 @@
   "status": 200,
   "piece": {
     "data": {
-      "html": "<h1>This is an example for the 'HTML' piece</h1>"
+      "html": "<h1>This is an example for the 'HTML' piece</h1><img src='http://www.w3schools.com/tags/smiley.gif' alt='Happy smile'>"
     }
   }
 }

@@ -17,7 +17,11 @@ var components = {
 class RedaxtorBundle extends Redaxtor {
     constructor(options) {
         options.pieces.components = components;
-        options.images.imageManager = ImageManager;
+        if (options.images) {
+            options.images.imageManager = ImageManager
+        } else {
+            options.images = {imageManager: ImageManager};
+        }
         super(options);
     }
 }
@@ -26,14 +30,14 @@ module.exports = RedaxtorBundle;
 
 //Other way is to bundle and init right here
 /*
-var redaxtor = new RedaxtorBundle({
-    pieces: {
-        components: components,
-    },
-    pages: {
-        getAllURL: "api/pages.json",
-        createURL: "api/pagesCreate.json",//optional, if not provided - saveURL will be used
-        saveURL: "api/pagesSave.json",
-        deleteURL: "api/pagesDelete.json"
-    }
-});*/
+ var redaxtor = new RedaxtorBundle({
+ pieces: {
+ components: components,
+ },
+ pages: {
+ getAllURL: "api/pages.json",
+ createURL: "api/pagesCreate.json",//optional, if not provided - saveURL will be used
+ saveURL: "api/pagesSave.json",
+ deleteURL: "api/pagesDelete.json"
+ }
+ });*/
