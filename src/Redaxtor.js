@@ -16,7 +16,7 @@ import reducers from "./reducers";
 import {initI18N} from './actions/i18n';
 import {pieceGet, addPiece, updatePiece} from './actions/pieces';
 import {pagesGet, pagesGetLayouts} from './actions/pages';
-import {configureFetch} from './helpers/fetch'
+import {configureFetch} from './helpers/callFetch'
 
 let config = getConfig();
 

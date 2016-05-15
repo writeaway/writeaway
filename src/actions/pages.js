@@ -1,5 +1,5 @@
 import C from "../constants";
-import callFetch from '../helpers/fetch'
+import callFetch from '../helpers/callFetch'
 
 export const pageSetCurrentIndex = index => {
     return {type: C.PAGES_SET_CURRENT_INDEX, index}

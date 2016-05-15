@@ -3,7 +3,7 @@ import ReactDOM from "react-dom"
 import {Provider} from 'react-redux'
 
 import C from "../constants"
-import callFetch from '../helpers/fetch'
+import callFetch from '../helpers/callFetch'
 import {getStore} from '../store'
 
 import I18NElementContainer from '../containers/I18NElementContainer'
