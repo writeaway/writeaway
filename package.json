@@ -33,7 +33,9 @@
     "react-redux": "^4.4.0",
     "react-tap-event-plugin": "^0.2.2",
     "redux": "^3.3.1",
-    "redux-thunk": "^2.0.1"
+    "redux-thunk": "^2.0.1",
+    "react-redux-toastr": "^3.0.8",
+    "react-toggle": "^2.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.6",
@@ -55,8 +57,6 @@
     "postcss": "^5.0.19",
     "postcss-loader": "^0.8.2",
     "react-modal": "^1.1.0",
-    "react-redux-toastr": "^3.0.8",
-    "react-toggle": "^2.0.1",
     "rimraf": "^2.5.2",
     "webpack": "^1.12.14"
   }
