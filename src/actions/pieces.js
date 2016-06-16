@@ -17,6 +17,26 @@ export const piecesDisableEdit = () => {
     return {type: C.PIECES_DISABLE_EDIT}
 };
 
+export const piecesInit = () => {
+    return (dispatch, getState) => {
+        const pieces = getState().pieces;
+        if (pieces.edit) {
+            dispatch(piecesEnableEdit());
+            if (!pieces.initialized) {
+                Object.keys(pieces.byId).forEach(id => {
+                    const piece = pieces.byId[id];
+                    if (piece.useHTML) {
+                        dispatch(pieceFetched(id, {data: {html: piece.node.innerHTML}}));
+                        pieceRender(piece);
+                    } else {
+                        dispatch(pieceGet(id))
+                    }
+                });
+            }
+        }
+    };
+};
+
 export const piecesToggleEdit = () => {
     return (dispatch, getState) => {
         const pieces = getState().pieces, edit = !pieces.edit;

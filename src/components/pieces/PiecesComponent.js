@@ -12,6 +12,10 @@ export default class PiecesComponent extends React.Component {
         this.props.setSourceId(null);
     }
 
+    componentDidMount(){
+        this.props.piecesInit();
+    }
+
     render() {
         var sourceEditor = null;
         if (this.props.components.source && this.props.sourceId) {

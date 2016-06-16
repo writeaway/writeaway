@@ -58,6 +58,7 @@ export default class RedaxtorBar extends React.Component {
         if (!this.state.dragging) return;
         this._node.style.left = e.pageX - this._rel.x + "px";
         this._node.style.top = e.pageY - this._rel.y + "px";
+        this.setState({dragged: true});
         e.stopPropagation();
         e.preventDefault();
     }
@@ -69,7 +70,11 @@ export default class RedaxtorBar extends React.Component {
     }
 
     toggleOpen() {
-        this.setState({isOpen: !this.state.isOpen})
+        if (!this.state.dragged) {
+            this.setState({isOpen: !this.state.isOpen})
+        } else {
+            this.setState({dragged: false});
+        }
     }
 
     render() {

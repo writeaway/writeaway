@@ -26,7 +26,7 @@ const piece = (piece = {}, action) => {
 };
 
 const piecesDefault = {
-    edit: false,
+    edit: true,
     highlight: true,
     sourceId: null
 };
