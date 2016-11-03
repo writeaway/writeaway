@@ -11,6 +11,7 @@ let defaults = {
     }
 };
 
+// allow fetch configuration (send custom headers for example)
 export const configureFetch = (options) => {
     const headers = options.headers ? {...defaults.headers, ...options.headers} : defaults.headers;
     defaults = {...defaults, ...options, headers}

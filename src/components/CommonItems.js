@@ -1,5 +1,8 @@
 import React, {Component} from "react"
 
+/**
+ * NOT USED ANYWHERE
+ */
 class CommonItems extends Component {
     constructor(props) {
         super(props);
@@ -41,7 +44,7 @@ class CommonItems extends Component {
     onFormClose() {
         this.setState({editIndex: -1})
     }
-    
+
     get items() {
         return this.props.data.items.map((item, i) => {
             item = {...item};

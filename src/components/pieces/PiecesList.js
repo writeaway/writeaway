@@ -1,5 +1,8 @@
 import React, {Component} from "react";
 
+/**
+ * Piece name||id with 'source' and 'save' buttons
+ */
 class PieceLine extends Component {
     shouldComponentUpdate(nextProps) {
         return this.props.edit !== nextProps.edit || this.props.piece.changed !== nextProps.piece.changed;

@@ -3,6 +3,9 @@ import PiecesList from './PiecesList'
 
 import Toggle from 'react-toggle'
 
+/**
+ * Renders pieces list and 'edit' toggle
+ */
 export default class PiecesComponent extends React.Component {
 
     savePiece(html) {

@@ -22,6 +22,7 @@ let config = getConfig();
 
 class Redaxtor {
     constructor(options) {
+        // are images work? it's probably for images gallery
         options.images && (config.images = options.images);
         const defaultState = {};
 
@@ -32,6 +33,8 @@ class Redaxtor {
             };
 
             this._edit = false;
+
+            // merge options with defaults
             this.pieces = {
                 attribute: "data-piece",
                 attributeId: "data-id",
@@ -49,6 +52,7 @@ class Redaxtor {
             };
         }
 
+        // doesn't work yet
         if (options.pages) {
             this.pages = {
                 allowCreate: true,
@@ -57,6 +61,7 @@ class Redaxtor {
             defaultState.pages = this.pages;
         }
 
+        // doesn't work yet
         if (options.i18n) {
             this.i18n = {
                 edit: false,
@@ -65,11 +70,13 @@ class Redaxtor {
             defaultState.i18n = this.i18n;
         }
 
+        // standard redux approach - create redux store
         this.store = createStore(reducers,
             {...defaultState, ...options.state},
             applyMiddleware(thunk));
 
         setStore(this.store);
+
         if (options.ajax) configureFetch(options.ajax);
 
         options.pieces && this.initPieces();
@@ -79,6 +86,7 @@ class Redaxtor {
         this.showBar();
     }
 
+    // render Redaxtor panel to the end of body
     showBar() {
         this.barNode = document.createElement("DIV");
         ReactDOM.render(
@@ -102,6 +110,7 @@ class Redaxtor {
         document.body.appendChild(this.barNode);
     }
 
+    // find all pieces on page and dispatch "addPiece"
     initPieces() {
         const selector = this.pieces.attribute.indexOf("data-") === 0 ? "[" + this.pieces.attribute + "]" : this.pieces.attribute;
         let nodes = document.querySelectorAll(selector);

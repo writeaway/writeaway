@@ -1,4 +1,4 @@
-
+// Shareable config
 let Config = {};
 
 export const setConfig = (config) => {

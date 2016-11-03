@@ -5,6 +5,9 @@ import classNames from 'classnames';
 import {updatePiece, savePiece, setSourceId} from '../actions/pieces'
 import {getConfig} from '../config'
 
+/**
+ * Container to render inline on page
+ */
 const PieceContainer = (props) => {
     return <props.component {...props} images={getConfig().images} className={classNames({
         "r_editable": true,

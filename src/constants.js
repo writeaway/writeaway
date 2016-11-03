@@ -1,5 +1,6 @@
+// Constants for reducers
 module.exports = {
-    
+
     /* PIECES */
     PIECES_ENABLE_EDIT: "PIECES_ENABLE_EDIT",
     PIECES_DISABLE_EDIT: "PIECES_DISABLE_EDIT",
@@ -40,7 +41,7 @@ module.exports = {
     PAGE_DATA_UPDATE: "PAGE_DATA_UPDATE",
     PAGE_DATA_FIELDS_UPDATE: "PAGE_DATA_FIELDS_UPDATE",
     PAGE_DATA_FIELDS_SET: "PAGE_DATA_FIELDS_SET",
-    
+
     PAGE_ADD: "PAGE_ADD",
 
     PAGE_SAVING: "PAGE_SAVING",

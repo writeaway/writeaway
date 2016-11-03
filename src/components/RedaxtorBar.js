@@ -8,6 +8,9 @@ import Pieces from './pieces/PiecesContainer'
 // import Pages from './pages/PagesContainer'
 // import I18N from './i18n/I18NContainer'
 
+/**
+ * Draggable Component with open/close logic
+ */
 export default class RedaxtorBar extends React.Component {
 
     constructor(props) {

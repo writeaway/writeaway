@@ -1,6 +1,9 @@
 import React from 'react'
 import Portal from 'react-portal'
 
+/**
+ * This component is to show editing form in popover on I18N text
+ */
 export default class FormPortal extends React.Component {
     constructor(props) {
         super(props);

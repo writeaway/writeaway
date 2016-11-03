@@ -17,6 +17,9 @@ export const piecesDisableEdit = () => {
     return {type: C.PIECES_DISABLE_EDIT}
 };
 
+/**
+ * Initialize pieces. Fetch if need.
+ */
 export const piecesInit = () => {
     return (dispatch, getState) => {
         const pieces = getState().pieces;
@@ -37,6 +40,9 @@ export const piecesInit = () => {
     };
 };
 
+/**
+ * Toggle pieces 'edit' mode
+ */
 export const piecesToggleEdit = () => {
     return (dispatch, getState) => {
         const pieces = getState().pieces, edit = !pieces.edit;
@@ -120,6 +126,9 @@ export const pieceFetchingError = (id, error) => {
     return {type: C.PIECE_FETCHING_ERROR, id, error}
 }
 
+/**
+ * Fetch piece data from the server
+ */
 export const pieceGet = id => {
     return (dispatch, getState) => {
         dispatch(pieceFetching(id));
@@ -144,6 +153,9 @@ export const pieceGet = id => {
     }
 }
 
+/**
+ * Render piece container right instead of current piece html
+ */
 const pieceRender = piece => {
     ReactDOM.render(
         <Provider store={getStore()}>

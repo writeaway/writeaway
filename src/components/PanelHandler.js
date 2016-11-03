@@ -1,5 +1,10 @@
 import React, {Component} from "react";
 
+/**
+ * Panel top bar with:
+ * - button to open/close block below
+ * - handler for dragging
+ */
 class PanelHandler extends Component {
 
     render() {

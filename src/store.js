@@ -1,4 +1,4 @@
-
+// Shareable store
 let store = null;
 
 export const setStore = (newStore) => {
