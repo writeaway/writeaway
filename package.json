@@ -20,7 +20,7 @@
     "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
     "build:umd": "cross-env NODE_ENV=development webpack src/index.js dist/redaxtor.js",
     "build:umd:min": "cross-env NODE_ENV=production webpack src/index.js dist/redaxtor.min.js",
-    "build": "npm run build:commonjs",
+    "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
     "prepublish": "npm run clean && npm run check:src && npm run build"
   },
   "author": "Alex Chepura",
