@@ -64,7 +64,8 @@ After enabling edit mode - each piece will fetch data from the server
    ```
 
 ## Developing and building
-Clone the repository.
+
+
  ```bash
  npm install
  npm run build

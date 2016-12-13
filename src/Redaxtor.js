@@ -7,7 +7,7 @@ import thunk from 'redux-thunk';
 import ReduxToastr from 'react-redux-toastr'
 
 import {setStore} from './store';
-import {setConfig, getConfig} from './config';
+import {setConfig, getConfig} from './config';//TODO: Unused, remove
 
 import RedaxtorContainer from "./containers/RedaxtorContainer";
 // import Img from "./components/img/ImgContainer";
@@ -22,6 +22,21 @@ let config = getConfig();
 
 class Redaxtor {
     constructor(options) {
+        /**
+         * Editable DOM pieces editors
+         */
+        this.pieces = void 0;
+
+        /**
+         * Editable pages editors
+         */
+        this.pages = void 0;
+
+        /**
+         * Internalization editors
+         */
+        this.i18n = void 0;
+
         options.images && (config.images = options.images);
         const defaultState = {};
 
@@ -31,7 +46,7 @@ class Redaxtor {
                 ...options.pieces.components
             };
 
-            this._edit = false;
+            this._edit = false;//TODO: No other code mentions. Unused?
             this.pieces = {
                 attribute: "data-piece",
                 attributeId: "data-id",
@@ -79,6 +94,9 @@ class Redaxtor {
         this.showBar();
     }
 
+    /**
+     * Renders a top Redaxtor bar with controls and attach it to body
+     */
     showBar() {
         this.barNode = document.createElement("DIV");
         ReactDOM.render(

@@ -4,6 +4,7 @@ var path = require('path');
 var webpack = require('webpack');
 var autoprefixer = require('autoprefixer');
 var env = process.env.NODE_ENV;
+var production = (env === 'production');
 // var node_modules_dir = path.resolve(__dirname, 'node_modules');
 
 var config = {
@@ -22,6 +23,7 @@ var config = {
             'process.env.NODE_ENV': JSON.stringify(env)
         })
     ],
+    devtool: "source-map",
     module: {
         loaders: [
             {
@@ -37,22 +39,32 @@ var config = {
             },
             {
                 test: /\.less$/,
-                loader: "style!css?-url&sourceMap!postcss!less?sourceMap"
+                loaders: [
+                    'style-loader',
+                    'css-loader?-url&sourceMap',
+                    'postcss-loader',
+                    'less?sourceMap'
+                ]
             },
             {
                 test: /\.css$/,
-                loader: "style!css?-url&sourceMap!postcss"
+                loaders: [
+                    'style-loader',
+                    'css-loader?-url',
+                    'postcss-loader'
+                ]
             }
         ]
     },
     resolve: {
-        extensions: ['', '.js']
+        extensions: ['', '.js', '.less']
     }
 }
 
-if (env === 'production') {
+if (production) {
     config.plugins.push(
         new webpack.optimize.UglifyJsPlugin({
+            sourceMap: true,
             compressor: {
                 pure_getters: true,
                 unsafe: true,

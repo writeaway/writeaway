@@ -29,13 +29,14 @@
     "material-ui": "^0.15.0-alpha.2",
     "react": "^15.0.0-rc || ^15.0.0",
     "react-dom": "^15.0.0-rc || ^15.0.0",
-    "react-portal": "^2.1.0",
-    "react-redux": "^4.4.0",
+    "react-portal": "^3.0.0",
+    "react-redux": "^4.4.6",
     "react-tap-event-plugin": "^0.2.2",
     "redux": "^3.3.1",
     "redux-thunk": "^2.0.1",
     "react-redux-toastr": "^3.0.8",
-    "react-toggle": "^2.0.1"
+    "react-toggle": "^2.2.0",
+    "react-addons-shallow-compare": "^15.4.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.6",
@@ -51,13 +52,16 @@
     "babel-preset-stage-1": "^6.5.0",
     "classnames": "^2.2.3",
     "cross-env": "^1.0.7",
+    "css-loader": "^0.26.1",
     "eslint": "^2.4.0",
     "eslint-plugin-react": "^4.2.3",
+    "less": "^2.7.1",
     "less-loader": "^2.2.3",
     "postcss": "^5.0.19",
     "postcss-loader": "^0.8.2",
     "react-modal": "^1.1.0",
     "rimraf": "^2.5.2",
+    "style-loader": "^0.13.1",
     "webpack": "^1.12.14"
   }
 }
