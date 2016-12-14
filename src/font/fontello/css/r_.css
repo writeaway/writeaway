@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'r_';
-  src: url('../font/r_.eot?34156557');
-  src: url('../font/r_.eot?34156557#iefix') format('embedded-opentype'),
-       url('../font/r_.woff2?34156557') format('woff2'),
-       url('../font/r_.woff?34156557') format('woff'),
-       url('../font/r_.ttf?34156557') format('truetype'),
-       url('../font/r_.svg?34156557#r_') format('svg');
+  src: url('../font/r_.eot?95162568');
+  src: url('../font/r_.eot?95162568#iefix') format('embedded-opentype'),
+       url('../font/r_.woff2?95162568') format('woff2'),
+       url('../font/r_.woff?95162568') format('woff'),
+       url('../font/r_.ttf?95162568') format('truetype'),
+       url('../font/r_.svg?95162568#r_') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -15,7 +15,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'r_';
-    src: url('../font/r_.svg?34156557#r_') format('svg');
+    src: url('../font/r_.svg?95162568#r_') format('svg');
   }
 }
 */

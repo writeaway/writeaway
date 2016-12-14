@@ -102,7 +102,7 @@ export default class RedaxtorBar extends React.Component {
                 <div ref="bar" className="r_bar">
                     <PanelHandler isOpen={this.state.isOpen}
                                   onMouseDown={this.onMouseDown.bind(this)}
-                                  toggleOpen={this.toggleOpen.bind(this)}/>
+                                  toggleOpen={this.toggleOpen.bind(this)} message={this.props.message}/>
 
                     {this.state.isOpen ?
                         <div className="r_tabs" value={this.state.value}>

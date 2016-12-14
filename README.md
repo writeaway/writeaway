@@ -15,6 +15,8 @@ npm install --save redaxtor
 ```js
 "use strict";
 var Redaxtor = require('redaxtor');
+require('src/font/fontello/css/r_.css');
+
 var RedaxtorMedium = require('redaxtor-medium');
 require('medium-editor/dist/css/medium-editor.css');
 require('redaxtor-medium/lib/redaxtor-medium.css');
@@ -40,14 +42,23 @@ var redaxtor = new Redaxtor({
 
 ````html
     <script lang="text/javascript" src="./dist/redaxtor.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./src/font/fontello/css/r_.css" charset="utf-8">
+    
+    
     <script lang="text/javascript" src="./dist/redaxtor-medium.min.js"></script>
     <link rel="stylesheet" type="text/css" href="./dist/medium-editor.min.css" charset="utf-8">
     <link rel="stylesheet" type="text/css" href="./dist/redaxtor-medium.min.css" charset="utf-8">
+    
+        
+    <script lang="text/javascript" src="./dist/redaxtor-codemirror.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./node_modules/codemirror/lib/codemirror.css" charset="utf-8">
+    
 ````
 
 ```js
 var components = {
-    html: window['Redaxtor-Medium']
+    html: RedaxtorMedium,
+    source: RedaxtorCodemirror
 }
 
 var redaxtor = new Redaxtor({
