@@ -14,16 +14,20 @@ npm install --save redaxtor
 ## The Gist (CommonJS)
 ```js
 "use strict";
+//Include redaxtor and it's default styles
 var Redaxtor = require('redaxtor');
-require('src/font/fontello/css/r_.css');
+require('redaxtor/lib/redaxtor.css');
 
+//Include redaxtor HTML editor and it's default styles
 var RedaxtorMedium = require('redaxtor-medium');
 require('medium-editor/dist/css/medium-editor.css');
 require('redaxtor-medium/lib/redaxtor-medium.css');
 
+//Include redaxtor HTML editor and it's default styles 
 var RedaxtorCodemirror = require('redaxtor-codemirror');
 require('codemirror/lib/codemirror.css');
 
+//Attach plugins to redaxtor
 var components = {
     html: RedaxtorMedium,
     source: RedaxtorCodemirror
@@ -41,21 +45,26 @@ var redaxtor = new Redaxtor({
 ## The Gist (Static)
 
 ````html
+    <!-- Include redaxtor and it's default styles -->
     <script lang="text/javascript" src="./dist/redaxtor.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="./src/font/fontello/css/r_.css" charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="./dist/redaxtor.min.css" charset="utf-8">
     
     
+    <!-- Include redaxtor HTML editor and it's default styles -->
     <script lang="text/javascript" src="./dist/redaxtor-medium.min.js"></script>
     <link rel="stylesheet" type="text/css" href="./dist/medium-editor.min.css" charset="utf-8">
     <link rel="stylesheet" type="text/css" href="./dist/redaxtor-medium.min.css" charset="utf-8">
     
         
+    <!-- Include redaxtor CODE editor and it's default styles -->
     <script lang="text/javascript" src="./dist/redaxtor-codemirror.min.js"></script>
     <link rel="stylesheet" type="text/css" href="./node_modules/codemirror/lib/codemirror.css" charset="utf-8">
     
 ````
 
 ```js
+
+//Attach plugins to redaxtor
 var components = {
     html: RedaxtorMedium,
     source: RedaxtorCodemirror

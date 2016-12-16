@@ -111,6 +111,7 @@ class Redaxtor {
                     }}>
                     </RedaxtorContainer>
                     <ReduxToastr
+                        className="r_toast-container"
                         timeOut={4000}
                         position="top-right"/>
                 </div>

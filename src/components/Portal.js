@@ -22,7 +22,7 @@ export default class FormPortal extends React.Component {
         // var Child = React.Children.toArray(this.props.children)[0];
         var Child = this.props.children;//https://facebook.github.io/react/tips/children-props-type.html
         return (
-            <Portal closeOnOutsideClick isOpened={this.state.isOpened} style={style} className="portal"
+            <Portal closeOnOutsideClick isOpened={this.state.isOpened} style={style} className="r_portal"
                     onClose={() => {this.onClose();}}>
                 {Child}
             </Portal>

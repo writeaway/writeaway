@@ -1,43 +1,6 @@
-.animated {
-  animation-duration: 1s;
-  animation-fill-mode: both;
 
-  &.bounceIn {
-    animation-duration: .7s;
-  }
 
-  &.bounceOut {
-    animation-duration: .5s;
-  }
-
-  &.bounceIn {
-    animation-name: bounceIn;
-  }
-
-  &.bounceOut {
-    animation-name: bounceOut;
-  }
-
-  &.fadeIn {
-    animation-name: fadeIn;
-    animation-duration: .7s;
-  }
-
-  &.fadeOut {
-    animation-name: fadeOut;
-    animation-duration: .3s;
-  }
-
-  &.bounceInDown {
-    animation-name: bounceInDown;
-  }
-
-  &.bounceOutUp {
-    animation-name: bounceOutUp;
-  }
-}
-
-@keyframes bounceIn {
+@keyframes redaxtor-bounceIn {
   from, 20%, 40%, 60%, 80%, to {
     animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
   }
@@ -70,7 +33,7 @@
   }
 }
 
-@keyframes bounceOut {
+@keyframes redaxtor-bounceOut {
   20% {
     transform: scale3d(.9, .9, .9);
   }
@@ -86,7 +49,7 @@
   }
 }
 
-@keyframes fadeIn {
+@keyframes redaxtor-fadeIn {
   from {
     opacity: 0;
   }
@@ -96,7 +59,7 @@
   }
 }
 
-@keyframes fadeOut {
+@keyframes redaxtor-fadeOut {
   from {
     opacity: 1;
   }
@@ -106,7 +69,7 @@
   }
 }
 
-@keyframes bounceInDown {
+@keyframes redaxtor-bounceInDown {
   from, 60%, 75%, 90%, to {
     animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
   }
@@ -135,7 +98,7 @@
   }
 }
 
-@keyframes bounceOutUp {
+@keyframes redaxtor-bounceOutUp {
   20% {
     transform: translate3d(0, -10px, 0);
   }

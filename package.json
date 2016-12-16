@@ -1,6 +1,6 @@
 {
   "name": "redaxtor",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Redaxtor is a JavaScript library for editing CMS pieces, pages and internationalisation on the client side.",
   "main": "lib/index.js",
   "files": [
@@ -16,14 +16,18 @@
     "lint": "eslint src test examples build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "check:src": "npm run lint",
+    "build:less": "npm run build:less:commonjs && npm run build:less:umd && npm run build:less:umd:min",
+    "build:less:commonjs": "lessc --source-map src/styles/redaxtor.less lib/redaxtor.css",
+    "build:less:umd": "lessc --source-map src/styles/redaxtor.less dist/redaxtor.css",
+    "build:less:umd:min": "lessc --compress --source-map src/styles/redaxtor.less dist/redaxtor.min.css",
     "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
     "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
     "build:umd": "cross-env NODE_ENV=development webpack src/index.js dist/redaxtor.js",
     "build:umd:min": "cross-env NODE_ENV=production webpack src/index.js dist/redaxtor.min.js",
-    "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
+    "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min && npm run build:less",
     "prepublish": "npm run clean && npm run check:src && npm run build"
   },
-  "author": "Alex Chepura",
+  "author": "SpiralScout",
   "license": "MIT",
   "dependencies": {
     "material-ui": "^0.15.0-alpha.2",

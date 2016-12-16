@@ -1,11 +1,6 @@
 @import './animation.less';
-@import './confirm.less';
 
-body.toastr-confirm-active {
-  overflow: hidden;
-}
-
-.redux-toastr {
+.r_toast-container {
   width: 310px;
   position: fixed;
   z-index: 99999999;
@@ -44,7 +39,54 @@ body.toastr-confirm-active {
     color: #333;
     padding: 10px 0;
     opacity: .9;
-    box-shadow: 0px 0px 10px #ccc;
+
+    button.close-toastr {
+      border: none;
+      background: none;
+      color: white;
+      position: absolute;
+      right: 10px;
+      top: 8px;
+    }
+
+    &.animated {
+      animation-duration: 1s;
+      animation-fill-mode: both;
+
+      &.bounceIn {
+        animation-duration: .7s;
+      }
+
+      &.bounceOut {
+        animation-duration: .5s;
+      }
+
+      &.bounceIn {
+        animation-name: redaxtor-bounceIn;
+      }
+
+      &.bounceOut {
+        animation-name: redaxtor-bounceOut;
+      }
+
+      &.fadeIn {
+        animation-name: redaxtor-fadeIn;
+        animation-duration: .7s;
+      }
+
+      &.fadeOut {
+        animation-name: redaxtor-fadeOut;
+        animation-duration: .3s;
+      }
+
+      &.bounceInDown {
+        animation-name: redaxtor-bounceInDown;
+      }
+
+      &.bounceOutUp {
+        animation-name: redaxtor-bounceOutUp;
+      }
+    }
 
     &:before {
       position: absolute;
@@ -56,7 +98,6 @@ body.toastr-confirm-active {
 
     &:hover {
       cursor: pointer;
-      box-shadow: 0px 0px 10px #777;
       opacity: 1;
     }
 
@@ -111,7 +152,6 @@ body.toastr-confirm-active {
           width: 90%;
           height: 50px;
           text-align: center;
-          overflow: hidden;
           font-size: 1.2em;
           text-overflow: ellipsis;
           overflow: hidden;
@@ -130,7 +170,6 @@ body.toastr-confirm-active {
           background-color: white;
           padding: 15px;
           font-size: 1.1em;
-
           img {
             display: block;
             margin: 10px auto;
