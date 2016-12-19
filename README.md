@@ -29,7 +29,9 @@ require('codemirror/lib/codemirror.css');
 
 //Attach plugins to redaxtor
 var components = {
-    html: RedaxtorMedium,
+    html: RedaxtorMedium.HTMLEditor,
+    image: RedaxtorMedium.IMGSrcEditor,
+    background: RedaxtorMedium.BackgroundImageEditor,
     source: RedaxtorCodemirror
 }
 
@@ -66,7 +68,9 @@ var redaxtor = new Redaxtor({
 
 //Attach plugins to redaxtor
 var components = {
-    html: RedaxtorMedium,
+    html: RedaxtorMedium.HTMLEditor,
+    image: RedaxtorMedium.IMGSrcEditor,
+    background: RedaxtorMedium.BackgroundImageEditor,
     source: RedaxtorCodemirror
 }
 
