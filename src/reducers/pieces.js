@@ -4,6 +4,8 @@ const piece = (piece = {}, action) => {
     switch (action.type) {
         case C.PIECE_UPDATE:
             return {...piece, ...action.piece, changed: !(action.notChanged || (action.piece.data.html === piece.data.html)) || piece.changed};
+        case C.PIECE_RESET:
+            return {...piece, changed: false};
         case C.PIECE_SAVING:
             return {...piece, saving: true};
         case C.PIECE_SAVED:
@@ -26,7 +28,7 @@ const piece = (piece = {}, action) => {
 };
 
 const piecesDefault = {
-    edit: true,
+    editorActive: true,
     highlight: true,
     sourceId: null
 };
@@ -34,9 +36,9 @@ const piecesDefault = {
 const pieces = (pieces = piecesDefault, action) => {
     switch (action.type) {
         case C.PIECES_ENABLE_EDIT:
-            return {...pieces, edit: true, initialized: true};
+            return {...pieces, editorActive: true, initialized: true};
         case C.PIECES_DISABLE_EDIT:
-            return {...pieces, edit: false};
+            return {...pieces, editorActive: false};
         case C.PIECES_SET_SOURCE_ID:
             return {...pieces, sourceId: action.id};
 

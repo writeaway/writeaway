@@ -20,6 +20,7 @@ const callFetch = (options) => {
     var noUrlMessage = 'undefined URL';
     let store = getStore();
     if (!options.url) {
+        console.error("Called fetch with no URL", options);
         store.dispatch(showMessage({content: noUrlMessage, type: "error"}));
         return Promise.reject(noUrlMessage)
     }

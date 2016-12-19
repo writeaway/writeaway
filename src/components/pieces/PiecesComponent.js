@@ -12,30 +12,30 @@ export default class PiecesComponent extends React.Component {
         this.props.setSourceId(null);
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.props.piecesInit();
     }
 
     render() {
         var sourceEditor = null;
         if (this.props.components.source && this.props.sourceId) {
-            sourceEditor = <this.props.components.source
-                html={this.props.byId[this.props.sourceId].data.html}
-                onClose={()=>this.props.setSourceId(null)}
-                onSave={(html)=>this.savePiece(html)}/>
+            sourceEditor = <this.props.components.source wrapper="redaxtor-modal"
+                                                         html={this.props.byId[this.props.sourceId].data.html}
+                                                         onClose={()=>this.props.setSourceId(null)}
+                                                         onSave={(html)=>this.savePiece(html)}/>
         }
         return (
             <div>
                 {sourceEditor}
                 <div className="r_list-header">
                     <label>Edit</label>
-                    <Toggle defaultChecked={this.props.edit}
+                    <Toggle defaultChecked={this.props.editorActive}
                             onChange={this.props.piecesToggleEdit}/>
                 </div>
-                <PiecesList edit={this.props.edit} pieces={this.props.byId}
+                <PiecesList editorActive={this.props.editorActive} pieces={this.props.byId}
                             source={this.props.components.source}
-                            savePiece={this.props.savePiece} updatePiece={this.props.updatePiece}
-                            setSourceId={this.props.setSourceId}/>
+                            setSourceId={this.props.setSourceId}
+                            savePiece={this.props.savePiece} updatePiece={this.props.updatePiece}/>
             </div>
         )
     }

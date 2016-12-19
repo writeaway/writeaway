@@ -74,7 +74,7 @@ class Redaxtor {
 
         if (options.i18n) {
             this.i18n = {
-                edit: false,
+                editorActive: false,
                 ...options.i18n
             };
             defaultState.i18n = this.i18n;
