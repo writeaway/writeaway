@@ -5,7 +5,7 @@ import {updatePiece, savePiece, resetPiece, setSourceId} from '../actions/pieces
 import {getConfig} from '../config'
 
 const PieceContainer = (props) => {
-    return <props.component {...props} images={getConfig().images} className={classNames({
+    return <props.component {...props} api={getConfig().api} className={classNames({
         "r_editor": true,
         "r_edit": props.editorActive,
         "r_highlight": props.editorActive

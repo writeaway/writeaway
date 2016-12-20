@@ -20,8 +20,28 @@ import {configureFetch} from './helpers/callFetch'
 
 let config = getConfig();
 
+/**
+ * Default minimum api allows basic editing without saving anything
+ * No Uploads and gallery
+ */
+const defaultMinimumApi = {
+    getImageList: false,
+    uploadImage: false,
+    getPieceData: function(piece) {
+        return {
+            ...piece,
+            html: piece.node.innerHTML
+        }
+    },
+    savePieceData: false
+};
+
 class Redaxtor {
     constructor(options) {
+        /**
+         * External server API
+         */
+        this.api = void 0;
         /**
          * Editable DOM pieces editors
          */
@@ -37,16 +57,17 @@ class Redaxtor {
          */
         this.i18n = void 0;
 
-        options.images && (config.images = options.images);
+
         const defaultState = {};
 
-        if (options.pieces) {
-            options.pieces.components = {
-                // img: Img,
-                ...options.pieces.components
-            };
+        /**
+         * Init API. Api is a const, we don't put it in storage, putting in const config instead
+         */
+        this.api = config.api = {...defaultMinimumApi, ...options.api};
 
-            this._edit = false;//TODO: No other code mentions. Unused?
+        if (options.pieces) {
+            options.pieces.components = {...options.pieces.components};
+
             this.pieces = {
                 attribute: "data-piece",
                 attributeId: "data-id",
