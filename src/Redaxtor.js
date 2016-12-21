@@ -23,17 +23,49 @@ let config = getConfig();
 /**
  * Default minimum api allows basic editing without saving anything
  * No Uploads and gallery
+ * TODO: Note this implementation is dependent on submodules. Reimplement as multi-extendable
  */
 const defaultMinimumApi = {
     getImageList: false,
     uploadImage: false,
-    getPieceData: function(piece) {
-        return {
-            ...piece,
-            html: piece.node.innerHTML
+    getPieceData: function (piece) {
+        console.warn("Using default implementation for getting piece data. This should be overriden", piece);
+        if (piece.type == "source" || piece.type == "html") {
+            return Promise.resolve({
+                ...piece,
+                data: {
+                    html: piece.node.innerHTML
+                }
+            });
         }
+        if (piece.type == "image") {
+            return Promise.resolve({
+                ...piece,
+                data: {
+                    src: piece.node.src,
+                    alt: piece.node.alt,
+                }
+            });
+        }
+        if (piece.type == "background") {
+            return Promise.resolve({
+                ...piece,
+                data: {
+                    url: piece.node.style.backgroundImage && piece.node.style.backgroundImage.slice(4, -1).replace(/"/g, ""),
+                    bgColor: piece.node.style.backgroundColor,
+                    bgRepeat: piece.node.style.backgroundRepeat,
+                    bgSize: piece.node.style.backgroundSize,
+                    bgPosition: piece.node.style.backgroundPosition,
+                    alt: piece.node.title || ""
+                }
+            });
+        }
+        return Promise.reject()
     },
-    savePieceData: false
+    savePieceData: function (piece) {
+        console.warn("Using default implementation for saving piece data. This should be overriden", piece);
+        return Promise.resolve();
+    }
 };
 
 class Redaxtor {
@@ -71,9 +103,7 @@ class Redaxtor {
             this.pieces = {
                 attribute: "data-piece",
                 attributeId: "data-id",
-                attributeUseHTML: "data-use-html",
-                attributeGetURL: "data-get-url",
-                attributeSaveURL: "data-save-url",
+                attributeName: "data-name",
                 components: {},
                 initialState: {},
                 //other options: getURL, saveURL
@@ -126,10 +156,10 @@ class Redaxtor {
                     <RedaxtorContainer
                         components={this.pieces.components}
                         tabs={{
-                        pieces: !!this.pieces,
-                        i18n: !!this.i18n,
-                        pages: !!this.pages
-                    }}>
+                            pieces: !!this.pieces,
+                            i18n: !!this.i18n,
+                            pages: !!this.pages
+                        }}>
                     </RedaxtorContainer>
                     <ReduxToastr
                         className="r_toast-container"
@@ -152,9 +182,7 @@ class Redaxtor {
                 node: el,
                 type: el.getAttribute(this.pieces.attribute),
                 id: el.getAttribute(this.pieces.attributeId),
-                useHTML: el.getAttribute(this.pieces.attributeUseHTML) || this.pieces.useHTML,
-                getURL: el.getAttribute(this.pieces.attributeGetURL) || this.pieces.getURL,
-                saveURL: el.getAttribute(this.pieces.attributeSaveURL) || this.pieces.saveURL,
+                name: el.getAttribute(this.pieces.attributeName),
                 dataset: {},
                 changed: false
             };

@@ -1,9 +1,9 @@
 import React, {Component} from "react";
 
 class PieceLine extends Component {
-    shouldComponentUpdate(nextProps) {
+    /*shouldComponentUpdate(nextProps) {
         return this.props.editorActive !== nextProps.editorActive || this.props.piece.changed !== nextProps.piece.changed;
-    }
+    }*/
 
     render() {
         const {piece, editorActive, source} = this.props;
@@ -12,7 +12,7 @@ class PieceLine extends Component {
             <div className="r_item-row">
                 <span>{piece.name || id}</span>
                 <span className="r_item-right">
-                    {source && editorActive && <i className="r_icon-code r_btn" onClick={()=>this.props.setSourceId(id)}></i>}
+                    {source && editorActive && piece.data && piece.data.html && <i className="r_icon-code r_btn" onClick={()=>this.props.setSourceId(id)}></i>}
                     {piece.changed && <i className="r_icon-floppy r_btn" onClick={this.props.savePiece}></i>}
                 </span>
             </div>

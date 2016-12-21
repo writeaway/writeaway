@@ -3,7 +3,6 @@ import ReactDOM from "react-dom"
 import {Provider} from 'react-redux'
 
 import C from "../constants"
-import callFetch from '../helpers/callFetch'
 import {getStore} from '../store'
 import {getConfig} from '../config'
 
@@ -75,14 +74,14 @@ export const pieceSavingFailed = (id, error) => ({type: C.PIECE_SAVING_FAILED, i
  */
 export const savePiece = id => (dispatch, getState) => {
     const piece = getState().pieces.byId[id];
-    if(piece.saveURL) {
-        dispatch(pieceSaving(id));
-        let body = {...piece.dataset, data: piece.data};
-        callFetch({url: piece.saveURL, data: body}).then(answer => {
-            dispatch(pieceSaved(id, answer));
-        }, error => {
+    if(getConfig().api.savePieceData) {
+        getConfig().api.savePieceData(piece).then((data)=>{
+            dispatch(pieceSaved(id, data));
+        }, error =>{
             dispatch(pieceSavingFailed(id, error));
-        });
+        })
+    } else {
+        dispatch(pieceSaved(id, {}));
     }
 };
 
@@ -106,48 +105,41 @@ export const pieceFetchingError = (id, error) => ({type: C.PIECE_FETCHING_ERROR,
  */
 export const pieceGet = id => (dispatch, getState) => {
     dispatch(pieceFetching(id));
+
     const piece = getState().pieces.byId[id];
     if (!piece) {
         dispatch(pieceFetchingError(id, "This piece does not exist"));
         return;
     }
-    /**
-     * If Api is set up to fetch pieces from backend, do that
-     */
-    if (piece.getURL) {
-        return callFetch({
-            url: piece.getURL,
-            data: piece.dataset
-        }).then(json => {
-            if (!json.piece.data) json.piece.data = {};
-            if (!json.piece.data.html) {
-                json.piece.data.html = getState().pieces.byId[id].node.innerHTML;
-            }
-            dispatch(pieceFetched(id, json.piece));
-            const piece = getState().pieces.byId[id];
-            pieceRender(piece);
-        }, error => {
-            dispatch(pieceFetchingError(id, error));
-        })
-    } else {
-        /**
-         * If no API url, return what is already on page
-         */
-        dispatch(pieceFetched(id, {
-            data: {
-                html: getState().pieces.byId[id].node.innerHTML
-            }
-        }));
+    getConfig().api.getPieceData(piece).then((updatedPiece)=>{
+        dispatch(pieceFetched(id, updatedPiece));
         const piece = getState().pieces.byId[id];
         pieceRender(piece);
-    }
+    }, (error)=>{
+        dispatch(pieceFetchingError(id, error));
+    });
 };
 
 
-const pieceRender = piece =>
-    ReactDOM.render(
-        <Provider store={getStore()}>
-            <Container id={piece.id}
-                       component={getConfig().pieces.components[piece.type]} targetNode={piece.node}
-            />
-        </Provider>, piece.node);
+const pieceRender = piece => {
+    let ComponentClass = getConfig().pieces.components[piece.type];
+    if(ComponentClass.__renderType === "INSIDE") {
+        return ReactDOM.render(
+            <Provider store={getStore()}>
+                <Container id={piece.id}
+                           component={getConfig().pieces.components[piece.type]} targetNode={piece.node}
+                />
+            </Provider>, piece.node);
+    }
+    if(ComponentClass.__renderType === "BEFORE") {
+        let containerNode = document.createElement("redaxtor-before");
+        piece.node.parentNode.insertBefore(containerNode, piece.node);
+        return ReactDOM.render(
+            <Provider store={getStore()}>
+                <Container id={piece.id}
+                           component={getConfig().pieces.components[piece.type]} targetNode={piece.node}
+                />
+            </Provider>, containerNode);
+    }
+    throw new Error("Component has no __renderType specified or __renderType is not supported");
+}
