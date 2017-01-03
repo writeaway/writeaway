@@ -1,7 +1,7 @@
 import React, {Component} from "react"
 import {connect} from 'react-redux'
 import classNames from 'classnames';
-import {updatePiece, savePiece, resetPiece, setSourceId} from '../actions/pieces'
+import {updatePiece, readyForRemovalPiece, savePiece, resetPiece, setSourceId} from '../actions/pieces'
 import {getConfig} from '../config'
 
 const PieceContainer = (props) => {
@@ -16,7 +16,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         ...state.pieces.byId[ownProps.id],
         highlight: state.pieces.highlight,
-        editorActive: state.pieces.editorActive
+        editorActive: !state.pieces.byId[ownProps.id].destroy && state.pieces.editorActive && state.pieces[`editorEnabled:${state.pieces.byId[ownProps.id].type}`]!==false //Note strict comparison to false. Undefined is treated as true
     };
 };
 const mapDispatchToProps = dispatch => {

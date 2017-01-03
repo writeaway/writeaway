@@ -6,6 +6,10 @@ const piece = (piece = {}, action) => {
             return {...piece, ...action.piece, changed: !(action.notChanged || (action.piece.data.html === piece.data.html)) || piece.changed};
         case C.PIECE_RESET:
             return {...piece, changed: false};
+        case C.PIECE_REMOVE:
+            return {...piece, destroy: true};
+        case C.PIECE_HAS_REMOVED:
+            return {...piece, destroyed: true};
         case C.PIECE_SAVING:
             return {...piece, saving: true};
         case C.PIECE_SAVED:
@@ -36,9 +40,21 @@ const piecesDefault = {
 const pieces = (pieces = piecesDefault, action) => {
     switch (action.type) {
         case C.PIECES_ENABLE_EDIT:
-            return {...pieces, editorActive: true, initialized: true};
+            if(action.subType) {
+                let data = {...pieces, initialized: true};
+                data[`editorEnabled:${action.subType}`] = true;
+                return data;
+            } else {
+                return {...pieces, editorActive: true, initialized: true};
+            }
         case C.PIECES_DISABLE_EDIT:
-            return {...pieces, editorActive: false};
+            if(action.subType) {
+                let data = {...pieces, initialized: true};
+                data[`editorEnabled:${action.subType}`] = false;
+                return data;
+            } else {
+                return {...pieces, editorActive: false};
+            }
         case C.PIECES_SET_SOURCE_ID:
             return {...pieces, sourceId: action.id};
 
@@ -48,10 +64,20 @@ const pieces = (pieces = piecesDefault, action) => {
                 byId: {...pieces.byId, [action.id]: action.piece}
             };
 
+        case C.PIECE_HAS_REMOVED:
+            let byId = {...pieces.byId, [action.id]: action.piece};
+            delete byId[action.id];
+
+            return {
+                ...pieces,
+                byId: byId
+            };
+
         case C.PIECE_UPDATE:
         case C.PIECE_SAVING:
         case C.PIECE_SAVED:
         case C.PIECE_SAVING_FAILED:
+        case C.PIECE_REMOVE:
 
         case C.PIECE_FETCHING:
         case C.PIECE_FETCHED:

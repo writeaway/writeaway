@@ -14,7 +14,7 @@ import RedaxtorContainer from "./containers/RedaxtorContainer";
 
 import reducers from "./reducers";
 import {initI18N} from './actions/i18n';
-import {pieceGet, addPiece, updatePiece} from './actions/pieces';
+import {addPiece, removePiece, pieceUnmount} from './actions/pieces';
 import {pagesGet, pagesGetLayouts} from './actions/pages';
 import {configureFetch} from './helpers/callFetch'
 
@@ -81,11 +81,13 @@ class Redaxtor {
 
         /**
          * Editable pages editors
+         * @deprecated
          */
         this.pages = void 0;
 
         /**
          * Internalization editors
+         * @deprecated
          */
         this.i18n = void 0;
 
@@ -113,8 +115,18 @@ class Redaxtor {
             config.pieces = {
                 components: options.pieces.components
             };
+
+            defaultState.pieces = {
+
+            };
+
+            Object.keys(options.pieces.components).forEach((key)=>{
+                this.pieces[`editorEnabled:${key}`] = true;
+                defaultState.pieces[`editorEnabled:${key}`] = true;
+            });
         }
 
+        //@deprecated
         if (options.pages) {
             this.pages = {
                 allowCreate: true,
@@ -123,6 +135,7 @@ class Redaxtor {
             defaultState.pages = this.pages;
         }
 
+        //@deprecated
         if (options.i18n) {
             this.i18n = {
                 editorActive: false,
@@ -138,9 +151,7 @@ class Redaxtor {
         setStore(this.store);
         if (options.ajax) configureFetch(options.ajax);
 
-        options.pieces && this.initPieces();
-        options.pages && this.initPages();
-        options.i18n && this.initI18N();
+        options.pieces && this.initPieces(document);
 
         this.showBar();
     }
@@ -172,34 +183,66 @@ class Redaxtor {
         document.body.appendChild(this.barNode);
     }
 
-    initPieces() {
+    initPieces(contextNode) {
         const selector = this.pieces.attribute.indexOf("data-") === 0 ? "[" + this.pieces.attribute + "]" : this.pieces.attribute;
-        let nodes = document.querySelectorAll(selector);
+        let nodes = contextNode.querySelectorAll(selector);
 
         for (let i = 0; i < nodes.length; ++i) {
             let el = nodes[i];
-            let pieceObj = {
-                node: el,
-                type: el.getAttribute(this.pieces.attribute),
-                id: el.getAttribute(this.pieces.attributeId),
-                name: el.getAttribute(this.pieces.attributeName),
-                dataset: {},
-                changed: false
-            };
-
-            for (let data in el.dataset) {//can we use rest on DOMStringMap? pieceObj.dataset = {...el.dataset}
-                pieceObj.dataset[data] = el.dataset[data]
-            }
-
-            this.store.dispatch(addPiece(pieceObj))
+            this.addPiece(el);
         }
     }
 
+    /**
+     * Add a piece from specific node
+     * @param node HTMLElement
+     * @param options
+     * @param options.id {string} Mandatory unique identification id of piece. Should present in options OR in `this.pieces.attributeId` attribute of node, i.e. `data-id`
+     * @param options.type {string} Mandatory type of piece. Should present in options OR in `this.pieces.attribute` attribute of node, i.e. `data-piece`
+     * @param options.name {string} Optional human readable name for list in editor. If not specified will be tried to be read from `this.pieces.attributeName` attribute of node
+     * @param options.dataset {Object} Optional set of data associated with node that will be passed to save and get API calls. If not specified will be read directly from node dataset
+     */
+    addPiece(node, options) {
+        let piece = {
+            node: node,
+            type: (options && options.type) || node.getAttribute(this.pieces.attribute),
+            id: (options && options.id) || node.getAttribute(this.pieces.attributeId),
+            name: (options && options.name) || node.getAttribute(this.pieces.attributeName),
+            dataset: (options && options.dataset) || {},
+            changed: false
+        };
+        if(!options || !options.dataset) {
+            for (let data in node.dataset) {
+                piece.dataset[data] = node.dataset[data];
+            }
+        }
+        if(!piece.id) throw new Error(`Can't add piece with undefined id`);
+        if(!piece.type) throw new Error(`Can't add piece with undefined type`);
+        if(!this.pieces.components[piece.type]) throw new Error(`Can't add piece with unsupported type "${piece.type}"`);
+
+        this.store.dispatch(addPiece(piece))
+    }
+
+    /**
+     * Prepares node for removal from DOM. Dirty destroys editor. Removes listeners, cleans up memory, but does not restore node fully.
+     * @param id of element to destroy
+     */
+    destroyPiece(id) {
+        this.store.dispatch(removePiece(id));//TODO: Might be deprecated
+        this.store.dispatch(pieceUnmount(this.store.getState().pieces.byId[id]));//Remove element from dom and trigger removing from state
+    }
+
+    /**
+     * @deprecated
+     */
     initPages() {
         this.store.dispatch(pagesGet());
         this.pages.getLayoutsURL && this.store.dispatch(pagesGetLayouts());
     }
 
+    /**
+     * @deprecated
+     */
     initI18N() {
         this.store.dispatch(initI18N());
     }
