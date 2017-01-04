@@ -7,24 +7,24 @@ import Portal from '../components/Portal'
 class Element extends Component {
     constructor(props){
         super(props);
-        this.state = {edit: false}
+        this.state = {editorActive: false}
     }
 
     render() {
         let style = {};
-        const {id, text, edit, updateI18NData} = this.props;
+        const {id, text, editorActive, updateI18NData} = this.props;
 
-        if (edit) {
+        if (editorActive) {
             style.outline = "2px dotted #3c93eb";
             style.cursor = "pointer";
         }
 
         let portal = null;
-        if (this.state.edit && this.refs["el"]) {
+        if (this.state.editorActive && this.refs["el"]) {
             const rect = this.refs["el"].getBoundingClientRect();
             portal =
                 <Portal top={rect.top + rect.height} left={rect.left} position="fixed"
-                        onClose={()=>this.setState({edit: false})}>
+                        onClose={()=>this.setState({editorActive: false})}>
                     <div className="input-container">
                         <input value={text} placeholder="text"
                                    onChange={e => updateI18NData(id, e.target.value)}/>
@@ -32,7 +32,7 @@ class Element extends Component {
                 </Portal>;
         }
         return (
-            <span ref="el" style={style} onClick={()=>this.setState({edit: true})}>
+            <span ref="el" style={style} onClick={()=>this.setState({editorActive: true})}>
                 {text}
                 {portal}
             </span>
@@ -44,7 +44,7 @@ class Element extends Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         text: state.i18n.data[ownProps.id],
-        edit: state.i18n.edit
+        editorActive: state.i18n.editorActive
     }
 };
 

@@ -54,11 +54,11 @@ export default class Pages extends React.Component {
                                 {list[id].data.fields.title.value}
                             </span>
                             <IconButton style={buttonStyle} iconStyle={iconStyle} tooltipPosition="top-left"
-                                        tooltip="edit" onClick={()=>this.props.pageSetCurrentIndex(id)}>
+                                        tooltip="Edit" onClick={()=>this.props.pageSetCurrentIndex(id)}>
                                 <Edit/>
                             </IconButton>
                             <IconButton style={buttonStyle} iconStyle={iconStyle} tooltipPosition="top-left"
-                                        tooltip="delete" onClick={()=>this.props.pageDelete(id)}>
+                                        tooltip="Delete" onClick={()=>this.props.pageDelete(id)}>
                                 <Delete/>
                             </IconButton>
                         </div>))

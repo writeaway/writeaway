@@ -121,8 +121,8 @@ export const i18nDisableEdit = () => {
 
 export const i18nToggleEdit = () => {
     return (dispatch, getState) => {
-        const i18n = getState().i18n, edit = !i18n.edit;
-        if (edit) {
+        const i18n = getState().i18n, editorActive = !i18n.editorActive;
+        if (editorActive) {
             if (i18n.initialized) {
 
             } else {

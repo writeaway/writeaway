@@ -1,35 +1,30 @@
 import React, {Component} from "react"
-import ReactDOM from "react-dom"
-import {Provider, connect} from 'react-redux'
+import {connect} from 'react-redux'
 import classNames from 'classnames';
-import {updatePiece, savePiece, setSourceId} from '../actions/pieces'
+import {updatePiece, readyForRemovalPiece, savePiece, resetPiece, setSourceId} from '../actions/pieces'
 import {getConfig} from '../config'
 
 const PieceContainer = (props) => {
-    return <props.component {...props} images={getConfig().images} className={classNames({
-        "r_editable": true,
-        "r_edit": props.edit,
-        "r_highlight": props.edit
-      })} wrapper="div"/>
+    return <props.component {...props} api={getConfig().api} className={classNames({
+        "r_editor": true,
+        "r_edit": props.editorActive,
+        "r_highlight": props.editorActive
+      })} wrapper="redaxtor"/>
 };
 
 const mapStateToProps = (state, ownProps) => {
     return {
         ...state.pieces.byId[ownProps.id],
         highlight: state.pieces.highlight,
-        edit: state.pieces.edit
+        editorActive: !state.pieces.byId[ownProps.id].destroy && state.pieces.editorActive && state.pieces[`editorEnabled:${state.pieces.byId[ownProps.id].type}`]!==false //Note strict comparison to false. Undefined is treated as true
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
         updatePiece: (id, piece) => dispatch(updatePiece(id, piece)),
+        resetPiece: (id) => dispatch(resetPiece(id)),
         savePiece: (id) => dispatch(savePiece(id)),
-        setCurrentSourcePieceId: id => dispatch(setSourceId(id)),
-        toggleImagePopup: () => dispatch(toggleImagePopup()),
-        setCancelCallback: callback => dispatch(setCancelCallback(callback)),
-        setSaveCallback: callback => dispatch(setSaveCallback(callback)),
-        saveImageData: data => dispatch(saveImageData(data)),
-        resetImageData: () => dispatch(resetImageData())
+        setCurrentSourcePieceId: id => dispatch(setSourceId(id))
     }
 };
 

@@ -45,7 +45,7 @@ class CommonItems extends Component {
     get items() {
         return this.props.data.items.map((item, i) => {
             item = {...item};
-            if (this.props.edit) {
+            if (this.props.editorActive) {
                 item.className += " redaxtor-piece-item"
             }
             return this.getItem(item, i);

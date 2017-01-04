@@ -11,27 +11,146 @@ Open sourced by [SpiralScout](http://spiralscout.com).
 npm install --save redaxtor
 ```
 
-## The Gist
+## The Gist (CommonJS)
 ```js
 "use strict";
+//Include redaxtor and it's default styles
 var Redaxtor = require('redaxtor');
+require('redaxtor/lib/redaxtor.css');
+
+//Include redaxtor HTML editor and it's default styles
 var RedaxtorMedium = require('redaxtor-medium');
 require('medium-editor/dist/css/medium-editor.css');
 require('redaxtor-medium/lib/redaxtor-medium.css');
 
+//Include redaxtor HTML editor and it's default styles 
 var RedaxtorCodemirror = require('redaxtor-codemirror');
 require('codemirror/lib/codemirror.css');
 
+//Attach plugins to redaxtor
 var components = {
-    html: RedaxtorMedium,
+    html: RedaxtorMedium.HTMLEditor,
+    image: RedaxtorMedium.IMGTagEditor,
+    background: RedaxtorMedium.BackgroundImageEditor,
     source: RedaxtorCodemirror
-}
+};
 
 var redaxtor = new Redaxtor({
     pieces: {
         components: components,
         getURL: "api/pieces/get",//will be overwritten by data-get-url
         saveURL: "api/pieces/save"//will be overwritten by data-save-url
+    }
+});
+```
+
+## The Gist (Static)
+
+````html
+    <!-- Include redaxtor and it's default styles -->
+    <script lang="text/javascript" src="./dist/redaxtor.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./dist/redaxtor.min.css" charset="utf-8">
+    
+    
+    <!-- Include redaxtor HTML editor and it's default styles -->
+    <script lang="text/javascript" src="./dist/redaxtor-medium.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./dist/medium-editor.min.css" charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="./dist/redaxtor-medium.min.css" charset="utf-8">
+    
+        
+    <!-- Include redaxtor CODE editor and it's default styles -->
+    <script lang="text/javascript" src="./dist/redaxtor-codemirror.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./node_modules/codemirror/lib/codemirror.css" charset="utf-8">
+    
+````
+
+```js
+
+//Attach plugins to redaxtor
+var components = {
+    html: RedaxtorMedium.HTMLEditor,
+    image: RedaxtorMedium.IMGTagEditor,
+    background: RedaxtorMedium.BackgroundImageEditor,
+    source: RedaxtorCodemirror
+};
+
+var redaxtor = new Redaxtor({
+    pieces: {
+        components: components
+    },
+    api: {
+        /**
+        *  Method to fetch list of image urls for gallery
+         * Should resolve into array of strings - URLS
+        */
+        getImageList: function () {
+            return new Promise(function(resolve, reject) {
+                $.get({
+                    url: "api/images.json",
+                    dataType: "json"
+                }).done(function(data) {
+                    resolve(data.data.list);//
+                }).fail(function(error) {
+                    reject(error);
+                });
+            });
+        },
+        uploadImage: function() {
+
+        },
+        /**
+         *  Method to specific piece data
+         * Should resolve into piece object, having all needed properties
+        */
+        getPieceData: function (piece) {                
+            if (piece.type == "source" || piece.type == "html") {
+                /**
+                * Source and html editors expect `html` property 
+                */
+                return Promise.resolve({
+                    ...piece,
+                    data: {
+                        html: piece.node.innerHTML
+                    }
+                });
+            }
+            if (piece.type == "image") {
+                /**
+                * Image editor expects `src` property with URL of image and `alt` string 
+                */
+                return Promise.resolve({
+                    ...piece,
+                    data: {
+                        src: piece.node.src,
+                        alt: piece.node.alt,
+                    }
+                });
+            }
+            if (piece.type == "background") {
+                /**
+                * Background editor expects a set of background styling properties 
+                */
+                return Promise.resolve({
+                    ...piece,
+                    data: {
+                        url: piece.node.style.backgroundImage && piece.node.style.backgroundImage.slice(4, -1).replace(/"/g, ""),
+                        bgColor: piece.node.style.backgroundColor,
+                        bgRepeat: piece.node.style.backgroundRepeat,
+                        bgSize: piece.node.style.backgroundSize,
+                        bgPosition: piece.node.style.backgroundPosition,
+                        alt: piece.node.title || ""
+                    }
+                });
+            }
+            return Promise.reject()
+        },
+        /**
+        * Should resolve, if piece was saved 
+        */
+        savePieceData: function(piece) {
+            console.info("Saving to server", piece);
+            return Promise.resolve();
+        }
     }
 });
 ```
@@ -43,28 +162,9 @@ Each piece should have:
 * id - ```data-id```
 * url to fetch data and options - ```data-get-url```
 
-After enabling edit mode - each piece will fetch data from the server
-### Ajax
-##### field {message} in response will show bar with message content
- *minimal example*
- ```bash
-  { ...
-    message: 'Message text'
-  ... }
-  ```
-
-  *full example*
-  ```bash
-    { ...
-      message: {
-        content: 'Message text',
-        type: 'error',
-        durationTime: 5000    //default 4000
-    ... }
-   ```
-
 ## Developing and building
-Clone the repository.
+
+
  ```bash
  npm install
  npm run build

@@ -9,7 +9,7 @@ export default class PiecesComponent extends React.Component {
             <div>
                 <div className="r_list-header">
                     <label>Edit & Highlight on the page</label>
-                    <Toggle defaultChecked={this.props.edit}
+                    <Toggle defaultChecked={this.props.editorActive}
                             onChange={this.props.i18nToggleEdit}/>
                 </div>
                 <I18NList {...this.props}/>

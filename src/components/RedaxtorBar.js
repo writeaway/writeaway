@@ -21,7 +21,7 @@ export default class RedaxtorBar extends React.Component {
 
     componentDidMount() {
         this._node = ReactDOM.findDOMNode(this.refs["bar"]);
-        this._rel = {x: 0, y: 0}
+        this._rel = {x: 0, y: 0, startX: 0, startY: 0}
     }
 
     componentDidUpdate(props, state) {
@@ -49,13 +49,18 @@ export default class RedaxtorBar extends React.Component {
         if (e.button !== 0) return;
         this._rel.x = e.pageX - this._node.offsetLeft;
         this._rel.y = e.pageY - this._node.offsetTop;
-        this.setState({dragging: true});
+        this._rel.startX = e.pageX;
+        this._rel.startY = e.pageY;
+        this.setState({dragging: true, dragged: false});
         e.stopPropagation();
         e.preventDefault();
     }
 
     onMouseMove(e) {
         if (!this.state.dragging) return;
+        if(e.pageX == this._rel.startX && e.pageY == this._rel.startY) {
+            return;
+        }
         this._node.style.left = e.pageX - this._rel.x + "px";
         this._node.style.top = e.pageY - this._rel.y + "px";
         this.setState({dragged: true});
@@ -102,7 +107,7 @@ export default class RedaxtorBar extends React.Component {
                 <div ref="bar" className="r_bar">
                     <PanelHandler isOpen={this.state.isOpen}
                                   onMouseDown={this.onMouseDown.bind(this)}
-                                  toggleOpen={this.toggleOpen.bind(this)}/>
+                                  toggleOpen={this.toggleOpen.bind(this)} message={this.props.message}/>
 
                     {this.state.isOpen ?
                         <div className="r_tabs" value={this.state.value}>
