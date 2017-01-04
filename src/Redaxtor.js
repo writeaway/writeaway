@@ -7,7 +7,9 @@ import thunk from 'redux-thunk';
 import ReduxToastr from 'react-redux-toastr'
 
 import {setStore} from './store';
-import {setConfig, getConfig} from './config';//TODO: Unused, remove
+import {setConfig, getConfig} from './config';
+
+import { compose } from 'react';
 
 import RedaxtorContainer from "./containers/RedaxtorContainer";
 // import Img from "./components/img/ImgContainer";
@@ -144,9 +146,21 @@ class Redaxtor {
             defaultState.i18n = this.i18n;
         }
 
+
+        const composeEnhancers =
+            //process.env.NODE_ENV !== 'production' && //TODO: Disallow in production
+            typeof window === 'object' &&
+            window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
+                window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+                    name: "RedaXtor"
+                }) : compose;
+
         this.store = createStore(reducers,
             {...defaultState, ...options.state},
-            applyMiddleware(thunk));
+            composeEnhancers(
+                applyMiddleware(thunk),
+                // other store enhancers if any
+            ));
 
         setStore(this.store);
         if (options.ajax) configureFetch(options.ajax);
