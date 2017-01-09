@@ -158,7 +158,7 @@ class Redaxtor {
         this.store = createStore(reducers,
             {...defaultState, ...options.state},
             composeEnhancers(
-                applyMiddleware(thunk),
+                applyMiddleware(thunk)
                 // other store enhancers if any
             ));
 
