@@ -8,6 +8,8 @@ const piece = (piece = {}, action) => {
             return {...piece, changed: false};
         case C.PIECE_REMOVE:
             return {...piece, destroy: true};
+        case C.PIECE_SET_DATA:
+            return {...piece, data: action.data};
         case C.PIECE_HAS_REMOVED:
             return {...piece, destroyed: true};
         case C.PIECE_SAVING:
@@ -78,6 +80,7 @@ const pieces = (pieces = piecesDefault, action) => {
         case C.PIECE_SAVED:
         case C.PIECE_SAVING_FAILED:
         case C.PIECE_REMOVE:
+        case C.PIECE_SET_DATA:
 
         case C.PIECE_FETCHING:
         case C.PIECE_FETCHED:

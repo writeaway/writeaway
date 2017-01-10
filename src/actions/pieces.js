@@ -55,6 +55,8 @@ export const addPiece = piece => ({type: C.PIECE_ADD, id: piece.id, piece});
 
 export const removePiece = id => ({type: C.PIECE_REMOVE, id: id});
 
+export const setPieceData = (id, data) => ({type: C.PIECE_SET_DATA, id: id, data: data});
+
 export const hasRemovedPiece = id => ({type: C.PIECE_HAS_REMOVED, id: id});
 
 export const pieceSaving = id => ({type: C.PIECE_SAVING, id});

@@ -16,7 +16,7 @@ import RedaxtorContainer from "./containers/RedaxtorContainer";
 
 import reducers from "./reducers";
 import {initI18N} from './actions/i18n';
-import {addPiece, removePiece, pieceUnmount} from './actions/pieces';
+import {addPiece, removePiece, pieceUnmount, setPieceData} from './actions/pieces';
 import {pagesGet, pagesGetLayouts} from './actions/pages';
 import {configureFetch} from './helpers/callFetch'
 
@@ -158,7 +158,7 @@ class Redaxtor {
         this.store = createStore(reducers,
             {...defaultState, ...options.state},
             composeEnhancers(
-                applyMiddleware(thunk),
+                applyMiddleware(thunk)
                 // other store enhancers if any
             ));
 
@@ -244,6 +244,15 @@ class Redaxtor {
     destroyPiece(id) {
         this.store.dispatch(removePiece(id));//TODO: Might be deprecated
         this.store.dispatch(pieceUnmount(this.store.getState().pieces.byId[id]));//Remove element from dom and trigger removing from state
+    }
+
+    /**
+     * set new data to a piece by Id
+     * @param pieceId {string} id of piece
+     * @param obj {Object} new data
+     */
+    setData(pieceId, obj){
+        this.store.dispatch(setPieceData(pieceId, obj))
     }
 
     /**
