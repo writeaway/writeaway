@@ -9,7 +9,7 @@ import ReduxToastr from 'react-redux-toastr'
 import {setStore} from './store';
 import {setConfig, getConfig} from './config';
 
-import { compose } from 'react';
+import { compose } from 'redux';
 
 import RedaxtorContainer from "./containers/RedaxtorContainer";
 // import Img from "./components/img/ImgContainer";
