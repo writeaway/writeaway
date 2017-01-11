@@ -165,10 +165,16 @@ class Redaxtor {
         setStore(this.store);
         if (options.ajax) configureFetch(options.ajax);
 
-        options.pieces && this.initPieces(document);
+        /**
+         * options.picesPlace - say where get pieces
+         */
+        options.pieces && this.initPieces(options.picesPlace || document);
 
         this.showBar();
 
+        /**
+         * enable pieces editing if set option 'enableEdit'
+         */
         if(options.enableEdit){
             this.store.dispatch(piecesToggleEdit());
         }
