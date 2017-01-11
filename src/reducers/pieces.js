@@ -3,15 +3,24 @@ import C from '../constants'
 const piece = (piece = {}, action) => {
     switch (action.type) {
         case C.PIECE_UPDATE:
-            return {...piece, ...action.piece, changed: !(action.notChanged || (action.piece.data.html === piece.data.html)) || piece.changed};
+            return {
+                ...piece, ...action.piece,
+                changed: !(action.notChanged || (action.piece.data.html === piece.data.html)) || piece.changed
+            };
         case C.PIECE_RESET:
             return {...piece, changed: false};
         case C.PIECE_REMOVE:
             return {...piece, destroy: true};
         case C.PIECE_SET_DATA:
-            let newData = {};
-            Object.assign(newData, piece.data, action.data);
-            return {...piece, data: newData};
+            //check is initiated
+            if(!piece.fetched){
+                console.error(`Piece was not initialized before use setDate function. Piece id: ${piece.id}`);
+                return {...piece};
+            }
+            else {
+                //set data
+                return {...piece, data: {...piece.data, ... action.data}};
+            }
         case C.PIECE_HAS_REMOVED:
             return {...piece, destroyed: true};
         case C.PIECE_SAVING:
@@ -44,7 +53,7 @@ const piecesDefault = {
 const pieces = (pieces = piecesDefault, action) => {
     switch (action.type) {
         case C.PIECES_ENABLE_EDIT:
-            if(action.subType) {
+            if (action.subType) {
                 let data = {...pieces, initialized: true};
                 data[`editorEnabled:${action.subType}`] = true;
                 return data;
@@ -52,7 +61,7 @@ const pieces = (pieces = piecesDefault, action) => {
                 return {...pieces, editorActive: true, initialized: true};
             }
         case C.PIECES_DISABLE_EDIT:
-            if(action.subType) {
+            if (action.subType) {
                 let data = {...pieces, initialized: true};
                 data[`editorEnabled:${action.subType}`] = false;
                 return data;
@@ -77,12 +86,28 @@ const pieces = (pieces = piecesDefault, action) => {
                 byId: byId
             };
 
+        case C.PIECE_SET_DATA:
+
+            //check to existing piece
+            if (!pieces.byId[action.id]) {
+                console.error(`You are trying to set data to an unexisting piece. Piece id: ${action.id}`);
+                return {
+                    ...pieces
+                };
+            }
+
+            return {
+                ...pieces,
+                byId: {...pieces.byId, [action.id]: piece(pieces.byId[action.id], action)}
+            };
+
+
         case C.PIECE_UPDATE:
         case C.PIECE_SAVING:
         case C.PIECE_SAVED:
         case C.PIECE_SAVING_FAILED:
         case C.PIECE_REMOVE:
-        case C.PIECE_SET_DATA:
+
 
         case C.PIECE_FETCHING:
         case C.PIECE_FETCHED:
