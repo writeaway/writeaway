@@ -9,7 +9,9 @@ const piece = (piece = {}, action) => {
         case C.PIECE_REMOVE:
             return {...piece, destroy: true};
         case C.PIECE_SET_DATA:
-            return {...piece, data: action.data};
+            let newData = {};
+            Object.assign(newData, piece.data, action.data);
+            return {...piece, data: newData};
         case C.PIECE_HAS_REMOVED:
             return {...piece, destroyed: true};
         case C.PIECE_SAVING:
