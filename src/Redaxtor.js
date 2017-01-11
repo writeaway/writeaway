@@ -16,7 +16,7 @@ import RedaxtorContainer from "./containers/RedaxtorContainer";
 
 import reducers from "./reducers";
 import {initI18N} from './actions/i18n';
-import {addPiece, removePiece, pieceUnmount, setPieceData} from './actions/pieces';
+import {addPiece, removePiece, pieceUnmount, setPieceData, piecesToggleEdit} from './actions/pieces';
 import {pagesGet, pagesGetLayouts} from './actions/pages';
 import {configureFetch} from './helpers/callFetch'
 
@@ -168,6 +168,11 @@ class Redaxtor {
         options.pieces && this.initPieces(document);
 
         this.showBar();
+
+        if(options.enableEdit){
+            this.store.dispatch(piecesToggleEdit());
+        }
+
     }
 
     /**
