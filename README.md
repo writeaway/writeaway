@@ -103,6 +103,16 @@ var redaxtor = new Redaxtor({
 
         },
         /**
+        * function for delete image from server
+        * @param id id of image
+        * @returns {Promise}
+        */
+        deleteImage: function (id) {
+            return new Promise(function(resolve, reject) {
+                resolve();
+            });
+        },
+        /**
          *  Method to specific piece data
          * Should resolve into piece object, having all needed properties
         */
