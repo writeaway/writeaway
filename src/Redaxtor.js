@@ -166,9 +166,9 @@ class Redaxtor {
         if (options.ajax) configureFetch(options.ajax);
 
         /**
-         * options.picesPlace - say where get pieces
+         * options.piecesRoot - say where get pieces
          */
-        options.pieces && this.initPieces(options.picesPlace || document);
+        options.pieces && this.initPieces(options.piecesRoot || document);
 
         this.showBar();
 
