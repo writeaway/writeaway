@@ -13,7 +13,7 @@ export const piecesEnableEdit = (subType) => ({type: C.PIECES_ENABLE_EDIT, subTy
 export const piecesDisableEdit = (subType) => ({type: C.PIECES_DISABLE_EDIT, subType});
 
 const piecesRunInit = (dispatch, pieces)=>{
-    Object.keys(pieces.byId).forEach(id => {
+    pieces.byId && Object.keys(pieces.byId).forEach(id => {
         dispatch(pieceGet(id))
     });
 };
