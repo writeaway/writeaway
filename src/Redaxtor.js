@@ -16,7 +16,7 @@ import RedaxtorContainer from "./containers/RedaxtorContainer";
 
 import reducers from "./reducers";
 import {initI18N} from './actions/i18n';
-import {addPiece, removePiece, pieceUnmount} from './actions/pieces';
+import {addPiece, removePiece, pieceUnmount, setPieceData, piecesToggleEdit} from './actions/pieces';
 import {pagesGet, pagesGetLayouts} from './actions/pages';
 import {configureFetch} from './helpers/callFetch'
 
@@ -165,9 +165,20 @@ class Redaxtor {
         setStore(this.store);
         if (options.ajax) configureFetch(options.ajax);
 
-        options.pieces && this.initPieces(document);
+        /**
+         * options.piecesRoot - say where get pieces
+         */
+        options.pieces && this.initPieces(options.piecesRoot || document);
 
         this.showBar();
+
+        /**
+         * enable pieces editing if set option 'enableEdit'
+         */
+        if(options.enableEdit){
+            this.store.dispatch(piecesToggleEdit());
+        }
+
     }
 
     /**
@@ -244,6 +255,15 @@ class Redaxtor {
     destroyPiece(id) {
         this.store.dispatch(removePiece(id));//TODO: Might be deprecated
         this.store.dispatch(pieceUnmount(this.store.getState().pieces.byId[id]));//Remove element from dom and trigger removing from state
+    }
+
+    /**
+     * set new data to a piece by Id
+     * @param pieceId {string} id of piece
+     * @param obj {Object} new data
+     */
+    setData(pieceId, obj){
+        this.store.dispatch(setPieceData(pieceId, obj))
     }
 
     /**

@@ -12,7 +12,7 @@ npm install --save redaxtor
 ```
 
 ## The Gist (CommonJS)
-```js
+```javascript
 "use strict";
 //Include redaxtor and it's default styles
 var Redaxtor = require('redaxtor');
@@ -38,15 +38,17 @@ var components = {
 var redaxtor = new Redaxtor({
     pieces: {
         components: components,
-        getURL: "api/pieces/get",//will be overwritten by data-get-url
-        saveURL: "api/pieces/save"//will be overwritten by data-save-url
-    }
+        getURL: "api/pieces/get", //will be overwritten by data-get-url
+        saveURL: "api/pieces/save" //will be overwritten by data-save-url
+    },
+    piecesRoot: document,  //Optional. Default: document. Set root  element for pieces
+    enableEdit: true //Optional. Default: false, If set enables everything editors for pieces after loading 
 });
 ```
 
 ## The Gist (Static)
 
-````html
+```html
     <!-- Include redaxtor and it's default styles -->
     <script lang="text/javascript" src="./dist/redaxtor.min.js"></script>
     <link rel="stylesheet" type="text/css" href="./dist/redaxtor.min.css" charset="utf-8">
@@ -62,9 +64,9 @@ var redaxtor = new Redaxtor({
     <script lang="text/javascript" src="./dist/redaxtor-codemirror.min.js"></script>
     <link rel="stylesheet" type="text/css" href="./node_modules/codemirror/lib/codemirror.css" charset="utf-8">
     
-````
+```
 
-```js
+```javascript
 
 //Attach plugins to redaxtor
 var components = {
@@ -78,6 +80,8 @@ var redaxtor = new Redaxtor({
     pieces: {
         components: components
     },
+    piecesRoot: document,  //Optional. Set document by default. Set root  element for pieces
+    enableEdit: true, //Optional. Default: false, If set enables everything editors for pieces after loading
     api: {
         /**
         *  Method to fetch list of image urls for gallery
