@@ -263,6 +263,14 @@ class Redaxtor {
      * @param obj {Object} new data
      */
     setData(pieceId, obj){
+        let state =  this.store.getState();
+        let currentPiece = state.pieces &&  state.pieces.byId && state.pieces.byId[pieceId];
+        if(!currentPiece){
+            throw new Error(`You are trying to set data to an unexisting piece. Piece id: ${pieceId}`)
+        }
+        if(!currentPiece.fetched){
+            throw new Error(`Piece was not initialized before use setDate function. Piece id: ${pieceId}`)
+        }
         this.store.dispatch(setPieceData(pieceId, obj))
     }
 

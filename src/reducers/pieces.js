@@ -118,13 +118,6 @@ const pieces = (pieces = piecesDefault, action) => {
                 byId: {...pieces.byId, [action.id]: piece(pieces.byId[action.id], action)}
             };
         default:
-            /*init default empty value*/
-            if(!pieces.byId){
-                return {
-                    ...pieces,
-                    byId: {}
-                };
-            }
             return pieces
     }
 };
