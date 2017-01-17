@@ -37,7 +37,19 @@ var components = {
 
 var redaxtor = new Redaxtor({
     pieces: {
-            components: components
+            components: components,
+            options: {
+                html: {
+                    pickerColors: [
+                        "#666",
+                        "#212121",
+                        "#f39c12",
+                        "#d2d064",
+                        "#4fbbf7",
+                        "#ffffff"
+                    ]
+                }
+            }
         },
         piecesRoot: document,  //Optional. Set document by default. Set root  element for pieces
         enableEdit: true, //Optional. Default: false, If set enables everything editors for pieces after loading
@@ -160,7 +172,19 @@ var components = {
 
 var redaxtor = new Redaxtor({
     pieces: {
-        components: components
+        components: components,
+        options: {
+                html: { //Pass options to HTML Editor
+                    pickerColors: [
+                        "#666",
+                        "#212121",
+                        "#f39c12",
+                        "#d2d064",
+                        "#4fbbf7",
+                        "#ffffff"
+                    ]
+                }
+            }
     },
     piecesRoot: document,  //Optional. Set document by default. Set root  element for pieces
     enableEdit: true, //Optional. Default: false, If set enables everything editors for pieces after loading

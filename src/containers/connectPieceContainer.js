@@ -5,7 +5,8 @@ import {updatePiece, readyForRemovalPiece, savePiece, resetPiece, setSourceId} f
 import {getConfig} from '../config'
 
 const PieceContainer = (props) => {
-    return <props.component {...props} api={getConfig().api} className={classNames({
+    let pieceOptions = getConfig().options[props.type] || {};
+    return <props.component {...props} api={getConfig().api} options={pieceOptions} className={classNames({
         "r_editor": true,
         "r_edit": props.editorActive,
         "r_highlight": props.editorActive
