@@ -96,6 +96,7 @@ class Redaxtor {
 
         const defaultState = {};
 
+
         /**
          * Init API. Api is a const, we don't put it in storage, putting in const config instead
          */
@@ -170,7 +171,16 @@ class Redaxtor {
          */
         options.pieces && this.initPieces(options.piecesRoot || document);
 
-        this.showBar();
+        /**
+         * default options for navbar
+         */
+        let barOptions = {
+            navBarRoot: options.navBarRoot || document.body,
+            navBarDraggable: (options.navBarDraggable !== undefined && options.navBarDraggable !== null) ? options.navBarDraggable : true,
+            navBarCollapsable: (options.navBarCollapsable !== undefined && options.navBarCollapsable !== null) ? options.navBarCollapsable : true
+        };
+
+        this.showBar(barOptions);
 
         /**
          * enable pieces editing if set option 'enableEdit'
@@ -179,17 +189,20 @@ class Redaxtor {
             this.store.dispatch(piecesToggleEdit());
         }
 
+
+
     }
 
     /**
      * Renders a top Redaxtor bar with controls and attach it to body
      */
-    showBar() {
+    showBar(options) {
         this.barNode = document.createElement("DIV");
         ReactDOM.render(
             <Provider store={this.store}>
                 <div>
                     <RedaxtorContainer
+                        options={options}
                         components={this.pieces.components}
                         tabs={{
                             pieces: !!this.pieces,
@@ -205,7 +218,7 @@ class Redaxtor {
             </Provider>,
             this.barNode
         );
-        document.body.appendChild(this.barNode);
+        options.navBarRoot.appendChild(this.barNode);
     }
 
     initPieces(contextNode) {
