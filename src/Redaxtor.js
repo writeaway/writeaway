@@ -101,6 +101,11 @@ class Redaxtor {
          */
         this.api = config.api = {...defaultMinimumApi, ...options.api};
 
+        /**
+         * Init Options per component type. We don't put it in storage, putting in const config instead
+         */
+        this.options = config.options = options.options || {};
+
         if (options.pieces) {
             options.pieces.components = {...options.pieces.components};
 
