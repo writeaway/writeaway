@@ -15,7 +15,8 @@ export default class RedaxtorBar extends React.Component {
         this.state = {
             value: 'pieces',
             dragging: false,
-            isOpen: false
+            isOpen: (this.props.options.navBarCollapsable != undefined && this.props.options.navBarCollapsable != null) ? !this.props.options.navBarCollapsable : false,
+            isCollapsible: this.props.options.navBarCollapsable
         };
     }
 
@@ -45,6 +46,11 @@ export default class RedaxtorBar extends React.Component {
     }
 
     onMouseDown(e) {
+        //ignore if don't set draggable option
+        if(!this.props.options.navBarDraggable){
+            return;
+        }
+
         // only left mouse button
         if (e.button !== 0) return;
         this._rel.x = e.pageX - this._node.offsetLeft;
@@ -57,6 +63,11 @@ export default class RedaxtorBar extends React.Component {
     }
 
     onMouseMove(e) {
+        //ignore if don't set draggable option
+        if(!this.props.options.navBarDraggable){
+            return;
+        }
+
         if (!this.state.dragging) return;
         if(e.pageX == this._rel.startX && e.pageY == this._rel.startY) {
             return;
@@ -69,12 +80,22 @@ export default class RedaxtorBar extends React.Component {
     }
 
     onMouseUp(e) {
+        //ignore if don't set draggable option
+        if(!this.props.options.navBarDraggable){
+            return;
+        }
+
         this.setState({dragging: false});
         e.stopPropagation();
         e.preventDefault();
     }
 
     toggleOpen() {
+        //ignore if don't set draggable option
+        if(!this.props.options.navBarCollapsable){
+            return;
+        }
+
         if (!this.state.dragged) {
             this.setState({isOpen: !this.state.isOpen})
         } else {
@@ -105,7 +126,8 @@ export default class RedaxtorBar extends React.Component {
         return (
             <div style={{all: 'initial'}}>
                 <div ref="bar" className="r_bar">
-                    <PanelHandler isOpen={this.state.isOpen}
+                    <PanelHandler isCollapsable={this.state.isCollapsible}
+                                  isOpen={this.state.isOpen}
                                   onMouseDown={this.onMouseDown.bind(this)}
                                   toggleOpen={this.toggleOpen.bind(this)} message={this.props.message}/>
 

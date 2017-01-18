@@ -53,6 +53,9 @@ var redaxtor = new Redaxtor({
         },
         piecesRoot: document,  //Optional. Set document by default. Set root  element for pieces
         enableEdit: true, //Optional. Default: false, If set enables everything editors for pieces after loading
+        navBarRoot: document.querySelector('.bs-docs-header .container'), //Optional. Default: document.body, Set place for the Redaxtor bar
+        navBarDraggable: true, //Optional. Default: true, If set `true` enables dragging of the redaxtor panel
+        navBarCollapsable: true, //Optional. Default: true, If set `true` enables collapsing of the redaxtor panel. If set `false` set the panel to the open state and disables collapsing   
         api: {
             /**
             *  Method to fetch list of image urls for gallery
@@ -188,6 +191,9 @@ var redaxtor = new Redaxtor({
     },
     piecesRoot: document,  //Optional. Set document by default. Set root  element for pieces
     enableEdit: true, //Optional. Default: false, If set enables everything editors for pieces after loading
+    navBarRoot: document.querySelector('.bs-docs-header .container'), //Optional. Default: document.body, Set place for the Redaxtor bar
+    navBarDraggable: true, //Optional. Default: true, If set `true` enables dragging of the redaxtor panel
+    navBarCollapsable: true, //Optional. Default: true, If set `true` enables collapsing of the redaxtor panel. If set `false` set the panel to the open state and disables collapsing   
     api: {
         /**
         *  Method to fetch list of image urls for gallery
