@@ -17,12 +17,16 @@ export default class PiecesComponent extends React.Component {
     }
 
     render() {
+        let representPieceTypes = {};
+        this.props.byId && Object.keys(this.props.byId).forEach(pieceId => representPieceTypes[this.props.byId[pieceId].type] = true);
+
+
         var sourceEditor = null;
         if (this.props.components.source && this.props.sourceId) {
             sourceEditor = <this.props.components.source wrapper="redaxtor-modal"
                                                          html={this.props.byId[this.props.sourceId].data.html}
-                                                         onClose={()=>this.props.setSourceId(null)}
-                                                         onSave={(html)=>this.savePiece(html)}/>
+                                                         onClose={() => this.props.setSourceId(null)}
+                                                         onSave={(html) => this.savePiece(html)}/>
         }
         return (
             <div>
@@ -32,11 +36,17 @@ export default class PiecesComponent extends React.Component {
                     <Toggle checked={this.props.editorActive}
                             onChange={() => this.props.piecesToggleEdit(false)}/>
                 </div>
-                {   Object.keys(this.props.components).map((object, index) => <div className="r_list-header r_list-subheader" key={index}>
-                    <label>{this.props.components[object].__name || object}</label>
-                    <Toggle checked={this.props[`editorEnabled:${object}`]}
-                            onChange={() => this.props.piecesToggleEdit(object)}/>
-                </div>) }
+                {   Object.keys(this.props.components).map((object, index) => {
+                    if(! representPieceTypes[object]){
+                        return '';
+                    }
+
+                    return (<div className="r_list-header r_list-subheader" key={index}>
+                        <label>{this.props.components[object].__name || object}</label>
+                        <Toggle checked={this.props[`editorEnabled:${object}`]}
+                                onChange={() => this.props.piecesToggleEdit(object)}/>
+                    </div>)
+                }) }
                 <PiecesList editorActive={this.props.editorActive} pieces={this.props.byId || {}}
                             source={this.props.components.source}
                             setSourceId={this.props.setSourceId}
