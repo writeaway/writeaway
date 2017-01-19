@@ -36,17 +36,13 @@ export default class PiecesComponent extends React.Component {
                     <Toggle checked={this.props.editorActive}
                             onChange={() => this.props.piecesToggleEdit(false)}/>
                 </div>
-                {   Object.keys(this.props.components).map((object, index) => {
-                    if(! representPieceTypes[object]){
-                        return '';
-                    }
-
-                    return (<div className="r_list-header r_list-subheader" key={index}>
+                {   Object.keys(this.props.components).map((object, index) =>
+                    representPieceTypes[object] && (<div className="r_list-header r_list-subheader" key={index}>
                         <label>{this.props.components[object].__name || object}</label>
                         <Toggle checked={this.props[`editorEnabled:${object}`]}
                                 onChange={() => this.props.piecesToggleEdit(object)}/>
                     </div>)
-                }) }
+                ) }
                 <PiecesList editorActive={this.props.editorActive} pieces={this.props.byId || {}}
                             source={this.props.components.source}
                             setSourceId={this.props.setSourceId}
