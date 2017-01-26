@@ -135,8 +135,8 @@ const pieceRender = piece => {
             </Provider>, piece.node);
     }
     if(ComponentClass.__renderType === "BEFORE") {
-        let containerNode = document.createElement("redaxtor-before");
-        piece.node.parentNode.insertBefore(containerNode, piece.node);
+        let containerNode = document.createElement("redaxtor-editor");
+        document.body.appendChild(containerNode);
         piece.node.__rdxContainderNode = containerNode;
         return ReactDOM.render(
             <Provider store={getStore()}>
