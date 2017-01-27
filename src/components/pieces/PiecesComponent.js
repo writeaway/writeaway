@@ -12,22 +12,13 @@ export default class PiecesComponent extends React.Component {
         this.props.setSourceId(null);
     }
 
-    componentWillMount(){
-        this.setEnableComponents(this.props.editorActive);
-    }
 
     componentDidMount() {
         this.props.piecesInit();
     }
 
-    setEnableComponents(isChecked){
-        let turnOn = isChecked || false;
-        Object.keys(this.props.components).forEach((key) => this.props.components[key].enabled = turnOn);
-    }
-
     toggleAllEditors(e) {
         this.props.piecesToggleEdit(false);
-        this.setEnableComponents(e.target.checked);
     }
 
     render() {
@@ -54,7 +45,7 @@ export default class PiecesComponent extends React.Component {
                     representPieceTypes[object] && (<div className="r_list-header r_list-subheader" key={index}>
                         <label>{this.props.components[object].__name || object}</label>
                         <Toggle checked={this.props[`editorEnabled:${object}`]}
-                                disabled={!this.props.components[object].enabled}
+                                disabled={!this.props.editorActive}
                                 onChange={() => this.props.piecesToggleEdit(object)}/>
                     </div>)
                 ) }
