@@ -10,11 +10,17 @@ class PieceLine extends Component {
         const id = piece.id;
         return (
             <div className="r_item-row">
-                <span>{piece.name || id}</span>
-                <span className="r_item-right">
-                    {source && editorActive && piece.data && piece.data.html && <i className="r_icon-code r_btn" onClick={()=>this.props.setSourceId(id)}></i>}
-                    {piece.changed && <i className="r_icon-floppy r_btn" onClick={this.props.savePiece}></i>}
-                </span>
+                <div>
+                    <span>{piece.name || id}</span>
+                    <span className="r_item-right">
+                        {source && editorActive && piece.data && piece.data.html && <i className="r_icon-code r_btn" onClick={()=>this.props.setSourceId(id)}></i>}
+                        {piece.changed && <i className="r_icon-floppy r_btn" onClick={this.props.savePiece}></i>}
+                    </span>
+                </div>
+                {piece.message &&
+                <div className={`r_item-message r_item-${piece.messageLevel}`}>
+                    <b>{piece.message}</b>
+                </div>}
             </div>
         )
     }

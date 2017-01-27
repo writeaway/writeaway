@@ -252,7 +252,9 @@ class Redaxtor {
             id: (options && options.id) || node.getAttribute(this.pieces.attributeId),
             name: (options && options.name) || node.getAttribute(this.pieces.attributeName),
             dataset: (options && options.dataset) || {},
-            changed: false
+            changed: false,
+            message: '',
+            messageLevel: ''
         };
         if(!options || !options.dataset) {
             for (let data in node.dataset) {
