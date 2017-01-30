@@ -57,6 +57,8 @@ export const removePiece = id => ({type: C.PIECE_REMOVE, id: id});
 
 export const setPieceData = (id, data) => ({type: C.PIECE_SET_DATA, id: id, data: data});
 
+export const pieceMessageSetted = (id, message, messageLevel) => ({type: C.PIECE_SET_MESSAGE, id,  message, messageLevel});
+
 export const hasRemovedPiece = id => ({type: C.PIECE_HAS_REMOVED, id: id});
 
 export const pieceSaving = id => ({type: C.PIECE_SAVING, id});
@@ -76,10 +78,19 @@ export const savePiece = id => (dispatch, getState) => {
             dispatch(pieceSaved(id, data));
         }, error =>{
             dispatch(pieceSavingFailed(id, error));
+            setPieceMessage(id, `Couldn't save`, 'error')(dispatch);
         })
     } else {
         dispatch(pieceSaved(id, {}));
     }
+};
+
+export const setPieceMessage = (id, message, messageLevel) => dispatch => {
+    if(!['warning', 'info', 'error'].includes(messageLevel)){
+     throw new Error(`Wrong message level '${messageLevel}' for PieceId: ${id}`);
+    }
+
+    dispatch(pieceMessageSetted(id, message, messageLevel))
 };
 
 
