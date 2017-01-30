@@ -27,7 +27,7 @@ let config = getConfig();
  * No Uploads and gallery
  * TODO: Note this implementation is dependent on submodules. Reimplement as multi-extendable
  */
-const defaultMinimumApi = {
+export const defaultMinimumApi = {
     getImageList: false,
     uploadImage: false,
     getPieceData: function (piece) {
