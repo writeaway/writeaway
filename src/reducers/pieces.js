@@ -21,6 +21,8 @@ const piece = (piece = {}, action) => {
                 //set data
                 return {...piece, data: {...piece.data, ... action.data}};
             }
+        case C.PIECE_SET_MESSAGE:
+            return {...piece, message: action.message, messageLevel: action.messageLevel};
         case C.PIECE_HAS_REMOVED:
             return {...piece, destroyed: true};
         case C.PIECE_SAVING:
@@ -107,7 +109,7 @@ const pieces = (pieces = piecesDefault, action) => {
         case C.PIECE_SAVED:
         case C.PIECE_SAVING_FAILED:
         case C.PIECE_REMOVE:
-
+        case C.PIECE_SET_MESSAGE:
 
         case C.PIECE_FETCHING:
         case C.PIECE_FETCHED:
