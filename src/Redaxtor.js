@@ -36,7 +36,8 @@ const defaultMinimumApi = {
             return Promise.resolve({
                 ...piece,
                 data: {
-                    html: piece.node.innerHTML
+                    html: piece.node.innerHTML,
+                    updateNode: true
                 }
             });
         }
