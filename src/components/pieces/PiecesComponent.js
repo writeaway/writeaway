@@ -12,8 +12,13 @@ export default class PiecesComponent extends React.Component {
         this.props.setSourceId(null);
     }
 
+
     componentDidMount() {
         this.props.piecesInit();
+    }
+
+    toggleAllEditors(e) {
+        this.props.piecesToggleEdit(false);
     }
 
     render() {
@@ -34,7 +39,7 @@ export default class PiecesComponent extends React.Component {
                 <div className="r_list-header">
                     <label>All Editors</label>
                     <Toggle checked={this.props.editorActive}
-                            onChange={() => this.props.piecesToggleEdit(false)}/>
+                            onChange={this.toggleAllEditors.bind(this)}/>
                 </div>
                 {   Object.keys(this.props.components).map((object, index) =>
                     representPieceTypes[object] && (<div className="r_list-header r_list-subheader" key={index}>
