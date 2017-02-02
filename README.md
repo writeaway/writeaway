@@ -94,11 +94,13 @@ var redaxtor = new Redaxtor({
                 if (piece.type == "source" || piece.type == "html") {
                     /**
                     * Source and html editors expect `html` property 
+                    * updateNode - define that is need to update piece after change code. Default value: true
                     */
                     return Promise.resolve({
                         ...piece,
                         data: {
-                            html: piece.node.innerHTML
+                            html: piece.node.innerHTML,
+                            updateNode: true
                         }
                     });
                 }
@@ -231,12 +233,14 @@ var redaxtor = new Redaxtor({
         getPieceData: function (piece) {                
             if (piece.type == "source" || piece.type == "html") {
                 /**
-                * Source and html editors expect `html` property 
+                * Source and html editors expect `html` property
+                * updateNode - define that is need to update piece after change code. Default value: true
                 */
                 return Promise.resolve({
                     ...piece,
                     data: {
-                        html: piece.node.innerHTML
+                        html: piece.node.innerHTML,
+                        updateNode: true
                     }
                 });
             }
