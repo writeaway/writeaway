@@ -22,9 +22,7 @@ export const piecesInit = () => (dispatch, getState) => {
         const pieces = getState().pieces;
         if (pieces.editorActive) {
             dispatch(piecesEnableEdit());
-            if (!pieces.initialized) {
-                piecesRunInit(dispatch, pieces);
-            }
+            piecesRunInit(dispatch, pieces);
         }
     };
 
@@ -36,9 +34,7 @@ export const piecesToggleEdit = (subType) => (dispatch, getState) => {
         }
         if (editorActive) {
             dispatch(piecesEnableEdit(subType));
-            if (!pieces.initialized) {
-                piecesRunInit(dispatch, pieces);
-            }
+            piecesRunInit(dispatch, pieces);
         } else {
             dispatch(piecesDisableEdit(subType));
         }
@@ -111,13 +107,18 @@ export const pieceFetchingError = (id, error) => ({type: C.PIECE_FETCHING_ERROR,
  * Triggers getting piece data by id
  */
 export const pieceGet = id => (dispatch, getState) => {
-    dispatch(pieceFetching(id));
-
     const piece = getState().pieces.byId[id];
     if (!piece) {
         dispatch(pieceFetchingError(id, "This piece does not exist"));
         return;
     }
+
+    if(piece.initialized || piece.fetching) {
+        return; // Don't need to init initialized piece or piece that is already being fetched
+    }
+
+    dispatch(pieceFetching(id));
+
     getConfig().api.getPieceData(piece).then((updatedPiece)=>{
         dispatch(pieceFetched(id, updatedPiece));
         const piece = getState().pieces.byId[id];
