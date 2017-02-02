@@ -16,6 +16,7 @@ import RedaxtorContainer from "./containers/RedaxtorContainer";
 
 import reducers from "./reducers";
 import {initI18N} from './actions/i18n';
+import {piecesToggleNavBar} from './actions/index'
 import {addPiece, removePiece, pieceUnmount, setPieceData, piecesToggleEdit} from './actions/pieces';
 import {pagesGet, pagesGetLayouts} from './actions/pages';
 import {configureFetch} from './helpers/callFetch'
@@ -95,7 +96,7 @@ class Redaxtor {
         this.i18n = void 0;
 
 
-        const defaultState = {};
+        const defaultState = { global:  {navBarCollapsed: true}};
 
 
         /**
@@ -186,17 +187,23 @@ class Redaxtor {
             navBarCollapsable: (options.navBarCollapsable !== undefined && options.navBarCollapsable !== null) ? options.navBarCollapsable : true
         };
 
-        this.showBar(barOptions);
 
-        /**
-         * enable pieces editing if set option 'enableEdit'
-         */
-        if(options.enableEdit){
-            this.store.dispatch(piecesToggleEdit());
+        let isNavBarOpen = (options.navBarCollapsed != undefined && options.navBarCollapsed != null) ? options.navBarCollapsed : false;
+        if(isNavBarOpen){
+            this.setNavBarCollapsed(false);
+        } else {
+            this.setNavBarCollapsed(true);
         }
 
 
+        this.showBar(barOptions);
 
+        /**
+         * enable pieces editing if set option 'editorActive'
+         */
+        if(options.editorActive){
+            this.store.dispatch(piecesToggleEdit());
+        }
     }
 
     /**
@@ -293,6 +300,46 @@ class Redaxtor {
             throw new Error(`Piece was not initialized before use setDate function. Piece id: ${pieceId}`)
         }
         this.store.dispatch(setPieceData(pieceId, obj))
+    }
+
+    /**
+     * shows that editors active
+     * @returns {boolean} returns the flag
+     */
+    isEditorActive(){
+        let state =  this.store.getState();
+        return state.pieces.editorActive != undefined ? state.pieces.editorActive : false;
+    }
+
+    /**
+     * shows that navbar is collapsed
+     * @returns {boolean}
+     */
+    isNavBarCollapsed(){
+        let state =  this.store.getState();
+        return state.global.navBarCollapsed  != undefined ? state.global.navBarCollapsed  : true;
+    }
+
+    /**
+     * Set the active state for editors
+     * @param  editorActive {boolean} new state
+     */
+    setEditorActive(editorActive){
+        let isActiveNow = this.isEditorActive();
+        if(editorActive != isActiveNow){
+            this.store.dispatch(piecesToggleEdit());
+        }
+    }
+
+    /**
+     * Set the collapsed state for navbar
+     * @param navBarActive {boolean} new state
+     */
+    setNavBarCollapsed(navBarActive){
+        let isCollapseNow = this.isNavBarCollapsed();
+        if(navBarActive != isCollapseNow){
+            this.store.dispatch(piecesToggleNavBar());
+        }
     }
 
     /**

@@ -12,10 +12,10 @@ export default class RedaxtorBar extends React.Component {
 
     constructor(props) {
         super(props);
+
         this.state = {
             value: 'pieces',
             dragging: false,
-            isOpen: (this.props.options.navBarCollapsable != undefined && this.props.options.navBarCollapsable != null) ? !this.props.options.navBarCollapsable : false,
             isCollapsible: this.props.options.navBarCollapsable
         };
     }
@@ -97,7 +97,7 @@ export default class RedaxtorBar extends React.Component {
         }
 
         if (!this.state.dragged) {
-            this.setState({isOpen: !this.state.isOpen})
+            this.props.piecesToggleNavBar();
         } else {
             this.setState({dragged: false});
         }
@@ -123,15 +123,18 @@ export default class RedaxtorBar extends React.Component {
         //                key="pages" value="pages"
         //                onClick={()=>this.setState({value: "pages"})}>Pages
         // </div>);
+
+        let isCollapse = this.props.navBarCollapsed != undefined && this.props.navBarCollapsed != null ?  this.props.navBarCollapsed : true;
+
         return (
             <div style={{all: 'initial'}}>
                 <div ref="bar" className="r_bar">
                     <PanelHandler isCollapsable={this.state.isCollapsible}
-                                  isOpen={this.state.isOpen}
+                                  isOpen={!isCollapse}
                                   onMouseDown={this.onMouseDown.bind(this)}
                                   toggleOpen={this.toggleOpen.bind(this)} message={this.props.message}/>
 
-                    {this.state.isOpen ?
+                    {!isCollapse ?
                         <div className="r_tabs" value={this.state.value}>
                             <div className="r_tabs-header">{tabs}</div>
                             <div className="r_tab-content">
