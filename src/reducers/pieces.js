@@ -1,6 +1,6 @@
 import C from '../constants'
 
-const piece = (piece = {}, action) => {
+const piece = (piece = {initialized: false}, action) => {
     switch (action.type) {
         case C.PIECE_UPDATE:
             return {
@@ -35,7 +35,7 @@ const piece = (piece = {}, action) => {
         case C.PIECE_FETCHING:
             return {...piece, fetched: false, fetching: true};
         case C.PIECE_FETCHED:
-            return {...piece, ...action.piece, fetched: true, fetching: false};
+            return {...piece, ...action.piece, fetched: true, fetching: false, initialized: true};
         case C.PIECE_FETCHING_FAILED:
             console.error(action.answer);
             return {...piece, fetched: false, fetching: false};
