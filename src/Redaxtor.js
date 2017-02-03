@@ -188,7 +188,8 @@ class Redaxtor {
         };
 
 
-        let isNavBarOpen = (options.navBarCollapsed != undefined && options.navBarCollapsed != null) ? options.navBarCollapsed : false;
+        let isNavBarOpen = (options.navBarCollapsed != undefined && options.navBarCollapsed != null) ? !options.navBarCollapsed : false;
+        
         if(isNavBarOpen){
             this.setNavBarCollapsed(false);
         } else {
