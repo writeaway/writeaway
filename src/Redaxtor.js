@@ -274,9 +274,7 @@ class Redaxtor {
         if(!this.pieces.components[piece.type]) throw new Error(`Can't add piece with unsupported type "${piece.type}"`);
 
         this.store.dispatch(addPiece(piece));
-        if(this.store.getState().pieces.editorActive) {
-            this.store.dispatch(pieceGet(piece.id));
-        }
+        this.store.dispatch(pieceGet(piece.id));
     }
 
     /**
