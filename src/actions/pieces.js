@@ -28,7 +28,9 @@ export const piecesInit = () => (dispatch, getState) => {
 
 
 export const piecesToggleEdit = (subType) => (dispatch, getState) => {
-        const pieces = getState().pieces; let editorActive = !pieces.editorActive;
+        const pieces = getState().pieces;
+        let editorActive = !pieces.editorActive;
+
         if(subType) {
             editorActive = !pieces[`editorEnabled:${subType}`];
         }
