@@ -49,8 +49,8 @@ export default class PiecesComponent extends React.Component {
                                 onChange={() => this.props.piecesToggleEdit(object)}/>
                     </div>)
                 ) }
-                <PiecesList editorActive={this.props.editorActive} pieces={this.props.byId || {}}
-                            source={this.props.components.source}
+                <PiecesList editorActive={this.props.editorActive } pieces={this.props.byId || {}}
+                            source={this.props['editorEnabled:source'] && this.props.components.source}
                             setSourceId={this.props.setSourceId}
                             savePiece={this.props.savePiece} updatePiece={this.props.updatePiece}/>
             </div>

@@ -12,12 +12,12 @@ import {setConfig, getConfig} from './config';
 import { compose } from 'redux';
 
 import RedaxtorContainer from "./containers/RedaxtorContainer";
-// import Img from "./components/img/ImgContainer";
+
 
 import reducers from "./reducers";
 import {initI18N} from './actions/i18n';
-import {piecesToggleNavBar} from './actions/index'
-import {addPiece, removePiece, pieceUnmount, setPieceData, piecesToggleEdit} from './actions/pieces';
+]import {piecesToggleNavBar} from './actions/index';
+import {addPiece, removePiece, pieceUnmount, setPieceData, piecesToggleEdit, pieceGet} from './actions/pieces';
 import {pagesGet, pagesGetLayouts} from './actions/pages';
 import {configureFetch} from './helpers/callFetch'
 
@@ -273,7 +273,10 @@ class Redaxtor {
         if(!piece.type) throw new Error(`Can't add piece with undefined type`);
         if(!this.pieces.components[piece.type]) throw new Error(`Can't add piece with unsupported type "${piece.type}"`);
 
-        this.store.dispatch(addPiece(piece))
+        this.store.dispatch(addPiece(piece));
+        if(this.store.getState().pieces.editorActive) {
+            this.store.dispatch(pieceGet(piece.id));
+        }
     }
 
     /**
