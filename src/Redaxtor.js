@@ -32,7 +32,6 @@ export const defaultMinimumApi = {
     getImageList: false,
     uploadImage: false,
     getPieceData: function (piece) {
-        console.warn("Using default implementation for getting piece data. This should be overriden", piece);
         if (piece.type == "source" || piece.type == "html") {
             return Promise.resolve({
                 ...piece,
