@@ -63,6 +63,10 @@ export const defaultMinimumApi = {
                 }
             });
         }
+        if(piece.data) {
+            // Piece already has data, ok
+            return Promise.resolve(piece);
+        }
         return Promise.reject()
     },
     savePieceData: function (piece) {
@@ -264,6 +268,9 @@ class Redaxtor {
             message: '',
             messageLevel: ''
         };
+        if(options && options.data) {
+            piece.data = options.data;
+        }
         if(!options || !options.dataset) {
             for (let data in node.dataset) {
                 piece.dataset[data] = node.dataset[data];
