@@ -183,7 +183,8 @@ class Redaxtor {
         let barOptions = {
             navBarRoot: options.navBarRoot || document.body,
             navBarDraggable: (options.navBarDraggable !== undefined && options.navBarDraggable !== null) ? options.navBarDraggable : true,
-            navBarCollapsable: (options.navBarCollapsable !== undefined && options.navBarCollapsable !== null) ? options.navBarCollapsable : true
+            navBarCollapsable: (options.navBarCollapsable !== undefined && options.navBarCollapsable !== null) ? options.navBarCollapsable : true,
+            pieceNameGroupSeparator: options.pieceNameGroupSeparator
         };
 
 

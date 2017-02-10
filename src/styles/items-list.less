@@ -24,6 +24,19 @@
   height: 20px;
 }
 
+.r_item_name{
+  .level-0{
+    display: block;
+    &+*{
+      margin-left: 10px;
+    }
+  }
+
+  .omit{
+    display: none;
+  }
+}
+
 .r_item-message {
   font-size: small;
   padding: 5px 0 5px 10px;
