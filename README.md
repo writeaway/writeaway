@@ -56,7 +56,8 @@ var redaxtor = new Redaxtor({
         navBarRoot: document.querySelector('.bs-docs-header .container'), //Optional. Default: document.body, Set place for the Redaxtor bar
         navBarDraggable: true, //Optional. Default: true, If set `true` enables dragging of the redaxtor panel
         navBarCollapsable: true, //Optional. Default: true, If set `true` enables collapsing of the redaxtor panel. If set `false` set the panel to the open state and disables collapsing   
-        navBarCollapsed: true, //Optional. Default: true, defines navbar is collapsed on creating or not   
+        navBarCollapsed: true, //Optional. Default: true, defines navbar is collapsed on creating or not
+        pieceNameGroupSeparator: ':', // Optional. Set name separator for grouping blocks 
         api: {
             /**
             *  Method to fetch list of image urls for gallery

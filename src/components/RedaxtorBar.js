@@ -125,7 +125,9 @@ export default class RedaxtorBar extends React.Component {
         // </div>);
 
         let isCollapse = this.props.navBarCollapsed != undefined && this.props.navBarCollapsed != null ?  this.props.navBarCollapsed : true;
-
+        let piecesOptions = {
+            pieceNameGroupSeparator: this.props.options.pieceNameGroupSeparator
+        }
         return (
             <div style={{all: 'initial'}}>
                 <div ref="bar" className="r_bar">
@@ -138,7 +140,7 @@ export default class RedaxtorBar extends React.Component {
                         <div className="r_tabs" value={this.state.value}>
                             <div className="r_tabs-header">{tabs}</div>
                             <div className="r_tab-content">
-                                {this.state.value === "pieces" && <Pieces components={this.props.components}/>}
+                                {this.state.value === "pieces" && <Pieces components={this.props.components} options={piecesOptions}/>}
                                 {this.state.value === "i18n" && <I18N/>}
                                 {this.state.value === "pages" && <Pages/>}
                             </div>
