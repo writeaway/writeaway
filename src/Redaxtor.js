@@ -192,7 +192,7 @@ class Redaxtor {
 
 
         let isNavBarOpen = (options.navBarCollapsed != undefined && options.navBarCollapsed != null) ? !options.navBarCollapsed : false;
-        
+
         if(isNavBarOpen){
             this.setNavBarCollapsed(false);
         } else {
@@ -312,11 +312,19 @@ class Redaxtor {
 
     /**
      * shows that editors active
+     * @param [editorType] {string} editor
      * @returns {boolean} returns the flag
      */
-    isEditorActive(){
+    isEditorActive(editorType){
         let state =  this.store.getState();
-        return state.pieces.editorActive != undefined ? state.pieces.editorActive : false;
+        let editor = state.pieces['editorActive:' + editorType];
+
+        if(editorType){
+            return state.pieces['editorEnabled:' + editorType] != undefined ? state.pieces['editorEnabled:' + editorType] : false;
+        } else {
+            return state.pieces.editorActive != undefined ? state.pieces.editorActive : false;
+        }
+
     }
 
     /**
@@ -330,12 +338,16 @@ class Redaxtor {
 
     /**
      * Set the active state for editors
+     * @param  editorType {string} type of editor
      * @param  editorActive {boolean} new state
      */
-    setEditorActive(editorActive){
-        let isActiveNow = this.isEditorActive();
+    setEditorActive(...parameters){
+        let editorActive = parameters.length == 1 ? parameters[0] : parameters[1];
+        let editorType  = parameters.length == 1 ? null : parameters[0];
+
+        let isActiveNow = this.isEditorActive(editorType);
         if(editorActive != isActiveNow){
-            this.store.dispatch(piecesToggleEdit());
+            this.store.dispatch(piecesToggleEdit(editorType));
         }
     }
 
@@ -349,6 +361,7 @@ class Redaxtor {
             this.store.dispatch(piecesToggleNavBar());
         }
     }
+
 
     /**
      * @deprecated
