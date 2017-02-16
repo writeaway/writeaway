@@ -41,6 +41,10 @@ const piece = (piece = {initialized: false}, action) => {
             return {...piece, fetched: false, fetching: false};
         case C.PIECE_FETCHING_ERROR:
             return {...piece, error: action.error, fetching: false};
+        case C.PIECES_ACTIVATE_PIECE:
+            return {...piece, manualActivation: true};
+        case C.PIECES_ACTIVATION_SENT_PIECE:
+            return {...piece, manualActivation: false};
         default:
             return piece
     }
@@ -70,8 +74,7 @@ const pieces = (pieces = piecesDefault, action) => {
             } else {
                 return {...pieces, editorActive: false};
             }
-        case C.PIECES_SET_SOURCE_ID:
-            return {...pieces, sourceId: action.id};
+
 
         case C.PIECE_ADD:
             return {
@@ -110,6 +113,8 @@ const pieces = (pieces = piecesDefault, action) => {
         case C.PIECE_SAVING_FAILED:
         case C.PIECE_REMOVE:
         case C.PIECE_SET_MESSAGE:
+        case C.PIECES_ACTIVATE_PIECE:
+        case C.PIECES_ACTIVATION_SENT_PIECE:
 
         case C.PIECE_FETCHING:
         case C.PIECE_FETCHED:

@@ -45,6 +45,10 @@ export const piecesToggleEdit = (subType) => (dispatch, getState) => {
 
 export const setSourceId = id => ({type: C.PIECES_SET_SOURCE_ID, id});
 
+export const activatePiece = id => ({type: C.PIECES_ACTIVATE_PIECE, id});
+
+export const onActivationSentPiece = id => ({type: C.PIECES_ACTIVATION_SENT_PIECE, id});
+
 export const updatePiece = (id, piece, notChanged) => ({type: C.PIECE_UPDATE, id, piece, notChanged});
 
 export const resetPiece = (id) => ({type: C.PIECE_RESET, id});

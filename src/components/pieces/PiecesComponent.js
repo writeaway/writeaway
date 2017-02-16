@@ -51,7 +51,9 @@ export default class PiecesComponent extends React.Component {
                 ) }
                 <PiecesList editorActive={this.props.editorActive } pieces={this.props.byId || {}}
                             source={this.props['editorEnabled:source'] && this.props.components.source}
-                            setSourceId={this.props.setSourceId} pieceNameGroupSeparator={this.props.options.pieceNameGroupSeparator}
+                            setSourceId={this.props.setSourceId}
+                            activatePiece={this.props.activatePiece}
+                            pieceNameGroupSeparator={this.props.options.pieceNameGroupSeparator}
                             savePiece={this.props.savePiece} updatePiece={this.props.updatePiece}/>
             </div>
         )
