@@ -58,7 +58,7 @@ class PiecesList extends Component {
         return (
             <div className="r_list">
                 {Object.keys(this.props.pieces).map(id => {
-                        if(this.props['editorEnabled:'+this.props.pieces[id].type]) {
+                        if(this.props.allProps['editorEnabled:'+this.props.pieces[id].type]) {
                             let prevPieceName = prevId ? this.props.pieces[prevId].name : '';
                             prevId = id;
 
