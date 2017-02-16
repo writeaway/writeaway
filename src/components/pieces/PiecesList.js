@@ -58,17 +58,21 @@ class PiecesList extends Component {
         return (
             <div className="r_list">
                 {Object.keys(this.props.pieces).map(id => {
-                        let prevPieceName = prevId ? this.props.pieces[prevId].name : '';
-                        prevId = id;
+                        if(this.props['editorEnabled:'+this.props.pieces[id].type]) {
+                            let prevPieceName = prevId ? this.props.pieces[prevId].name : '';
+                            prevId = id;
 
-                        return this.props['editorEnabled:'+this.props.pieces[id].type] && <PieceLine key={id} piece={this.props.pieces[id]}
-                                          savePiece={() => this.props.savePiece(id)}
-                                          activatePiece={this.props.activatePiece}
-                                          source={this.props.source}
-                                          setSourceId={this.props.setSourceId}
-                                          pieceNameGroupSeparator={this.props.pieceNameGroupSeparator}
-                                          prevPieceName={prevPieceName}
-                                          editorActive={this.props.editorActive}/>
+                            return <PieceLine key={id} piece={this.props.pieces[id]}
+                                           savePiece={() => this.props.savePiece(id)}
+                                           activatePiece={this.props.activatePiece}
+                                           source={this.props.source}
+                                           setSourceId={this.props.setSourceId}
+                                           pieceNameGroupSeparator={this.props.pieceNameGroupSeparator}
+                                           prevPieceName={prevPieceName}
+                                           editorActive={this.props.editorActive}/>
+                        } else {
+                            return false;
+                        }
                     }
                 )}
             </div>
