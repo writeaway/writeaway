@@ -15,7 +15,7 @@ class PieceLine extends Component {
         let prevName = this.props.prevPieceName ? this.props.prevPieceName.split(this.props.pieceNameGroupSeparator) : [];
         let noOmit = true;
         return (
-            <div className="r_item-row">
+            <div className={"r_item-row r_item-type-" + piece.type}>
                 <div>
                     <span className="r_item_name">
                         {
