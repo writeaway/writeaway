@@ -61,7 +61,7 @@ class PiecesList extends Component {
                         let prevPieceName = prevId ? this.props.pieces[prevId].name : '';
                         prevId = id;
 
-                        return <PieceLine key={id} piece={this.props.pieces[id]}
+                        return this.props['editorEnabled:'+this.props.pieces[id].type] && <PieceLine key={id} piece={this.props.pieces[id]}
                                           savePiece={() => this.props.savePiece(id)}
                                           activatePiece={this.props.activatePiece}
                                           source={this.props.source}
