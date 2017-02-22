@@ -13,7 +13,7 @@ export const piecesEnableEdit = (subType) => ({type: C.PIECES_ENABLE_EDIT, subTy
 export const piecesDisableEdit = (subType) => ({type: C.PIECES_DISABLE_EDIT, subType});
 
 const piecesRunInit = (dispatch, pieces)=>{
-    Object.keys(pieces.byId).forEach(id => {
+    pieces.byId && Object.keys(pieces.byId).forEach(id => {
         dispatch(pieceGet(id))
     });
 };
@@ -22,23 +22,21 @@ export const piecesInit = () => (dispatch, getState) => {
         const pieces = getState().pieces;
         if (pieces.editorActive) {
             dispatch(piecesEnableEdit());
-            if (!pieces.initialized) {
-                piecesRunInit(dispatch, pieces);
-            }
+            piecesRunInit(dispatch, pieces);
         }
     };
 
 
 export const piecesToggleEdit = (subType) => (dispatch, getState) => {
-        const pieces = getState().pieces; let editorActive = !pieces.editorActive;
+        const pieces = getState().pieces;
+        let editorActive = !pieces.editorActive;
+
         if(subType) {
             editorActive = !pieces[`editorEnabled:${subType}`];
         }
         if (editorActive) {
             dispatch(piecesEnableEdit(subType));
-            if (!pieces.initialized) {
-                piecesRunInit(dispatch, pieces);
-            }
+            piecesRunInit(dispatch, pieces);
         } else {
             dispatch(piecesDisableEdit(subType));
         }
@@ -47,6 +45,10 @@ export const piecesToggleEdit = (subType) => (dispatch, getState) => {
 
 export const setSourceId = id => ({type: C.PIECES_SET_SOURCE_ID, id});
 
+export const activatePiece = id => ({type: C.PIECES_ACTIVATE_PIECE, id});
+
+export const onActivationSentPiece = id => ({type: C.PIECES_ACTIVATION_SENT_PIECE, id});
+
 export const updatePiece = (id, piece, notChanged) => ({type: C.PIECE_UPDATE, id, piece, notChanged});
 
 export const resetPiece = (id) => ({type: C.PIECE_RESET, id});
@@ -54,6 +56,10 @@ export const resetPiece = (id) => ({type: C.PIECE_RESET, id});
 export const addPiece = piece => ({type: C.PIECE_ADD, id: piece.id, piece});
 
 export const removePiece = id => ({type: C.PIECE_REMOVE, id: id});
+
+export const setPieceData = (id, data) => ({type: C.PIECE_SET_DATA, id: id, data: data});
+
+export const pieceMessageSetted = (id, message, messageLevel) => ({type: C.PIECE_SET_MESSAGE, id,  message, messageLevel});
 
 export const hasRemovedPiece = id => ({type: C.PIECE_HAS_REMOVED, id: id});
 
@@ -74,10 +80,19 @@ export const savePiece = id => (dispatch, getState) => {
             dispatch(pieceSaved(id, data));
         }, error =>{
             dispatch(pieceSavingFailed(id, error));
+            setPieceMessage(id, `Couldn't save`, 'error')(dispatch);
         })
     } else {
         dispatch(pieceSaved(id, {}));
     }
+};
+
+export const setPieceMessage = (id, message, messageLevel) => dispatch => {
+    if(!['warning', 'info', 'error'].includes(messageLevel)){
+     throw new Error(`Wrong message level '${messageLevel}' for PieceId: ${id}`);
+    }
+
+    dispatch(pieceMessageSetted(id, message, messageLevel))
 };
 
 
@@ -98,13 +113,18 @@ export const pieceFetchingError = (id, error) => ({type: C.PIECE_FETCHING_ERROR,
  * Triggers getting piece data by id
  */
 export const pieceGet = id => (dispatch, getState) => {
-    dispatch(pieceFetching(id));
-
     const piece = getState().pieces.byId[id];
     if (!piece) {
         dispatch(pieceFetchingError(id, "This piece does not exist"));
         return;
     }
+
+    if(piece.initialized || piece.fetching) {
+        return; // Don't need to init initialized piece or piece that is already being fetched
+    }
+
+    dispatch(pieceFetching(id));
+
     getConfig().api.getPieceData(piece).then((updatedPiece)=>{
         dispatch(pieceFetched(id, updatedPiece));
         const piece = getState().pieces.byId[id];
@@ -133,8 +153,8 @@ const pieceRender = piece => {
             </Provider>, piece.node);
     }
     if(ComponentClass.__renderType === "BEFORE") {
-        let containerNode = document.createElement("redaxtor-before");
-        piece.node.parentNode.insertBefore(containerNode, piece.node);
+        let containerNode = document.createElement("redaxtor-editor");
+        document.body.appendChild(containerNode);
         piece.node.__rdxContainderNode = containerNode;
         return ReactDOM.render(
             <Provider store={getStore()}>

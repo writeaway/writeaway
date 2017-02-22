@@ -8,6 +8,12 @@ import i18n from './i18n'
 
 const global = (state = {}, action) => {
     switch (action.type) {
+        case C.NAVBAR_COLLAPSE:
+            return {...state, navBarCollapsed: true};
+
+        case C.NAVBAR_EXPAND:
+            return {...state, navBarCollapsed: false};
+
         case C.GLOBAL_SHOW_MESSAGE:
             return {...state, message: action.message};
         default:

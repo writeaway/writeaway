@@ -1,11 +1,12 @@
 import React, {Component} from "react"
 import {connect} from 'react-redux'
 import classNames from 'classnames';
-import {updatePiece, readyForRemovalPiece, savePiece, resetPiece, setSourceId} from '../actions/pieces'
+import {updatePiece, readyForRemovalPiece, savePiece, setPieceMessage, resetPiece, setSourceId, onActivationSentPiece} from '../actions/pieces'
 import {getConfig} from '../config'
 
 const PieceContainer = (props) => {
-    return <props.component {...props} api={getConfig().api} className={classNames({
+    let pieceOptions = getConfig().options[props.type] || {};
+    return <props.component {...props} api={getConfig().api} options={pieceOptions} className={classNames({
         "r_editor": true,
         "r_edit": props.editorActive,
         "r_highlight": props.editorActive
@@ -21,9 +22,11 @@ const mapStateToProps = (state, ownProps) => {
 };
 const mapDispatchToProps = dispatch => {
     return {
+        onManualActivation: (id) => dispatch(onActivationSentPiece(id)),
         updatePiece: (id, piece) => dispatch(updatePiece(id, piece)),
         resetPiece: (id) => dispatch(resetPiece(id)),
         savePiece: (id) => dispatch(savePiece(id)),
+        setPieceMessage: (id, message, messageLevel) =>  dispatch(setPieceMessage(id, message, messageLevel)),
         setCurrentSourcePieceId: id => dispatch(setSourceId(id))
     }
 };

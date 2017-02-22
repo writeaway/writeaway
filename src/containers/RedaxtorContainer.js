@@ -1,16 +1,18 @@
 import {connect} from 'react-redux';
-import {showMessage} from '../actions';
+import {showMessage, piecesToggleNavBar} from '../actions';
 import RedaxtorBarComponent from '../components/RedaxtorBar';
 
 const mapStateToProps = (state) => {
     return {
-        message: state.message
+        message: state.message,
+        navBarCollapsed: state.global.navBarCollapsed
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        hideMessage: () => dispatch(showMessage(null))
+        hideMessage: () => dispatch(showMessage(null)),
+        piecesToggleNavBar: () => dispatch(piecesToggleNavBar())
     }
 };
 

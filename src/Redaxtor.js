@@ -9,14 +9,15 @@ import ReduxToastr from 'react-redux-toastr'
 import {setStore} from './store';
 import {setConfig, getConfig} from './config';
 
-import { compose } from 'react';
+import {compose} from 'redux';
 
 import RedaxtorContainer from "./containers/RedaxtorContainer";
-// import Img from "./components/img/ImgContainer";
+
 
 import reducers from "./reducers";
 import {initI18N} from './actions/i18n';
-import {addPiece, removePiece, pieceUnmount} from './actions/pieces';
+import {piecesToggleNavBar} from './actions/index';
+import {addPiece, removePiece, pieceUnmount, setPieceData, piecesToggleEdit, pieceGet} from './actions/pieces';
 import {pagesGet, pagesGetLayouts} from './actions/pages';
 import {configureFetch} from './helpers/callFetch'
 
@@ -27,16 +28,16 @@ let config = getConfig();
  * No Uploads and gallery
  * TODO: Note this implementation is dependent on submodules. Reimplement as multi-extendable
  */
-const defaultMinimumApi = {
+export const defaultMinimumApi = {
     getImageList: false,
     uploadImage: false,
     getPieceData: function (piece) {
-        console.warn("Using default implementation for getting piece data. This should be overriden", piece);
         if (piece.type == "source" || piece.type == "html") {
             return Promise.resolve({
                 ...piece,
                 data: {
-                    html: piece.node.innerHTML
+                    html: piece.node.innerHTML,
+                    updateNode: true
                 }
             });
         }
@@ -62,6 +63,10 @@ const defaultMinimumApi = {
                 }
             });
         }
+        if (piece.data) {
+            // Piece already has data, ok
+            return Promise.resolve(piece);
+        }
         return Promise.reject()
     },
     savePieceData: function (piece) {
@@ -74,8 +79,10 @@ class Redaxtor {
     constructor(options) {
         /**
          * External server API
+         * @type {RedaxtorAPI}
          */
         this.api = void 0;
+
         /**
          * Editable DOM pieces editors
          */
@@ -94,12 +101,21 @@ class Redaxtor {
         this.i18n = void 0;
 
 
-        const defaultState = {};
+        const defaultState = {
+            global: {
+                navBarCollapsed: true
+            }
+        };
 
         /**
          * Init API. Api is a const, we don't put it in storage, putting in const config instead
          */
         this.api = config.api = {...defaultMinimumApi, ...options.api};
+
+        /**
+         * Init Options per component type. We don't put it in storage, putting in const config instead
+         */
+        this.options = config.options = options.options || {};
 
         if (options.pieces) {
             options.pieces.components = {...options.pieces.components};
@@ -110,7 +126,6 @@ class Redaxtor {
                 attributeName: "data-name",
                 components: {},
                 initialState: {},
-                //other options: getURL, saveURL
                 ...options.pieces
             };
 
@@ -118,11 +133,9 @@ class Redaxtor {
                 components: options.pieces.components
             };
 
-            defaultState.pieces = {
+            defaultState.pieces = {};
 
-            };
-
-            Object.keys(options.pieces.components).forEach((key)=>{
+            Object.keys(options.pieces.components).forEach((key)=> {
                 this.pieces[`editorEnabled:${key}`] = true;
                 defaultState.pieces[`editorEnabled:${key}`] = true;
             });
@@ -158,27 +171,58 @@ class Redaxtor {
         this.store = createStore(reducers,
             {...defaultState, ...options.state},
             composeEnhancers(
-                applyMiddleware(thunk),
+                applyMiddleware(thunk)
                 // other store enhancers if any
             ));
 
         setStore(this.store);
         if (options.ajax) configureFetch(options.ajax);
 
-        options.pieces && this.initPieces(document);
+        /**
+         * options.piecesRoot - say where search for pieces
+         */
+        options.pieces && this.initPieces(options.piecesRoot || document);
 
-        this.showBar();
+        /**
+         * default options for navbar
+         */
+        let barOptions = {
+            navBarRoot: options.navBarRoot || document.body,
+            navBarDraggable: (options.navBarDraggable !== undefined && options.navBarDraggable !== null) ? options.navBarDraggable : true,
+            navBarCollapsable: (options.navBarCollapsable !== undefined && options.navBarCollapsable !== null) ? options.navBarCollapsable : true,
+            pieceNameGroupSeparator: options.pieceNameGroupSeparator
+        };
+
+
+        let isNavBarOpen = (options.navBarCollapsed != undefined && options.navBarCollapsed != null) ? !options.navBarCollapsed : false;
+
+        if (isNavBarOpen) {
+            this.setNavBarCollapsed(false);
+        } else {
+            this.setNavBarCollapsed(true);
+        }
+
+
+        this.showBar(barOptions);
+
+        /**
+         * Enable pieces editing if set option 'editorActive'
+         */
+        if (options.editorActive) {
+            this.store.dispatch(piecesToggleEdit());
+        }
     }
 
     /**
      * Renders a top Redaxtor bar with controls and attach it to body
      */
-    showBar() {
+    showBar(options) {
         this.barNode = document.createElement("DIV");
         ReactDOM.render(
             <Provider store={this.store}>
                 <div>
                     <RedaxtorContainer
+                        options={options}
                         components={this.pieces.components}
                         tabs={{
                             pieces: !!this.pieces,
@@ -194,7 +238,7 @@ class Redaxtor {
             </Provider>,
             this.barNode
         );
-        document.body.appendChild(this.barNode);
+        options.navBarRoot.appendChild(this.barNode);
     }
 
     initPieces(contextNode) {
@@ -210,11 +254,12 @@ class Redaxtor {
     /**
      * Add a piece from specific node
      * @param node HTMLElement
-     * @param options
+     * @param options {RedaxtorPieceOptions}
      * @param options.id {string} Mandatory unique identification id of piece. Should present in options OR in `this.pieces.attributeId` attribute of node, i.e. `data-id`
      * @param options.type {string} Mandatory type of piece. Should present in options OR in `this.pieces.attribute` attribute of node, i.e. `data-piece`
-     * @param options.name {string} Optional human readable name for list in editor. If not specified will be tried to be read from `this.pieces.attributeName` attribute of node
-     * @param options.dataset {Object} Optional set of data associated with node that will be passed to save and get API calls. If not specified will be read directly from node dataset
+     * @param options.name {string} Optional. Human readable name for list in editor. If not specified will be tried to be read from `this.pieces.attributeName` attribute of node
+     * @param options.dataset {Object} Optional. Set of random data attributes associated with node that will be passed to save and get API calls. If not specified will be read directly from node dataset.
+     * @param options.data {Object} Optional. Set of data associated with piece in format of piece component. If not specified will be fetched.
      */
     addPiece(node, options) {
         let piece = {
@@ -223,18 +268,24 @@ class Redaxtor {
             id: (options && options.id) || node.getAttribute(this.pieces.attributeId),
             name: (options && options.name) || node.getAttribute(this.pieces.attributeName),
             dataset: (options && options.dataset) || {},
-            changed: false
+            changed: false,
+            message: '',
+            messageLevel: ''
         };
-        if(!options || !options.dataset) {
+        if (options && options.data) {
+            piece.data = options.data;
+        }
+        if (!options || !options.dataset) {
             for (let data in node.dataset) {
                 piece.dataset[data] = node.dataset[data];
             }
         }
-        if(!piece.id) throw new Error(`Can't add piece with undefined id`);
-        if(!piece.type) throw new Error(`Can't add piece with undefined type`);
-        if(!this.pieces.components[piece.type]) throw new Error(`Can't add piece with unsupported type "${piece.type}"`);
+        if (!piece.id) throw new Error(`Can't add piece with undefined id`);
+        if (!piece.type) throw new Error(`Can't add piece with undefined type`);
+        if (!this.pieces.components[piece.type]) throw new Error(`Can't add piece with unsupported type "${piece.type}"`);
 
-        this.store.dispatch(addPiece(piece))
+        this.store.dispatch(addPiece(piece));
+        this.store.dispatch(pieceGet(piece.id));
     }
 
     /**
@@ -245,6 +296,72 @@ class Redaxtor {
         this.store.dispatch(removePiece(id));//TODO: Might be deprecated
         this.store.dispatch(pieceUnmount(this.store.getState().pieces.byId[id]));//Remove element from dom and trigger removing from state
     }
+
+    /**
+     * Set new data to a piece by piece id
+     * @param pieceId {string} id of piece
+     * @param data {Object} new data
+     */
+    setData(pieceId, data) {
+        let state = this.store.getState();
+        let currentPiece = state.pieces && state.pieces.byId && state.pieces.byId[pieceId];
+        if (!currentPiece) {
+            throw new Error(`You are trying to set data to an unexisting piece. Piece id: ${pieceId}`)
+        }
+        if (!currentPiece.fetched) {
+            throw new Error(`Piece was not initialized before use setDate function. Piece id: ${pieceId}`)
+        }
+        this.store.dispatch(setPieceData(pieceId, obj))
+    }
+
+    /**
+     * Checks if editor toggle is active
+     * @param editorType {string} editor type. Optional. If not specified, returns state of "all" toggle
+     * @returns {boolean}
+     */
+    isEditorActive(editorType) {
+        let state = this.store.getState();
+
+        if (editorType) {
+            return state.pieces['editorEnabled:' + editorType] != undefined ? state.pieces['editorEnabled:' + editorType] : false;
+        } else {
+            return state.pieces.editorActive != undefined ? state.pieces.editorActive : false;
+        }
+
+    }
+
+    /**
+     * Check if navbar is collapsed
+     * @returns {boolean}
+     */
+    isNavBarCollapsed() {
+        let state = this.store.getState();
+        return state.global.navBarCollapsed != undefined ? state.global.navBarCollapsed : true;
+    }
+
+    /**
+     * Set the active state for editors
+     * @param editorActive {boolean} new state
+     * @param editorType {string} type of editor, optional. By default applies to "all" toggle.
+     */
+    setEditorActive(editorActive, editorType) {
+        let isActiveNow = this.isEditorActive(editorType);
+        if (editorActive != isActiveNow) {
+            this.store.dispatch(piecesToggleEdit(editorType));
+        }
+    }
+
+    /**
+     * Set the collapsed state for navbar
+     * @param navBarActive {boolean} new state
+     */
+    setNavBarCollapsed(navBarActive) {
+        let isCollapseNow = this.isNavBarCollapsed();
+        if (navBarActive != isCollapseNow) {
+            this.store.dispatch(piecesToggleNavBar());
+        }
+    }
+
 
     /**
      * @deprecated

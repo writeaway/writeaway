@@ -12,10 +12,11 @@ export default class RedaxtorBar extends React.Component {
 
     constructor(props) {
         super(props);
+
         this.state = {
             value: 'pieces',
             dragging: false,
-            isOpen: false
+            isCollapsible: this.props.options.navBarCollapsable
         };
     }
 
@@ -45,6 +46,11 @@ export default class RedaxtorBar extends React.Component {
     }
 
     onMouseDown(e) {
+        //ignore if don't set draggable option
+        if(!this.props.options.navBarDraggable){
+            return;
+        }
+
         // only left mouse button
         if (e.button !== 0) return;
         this._rel.x = e.pageX - this._node.offsetLeft;
@@ -57,6 +63,11 @@ export default class RedaxtorBar extends React.Component {
     }
 
     onMouseMove(e) {
+        //ignore if don't set draggable option
+        if(!this.props.options.navBarDraggable){
+            return;
+        }
+
         if (!this.state.dragging) return;
         if(e.pageX == this._rel.startX && e.pageY == this._rel.startY) {
             return;
@@ -69,14 +80,24 @@ export default class RedaxtorBar extends React.Component {
     }
 
     onMouseUp(e) {
+        //ignore if don't set draggable option
+        if(!this.props.options.navBarDraggable){
+            return;
+        }
+
         this.setState({dragging: false});
         e.stopPropagation();
         e.preventDefault();
     }
 
     toggleOpen() {
+        //ignore if don't set draggable option
+        if(!this.props.options.navBarCollapsable){
+            return;
+        }
+
         if (!this.state.dragged) {
-            this.setState({isOpen: !this.state.isOpen})
+            this.props.piecesToggleNavBar();
         } else {
             this.setState({dragged: false});
         }
@@ -102,18 +123,24 @@ export default class RedaxtorBar extends React.Component {
         //                key="pages" value="pages"
         //                onClick={()=>this.setState({value: "pages"})}>Pages
         // </div>);
+
+        let isCollapse = this.props.navBarCollapsed != undefined && this.props.navBarCollapsed != null ?  this.props.navBarCollapsed : true;
+        let piecesOptions = {
+            pieceNameGroupSeparator: this.props.options.pieceNameGroupSeparator
+        }
         return (
             <div style={{all: 'initial'}}>
                 <div ref="bar" className="r_bar">
-                    <PanelHandler isOpen={this.state.isOpen}
+                    <PanelHandler isCollapsable={this.state.isCollapsible}
+                                  isOpen={!isCollapse}
                                   onMouseDown={this.onMouseDown.bind(this)}
                                   toggleOpen={this.toggleOpen.bind(this)} message={this.props.message}/>
 
-                    {this.state.isOpen ?
+                    {!isCollapse ?
                         <div className="r_tabs" value={this.state.value}>
                             <div className="r_tabs-header">{tabs}</div>
                             <div className="r_tab-content">
-                                {this.state.value === "pieces" && <Pieces components={this.props.components}/>}
+                                {this.state.value === "pieces" && <Pieces components={this.props.components} options={piecesOptions}/>}
                                 {this.state.value === "i18n" && <I18N/>}
                                 {this.state.value === "pages" && <Pages/>}
                             </div>
