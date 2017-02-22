@@ -12,35 +12,35 @@ export const piecesEnableEdit = (subType) => ({type: C.PIECES_ENABLE_EDIT, subTy
 
 export const piecesDisableEdit = (subType) => ({type: C.PIECES_DISABLE_EDIT, subType});
 
-const piecesRunInit = (dispatch, pieces)=>{
+const piecesRunInit = (dispatch, pieces)=> {
     pieces.byId && Object.keys(pieces.byId).forEach(id => {
         dispatch(pieceGet(id))
     });
 };
 
 export const piecesInit = () => (dispatch, getState) => {
-        const pieces = getState().pieces;
-        if (pieces.editorActive) {
-            dispatch(piecesEnableEdit());
-            piecesRunInit(dispatch, pieces);
-        }
-    };
+    const pieces = getState().pieces;
+    if (pieces.editorActive) {
+        dispatch(piecesEnableEdit());
+        piecesRunInit(dispatch, pieces);
+    }
+};
 
 
 export const piecesToggleEdit = (subType) => (dispatch, getState) => {
-        const pieces = getState().pieces;
-        let editorActive = !pieces.editorActive;
+    const pieces = getState().pieces;
+    let editorActive = !pieces.editorActive;
 
-        if(subType) {
-            editorActive = !pieces[`editorEnabled:${subType}`];
-        }
-        if (editorActive) {
-            dispatch(piecesEnableEdit(subType));
-            piecesRunInit(dispatch, pieces);
-        } else {
-            dispatch(piecesDisableEdit(subType));
-        }
-    };
+    if (subType) {
+        editorActive = !pieces[`editorEnabled:${subType}`];
+    }
+    if (editorActive) {
+        dispatch(piecesEnableEdit(subType));
+        piecesRunInit(dispatch, pieces);
+    } else {
+        dispatch(piecesDisableEdit(subType));
+    }
+};
 
 
 export const setSourceId = id => ({type: C.PIECES_SET_SOURCE_ID, id});
@@ -59,7 +59,12 @@ export const removePiece = id => ({type: C.PIECE_REMOVE, id: id});
 
 export const setPieceData = (id, data) => ({type: C.PIECE_SET_DATA, id: id, data: data});
 
-export const pieceMessageSetted = (id, message, messageLevel) => ({type: C.PIECE_SET_MESSAGE, id,  message, messageLevel});
+export const pieceMessageSetted = (id, message, messageLevel) => ({
+    type: C.PIECE_SET_MESSAGE,
+    id,
+    message,
+    messageLevel
+});
 
 export const hasRemovedPiece = id => ({type: C.PIECE_HAS_REMOVED, id: id});
 
@@ -75,10 +80,10 @@ export const pieceSavingFailed = (id, error) => ({type: C.PIECE_SAVING_FAILED, i
  */
 export const savePiece = id => (dispatch, getState) => {
     const piece = getState().pieces.byId[id];
-    if(getConfig().api.savePieceData) {
-        getConfig().api.savePieceData(piece).then((data)=>{
+    if (getConfig().api.savePieceData) {
+        getConfig().api.savePieceData(piece).then((data)=> {
             dispatch(pieceSaved(id, data));
-        }, error =>{
+        }, error => {
             dispatch(pieceSavingFailed(id, error));
             setPieceMessage(id, `Couldn't save`, 'error')(dispatch);
         })
@@ -88,8 +93,8 @@ export const savePiece = id => (dispatch, getState) => {
 };
 
 export const setPieceMessage = (id, message, messageLevel) => dispatch => {
-    if(!['warning', 'info', 'error'].includes(messageLevel)){
-     throw new Error(`Wrong message level '${messageLevel}' for PieceId: ${id}`);
+    if (!['warning', 'info', 'error'].includes(messageLevel)) {
+        throw new Error(`Wrong message level '${messageLevel}' for PieceId: ${id}`);
     }
 
     dispatch(pieceMessageSetted(id, message, messageLevel))
@@ -119,49 +124,44 @@ export const pieceGet = id => (dispatch, getState) => {
         return;
     }
 
-    if(piece.initialized || piece.fetching) {
+    if (piece.initialized || piece.fetching) {
         return; // Don't need to init initialized piece or piece that is already being fetched
     }
 
     dispatch(pieceFetching(id));
 
-    getConfig().api.getPieceData(piece).then((updatedPiece)=>{
+    getConfig().api.getPieceData(piece).then((updatedPiece)=> {
         dispatch(pieceFetched(id, updatedPiece));
         const piece = getState().pieces.byId[id];
         pieceRender(piece);
-    }, (error)=>{
+    }, (error)=> {
         dispatch(pieceFetchingError(id, error));
     });
 };
 
 export const pieceUnmount = piece => (dispatch, getState) => {
-    if(piece.node.__rdxContainderNode) {
+    if (piece.node.__rdxContainderNode) {
         ReactDOM.unmountComponentAtNode(piece.node.__rdxContainderNode);
         dispatch(hasRemovedPiece(piece.id));
     }
 }
 
 const pieceRender = piece => {
-    let ComponentClass = getConfig().pieces.components[piece.type];
-    if(ComponentClass.__renderType === "INSIDE") {
-        piece.node.__rdxContainderNode = piece.node;
-        return ReactDOM.render(
-            <Provider store={getStore()}>
-                <Container id={piece.id}
-                           component={getConfig().pieces.components[piece.type]} targetNode={piece.node}
-                />
-            </Provider>, piece.node);
+    // let ComponentClass = getConfig().pieces.components[piece.type];
+    let mainNode = document.querySelector("redaxtor-react-container");
+    if(!mainNode) {
+        mainNode = document.createElement("redaxtor-react-container");
+        document.body.appendChild(mainNode);
     }
-    if(ComponentClass.__renderType === "BEFORE") {
-        let containerNode = document.createElement("redaxtor-editor");
-        document.body.appendChild(containerNode);
-        piece.node.__rdxContainderNode = containerNode;
-        return ReactDOM.render(
-            <Provider store={getStore()}>
-                <Container id={piece.id}
-                           component={getConfig().pieces.components[piece.type]} targetNode={piece.node}
-                />
-            </Provider>, containerNode);
-    }
-    throw new Error("Component class has no __renderType specified or __renderType is not supported");
-}
+    let containerNode = document.createElement("redaxtor-editor");
+    mainNode.appendChild(containerNode);
+    piece.node.__rdxContainderNode = containerNode;
+    return ReactDOM.render(
+        <Provider store={getStore()}>
+            <Container id={piece.id}
+                       component={getConfig().pieces.components[piece.type]} targetNode={piece.node}
+            />
+        </Provider>, containerNode, (ref)=> {
+            piece.node.__rdxRef = ref;
+        });
+};
