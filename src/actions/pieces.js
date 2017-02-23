@@ -59,7 +59,7 @@ export const hoverPiece = (pieceId, rect) => ({type: C.PIECES_HOVERED, id: piece
 
 export const onEditorActive = (pieceId, active) => ({type: C.PIECES_EDITOR_ACTIVE, id: pieceId, active: active});
 
-export const onNodeUpdated = (pieceId)  => (dispatch, getState) => {
+export const onNodeResized = (pieceId)  => (dispatch, getState) => {
     const piece = getState().pieces.byId[pieceId];
     const hoveredId = getState().pieces.hoveredId;
     const activeId = getState().pieces.activeId;

@@ -1,7 +1,7 @@
 import React, {Component} from "react"
 import {connect} from 'react-redux'
 import classNames from 'classnames';
-import {updatePiece, onEditorActive, onNodeUpdated, savePiece, setPieceMessage, resetPiece, setSourceId, onActivationSentPiece} from '../actions/pieces'
+import {updatePiece, onEditorActive, onNodeResized, savePiece, setPieceMessage, resetPiece, setSourceId, onActivationSentPiece} from '../actions/pieces'
 import {getConfig} from '../config'
 
 const PieceContainer = (props) => {
@@ -27,7 +27,7 @@ const mapDispatchToProps = dispatch => {
         resetPiece: (id) => dispatch(resetPiece(id)),
         savePiece: (id) => dispatch(savePiece(id)),
         onEditorActive: (id, active) => dispatch(onEditorActive(id, active)),
-        onNodeUpdated: (id) => dispatch(onNodeUpdated(id)),
+        onNodeResized: (id) => dispatch(onNodeResized(id)),
         setPieceMessage: (id, message, messageLevel) =>  dispatch(setPieceMessage(id, message, messageLevel)),
         setCurrentSourcePieceId: id => dispatch(setSourceId(id))
     }
