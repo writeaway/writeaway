@@ -125,7 +125,7 @@ export default class RedaxtorBar extends React.Component {
         const hoverLabel = this.props.hoveredPiece?(this.props.hoveredPiece.name || this.props.hoveredPiece.id):false;
 
         return (
-            <div style={{all: 'initial'}}>
+            <div className="r_reset">
 
                 <div ref="overlay" className="r_overlay">
                     <div className="r_pointer-div" style={hoverRectStyles}>

@@ -168,6 +168,10 @@ const pieceRender = piece => {
         document.body.appendChild(mainNode);
     }
     let containerNode = document.createElement("redaxtor-editor");
+
+    // Add few attributes. They are used only for visual information in browser inspector
+    containerNode.setAttribute("rx:id", piece.id);
+    containerNode.setAttribute("rx:type", piece.type);
     mainNode.appendChild(containerNode);
     piece.node.__rdxContainderNode = containerNode;
     return ReactDOM.render(
