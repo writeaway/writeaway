@@ -55,6 +55,20 @@ export const resetPiece = (id) => ({type: C.PIECE_RESET, id});
 
 export const addPiece = piece => ({type: C.PIECE_ADD, id: piece.id, piece});
 
+export const hoverPiece = (pieceId, rect) => ({type: C.PIECES_HOVERED, id: pieceId, rect: rect});
+
+export const onEditorActive = (pieceId, active) => ({type: C.PIECES_EDITOR_ACTIVE, id: pieceId, active: active});
+
+export const onNodeUpdated = (pieceId)  => (dispatch, getState) => {
+    const piece = getState().pieces.byId[pieceId];
+    const hoveredId = getState().pieces.hoveredId;
+    const activeId = getState().pieces.activeId;
+
+    if(hoveredId == pieceId) {
+        dispatch(hoverPiece(pieceId, piece.node.getBoundingClientRect()));
+    }
+};
+
 export const removePiece = id => ({type: C.PIECE_REMOVE, id: id});
 
 export const setPieceData = (id, data) => ({type: C.PIECE_SET_DATA, id: id, data: data});

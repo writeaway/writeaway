@@ -13,7 +13,7 @@ const piece = (piece = {initialized: false}, action) => {
             return {...piece, destroy: true};
         case C.PIECE_SET_DATA:
             //check is initiated
-            if(!piece.fetched){
+            if (!piece.fetched) {
                 console.error(`Piece was not initialized before use setDate function. Piece id: ${piece.id}`);
                 return {...piece};
             }
@@ -45,6 +45,8 @@ const piece = (piece = {initialized: false}, action) => {
             return {...piece, manualActivation: true};
         case C.PIECES_ACTIVATION_SENT_PIECE:
             return {...piece, manualActivation: false};
+        case C.PIECES_EDITOR_ACTIVE:
+            return {...piece, active: action.active};
         default:
             return piece
     }
@@ -53,7 +55,9 @@ const piece = (piece = {initialized: false}, action) => {
 const piecesDefault = {
     editorActive: true,
     highlight: true,
-    sourceId: null
+    sourceId: null,
+    hoveredId: null,
+    activeId: null
 };
 
 const pieces = (pieces = piecesDefault, action) => {
@@ -124,6 +128,21 @@ const pieces = (pieces = piecesDefault, action) => {
                 ...pieces,
                 byId: {...pieces.byId, [action.id]: piece(pieces.byId[action.id], action)}
             };
+
+        case C.PIECES_EDITOR_ACTIVE:
+            return {
+                ...pieces,
+                activeId: action.active ? action.id : null,
+                byId: {...pieces.byId, [action.id]: piece(pieces.byId[action.id], action)}
+            };
+
+        case C.PIECES_HOVERED:
+            return {
+                ...pieces,
+                hoveredId: action.id,
+                hoveredRect: action.rect
+            };
+
         default:
             return pieces
     }

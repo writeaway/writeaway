@@ -5,7 +5,10 @@ import RedaxtorBarComponent from '../components/RedaxtorBar';
 const mapStateToProps = (state) => {
     return {
         message: state.message,
-        navBarCollapsed: state.global.navBarCollapsed
+        navBarCollapsed: state.global.navBarCollapsed,
+        hoveredId: state.pieces.hoveredId,
+        hoveredRect: state.pieces.hoveredRect,
+        hoveredPiece: state.pieces.hoveredId ? state.pieces.byId[state.pieces.hoveredId] : null
     }
 };
 

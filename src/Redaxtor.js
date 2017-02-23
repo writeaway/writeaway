@@ -17,7 +17,7 @@ import RedaxtorContainer from "./containers/RedaxtorContainer";
 import reducers from "./reducers";
 import {initI18N} from './actions/i18n';
 import {piecesToggleNavBar} from './actions/index';
-import {addPiece, removePiece, pieceUnmount, setPieceData, piecesToggleEdit, pieceGet} from './actions/pieces';
+import {addPiece, hoverPiece, removePiece, pieceUnmount, setPieceData, piecesToggleEdit, pieceGet} from './actions/pieces';
 import {pagesGet, pagesGetLayouts} from './actions/pages';
 import {configureFetch} from './helpers/callFetch'
 
@@ -74,6 +74,7 @@ export const defaultMinimumApi = {
         return Promise.resolve();
     }
 };
+
 
 class Redaxtor {
     constructor(options) {
@@ -211,6 +212,48 @@ class Redaxtor {
         if (options.editorActive) {
             this.store.dispatch(piecesToggleEdit());
         }
+
+        this.onHoverTrack = this._onHoverTrack.bind(this);
+        document.addEventListener("mousemove", this.onHoverTrack);
+    }
+
+    /**
+     * @private
+     */
+    _onHoverTrack(e) {
+        const state = this.store.getState();
+        const pieces  = state.pieces;
+        const pieceHovered  = state.pieces.hoveredId;
+        const pieceActive  = state.pieces.activeId;
+        let foundId = null;
+        let foundRect = null;
+
+        if(pieceActive) {
+            return;
+        }
+        Object.keys(pieces.byId).forEach((pieceId)=> {
+
+            /**
+             * @type RedaxtorPiece
+             */
+            let piece = pieces.byId[pieceId];
+
+            let enabled = pieces['editorEnabled:' + piece.type];
+
+            if (enabled) {
+                let rect = piece.node.getBoundingClientRect();
+                if(rect.top + window.scrollY <= e.pageY && rect.bottom + window.scrollY >= e.pageY &&
+                    rect.left <= e.pageX && rect.right >= e.pageX) {
+                    foundId = pieceId;
+                    foundRect = rect;
+                }
+            }
+        });
+
+        if(pieceHovered != foundId) {
+            this.store.dispatch(hoverPiece(foundId, foundRect));
+        }
+
     }
 
     /**

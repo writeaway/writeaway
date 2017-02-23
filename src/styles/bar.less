@@ -65,3 +65,33 @@
     background-color: @md-blue-grey-700;
   }
 }
+
+.r_pointer-div {
+  pointer-events: none;
+  border: 2px solid deepskyblue;
+  position: absolute;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 0 10000px rgba(0,0,0,0.2);
+  box-sizing: border-box;
+
+  .r_pointer-div-label {
+    font-family: "Helvetica", arial, sans-serif;
+    color: white;
+    font-size: 12px;
+    line-height: 20px;
+    height: 20px;
+    top: -20px;
+    position: absolute;
+    text-shadow: 1px 1px rgba(0,0,0,0.3);
+  }
+  .r_pointer-edit-icon {
+    color: white;
+    position: absolute;
+    right: 1px;
+    font-size: 12px;
+    line-height: 20px;
+    height: 20px;
+    top: -20px;
+    text-shadow: 1px 1px rgba(0,0,0,0.3);
+  }
+}

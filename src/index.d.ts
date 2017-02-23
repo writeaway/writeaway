@@ -138,6 +138,12 @@ declare module "redaxtor" {
         fetched: boolean;
 
         /**
+         * Indicates that piece editor is active
+         * @private
+         */
+        active: boolean;
+
+        /**
          * Indicates that piece is in process of fetching from API call {@link RedaxtorAPI.getPieceData}
          * @private
          */
