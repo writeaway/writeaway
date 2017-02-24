@@ -1,48 +1,72 @@
+/**
+ * Redaxtor main module including Redaxtor main class and basic module interface information
+ */
 declare module "redaxtor" {
-    import * as React from 'react';
 
-    export interface RedaxtorResource {
+    /**
+     * Redaxtor resource object stores data of a single image from server
+     */
+    export interface IRedaxtorResource {
+        /**
+         * URL of image
+         */
         url: string;
+        /**
+         * Thumbnail URL
+         */
         thumbnailUrl?: string;
+
+        /**
+         * Server-side calculated width
+         */
         width?: number;
+
+        /**
+         * Server-side calculated height
+         */
         height?: number;
     }
 
     /**
      * API that redaxtor uses to fetch and save data from external sources
      */
-    export interface RedaxtorAPI {
+    export interface IRedaxtorAPI {
         /**
          * Fetches resource list associated with a piece
          * If not specified, piece is considered to be resource-less
-         * @param piece {RedaxtorPiece}
+         * @param piece {IRedaxtorPiece}
          */
-        getImageList?: (piece: RedaxtorPiece) => Promise<RedaxtorResource[]>;
+        getImageList?: (piece: IRedaxtorPiece) => Promise<IRedaxtorResource[]>;
 
         /**
          * Upload resource to server
          * If not specified, piece is considered not to be able to add server resources
          * @param data {FormData} prefilled by component form data component
-         * @param piece {RedaxtorPiece}
+         * @param piece {IRedaxtorPiece}
          */
-        uploadImage?: (data: FormData, piece: RedaxtorPiece) => Promise<RedaxtorResource>;
+        uploadImage?: (data: FormData, piece: IRedaxtorPiece) => Promise<IRedaxtorResource>;
 
         /**
          * Fetch piece data and return new piece object with {@link RedaxtorPiece.data} filled
          * @param piece
          */
-        getPieceData?: (piece: RedaxtorPiece) => Promise<RedaxtorPiece>;
+        getPieceData?: (piece: IRedaxtorPiece) => Promise<IRedaxtorPiece>;
 
         /**
          * Save piece data
          * @param piece
          */
-        savePieceData?: (piece: RedaxtorPiece) => Promise<void>
+        savePieceData?: (piece: IRedaxtorPiece) => Promise<void>
     }
 
-    export interface RedaxtorOptions {
+    /**
+     * Redaxtor constructor options
+     */
+    export interface IRedaxtorOptions {
+
         /**
          * List of available editor components for pieces
+         * See {@link RedaxtorComponent} and its props {@link IRedaxtorComponentProps}
          */
         pieces: {
             components?: { [componentType: string]: RedaxtorComponent; }
@@ -51,7 +75,7 @@ declare module "redaxtor" {
         /**
          * External API to fetch and save data for pieces
          */
-        api: RedaxtorAPI;
+        api: IRedaxtorAPI;
 
         /**
          * HTMLElement root of pieces container. Specify detached from document element to disable auto-search
@@ -90,7 +114,7 @@ declare module "redaxtor" {
         pieceNameGroupSeparator?: string;
     }
 
-    export interface RedaxtorPiece {
+    export interface IRedaxtorPiece {
         /**
          * Unique piece id
          */
@@ -98,9 +122,9 @@ declare module "redaxtor" {
 
         /**
          * Piece type is a string representing a type of component to use to edit this piece
-         * It should match one of the {@link RedaxtorOptions.components} map keys
+         * It should match one of the {@link IRedaxtorOptions.components} map keys
          */
-            type: string;
+        type: string;
 
         /**
          * Optional human readable piece name
@@ -113,7 +137,7 @@ declare module "redaxtor" {
         node: HTMLElement;
 
         /**
-         * Data of piece editor component {@link RedaxtorOptions.components}
+         * Data of piece editor component {@link IRedaxtorOptions.components}
          * Each component may have own format of data, typically it has functionally minimum set of attributes editable by component
          */
         data: any;
@@ -123,17 +147,18 @@ declare module "redaxtor" {
          * but may be used for additional identifications in external API calls
          * Typically that stores all dataset attributes of html node
          * @readonly
+         * @const
          */
         dataset: {[dataAttribute: string]: string};
 
         /**
-         * Indicates if piece was changed and not saved yet with {@link RedaxtorAPI.savePieceData}
+         * Indicates if piece was changed and not saved yet with {@link IRedaxtorAPI.savePieceData}
          * @private
          */
         changed: boolean;
 
         /**
-         * Indicates that piece was fetched from API call {@link RedaxtorAPI.getPieceData}
+         * Indicates that piece was fetched from API call {@link IRedaxtorAPI.getPieceData}
          * @private
          */
         fetched: boolean;
@@ -145,7 +170,7 @@ declare module "redaxtor" {
         active: boolean;
 
         /**
-         * Indicates that piece is in process of fetching from API call {@link RedaxtorAPI.getPieceData}
+         * Indicates that piece is in process of fetching from API call {@link IRedaxtorAPI.getPieceData}
          * @private
          */
         fetching: boolean;
@@ -166,36 +191,37 @@ declare module "redaxtor" {
         /**
          * Flag is raised to manually activate node editor with prop.
          * Editor component is expected to drop it using onManualActivation {@link IRedaxtorComponentProps.onManualActivation}
+         * @private
          */
         manualActivation: boolean
     }
 
-    export interface RedaxtorPieceOptions {
+    export interface IRedaxtorPieceOptions {
         /**
-         * Specify unique piece id for {@link RedaxtorPiece.id}
+         * Specify unique piece id for {@link IRedaxtorPiece.id}
          */
         id: string;
 
         /**
          * Piece type is a string representing a type of component to use to edit this piece
-         * It should match one of the {@link RedaxtorOptions.components} map keys
+         * It should match one of the {@link IRedaxtorOptions.components} map keys
          */
             type: string;
 
         /**
-         * Specify human readable name for {@link RedaxtorPiece.name}
+         * Specify human readable name for {@link IRedaxtorPiece.name}
          */
         name?: string;
 
         /**
          * Specify data {@link RedaxtorPiece.data}
-         * If data is not specified, adding a piece will make an {@link RedaxtorOptions.api.getPieceData} call to retrieve it
+         * If data is not specified, adding a piece will make an {@link IRedaxtorOptions.api.getPieceData} call to retrieve it
          */
         data?: any;
 
         /**
          * Readonly random data associated with a piece that is not edited by component editors,
-         * but may be used for additional identifications in external API calls {@link RedaxtorPiece.dataset}
+         * but may be used for additional identifications in external API calls {@link IRedaxtorPiece.dataset}
          * If not specified, stores all dataset attributes of html node
          * @readonly
          */
@@ -203,9 +229,9 @@ declare module "redaxtor" {
     }
 
     export default class Redaxtor {
-        constructor(options: RedaxtorOptions);
+        constructor(options: IRedaxtorOptions);
 
-        addPiece(node: HTMLElement, options: RedaxtorPieceOptions): void;
+        addPiece(node: HTMLElement, options: IRedaxtorPieceOptions): void;
 
         /**
          * Set new data to a piece by piece id
@@ -249,10 +275,10 @@ declare module "redaxtor" {
         /**
          * Redaxtor has default implementation for specific use case scenario when you have component mapping as default one with default Redaxtor components
          */
-        static defaultMinimumApi: RedaxtorAPI;
+        static defaultMinimumApi: IRedaxtorAPI;
     }
 
-    export interface IRedaxtorComponentProps extends React.ClassAttributes<RedaxtorComponent>, RedaxtorPiece {
+    export interface IRedaxtorComponentProps extends /* React.ClassAttributes<RedaxtorComponent>, */ IRedaxtorPiece {
 
 
         /**
@@ -266,7 +292,7 @@ declare module "redaxtor" {
         editorActive: boolean;
 
         /**
-         * Call this function after you've initiated changes triggered by manualActivation flag.  {@link RedaxtorPiece.manualActivation}
+         * Call this function after you've initiated changes triggered by manualActivation flag.  {@link IRedaxtorPiece.manualActivation}
          * @param id
          */
         onManualActivation: (id: string) => any;
@@ -274,9 +300,9 @@ declare module "redaxtor" {
         /**
          * Call this to update data of piece
          * @param id {string} piece id
-         * @param piece {RedaxtorPiece}
+         * @param piece {IRedaxtorPiece}
          */
-        updatePiece: (id: string, piece: RedaxtorPiece) => any;
+        updatePiece: (id: string, piece: IRedaxtorPiece) => any;
 
         /**
          * @deprecated
@@ -313,12 +339,17 @@ declare module "redaxtor" {
         /**
          * If your piece supports "source code" editing, call this to initiate source code editor on `piece.data.html` string
          * @param id {string} piece id
-         * @internal
+         * @private
          */
         setCurrentSourcePieceId: (id: string) => any;
     }
 
-    export class RedaxtorComponent extends React.Component<IRedaxtorComponentProps, any> {
+    /**
+     * React component that implements a plugin to redaxtor
+     * Follows {@link IRedaxtorComponentProps} for props
+     * Is of React.Component<IRedaxtorComponentProps, any> type
+     */
+    export class RedaxtorComponent /* extends React.Component<IRedaxtorComponentProps, any>*/ {
         /**
          * Human readable name of editor component
          */
