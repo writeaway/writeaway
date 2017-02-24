@@ -45,7 +45,7 @@ declare module "redaxtor" {
          * List of available editor components for pieces
          */
         pieces: {
-            components?: { [componentType: string]: React.Component<any, any>; }
+            components?: { [componentType: string]: RedaxtorComponent; }
         };
 
         /**
@@ -160,6 +160,12 @@ declare module "redaxtor" {
          * @private
          */
         messageLevel?: "error" | "warning";
+
+        /**
+         * Flag is raised to manually activate node editor with prop.
+         * Editor component is expected to drop it using onManualActivation {@link IRedaxtorComponentProps.onManualActivation}
+         */
+        manualActivation: boolean
     }
 
     export interface RedaxtorPieceOptions {
@@ -243,39 +249,56 @@ declare module "redaxtor" {
         static defaultMinimumApi: RedaxtorAPI;
     }
 
-    export interface IRedaxtorComponentProps extends React.HTMLAttributes {
+    export interface IRedaxtorComponentProps extends React.HTMLAttributes, RedaxtorPiece {
+
 
         /**
-         * Call this function after you've initiated changes triggered by manualActivation flag.
+         * @deprecated
+         */
+        highlight: boolean,
+
+        /**
+         * Editor type for node is active
+         */
+        editorActive: boolean,
+
+        /**
+         * Call this function after you've initiated changes triggered by manualActivation flag.  {@link RedaxtorPiece.manualActivation}
          * @param id
          */
         onManualActivation: (id: string) => any;
+
         /**
          * Call this to update data of piece
          * @param id {string} piece id
          * @param piece {RedaxtorPiece}
          */
         updatePiece: (id: string, piece: RedaxtorPiece) => any;
+
         /**
          * @deprecated
          */
         resetPiece: (id: string) => any;
+
         /**
          * Initiate server saving of piece data
          * @param id {string} piece id
          */
         savePiece: (id: string) => any;
+
         /**
          * Notify if editor is active. This will lock piece from loosing focus easily.
          * @param id {string} piece id
          * @param active {boolean} if piece editor activated
          */
         onEditorActive: (id: string, active: boolean) => any;
+
         /**
          * Notify that node size has changes. This will trigger rerender of floating pointer block
          * @param id {string} piece id
          */
         onNodeResized: (id: string) => any;
+
         /**
          * Set notification to user
          * @param id {string} piece id
@@ -283,6 +306,7 @@ declare module "redaxtor" {
          * @param messageLevel {string} can be either "error" or "warning"
          */
         setPieceMessage: (id: string, message: string, messageLevel: "error"|"warning") => any;
+
         /**
          * If your piece supports "source code" editing, call this to initiate source code editor on `piece.data.html` string
          * @param id {string} piece id
