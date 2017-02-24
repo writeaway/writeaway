@@ -3,39 +3,49 @@ Redaxtor is a JavaScript library for editing CMS pieces, pages and international
 Based on [React](https://facebook.github.io/react/) and [Redux](http://redux.js.org/).
 Built with [Webpack](https://webpack.github.io/).
 Written in ES2015.
-Created by [Alex Chepura](https://twitter.com/alexchepura) and [Zmicer Boksha](https://github.com/ZmicerBoksha).
-Open sourced by [SpiralScout](http://spiralscout.com).
+Created by [SpiralScout](http://spiralscout.com).
 
 ## Installation
+
+Install redaxtor base and it's plugins
+
 ```
 npm install --save redaxtor
+npm install --save redaxtor-medium
+npm install --save redaxtor-codemirror
+npm install --save redaxtor-seo
 ```
 
 ## The Gist (CommonJS)
+
+See [Typescript Typings](./src/index.d.ts) for more details
+
 ```javascript
-"use strict";
-//Include redaxtor and it's default styles
-var Redaxtor = require('redaxtor');
-require('redaxtor/lib/redaxtor.css');
+    // Include redaxtor and it's default styles
+    
+    var Redaxtor = require('redaxtor');
+    require('redaxtor/lib/redaxtor.css');
+    
+    // Include redaxtor Rich Text editor and it's default styles
+    // RedaxtorMedium exports 3 components:
+    // 
+    var RedaxtorMedium = require('redaxtor-medium');
+    require('medium-editor/dist/css/medium-editor.css');
+    require('redaxtor-medium/lib/redaxtor-medium.css');
 
-//Include redaxtor HTML editor and it's default styles
-var RedaxtorMedium = require('redaxtor-medium');
-require('medium-editor/dist/css/medium-editor.css');
-require('redaxtor-medium/lib/redaxtor-medium.css');
+    // Include redaxtor source code editor and it's default styles 
+    var RedaxtorCodemirror = require('redaxtor-codemirror');
+    require('codemirror/lib/codemirror.css');
 
-//Include redaxtor HTML editor and it's default styles 
-var RedaxtorCodemirror = require('redaxtor-codemirror');
-require('codemirror/lib/codemirror.css');
+    // Attach plugins to redaxtor
+    var components = {
+        html: RedaxtorMedium.HTMLEditor,
+        image: RedaxtorMedium.IMGTagEditor,
+        background: RedaxtorMedium.BackgroundImageEditor,
+        source: RedaxtorCodemirror
+    };
 
-//Attach plugins to redaxtor
-var components = {
-    html: RedaxtorMedium.HTMLEditor,
-    image: RedaxtorMedium.IMGTagEditor,
-    background: RedaxtorMedium.BackgroundImageEditor,
-    source: RedaxtorCodemirror
-};
-
-var redaxtor = new Redaxtor({
+    var redaxtor = new Redaxtor({
     pieces: {
             components: components,
             options: {
@@ -287,15 +297,7 @@ var redaxtor = new Redaxtor({
 });
 ```
 
-## API
-### Pieces
-Each piece should have:
-* type - ```data-piece```
-* id - ```data-id```
-* url to fetch data and options - ```data-get-url```
-
 ## Developing and building
-
 
  ```bash
  npm install

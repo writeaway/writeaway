@@ -18,17 +18,18 @@ export default class RedaxtorBar extends React.Component {
             dragging: false,
             isCollapsible: this.props.options.navBarCollapsable
         };
+
+        this._onMouseMove = this.onMouseMove.bind(this);
+        this._onMouseUp = this.onMouseUp.bind(this);
     }
 
     componentDidMount() {
         this._node = ReactDOM.findDOMNode(this.refs["bar"]);
-        this._rel = {x: 0, y: 0, startX: 0, startY: 0}
+        this._rel = {x: 0, y: 0, startX: 0, startY: 0};
     }
 
     componentDidUpdate(props, state) {
         if (this.state.dragging && !state.dragging) {
-            this._onMouseMove = this.onMouseMove.bind(this);
-            this._onMouseUp = this.onMouseUp.bind(this);
             document.addEventListener('mousemove', this._onMouseMove);
             document.addEventListener('mouseup', this._onMouseUp);
         } else if (!this.state.dragging && state.dragging) {
@@ -37,17 +38,9 @@ export default class RedaxtorBar extends React.Component {
         }
     }
 
-    handleSaveI18N() {
-        console.log("handleSaveI18N", this.props.I18N);
-        // Object.keys(this.props.I18N).forEach(id => {
-        //     const piece = this.props.pieces[id]
-        //     console.log("Save piece:", piece);
-        // })
-    }
-
     onMouseDown(e) {
         //ignore if don't set draggable option
-        if(!this.props.options.navBarDraggable){
+        if (!this.props.options.navBarDraggable) {
             return;
         }
 
@@ -64,12 +57,12 @@ export default class RedaxtorBar extends React.Component {
 
     onMouseMove(e) {
         //ignore if don't set draggable option
-        if(!this.props.options.navBarDraggable){
+        if (!this.props.options.navBarDraggable) {
             return;
         }
 
         if (!this.state.dragging) return;
-        if(e.pageX == this._rel.startX && e.pageY == this._rel.startY) {
+        if (e.pageX == this._rel.startX && e.pageY == this._rel.startY) {
             return;
         }
         this._node.style.left = e.pageX - this._rel.x + "px";
@@ -81,7 +74,7 @@ export default class RedaxtorBar extends React.Component {
 
     onMouseUp(e) {
         //ignore if don't set draggable option
-        if(!this.props.options.navBarDraggable){
+        if (!this.props.options.navBarDraggable) {
             return;
         }
 
@@ -92,10 +85,9 @@ export default class RedaxtorBar extends React.Component {
 
     toggleOpen() {
         //ignore if don't set draggable option
-        if(!this.props.options.navBarCollapsable){
+        if (!this.props.options.navBarCollapsable) {
             return;
         }
-
         if (!this.state.dragged) {
             this.props.piecesToggleNavBar();
         } else {
@@ -103,46 +95,56 @@ export default class RedaxtorBar extends React.Component {
         }
     }
 
+    getHoverRectStyles() {
+        const padding = 10;
+        if(this.props.hoveredId) {
+            return {
+                opacity: 1,
+                top: (this.props.hoveredRect.top - padding + window.scrollY) + "px",
+                left: (this.props.hoveredRect.left - padding) + "px",
+                width: (this.props.hoveredRect.right - this.props.hoveredRect.left + 2 * padding) + "px",
+                height: (this.props.hoveredRect.bottom - this.props.hoveredRect.top + 2 * padding) + "px",
+            };
+        } else {
+            return {
+                opacity: 0,
+                top: window.scrollY + "px",
+                left: 0,
+                width: "100%",
+                height: "100%"
+            }
+        }
+    }
+
     render() {
-        var tabs = [];
-        this.props.tabs.pieces &&
-        tabs.push(<div className={classNames({"r_tab": true, "r_active": this.state.value === "pieces"})}
-                       key="pieces" value="pieces"
-                       onClick={()=>this.setState({value: "pieces"})}>Pieces
-
-        </div>);
-
-        // this.props.tabs.i18n &&
-        // tabs.push(<div className={classNames({"r_tab": true, "r_active": this.state.value === "i18n"})} key="i18n"
-        //                value="i18n"
-        //                onClick={()=>this.setState({value: "i18n"})}>I18N
-        // </div>);
-
-        // this.props.tabs.pages &&
-        // tabs.push(<div className={classNames({"r_tab": true, "r_active": this.state.value === "pages"})}
-        //                key="pages" value="pages"
-        //                onClick={()=>this.setState({value: "pages"})}>Pages
-        // </div>);
-
-        let isCollapse = this.props.navBarCollapsed != undefined && this.props.navBarCollapsed != null ?  this.props.navBarCollapsed : true;
+        let isCollapsed = this.props.navBarCollapsed != undefined && this.props.navBarCollapsed != null ? this.props.navBarCollapsed : true;
         let piecesOptions = {
             pieceNameGroupSeparator: this.props.options.pieceNameGroupSeparator
-        }
+        };
+        const hoverRectStyles =  this.getHoverRectStyles();
+        const hoverLabel = this.props.hoveredPiece?(this.props.hoveredPiece.name || this.props.hoveredPiece.id):false;
+
         return (
-            <div style={{all: 'initial'}}>
+            <div className="r_reset">
+
+                <div ref="overlay" className="r_overlay">
+                    <div className="r_pointer-div" style={hoverRectStyles}>
+                        <div className="r_pointer-div-label">{hoverLabel}</div>
+                        <div className="r_pointer-edit-icon"><i className="r_icon-pencil r_btn">&nbsp;</i></div>
+                    </div>
+                </div>
+
                 <div ref="bar" className="r_bar">
                     <PanelHandler isCollapsable={this.state.isCollapsible}
-                                  isOpen={!isCollapse}
+                                  isOpen={!isCollapsed}
                                   onMouseDown={this.onMouseDown.bind(this)}
                                   toggleOpen={this.toggleOpen.bind(this)} message={this.props.message}/>
 
-                    {!isCollapse ?
+                    {!isCollapsed ?
                         <div className="r_tabs" value={this.state.value}>
-                            <div className="r_tabs-header">{tabs}</div>
                             <div className="r_tab-content">
-                                {this.state.value === "pieces" && <Pieces components={this.props.components} options={piecesOptions}/>}
-                                {this.state.value === "i18n" && <I18N/>}
-                                {this.state.value === "pages" && <Pages/>}
+                                {this.state.value === "pieces" &&
+                                <Pieces components={this.props.components} options={piecesOptions}/>}
                             </div>
                         </div> : null}
                 </div>
