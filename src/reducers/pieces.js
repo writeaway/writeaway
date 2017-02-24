@@ -57,7 +57,7 @@ const piecesDefault = {
     highlight: true,
     sourceId: null,
     hoveredId: null,
-    activeId: null
+    activeId: []
 };
 
 const pieces = (pieces = piecesDefault, action) => {
@@ -130,19 +130,20 @@ const pieces = (pieces = piecesDefault, action) => {
             };
 
         case C.PIECES_EDITOR_ACTIVE:
+            let activeList = pieces.activeId || [];
             if(action.active) {
-                if(pieces.activeId.indexOf(action.id) == -1) {
+                if(activeList.indexOf(action.id) == -1) {
                     return {
                         ...pieces,
-                        activeId: [...pieces.activeId, action.id],
+                        activeId: [...activeList, action.id],
                         byId: {...pieces.byId, [action.id]: piece(pieces.byId[action.id], action)}
                     };
                 }
             } else {
-                if(pieces.activeId.indexOf(action.id) != -1) {
+                if(activeList.indexOf(action.id) != -1) {
                     return {
                         ...pieces,
-                        activeId: pieces.activeId.filter(function(e) { return e !== action.id }),
+                        activeId: activeList.filter(function(e) { return e !== action.id }),
                         byId: {...pieces.byId, [action.id]: piece(pieces.byId[action.id], action)}
                     };
                 }
