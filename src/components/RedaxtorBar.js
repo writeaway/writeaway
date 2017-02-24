@@ -97,7 +97,7 @@ export default class RedaxtorBar extends React.Component {
 
     getHoverRectStyles() {
         const padding = 10;
-        if(this.props.hoveredId) {
+        if(this.props.enabled && this.props.hoveredId) {
             return {
                 opacity: 1,
                 top: (this.props.hoveredRect.top - padding + window.scrollY) + "px",

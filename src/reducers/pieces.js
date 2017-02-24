@@ -130,9 +130,25 @@ const pieces = (pieces = piecesDefault, action) => {
             };
 
         case C.PIECES_EDITOR_ACTIVE:
+            if(action.active) {
+                if(pieces.activeId.indexOf(action.id) == -1) {
+                    return {
+                        ...pieces,
+                        activeId: [...pieces.activeId, action.id],
+                        byId: {...pieces.byId, [action.id]: piece(pieces.byId[action.id], action)}
+                    };
+                }
+            } else {
+                if(pieces.activeId.indexOf(action.id) != -1) {
+                    return {
+                        ...pieces,
+                        activeId: pieces.activeId.filter(function(e) { return e !== action.id }),
+                        byId: {...pieces.byId, [action.id]: piece(pieces.byId[action.id], action)}
+                    };
+                }
+            }
             return {
                 ...pieces,
-                activeId: action.active ? action.id : null,
                 byId: {...pieces.byId, [action.id]: piece(pieces.byId[action.id], action)}
             };
 

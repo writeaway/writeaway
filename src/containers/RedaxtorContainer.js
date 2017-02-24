@@ -5,6 +5,7 @@ import RedaxtorBarComponent from '../components/RedaxtorBar';
 const mapStateToProps = (state) => {
     return {
         message: state.message,
+        enabled: state.pieces.editorActive,
         navBarCollapsed: state.global.navBarCollapsed,
         hoveredId: state.pieces.hoveredId,
         hoveredRect: state.pieces.hoveredRect,

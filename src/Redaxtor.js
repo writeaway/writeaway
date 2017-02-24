@@ -228,7 +228,7 @@ class Redaxtor {
         let foundId = null;
         let foundRect = null;
 
-        if(pieceActive) {
+        if(pieceActive && pieceActive.length) {
             return;
         }
         Object.keys(pieces.byId).forEach((pieceId)=> {
