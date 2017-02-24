@@ -1,7 +1,7 @@
 /**
  * Redaxtor main module including Redaxtor main class and basic module interface information
  */
-declare module "redaxtor" {
+declare module redaxtor {
 
     /**
      * Redaxtor resource object stores data of a single image from server
