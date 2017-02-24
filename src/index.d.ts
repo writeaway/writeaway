@@ -3,9 +3,9 @@ declare module "redaxtor" {
 
     export interface RedaxtorResource {
         url: string;
-        thumbnailUrl?: string,
-        width?: number,
-        height?: number
+        thumbnailUrl?: string;
+        width?: number;
+        height?: number;
     }
 
     /**
@@ -17,7 +17,7 @@ declare module "redaxtor" {
          * If not specified, piece is considered to be resource-less
          * @param piece {RedaxtorPiece}
          */
-        getImageList?: (piece: RedaxtorPiece) => Promise<RedaxtorResource[]>,
+        getImageList?: (piece: RedaxtorPiece) => Promise<RedaxtorResource[]>;
 
         /**
          * Upload resource to server
@@ -25,13 +25,13 @@ declare module "redaxtor" {
          * @param data {FormData} prefilled by component form data component
          * @param piece {RedaxtorPiece}
          */
-        uploadImage?: (data: FormData, piece: RedaxtorPiece) => Promise<RedaxtorResource>,
+        uploadImage?: (data: FormData, piece: RedaxtorPiece) => Promise<RedaxtorResource>;
 
         /**
          * Fetch piece data and return new piece object with {@link RedaxtorPiece.data} filled
          * @param piece
          */
-        getPieceData?: (piece: RedaxtorPiece) => Promise<RedaxtorPiece>,
+        getPieceData?: (piece: RedaxtorPiece) => Promise<RedaxtorPiece>;
 
         /**
          * Save piece data
@@ -119,7 +119,8 @@ declare module "redaxtor" {
         data: any;
 
         /**
-         * Readonly random data associated with a piece that is not edited by component editors, but may be used for additional identifications in external API calls
+         * Readonly random data associated with a piece that is not edited by component editors,
+         * but may be used for additional identifications in external API calls
          * Typically that stores all dataset attributes of html node
          * @readonly
          */
@@ -150,7 +151,8 @@ declare module "redaxtor" {
         fetching: boolean;
 
         /**
-         * Message that states important notification information for user. Typically a server save error or notification that changes will be applied on reload only
+         * Message that states important notification information for user.
+         * Typically a server save error or notification that changes will be applied on reload only
          * @private
          */
         message?: string;
@@ -192,7 +194,8 @@ declare module "redaxtor" {
         data?: any;
 
         /**
-         * Readonly random data associated with a piece that is not edited by component editors, but may be used for additional identifications in external API calls {@link RedaxtorPiece.dataset}
+         * Readonly random data associated with a piece that is not edited by component editors,
+         * but may be used for additional identifications in external API calls {@link RedaxtorPiece.dataset}
          * If not specified, stores all dataset attributes of html node
          * @readonly
          */
@@ -222,7 +225,7 @@ declare module "redaxtor" {
          * @param editorType {string} editor type. Optional. If not specified, returns state of "all" toggle
          * @returns {boolean}
          */
-        isEditorActive(editorType?: string = void 0): boolean;
+        isEditorActive(editorType?: string): boolean;
 
         /**
          * Check if navbar is collapsed
@@ -235,7 +238,7 @@ declare module "redaxtor" {
          * @param editorActive {boolean} new state
          * @param editorType {string} type of editor, optional. By default applies to "all" toggle.
          */
-        setEditorActive(editorActive: boolean, editorType?: string = void 0): void;
+        setEditorActive(editorActive: boolean, editorType?: string): void;
 
         /**
          * Set the collapsed state for navbar
@@ -249,18 +252,18 @@ declare module "redaxtor" {
         static defaultMinimumApi: RedaxtorAPI;
     }
 
-    export interface IRedaxtorComponentProps extends React.HTMLAttributes, RedaxtorPiece {
+    export interface IRedaxtorComponentProps extends React.ClassAttributes<RedaxtorComponent>, RedaxtorPiece {
 
 
         /**
          * @deprecated
          */
-        highlight: boolean,
+        highlight: boolean;
 
         /**
          * Editor type for node is active
          */
-        editorActive: boolean,
+        editorActive: boolean;
 
         /**
          * Call this function after you've initiated changes triggered by manualActivation flag.  {@link RedaxtorPiece.manualActivation}
