@@ -3,7 +3,7 @@
   "version": "0.9.4",
   "description": "Redaxtor is a JavaScript library for editing CMS pieces, pages and internationalisation on the client side.",
   "main": "./lib/index.js",
-  "types": "./src/index-ts.ts",
+  "types": "./src/index.d.ts",
   "files": [
     "lib",
     "src"
