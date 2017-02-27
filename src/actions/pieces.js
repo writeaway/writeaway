@@ -57,7 +57,36 @@ export const addPiece = piece => ({type: C.PIECE_ADD, id: piece.id, piece});
 
 export const hoverPiece = (pieceId, rect) => ({type: C.PIECES_HOVERED, id: pieceId, rect: rect});
 
-export const onEditorActive = (pieceId, active) => ({type: C.PIECES_EDITOR_ACTIVE, id: pieceId, active: active});
+export const onEditorActive = (pieceId, active) => (dispatch, getState) => {
+
+    const activeId = getState().pieces.activeId || [];
+
+    /**
+     * Before actually activating, check if we need to force a hover over elements becoming active
+     * TODO: Reducer is a better place for that, but how to use getBoundingClientRect there and not mess up reducers purity?
+     */
+    if(active && activeId.length == 0) {
+        // That editor is now the active editor, invoke hover
+        const piece = getState().pieces.byId[pieceId];
+        dispatch(hoverPiece(pieceId, piece.node.getBoundingClientRect()));
+    }
+
+    if(!active && activeId.length == 2) {
+        // That editor is `other` one, after disactivation, only one is left
+        const newHoverId = (pieceId === activeId[0])?activeId[1]:activeId[0];
+        const piece = getState().pieces.byId[newHoverId];
+        dispatch(hoverPiece(newHoverId, piece.node.getBoundingClientRect()));
+    }
+
+    if(!active && activeId.length == 1 && pieceId === activeId[0]) {
+        // We are going to disactivate all. Good chance to disable hover overlay too
+        dispatch(hoverPiece(null));
+    }
+
+    dispatch({type: C.PIECES_EDITOR_ACTIVE, id: pieceId, active: active});
+};
+
+
 
 export const onNodeResized = (pieceId)  => (dispatch, getState) => {
     const piece = getState().pieces.byId[pieceId];
@@ -144,10 +173,33 @@ export const pieceGet = id => (dispatch, getState) => {
 
     dispatch(pieceFetching(id));
 
-    getConfig().api.getPieceData(piece).then((updatedPiece)=> {
-        dispatch(pieceFetched(id, updatedPiece));
-        const piece = getState().pieces.byId[id];
-        pieceRender(piece);
+    /**
+     * Generate a copy that anyone from external API can modify and send back without immutability worries
+     * @type {IRedaxtorPiece}
+     */
+    const mutableCopy = {
+        ...piece,
+        data: piece.data? {...piece.data} : void 0,
+    };
+
+    getConfig().api.getPieceData(mutableCopy).then((updatedPiece)=> {
+        if(!updatedPiece.data) {
+            dispatch(pieceFetchingError(id, "Api method generated no data"));
+        } else {
+            /**
+             * Generate a copy again so evil user can't modify our object by storing reference
+             * Note we don't care what is done to `dataset` field
+             * @type {IRedaxtorPiece}
+             */
+            const updatedMutableCopy = {
+                ...updatedPiece,
+                data: {...updatedPiece.data}
+            };
+
+            dispatch(pieceFetched(id, updatedMutableCopy));
+            const piece = getState().pieces.byId[id];
+            pieceRender(piece);
+        }
     }, (error)=> {
         dispatch(pieceFetchingError(id, error));
     });

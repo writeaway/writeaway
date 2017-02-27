@@ -1,0 +1,47 @@
+.r_pointer-div {
+  pointer-events: none;
+  border: 2px solid #132432;
+  position: absolute;
+
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+  transition-property: top, left, width, height, opacity;
+
+  box-shadow: 0 0 0 10000px fade(#132432, 50%);
+  box-sizing: border-box;
+
+  .r_pointer-div-label {
+    font-family: "Helvetica", arial, sans-serif;
+    color: white;
+    font-size: 14px;
+    line-height: 25px;
+    height: 25px;
+    top: -27px;
+    position: absolute;
+    background: #132432;
+    padding-left: 5px;
+    padding-right: 10px;
+    //border-top-left-radius: 5px;
+    //border-top-right-radius: 5px;
+    left: -2px;
+  }
+
+  &.shrinked {
+    .r_pointer-div-label {
+      top: 0;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+     // border-bottom-right-radius: 5px;
+    }
+  }
+
+  .r_pointer-edit-icon {
+    color: #333;
+    position: absolute;
+    right: 1px;
+    font-size: 15px;
+    line-height: 20px;
+    height: 20px;
+    top: 1px;
+  }
+}
