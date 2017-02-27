@@ -1,6 +1,14 @@
 import * as React from "react";
 
-var r = require('./index').default;
+/**
+ * CommonJS require
+ */
+declare var require: any; // `declare` is needed for tsdoc only
+
+/**
+ * @private
+ */
+var __r = require('./index').default;
 
 /**
  * Redaxtor resource object stores data of a single image from server
@@ -355,4 +363,4 @@ declare class RedaxtorComponent extends React.Component<IRedaxtorComponentProps,
     static __name: string;
 }
 
-export default <Redaxtor>r;
+export default <Redaxtor>__r;
