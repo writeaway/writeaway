@@ -215,6 +215,13 @@ class Redaxtor {
 
         this.onHoverTrack = this._onHoverTrack.bind(this);
         document.addEventListener("mousemove", this.onHoverTrack);
+
+        this.handleKeyUpBinded = this._handleClick.bind(this);
+        this._initKeys();
+    }
+
+    destroy(){
+        document.removeEventListener('keyup', this.handleKeyUpBinded);
     }
 
     /**
@@ -254,6 +261,18 @@ class Redaxtor {
             this.store.dispatch(hoverPiece(foundId, foundRect));
         }
 
+    }
+
+    _initKeys(){
+        document.addEventListener('keyup', this.handleKeyUpBinded);
+    }
+
+    _handleClick(event){
+        switch (event.keyCode) {
+            case 27: //is escape
+                this.setEditorActive(false);
+                break;
+        }
     }
 
     /**
