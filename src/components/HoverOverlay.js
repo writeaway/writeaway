@@ -9,11 +9,14 @@ export default class HoverOverlay extends React.Component {
         delete hoverRectStyles.className;
 
         return (
-            <div ref="overlay" className="r_overlay">
-                <div className={overlayClass} style={hoverRectStyles}>
-                    <div className="r_pointer-div-label"><i className="r_icon-pencil r_btn">&nbsp;</i>{componentName}
+            <div className="r_reset">
+                <div ref="overlay" className="r_overlay">
+                    <div className={overlayClass} style={hoverRectStyles}>
+                        <div className="r_pointer-div-label"><i
+                            className="r_icon-pencil r_btn">&nbsp;</i>{componentName}
+                        </div>
+                        <div className="r_pointer-edit-icon"></div>
                     </div>
-                    <div className="r_pointer-edit-icon"></div>
                 </div>
             </div>
         )

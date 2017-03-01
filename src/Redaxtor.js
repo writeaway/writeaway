@@ -211,7 +211,7 @@ class Redaxtor {
         /**
          * options.overlayRoot - say where search for pieces
          */
-        this.showHoverOverlay(options.piecesRoot || document.body);
+        this.showHoverOverlay(options.overlayRoot || document.body);
 
         /**
          * Enable pieces editing if set option 'editorActive'
@@ -295,7 +295,7 @@ class Redaxtor {
      * Renders tbe hover overlay
      */
     showHoverOverlay(root){
-        this.overlayNode = document.createElement("DIV");
+        this.overlayNode = document.createElement("redaxtor-overlay");
         ReactDOM.render(
             <Provider store={this.store}>
                 <div>
@@ -304,7 +304,7 @@ class Redaxtor {
             </Provider>,
             this.overlayNode
         );
-        (root || document.body).appendChild(this.overlayNode);
+        root.appendChild(this.overlayNode);
     }
 
     initPieces(contextNode) {
