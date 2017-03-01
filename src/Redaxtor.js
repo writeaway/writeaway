@@ -231,6 +231,9 @@ class Redaxtor {
         if(pieceActive && pieceActive.length) {
             return;
         }
+        if(!pieces.byId) {
+            return;
+        }
         Object.keys(pieces.byId).forEach((pieceId)=> {
 
             /**
