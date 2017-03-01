@@ -20,7 +20,7 @@ import {piecesToggleNavBar} from './actions/index';
 import {addPiece, hoverPiece, removePiece, pieceUnmount, setPieceData, piecesToggleEdit, pieceGet} from './actions/pieces';
 import {pagesGet, pagesGetLayouts} from './actions/pages';
 import {configureFetch} from './helpers/callFetch'
-import HoverOverlay from './components/HoverOverlay';
+import HoverOverlay from './containers/HoverOverlayContainer';
 
 let config = getConfig();
 
@@ -211,7 +211,7 @@ class Redaxtor {
         /**
          * options.overlayRoot - say where search for pieces
          */
-        options.overlayRoot && this.showHoverOverlay(options.piecesRoot || document);
+        this.showHoverOverlay(options.piecesRoot || document.body);
 
         /**
          * Enable pieces editing if set option 'editorActive'
@@ -295,16 +295,16 @@ class Redaxtor {
      * Renders tbe hover overlay
      */
     showHoverOverlay(root){
-        this.overlayNode = (root || document).createElement("DIV");
-        const state = this.store.getState();
-        const hoveredPiece = state.pieces.hoveredId ? state.pieces.byId[state.pieces.hoveredId] : null
+        this.overlayNode = document.createElement("DIV");
         ReactDOM.render(
-            <HoverOverlay hoveredPiece={hoveredPiece} hoveredRect={state.hoveredRect}
-                          enabled={state.pieces.editorActive} hoveredId={state.pieces.hoveredId}
-                          components={this.pieces.components} />,
+            <Provider store={this.store}>
+                <div>
+                    <HoverOverlay components={this.pieces.components} />
+                </div>
+            </Provider>,
             this.overlayNode
         );
-        options.navBarRoot.appendChild(this.overlayNode);
+        (root || document.body).appendChild(this.overlayNode);
     }
 
     initPieces(contextNode) {
