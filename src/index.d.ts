@@ -201,7 +201,14 @@ declare module redaxtor {
          * Editor component is expected to drop it using onManualActivation {@link IRedaxtorComponentProps.onManualActivation}
          * @private
          */
-        manualActivation: boolean
+        manualActivation: boolean;
+
+        /**
+         * Flag is raised to manually deactivate node editor with prop.
+         * Editor component is expected to drop it using onManualDeactivation {@link IRedaxtorComponentProps.onManualDeactivation}
+         * @private
+         */
+        manualDeactivation: boolean
     }
 
     export interface IRedaxtorPieceOptions {
@@ -304,6 +311,12 @@ declare module redaxtor {
          * @param id
          */
         onManualActivation: (id: string) => any;
+
+        /**
+         * Call this function after you've initiated changes triggered by manualDeactivation flag.  {@link IRedaxtorPiece.manualDeactivation}
+         * @param id
+         */
+        onManualDeactivation: (id: string) => any;
 
         /**
          * Call this to update data of piece
