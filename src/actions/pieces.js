@@ -49,6 +49,10 @@ export const activatePiece = id => ({type: C.PIECES_ACTIVATE_PIECE, id});
 
 export const onActivationSentPiece = id => ({type: C.PIECES_ACTIVATION_SENT_PIECE, id});
 
+export const deactivatePiece = id => ({type: C.PIECES_DEACTIVATE_PIECE, id});
+
+export const onDeactivationSentPiece = id => ({type: C.PIECES_DEACTIVATION_SENT_PIECE, id});
+
 export const updatePiece = (id, piece, notChanged) => ({type: C.PIECE_UPDATE, id, piece, notChanged});
 
 export const resetPiece = (id) => ({type: C.PIECE_RESET, id});

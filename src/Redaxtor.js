@@ -17,7 +17,7 @@ import RedaxtorContainer from "./containers/RedaxtorContainer";
 import reducers from "./reducers";
 import {initI18N} from './actions/i18n';
 import {piecesToggleNavBar} from './actions/index';
-import {addPiece, hoverPiece, removePiece, pieceUnmount, setPieceData, piecesToggleEdit, pieceGet} from './actions/pieces';
+import {addPiece, hoverPiece, removePiece, pieceUnmount, setPieceData, piecesToggleEdit, pieceGet, deactivatePiece} from './actions/pieces';
 import {pagesGet, pagesGetLayouts} from './actions/pages';
 import {configureFetch} from './helpers/callFetch'
 
@@ -270,8 +270,22 @@ class Redaxtor {
     _handleClick(event){
         switch (event.keyCode) {
             case 27: //is escape
-                this.setEditorActive(false);
+                this._onEscPress();
                 break;
+            case 0: //if keycode didn't set. for example from manual event (see codemirror)
+                if(event.key === "Escape"){
+                    this._onEscPress();
+                }
+                break;
+        }
+    }
+
+    _onEscPress() {
+        let state = this.store.getState();
+        if(state.pieces.activeId && state.pieces.activeId.length > 0){
+            this.store.dispatch(deactivatePiece(state.pieces.activeId[0]));
+        } else {
+            this.setEditorActive(false);
         }
     }
 
