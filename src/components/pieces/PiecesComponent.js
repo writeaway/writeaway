@@ -36,19 +36,21 @@ export default class PiecesComponent extends React.Component {
         return (
             <div>
                 {sourceEditor}
-                <div className="r_list-header">
-                    <label>All Editors</label>
-                    <Toggle checked={this.props.editorActive}
-                            onChange={this.toggleAllEditors.bind(this)}/>
+                <div className="r_list-header-container">
+                    <div className="r_list-header">
+                        <label>Enable All Editors</label>
+                        <Toggle checked={this.props.editorActive}
+                                onChange={this.toggleAllEditors.bind(this)}/>
+                    </div>
+                    {   Object.keys(this.props.components).map((object, index) =>
+                        representPieceTypes[object] && (<div className="r_list-header r_list-subheader" key={index}>
+                            <label>{this.props.components[object].__name || object}</label>
+                            <Toggle checked={this.props[`editorEnabled:${object}`]}
+                                    disabled={!this.props.editorActive}
+                                    onChange={() => this.props.piecesToggleEdit(object)}/>
+                        </div>)
+                    ) }
                 </div>
-                {   Object.keys(this.props.components).map((object, index) =>
-                    representPieceTypes[object] && (<div className="r_list-header r_list-subheader" key={index}>
-                        <label>{this.props.components[object].__name || object}</label>
-                        <Toggle checked={this.props[`editorEnabled:${object}`]}
-                                disabled={!this.props.editorActive}
-                                onChange={() => this.props.piecesToggleEdit(object)}/>
-                    </div>)
-                ) }
                 <PiecesList editorActive={this.props.editorActive } pieces={this.props.byId || {}}
                             source={this.props['editorEnabled:source'] && this.props.components.source}
                             allProps={this.props} // TODO: This is ugly

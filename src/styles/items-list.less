@@ -1,8 +1,18 @@
 .r_list-header {
   margin-bottom: 10px;
-  label {
-    font-weight: bold;
+  &:first-child {
+    margin-bottom: 30px;
   }
+  &:last-child {
+    margin-bottom: 30px;
+  }
+  label {
+    font-size: 12px;
+  }
+}
+
+.r_list-header-container {
+  padding: 20px;
 }
 
 .r_list {
@@ -11,8 +21,12 @@
 }
 
 .r_item-row {
-  padding: 2px 0;
-  color: #555;
+  padding: 3px 0;
+  &:hover {
+    color: @rx-text-base;
+  }
+  color: @rx-text-dark;
+  font-size: 12px;
 }
 
 .r_item-right {
@@ -44,24 +58,19 @@
 .r_item-message {
   font-size: small;
   padding: 5px 0 5px 10px;
-  border: 1px solid transparent;
-  border-radius: 4px;
   margin-top: 3px;
   margin-bottom: 5px;
 
   &.r_item-warning {
     color: #8a6d3b;
     background-color: #fcf8e3;
-    border-color: #faebcc;
   }
   &.r_item-info {
     color: #31708f;
     background-color: #d9edf7;
-    border-color: #bce8f1;
   }
   &.r_item-error{
     color: #a94442;
     background-color: #f2dede;
-    border-color: #ebccd1;
   }
 }

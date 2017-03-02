@@ -6,13 +6,13 @@
   position: fixed;
   top: 0;
   left: 0;
-  color: @md-grey-900;
+  color: @rx-text-base;
   z-index: 1000;
   width: 320px;
   border-radius: 2px;
-  font-family: @font;
-  background-color: @md-white;
-  box-shadow: @md-shadow-2;
+  font-family: @rx-font;
+  background-color: @rx-background-base;
+  box-shadow: @rx-shadow;
 }
 
 .r_bar-header {
@@ -20,10 +20,11 @@
   height: 30px;
   line-height: 28px;
   cursor: pointer;
-  color: @md-white;
+  color: @rx-text-base;
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
-  background-color: @background-header;
+  background-color: @rx-background-base;
+  font-size: 11px;
 }
 
 .r_bar-header-button {
@@ -36,33 +37,19 @@
   border: none;
   box-sizing: border-box;
   cursor: pointer;
-  color: @md-white;
+  color: @rx-text-base;
 }
 
 .r_tabs {
-
+  border-top: 1px solid @rx-border-dark;
 }
 
 .r_tabs-header {
-  //display: flex;
   display: none;
-  width: 100%;
-  background-color: @md-blue-grey-800;
 }
 
 .r_tab-content {
   padding: 10px;
   position: relative;
-}
-
-.r_tab {
-  cursor: pointer;
-  flex: 1 1;
-  padding: 5px 0;
-  color: @md-blue-grey-50;
-  text-align: center;
-  &.r_active {
-    background-color: @md-blue-grey-700;
-  }
 }
 
