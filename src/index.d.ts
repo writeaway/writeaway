@@ -86,6 +86,12 @@ declare module redaxtor {
         piecesRoot?: HTMLElement;
 
         /**
+         * Element to attach redaxtor hover overlay
+         * @default document.body
+         */
+        overlayRoot?: HTMLElement;
+
+        /**
          * Start editor started
          * @default false
          */

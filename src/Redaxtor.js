@@ -20,6 +20,7 @@ import {piecesToggleNavBar} from './actions/index';
 import {addPiece, hoverPiece, removePiece, pieceUnmount, setPieceData, piecesToggleEdit, pieceGet} from './actions/pieces';
 import {pagesGet, pagesGetLayouts} from './actions/pages';
 import {configureFetch} from './helpers/callFetch'
+import HoverOverlay from './containers/HoverOverlayContainer';
 
 let config = getConfig();
 
@@ -184,6 +185,7 @@ class Redaxtor {
          */
         options.pieces && this.initPieces(options.piecesRoot || document);
 
+
         /**
          * default options for navbar
          */
@@ -205,6 +207,11 @@ class Redaxtor {
 
 
         this.showBar(barOptions);
+
+        /**
+         * options.overlayRoot - say where search for pieces
+         */
+        this.showHoverOverlay(options.overlayRoot || document.body);
 
         /**
          * Enable pieces editing if set option 'editorActive'
@@ -285,6 +292,22 @@ class Redaxtor {
             this.barNode
         );
         options.navBarRoot.appendChild(this.barNode);
+
+    }
+    /**
+     * Renders tbe hover overlay
+     */
+    showHoverOverlay(root){
+        this.overlayNode = document.createElement("redaxtor-overlay");
+        ReactDOM.render(
+            <Provider store={this.store}>
+                <div>
+                    <HoverOverlay components={this.pieces.components} />
+                </div>
+            </Provider>,
+            this.overlayNode
+        );
+        root.appendChild(this.overlayNode);
     }
 
     initPieces(contextNode) {
@@ -296,6 +319,8 @@ class Redaxtor {
             this.addPiece(el);
         }
     }
+
+
 
     /**
      * Add a piece from specific node
