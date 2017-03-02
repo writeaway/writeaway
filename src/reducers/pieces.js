@@ -45,6 +45,10 @@ const piece = (piece = {initialized: false}, action) => {
             return {...piece, manualActivation: true};
         case C.PIECES_ACTIVATION_SENT_PIECE:
             return {...piece, manualActivation: false};
+        case C.PIECES_DEACTIVATE_PIECE:
+            return {...piece, manualDeactivation: true};
+        case C.PIECES_DEACTIVATION_SENT_PIECE:
+            return {...piece, manualDeactivation: false};
         case C.PIECES_EDITOR_ACTIVE:
             return {...piece, active: action.active};
         default:
@@ -119,6 +123,8 @@ const pieces = (pieces = piecesDefault, action) => {
         case C.PIECE_SET_MESSAGE:
         case C.PIECES_ACTIVATE_PIECE:
         case C.PIECES_ACTIVATION_SENT_PIECE:
+        case C.PIECES_DEACTIVATE_PIECE:
+        case C.PIECES_DEACTIVATION_SENT_PIECE:
 
         case C.PIECE_FETCHING:
         case C.PIECE_FETCHED:
