@@ -8,7 +8,7 @@ class PanelHandler extends Component {
                 <span>R E D A X T O R</span>
                 {this.props.isCollapsable &&
                     <button className="r_bar-header-button">
-                        {this.props.isOpen ? <i className="r_icon-down-dir"></i> : <i className="r_icon-up-dir"></i>}
+                        {this.props.isOpen ? <i className="rx_icon rx_icon-keyboard_arrow_down"></i> : <i className="rx_icon rx_icon-keyboard_arrow_up"></i>}
                     </button>}
                 {this.props.message ? <div className="r_message r_message-{this.prop.message.type}">{this.prop.message.content}</div>:""}
             </div>

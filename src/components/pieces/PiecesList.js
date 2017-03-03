@@ -32,11 +32,11 @@ class PieceLine extends Component {
                     </span>
                     <span className="r_item-right">
                         {source && editorActive && piece.data && piece.data.html &&
-                        <i className="r_icon-code r_btn" onClick={() => this.props.setSourceId(id)}></i>}
+                        <i className="rx_icon rx_icon-code r_btn" onClick={() => this.props.setSourceId(id)}></i>}
 
                         {piece.changed && <i className="r_icon-floppy r_btn" onClick={this.props.savePiece}></i>}
 
-                        {editorActive && piece.data && !piece.data.html && hasActionOpen && <i className="r_icon-pencil r_btn" onClick={() => this.props.activatePiece(id)}></i>}
+                        {editorActive && piece.data && !piece.data.html && hasActionOpen && <i className="rx_icon rx_icon-mode_edit r_btn" onClick={() => this.props.activatePiece(id)}></i>}
                     </span>
                 </div>
                 {piece.message &&

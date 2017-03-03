@@ -13,7 +13,7 @@ export default class HoverOverlay extends React.Component {
                 <div ref="overlay" className="r_overlay">
                     <div className={overlayClass} style={hoverRectStyles}>
                         <div className="r_pointer-div-label"><i
-                            className="r_icon-pencil r_btn">&nbsp;</i>{componentName}
+                            className="rx_icon rx_icon-mode_edit r_btn">&nbsp;</i>{componentName}
                         </div>
                         <div className="r_pointer-edit-icon"></div>
                     </div>
