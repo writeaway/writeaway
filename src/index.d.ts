@@ -372,8 +372,8 @@ declare module redaxtor {
      */
     export class RedaxtorComponent extends React.Component<IRedaxtorComponentProps, any> {
         /**
-         * Human readable name of editor component
+         * Human readable label of editor component
          */
-        static __name: string;
+        static __editLabel: string;
     }
 }
