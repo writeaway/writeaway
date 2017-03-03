@@ -24,6 +24,42 @@ import HoverOverlay from './containers/HoverOverlayContainer';
 
 let config = getConfig();
 
+
+/**
+ * Calculate node bounding rect and it's capture area (that is recommended to be with small padding to node rect)
+ * If "hover" area not returned, only "node" area is used and it is assumed node fit is too tight to enable paddings
+ * @param piece {RedaxtorPiece}
+ * @param padding {number} padding to add. Optional. Defaults to 10.
+ * @param piece.node {HTMLElement}
+ * @param piece.type {string}
+ * @returns {{hover: {ClientRect}, node: {ClientRect}}}
+ */
+export const getNodeRect = function(piece, padding) {
+    const _padding = typeof (padding) === 'undefined' ? 10 : +padding;
+
+    let node = piece.node.getBoundingClientRect();
+
+    let hover = {
+        left: node.left - _padding,
+        right: node.right + _padding,
+        top: node.top - _padding,
+        bottom: node.bottom + _padding,
+        width: node.width + _padding*2,
+        height: node.height + _padding*2,
+    };
+
+    if (hover.left + window.scrollX < 0 || hover.top + window.scrollY < 0 || hover.width + hover.left + window.scrollX > document.body.scrollWidth || hover.height + hover.top + window.scrollY > document.body.scrollHeight) {
+        return {
+            node
+        }
+    } else {
+        return {
+            node,
+            hover
+        }
+    }
+};
+
 /**
  * Default minimum api allows basic editing without saving anything
  * No Uploads and gallery
@@ -32,6 +68,7 @@ let config = getConfig();
 export const defaultMinimumApi = {
     getImageList: false,
     uploadImage: false,
+    getNodeRect: getNodeRect,
     getPieceData: function (piece) {
         if (piece.type == "source" || piece.type == "html") {
             return Promise.resolve({
@@ -75,7 +112,6 @@ export const defaultMinimumApi = {
         return Promise.resolve();
     }
 };
-
 
 class Redaxtor {
     constructor(options) {
@@ -258,7 +294,8 @@ class Redaxtor {
             let enabled = pieces['editorEnabled:' + piece.type];
 
             if (enabled) {
-                let rect = piece.node.getBoundingClientRect();
+                const nodeRect = getConfig().api.getNodeRect(piece);
+                let rect = nodeRect.hover || nodeRect.node;
                 if(rect.top + window.scrollY <= e.pageY && rect.bottom + window.scrollY >= e.pageY &&
                     rect.left <= e.pageX && rect.right >= e.pageX) {
                     foundId = pieceId;

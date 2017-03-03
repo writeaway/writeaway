@@ -23,28 +23,21 @@ export default class HoverOverlay extends React.Component {
     }
 
     getHoverRectStyles() {
-        const padding = 10;
         let shrinked = false;
         if (this.props.enabled && this.props.hoveredId) {
             let base = {
                 className: 'normal',
-                top: (this.props.hoveredRect.top - padding + window.scrollY),
-                left: (this.props.hoveredRect.left - padding),
-                width: (this.props.hoveredRect.right - this.props.hoveredRect.left + 2 * padding),
-                height: (this.props.hoveredRect.bottom - this.props.hoveredRect.top + 2 * padding),
+                top: (this.props.hoveredRect.top + window.scrollY),
+                left: (this.props.hoveredRect.left),
+                width: (this.props.hoveredRect.right - this.props.hoveredRect.left),
+                height: (this.props.hoveredRect.bottom - this.props.hoveredRect.top),
             };
-            if (base.left < 0 || base.top < 0 || base.width + base.left > document.body.scrollWidth || base.height + base.top > document.body.scrollHeight) {
+            if (base.left <= 0 || base.top <= 0 || base.width + base.left >= document.body.scrollWidth || base.height + base.top >= document.body.scrollHeight) {
                 /**
-                 * We are overflowing, switch to shrinked styles
+                 * We are touching edges, switch to shrinked styles
                  */
                 shrinked = true;
-                base = {
-                    className: 'shrinked',
-                    top: (this.props.hoveredRect.top + window.scrollY),
-                    left: (this.props.hoveredRect.left ),
-                    width: (this.props.hoveredRect.right - this.props.hoveredRect.left),
-                    height: (this.props.hoveredRect.bottom - this.props.hoveredRect.top),
-                };
+                base.className = 'shrinked';
             }
 
             return {
