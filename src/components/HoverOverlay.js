@@ -27,11 +27,13 @@ export default class HoverOverlay extends React.Component {
 
     getHoverRectStyles() {
         let shrinked = false;
+        const labelHeight = 27;
+
         if (this.props.enabled && this.props.hoveredId) {
             let base = {
                 className: 'normal',
                 top: (this.props.hoveredRect.top + window.scrollY),
-                left: (this.props.hoveredRect.left),
+                left: (this.props.hoveredRect.left + window.scrollX),
                 width: (this.props.hoveredRect.right - this.props.hoveredRect.left),
                 height: (this.props.hoveredRect.bottom - this.props.hoveredRect.top),
             };
@@ -41,6 +43,18 @@ export default class HoverOverlay extends React.Component {
                  */
                 shrinked = true;
                 base.className = 'shrinked';
+            }
+
+            if(this.props.hoveredRect.top - labelHeight < 0 && this.props.hoveredRect.bottom + labelHeight> window.innerHeight) {
+                base.className += ' too-high';
+            }
+
+            if(this.props.hoveredRect.top - labelHeight < 0) {
+                base.className+= ' touches-top';
+            }
+
+            if(this.props.hoveredRect.bottom + labelHeight > window.innerHeight) {
+                base.className+= ' touches-bottom';
             }
 
             return {
