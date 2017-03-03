@@ -72,14 +72,16 @@ export const onEditorActive = (pieceId, active) => (dispatch, getState) => {
     if(active && activeId.length == 0) {
         // That editor is now the active editor, invoke hover
         const piece = getState().pieces.byId[pieceId];
-        dispatch(hoverPiece(pieceId, piece.node.getBoundingClientRect()));
+        const nodeRect = getConfig().api.getNodeRect(piece);
+        dispatch(hoverPiece(pieceId, nodeRect.hover || nodeRect.node));
     }
 
     if(!active && activeId.length == 2) {
         // That editor is `other` one, after disactivation, only one is left
         const newHoverId = (pieceId === activeId[0])?activeId[1]:activeId[0];
         const piece = getState().pieces.byId[newHoverId];
-        dispatch(hoverPiece(newHoverId, piece.node.getBoundingClientRect()));
+        const nodeRect = getConfig().api.getNodeRect(piece);
+        dispatch(hoverPiece(newHoverId, nodeRect.hover || nodeRect.node));
     }
 
     if(!active && activeId.length == 1 && pieceId === activeId[0]) {
@@ -98,7 +100,8 @@ export const onNodeResized = (pieceId)  => (dispatch, getState) => {
     const activeId = getState().pieces.activeId;
 
     if(hoveredId == pieceId) {
-        dispatch(hoverPiece(pieceId, piece.node.getBoundingClientRect()));
+        const nodeRect = getConfig().api.getNodeRect(piece);
+        dispatch(hoverPiece(pieceId, nodeRect.hover || nodeRect.node));
     }
 };
 

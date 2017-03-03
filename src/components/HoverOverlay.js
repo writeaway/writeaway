@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import classNames from "classnames";
 
 export default class HoverOverlay extends React.Component {
 
@@ -10,10 +11,12 @@ export default class HoverOverlay extends React.Component {
 
         return (
             <div className="r_reset">
-                <div ref="overlay" className="r_overlay">
+                <div ref="overlay" className={classNames({'r_overlay': true, 'r_active-editor': this.props.triggeredByActionId})}>
                     <div className={overlayClass} style={hoverRectStyles}>
+                        {!this.props.triggeredByActionId &&
                         <div className="r_pointer-div-label">{componentLabel}
                         </div>
+                        }
                         <div className="r_pointer-edit-icon"></div>
                     </div>
                 </div>
@@ -22,28 +25,21 @@ export default class HoverOverlay extends React.Component {
     }
 
     getHoverRectStyles() {
-        const padding = 10;
         let shrinked = false;
         if (this.props.enabled && this.props.hoveredId) {
             let base = {
                 className: 'normal',
-                top: (this.props.hoveredRect.top - padding + window.scrollY),
-                left: (this.props.hoveredRect.left - padding),
-                width: (this.props.hoveredRect.right - this.props.hoveredRect.left + 2 * padding),
-                height: (this.props.hoveredRect.bottom - this.props.hoveredRect.top + 2 * padding),
+                top: (this.props.hoveredRect.top + window.scrollY),
+                left: (this.props.hoveredRect.left),
+                width: (this.props.hoveredRect.right - this.props.hoveredRect.left),
+                height: (this.props.hoveredRect.bottom - this.props.hoveredRect.top),
             };
-            if (base.left < 0 || base.top < 0 || base.width + base.left > document.body.scrollWidth || base.height + base.top > document.body.scrollHeight) {
+            if (base.left <= 0 || base.top <= 0 || base.width + base.left >= document.body.scrollWidth || base.height + base.top >= document.body.scrollHeight) {
                 /**
-                 * We are overflowing, switch to shrinked styles
+                 * We are touching edges, switch to shrinked styles
                  */
                 shrinked = true;
-                base = {
-                    className: 'shrinked',
-                    top: (this.props.hoveredRect.top + window.scrollY),
-                    left: (this.props.hoveredRect.left ),
-                    width: (this.props.hoveredRect.right - this.props.hoveredRect.left),
-                    height: (this.props.hoveredRect.bottom - this.props.hoveredRect.top),
-                };
+                base.className = 'shrinked';
             }
 
             return {

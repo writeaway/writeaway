@@ -132,15 +132,16 @@ See [Typescript Typings](./src/index.d.ts) for more details
                     /**
                     * Background editor expects a set of background styling properties 
                     */
+                    const computedStyle = getComputedStyle(piece.node);
                     return Promise.resolve({
                         ...piece,
                         data: {
-                            url: piece.node.style.backgroundImage && piece.node.style.backgroundImage.slice(4, -1).replace(/"/g, ""),
-                            bgColor: piece.node.style.backgroundColor,
-                            bgRepeat: piece.node.style.backgroundRepeat,
-                            bgSize: piece.node.style.backgroundSize,
-                            bgPosition: piece.node.style.backgroundPosition,
-                            alt: piece.node.title || ""
+                             url: computedStyle.backgroundImage && computedStyle.backgroundImage.slice(4, -1).replace(/"/g, ""),
+                             bgColor: computedStyle.backgroundColor,
+                             bgRepeat: computedStyle.backgroundRepeat,
+                             bgSize: computedStyle.style.backgroundSize,
+                             bgPosition: computedStyle.style.backgroundPosition,
+                             alt: piece.node.title || ""
                         }
                     });
                 }
@@ -272,14 +273,15 @@ var redaxtor = new Redaxtor({
                 /**
                 * Background editor expects a set of background styling properties 
                 */
+                const computedStyle = getComputedStyle(piece.node);
                 return Promise.resolve({
                     ...piece,
                     data: {
-                        url: piece.node.style.backgroundImage && piece.node.style.backgroundImage.slice(4, -1).replace(/"/g, ""),
-                        bgColor: piece.node.style.backgroundColor,
-                        bgRepeat: piece.node.style.backgroundRepeat,
-                        bgSize: piece.node.style.backgroundSize,
-                        bgPosition: piece.node.style.backgroundPosition,
+                        url: computedStyle.backgroundImage && computedStyle.backgroundImage.slice(4, -1).replace(/"/g, ""),
+                        bgColor: computedStyle.backgroundColor,
+                        bgRepeat: computedStyle.backgroundRepeat,
+                        bgSize: computedStyle.style.backgroundSize,
+                        bgPosition: computedStyle.style.backgroundPosition,
                         alt: piece.node.title || ""
                     }
                 });
