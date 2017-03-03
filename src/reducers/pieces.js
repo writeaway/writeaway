@@ -82,7 +82,9 @@ const pieces = (pieces = piecesDefault, action) => {
             } else {
                 return {...pieces, editorActive: false};
             }
-
+            
+        case C.PIECES_SET_SOURCE_ID:
+            return {...pieces, sourceId: action.id};
 
         case C.PIECE_ADD:
             return {
