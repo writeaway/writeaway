@@ -89,14 +89,15 @@ export const defaultMinimumApi = {
             });
         }
         if (piece.type == "background") {
+            const computedStyle = getComputedStyle(piece.node);
             return Promise.resolve({
                 ...piece,
                 data: {
-                    url: piece.node.style.backgroundImage && piece.node.style.backgroundImage.slice(4, -1).replace(/"/g, ""),
-                    bgColor: piece.node.style.backgroundColor,
-                    bgRepeat: piece.node.style.backgroundRepeat,
-                    bgSize: piece.node.style.backgroundSize,
-                    bgPosition: piece.node.style.backgroundPosition,
+                    url: computedStyle.backgroundImage && computedStyle.backgroundImage.slice(4, -1).replace(/"/g, ""),
+                    bgColor: computedStyle.backgroundColor,
+                    bgRepeat: computedStyle.backgroundRepeat,
+                    bgSize: computedStyle.backgroundSize,
+                    bgPosition: computedStyle.backgroundPosition,
                     alt: piece.node.title || ""
                 }
             });
