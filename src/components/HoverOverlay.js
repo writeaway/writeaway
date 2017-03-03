@@ -3,7 +3,7 @@ import React, {Component} from "react";
 export default class HoverOverlay extends React.Component {
 
     render() {
-        let componentName = this.props.hoveredPiece ? (this.props.components[this.props.hoveredPiece.type].__name) : false;
+        let componentLabel = this.props.hoveredPiece ? (this.props.components[this.props.hoveredPiece.type].__editLabel) : false;
         let hoverRectStyles = this.getHoverRectStyles();
         const overlayClass = `r_pointer-div ${hoverRectStyles.className}`;
         delete hoverRectStyles.className;
@@ -12,8 +12,7 @@ export default class HoverOverlay extends React.Component {
             <div className="r_reset">
                 <div ref="overlay" className="r_overlay">
                     <div className={overlayClass} style={hoverRectStyles}>
-                        <div className="r_pointer-div-label"><i
-                            className="rx_icon rx_icon-mode_edit r_btn">&nbsp;</i>{componentName}
+                        <div className="r_pointer-div-label">{componentLabel}
                         </div>
                         <div className="r_pointer-edit-icon"></div>
                     </div>

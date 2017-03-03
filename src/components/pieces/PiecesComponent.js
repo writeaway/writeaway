@@ -44,7 +44,7 @@ export default class PiecesComponent extends React.Component {
                     </div>
                     {   Object.keys(this.props.components).map((object, index) =>
                         representPieceTypes[object] && (<div className="r_list-header r_list-subheader" key={index}>
-                            <label>{this.props.components[object].__name || object}</label>
+                            <label>{this.props.components[object].__editLabel || object}</label>
                             <Toggle checked={this.props[`editorEnabled:${object}`]}
                                     disabled={!this.props.editorActive}
                                     onChange={() => this.props.piecesToggleEdit(object)}/>
