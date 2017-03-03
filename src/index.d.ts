@@ -375,5 +375,10 @@ declare module redaxtor {
          * Human readable label of editor component
          */
         static __editLabel: string;
+
+        /**
+         * Human readable name of editor component
+         */
+        static __name: string;
     }
 }
