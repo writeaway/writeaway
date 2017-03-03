@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import classNames from "classnames";
 
 export default class HoverOverlay extends React.Component {
 
@@ -10,11 +11,13 @@ export default class HoverOverlay extends React.Component {
 
         return (
             <div className="r_reset">
-                <div ref="overlay" className="r_overlay">
+                <div ref="overlay" className={classNames({'r_overlay': true, 'r_active-editor': this.props.triggeredByActionId})}>
                     <div className={overlayClass} style={hoverRectStyles}>
+                        {!this.props.triggeredByActionId &&
                         <div className="r_pointer-div-label"><i
                             className="rx_icon rx_icon-mode_edit r_btn">&nbsp;</i>{componentName}
                         </div>
+                        }
                         <div className="r_pointer-edit-icon"></div>
                     </div>
                 </div>
