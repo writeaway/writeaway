@@ -1,7 +1,7 @@
-import React from 'react'
-import PiecesList from './PiecesList'
+import React from 'react';
+import PiecesList from './PiecesList';
 
-import Toggle from 'react-toggle'
+import RxCheckBox from '../RxCheckBox';
 
 export default class PiecesComponent extends React.Component {
 
@@ -37,17 +37,16 @@ export default class PiecesComponent extends React.Component {
             <div>
                 {sourceEditor}
                 <div className="r_list-header-container">
-                    <div className="r_list-header">
+                    <div className="r_list-header" onClick={this.toggleAllEditors.bind(this)}>
                         <label>Enable All Editors</label>
-                        <Toggle checked={this.props.editorActive}
-                                onChange={this.toggleAllEditors.bind(this)}/>
+                        <RxCheckBox checked={this.props.editorActive}/>
                     </div>
                     {   Object.keys(this.props.components).map((object, index) =>
-                        representPieceTypes[object] && (<div className="r_list-header r_list-subheader" key={index}>
+                        representPieceTypes[object] && (<div className="r_list-header r_list-subheader" key={index} onClick={() => this.props.piecesToggleEdit(object)}>
                             <label>{this.props.components[object].__name || object}</label>
-                            <Toggle checked={this.props[`editorEnabled:${object}`]}
+                            <RxCheckBox checked={this.props[`editorEnabled:${object}`]}
                                     disabled={!this.props.editorActive}
-                                    onChange={() => this.props.piecesToggleEdit(object)}/>
+                                    />
                         </div>)
                     ) }
                 </div>
