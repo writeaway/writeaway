@@ -12,7 +12,7 @@ export default class RxCheckBox extends React.Component {
         };
 
         return (
-            <div className="r_checkbox">
+            <div className="r_checkbox r_item-right">
                 <div style={styles} className={classNames({
                     "rx_icon": true,
                     "rx_icon-circle-thin": !checked,
