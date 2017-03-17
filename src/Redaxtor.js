@@ -215,6 +215,7 @@ class Redaxtor {
             ));
 
         setStore(this.store);
+
         if (options.ajax) configureFetch(options.ajax);
 
         /**
