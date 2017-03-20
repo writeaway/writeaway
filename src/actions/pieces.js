@@ -1,12 +1,14 @@
 import React from "react"
 import ReactDOM from "react-dom"
 import {Provider} from 'react-redux'
+import {toastr} from 'react-redux-toastr'
 
 import C from "../constants"
 import {getStore} from '../store'
 import {getConfig} from '../config'
 
 import Container from '../containers/connectPieceContainer';
+
 
 export const piecesEnableEdit = (subType) => ({type: C.PIECES_ENABLE_EDIT, subType});
 
@@ -147,7 +149,18 @@ export const setPieceMessage = (id, message, messageLevel) => dispatch => {
         throw new Error(`Wrong message level '${messageLevel}' for PieceId: ${id}`);
     }
 
-    dispatch(pieceMessageSetted(id, message, messageLevel))
+    //chaining actions
+    Promise.resolve(dispatch(pieceMessageSetted(id, message, messageLevel)))
+        .then(()=>{
+        switch (messageLevel) {
+            case "error":
+                toastr.error('Error', `Piece '${id}': ${message}`);
+                break;
+            case "warning":
+                toastr.warning('Warning', `Piece '${id}': ${message}`);
+                break;
+        }
+    })
 };
 
 
