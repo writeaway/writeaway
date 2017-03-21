@@ -44,7 +44,7 @@ export default class PiecesComponent extends React.Component {
                         <RxCheckBox checked={this.props.editorActive}/>
                     </div>
                     {   Object.keys(this.props.components).map((object, index) =>
-                        representPieceTypes[object] && (<div className="r_list-header r_list-subheader" key={index} onClick={() => this.props.piecesToggleEdit(object)}>
+                        representPieceTypes[object] && (<div className={"r_list-header r_list-subheader r_list-subheader-"+object} key={index} onClick={() => this.props.piecesToggleEdit(object)}>
                             <label>{this.props.components[object].__name || object}</label>
                             <RxCheckBox checked={this.props[`editorEnabled:${object}`]}
                                     disabled={!this.props.editorActive}

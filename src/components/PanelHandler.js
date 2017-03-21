@@ -4,6 +4,7 @@ import i18n from '../i18n';
 class PanelHandler extends Component {
 
     render() {
+        const mType = this.props.message && this.props.message.type;
         return (
             <div className="r_bar-header" onMouseDown={this.props.onMouseDown} onClick={this.props.toggleOpen}>
                 <span>{i18n.bar.title}</span>
@@ -11,7 +12,12 @@ class PanelHandler extends Component {
                     <button className="r_bar-header-button">
                         {this.props.isOpen ? <i className="rx_icon rx_icon-keyboard_arrow_down"></i> : <i className="rx_icon rx_icon-keyboard_arrow_up"></i>}
                     </button>}
-                {this.props.message ? <div className="r_message r_message-{this.prop.message.type}">{this.prop.message.content}</div>:""}
+                {this.props.message ? <div className="r_message r_message-{this.prop.message.type}" onClick={(e)=>{
+                    console.log("Click ", mType);
+                    if(mType === 'warning') {
+                        window.location.reload(); //TODO: Need better hack for that
+                    }
+                }}>{this.props.message.content}</div>:""}
             </div>
         )
     }
