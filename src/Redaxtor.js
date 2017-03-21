@@ -85,6 +85,7 @@ export const defaultMinimumApi = {
                 data: {
                     src: piece.node.src,
                     alt: piece.node.alt,
+                    title: piece.node.title,
                 }
             });
         }
@@ -98,7 +99,7 @@ export const defaultMinimumApi = {
                     bgRepeat: computedStyle.backgroundRepeat,
                     bgSize: computedStyle.backgroundSize,
                     bgPosition: computedStyle.backgroundPosition,
-                    alt: piece.node.title || ""
+                    title: piece.node.title || ""
                 }
             });
         }

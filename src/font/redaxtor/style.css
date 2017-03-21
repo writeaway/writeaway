@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'redaxtor';
-  src:  url('fonts/redaxtor.eot?asoz64');
-  src:  url('fonts/redaxtor.eot?asoz64#iefix') format('embedded-opentype'),
-    url('fonts/redaxtor.ttf?asoz64') format('truetype'),
-    url('fonts/redaxtor.woff?asoz64') format('woff'),
-    url('fonts/redaxtor.svg?asoz64#redaxtor') format('svg');
+  src:  url('fonts/redaxtor.eot?lh721r');
+  src:  url('fonts/redaxtor.eot?lh721r#iefix') format('embedded-opentype'),
+    url('fonts/redaxtor.ttf?lh721r') format('truetype'),
+    url('fonts/redaxtor.woff?lh721r') format('woff'),
+    url('fonts/redaxtor.svg?lh721r#redaxtor') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -114,6 +114,12 @@
 .rx_icon-check_circle3:before {
   content: "\e900";
 }
+.rx_icon-info_outline:before {
+  content: "\e925";
+}
+.rx_icon-save2:before {
+  content: "\e923";
+}
 .rx_icon-image:before {
   content: "\e901";
 }
@@ -134,5 +140,11 @@
 }
 .rx_icon-header:before {
   content: "\e922";
+}
+.rx_icon-floppy-o:before {
+  content: "\e924";
+}
+.rx_icon-save:before {
+  content: "\e924";
 }
 
