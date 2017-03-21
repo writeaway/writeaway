@@ -40,7 +40,11 @@ class PieceLine extends Component {
                     </span>
                 </div>
                 {piece.message &&
-                <div className={`r_item-message r_item-${piece.messageLevel}`}>
+                <div className={`r_item-message r_item-${piece.messageLevel}`} onClick={(e)=>{
+                    if(piece.messageLevel === 'warning') {
+                        window.location.reload(); //TODO: Need better hack for that
+                    }
+                }}>
                     <b>{piece.message}</b>
                 </div>}
             </div>
