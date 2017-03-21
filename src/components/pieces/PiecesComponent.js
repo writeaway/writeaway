@@ -3,6 +3,8 @@ import PiecesList from './PiecesList';
 
 import RxCheckBox from '../RxCheckBox';
 
+import i18n from '../../i18n';
+
 export default class PiecesComponent extends React.Component {
 
     savePiece(html) {
@@ -38,7 +40,7 @@ export default class PiecesComponent extends React.Component {
                 {sourceEditor}
                 <div className="r_list-header-container">
                     <div className="r_list-header" onClick={this.toggleAllEditors.bind(this)}>
-                        <label>Enable All Editors</label>
+                        <label>{i18n.bar.editAll}</label>
                         <RxCheckBox checked={this.props.editorActive}/>
                     </div>
                     {   Object.keys(this.props.components).map((object, index) =>
