@@ -1,3 +1,5 @@
+@import (reference) "vars";
+
 .r_reset {
   all: initial;
 
@@ -135,4 +137,11 @@
   /* let's clear some floats */
   .clearfix:after { content: " "; display: block; clear: both; }
 
+}
+
+/* REDAXTOR Specific reset styles now */
+.r_reset {
+  font-family: @rx-font; // Setup base font for everything
+  font-size: 12px; // Base font size
+  color: #444;
 }
