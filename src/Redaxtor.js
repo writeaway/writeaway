@@ -280,6 +280,7 @@ class Redaxtor {
         const pieceActive  = state.pieces.activeId;
         let foundId = null;
         let foundRect = null;
+        let foundNode = null;
 
         if(pieceActive && pieceActive.length) {
             return;
@@ -301,8 +302,12 @@ class Redaxtor {
                 let rect = nodeRect.hover || nodeRect.node;
                 if(rect.top + window.scrollY <= e.pageY && rect.bottom + window.scrollY >= e.pageY &&
                     rect.left <= e.pageX && rect.right >= e.pageX) {
-                    foundId = pieceId;
-                    foundRect = rect;
+
+                    if(!foundNode || foundNode.contains(piece.node)) {
+                        foundId = pieceId;
+                        foundRect = rect;
+                        foundNode = piece.node;
+                    }
                 }
             }
         });
