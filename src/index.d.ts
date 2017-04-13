@@ -291,6 +291,14 @@ declare module redaxtor {
          * Redaxtor has default implementation for specific use case scenario when you have component mapping as default one with default Redaxtor components
          */
         static defaultMinimumApi: IRedaxtorAPI;
+
+        /**
+         * Apply editor for the node
+         * @param node {HTMLElement} node for apply
+         * @param editorType {string} editor for apply
+         * @param data {any} data for apply
+         */
+        applyEditor(node: HTMLElement, editorType: string, data: any):void;
     }
 
     export interface IRedaxtorComponentProps extends React.ClassAttributes<RedaxtorComponent>,  IRedaxtorPiece {
