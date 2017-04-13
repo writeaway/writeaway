@@ -529,8 +529,10 @@ class Redaxtor {
 
     applyEditor(node, editorType, data){
         let componentObj = this.pieces.components[editorType];
-        if(componentObj && componentObj.applyEditor){
-            componentObj.applyEditor(node, data);
+        if(componentObj){
+          componentObj.applyEditor && componentObj.applyEditor(node, data);
+        } else {
+          throw new Error(`Unknown editor type '${editorType}'`);
         }
     }
 }
