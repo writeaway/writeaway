@@ -1,6 +1,6 @@
 module.exports = {
     bar: {
         editAll: "Edit Page",
-        title: "R E D A X T O R"
+        title: "W R I T E A W A Y"
     }
 };
