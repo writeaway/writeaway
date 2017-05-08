@@ -334,6 +334,17 @@ declare module redaxtor {
         updatePiece: (id: string, piece: IRedaxtorPiece) => any;
 
         /**
+         * Destroy all existing pieces
+         */
+        destroyAllPieces: () => void;
+
+        /**
+         * Get a list of all active pieces information
+         * @returns {{[pieceId: string]: IRedaxtorPiece}}
+         */
+        getPieceList: () => {[pieceId: string]: IRedaxtorPiece};
+
+        /**
          * @deprecated
          */
         resetPiece: (id: string) => any;

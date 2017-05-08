@@ -480,6 +480,34 @@ class Redaxtor {
     }
 
     /**
+     * Get a list of all active pieces information
+     * @returns {{[pieceId: string]: IRedaxtorPiece}}
+     */
+    getPieceList() {
+        const state = this.store.getState();
+        const pieces = state.pieces && state.pieces.byId || {};
+        let out = {};
+        for(let pieceId of Object.keys(pieces)) {
+            out[pieceId] = { // Clone piece, so outer code can't affect it
+                ...pieces[pieceId],
+                data: pieces[pieceId].data? {...pieces[pieceId].data} : void 0,
+            };
+        }
+        return out;
+    }
+
+    /**
+     * Destroy all existing pieces
+     */
+    destroyAllPieces() {
+        const state = this.store.getState();
+        const pieces = state.pieces && state.pieces.byId || {};
+        for(let pieceId of Object.keys(pieces)) {
+            this.destroyPiece(pieceId);
+        }
+    }
+
+    /**
      * Check if navbar is collapsed
      * @returns {boolean}
      */
