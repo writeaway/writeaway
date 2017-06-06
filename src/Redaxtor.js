@@ -64,7 +64,8 @@ export const getNodeRect = function (piece, padding) {
 };
 
 export const isNodeVisible = function (piece) {
-    if (piece.node.style.display === 'none' || piece.node.style.opacity == 0) {
+    const computedStyle = getComputedStyle(piece.node);
+    if (computedStyle.display === 'none' || computedStyle.opacity === 0) {
         return false;
     }
     return true;
