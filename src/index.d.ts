@@ -58,7 +58,36 @@ declare module redaxtor {
          * Save piece data
          * @param piece
          */
-        savePieceData?: (piece: IRedaxtorPiece) => Promise<void>
+        savePieceData?: (piece: IRedaxtorPiece) => Promise<void>;
+
+        /**
+         * Return true if node is visible. Used for hover overlay logic that will hover only for visible nodes.
+         * @param {IRedaxtorPiece} piece
+         * @return {boolean}
+         */
+        isNodeVisible?: (piece: IRedaxtorPiece) => boolean;
+
+        /**
+         * Return bounding box of piece with addition of padding
+         * @param {IRedaxtorPiece} piece
+         * @param {number} padding optional, default is 10
+         * @return {*}
+         */
+        getNodeRect?: (piece: IRedaxtorPiece, padding?: number) => {node: {
+            left: number,
+            right: number,
+            top: number,
+            bottom: number,
+            width: number,
+            height: number,
+        }, hover?: {
+            left: number,
+            right: number,
+            top: number,
+            bottom: number,
+            width: number,
+            height: number,
+        }};
     }
 
     /**
@@ -132,7 +161,7 @@ declare module redaxtor {
          * Piece type is a string representing a type of component to use to edit this piece
          * It should match one of the {@link IRedaxtorOptions.components} map keys
          */
-        type: string;
+            type: string;
 
         /**
          * Optional human readable piece name
@@ -298,7 +327,7 @@ declare module redaxtor {
          * @param editorType {string} editor for apply
          * @param data {any} data for apply
          */
-        applyEditor(node: HTMLElement, editorType: string, data: any):void;
+        applyEditor(node: HTMLElement, editorType: string, data: any): void;
     }
 
     export interface IRedaxtorComponentProps extends React.ClassAttributes<RedaxtorComponent>,  IRedaxtorPiece {

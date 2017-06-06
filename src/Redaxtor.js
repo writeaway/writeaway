@@ -1,26 +1,29 @@
 "use strict";
 import React from "react";
 import ReactDOM from "react-dom";
-import {createStore, applyMiddleware} from 'redux';
-import {Provider} from 'react-redux';
-import thunk from 'redux-thunk';
-import ReduxToastr from 'react-redux-toastr'
-
-import {setStore} from './store';
-import {setConfig, getConfig} from './config';
-
-import {compose} from 'redux';
-
+import {createStore, applyMiddleware, compose} from "redux";
+import {Provider} from "react-redux";
+import thunk from "redux-thunk";
+import ReduxToastr from "react-redux-toastr";
+import {setStore} from "./store";
+import {getConfig} from "./config";
 import RedaxtorContainer from "./containers/RedaxtorContainer";
-
-
 import reducers from "./reducers";
-import {initI18N} from './actions/i18n';
-import {piecesToggleNavBar} from './actions/index';
-import {addPiece, hoverPiece, removePiece, pieceUnmount, setPieceData, piecesToggleEdit, pieceGet, deactivatePiece} from './actions/pieces';
-import {pagesGet, pagesGetLayouts} from './actions/pages';
-import {configureFetch} from './helpers/callFetch'
-import HoverOverlay from './containers/HoverOverlayContainer';
+import {initI18N} from "./actions/i18n";
+import {piecesToggleNavBar} from "./actions/index";
+import {
+    addPiece,
+    hoverPiece,
+    removePiece,
+    pieceUnmount,
+    setPieceData,
+    piecesToggleEdit,
+    pieceGet,
+    deactivatePiece
+} from "./actions/pieces";
+import {pagesGet, pagesGetLayouts} from "./actions/pages";
+import {configureFetch} from "./helpers/callFetch";
+import HoverOverlay from "./containers/HoverOverlayContainer";
 
 let config = getConfig();
 
@@ -34,7 +37,7 @@ let config = getConfig();
  * @param piece.type {string}
  * @returns {{hover: {ClientRect}, node: {ClientRect}}}
  */
-export const getNodeRect = function(piece, padding) {
+export const getNodeRect = function (piece, padding) {
     const _padding = typeof (padding) === 'undefined' ? 10 : +padding;
 
     let node = piece.node.getBoundingClientRect();
@@ -44,8 +47,8 @@ export const getNodeRect = function(piece, padding) {
         right: node.right + _padding,
         top: node.top - _padding,
         bottom: node.bottom + _padding,
-        width: node.width + _padding*2,
-        height: node.height + _padding*2,
+        width: node.width + _padding * 2,
+        height: node.height + _padding * 2,
     };
 
     if (hover.left + window.scrollX < 0 || hover.top + window.scrollY < 0 || hover.width + hover.left + window.scrollX > document.body.scrollWidth || hover.height + hover.top + window.scrollY > document.body.scrollHeight) {
@@ -60,6 +63,13 @@ export const getNodeRect = function(piece, padding) {
     }
 };
 
+export const isNodeVisible = function (piece) {
+    if (piece.node.style.display === 'none' || piece.node.style.opacity == 0) {
+        return false;
+    }
+    return true;
+};
+
 /**
  * Default minimum api allows basic editing without saving anything
  * No Uploads and gallery
@@ -69,6 +79,7 @@ export const defaultMinimumApi = {
     getImageList: false,
     uploadImage: false,
     getNodeRect: getNodeRect,
+    isNodeVisible: isNodeVisible,
     getPieceData: function (piece) {
         if (piece.type == "source" || piece.type == "html") {
             return Promise.resolve({
@@ -266,7 +277,7 @@ class Redaxtor {
         this._initKeys();
     }
 
-    destroy(){
+    destroy() {
         document.removeEventListener('keyup', this.handleKeyUpBinded);
     }
 
@@ -275,17 +286,17 @@ class Redaxtor {
      */
     _onHoverTrack(e) {
         const state = this.store.getState();
-        const pieces  = state.pieces;
-        const pieceHovered  = state.pieces.hoveredId;
-        const pieceActive  = state.pieces.activeId;
+        const pieces = state.pieces;
+        const pieceHovered = state.pieces.hoveredId;
+        const pieceActive = state.pieces.activeId;
         let foundId = null;
         let foundRect = null;
         let foundNode = null;
 
-        if(pieceActive && pieceActive.length) {
+        if (pieceActive && pieceActive.length) {
             return;
         }
-        if(!pieces.byId) {
+        if (!pieces.byId) {
             return;
         }
         Object.keys(pieces.byId).forEach((pieceId)=> {
@@ -298,37 +309,40 @@ class Redaxtor {
             let enabled = pieces['editorEnabled:' + piece.type];
 
             if (enabled) {
-                const nodeRect = getConfig().api.getNodeRect(piece);
-                let rect = nodeRect.hover || nodeRect.node;
-                if(rect.top + window.scrollY <= e.pageY && rect.bottom + window.scrollY >= e.pageY &&
-                    rect.left <= e.pageX && rect.right >= e.pageX) {
+                const nodeVisible = getConfig().api.isNodeVisible(piece);
+                if (nodeVisible) {
+                    const nodeRect = getConfig().api.getNodeRect(piece);
+                    let rect = nodeRect.hover || nodeRect.node;
+                    if (rect.top + window.scrollY <= e.pageY && rect.bottom + window.scrollY >= e.pageY &&
+                        rect.left <= e.pageX && rect.right >= e.pageX) {
 
-                    if(!foundNode || foundNode.contains(piece.node)) {
-                        foundId = pieceId;
-                        foundRect = rect;
-                        foundNode = piece.node;
+                        if (!foundNode || foundNode.contains(piece.node)) {
+                            foundId = pieceId;
+                            foundRect = rect;
+                            foundNode = piece.node;
+                        }
                     }
                 }
             }
         });
 
-        if(pieceHovered != foundId) {
+        if (pieceHovered != foundId) {
             this.store.dispatch(hoverPiece(foundId, foundRect));
         }
 
     }
 
-    _initKeys(){
+    _initKeys() {
         document.addEventListener('keyup', this.handleKeyUpBinded);
     }
 
-    _handleClick(event){
+    _handleClick(event) {
         switch (event.keyCode) {
             case 27: //is escape
                 this._onEscPress();
                 break;
             case 0: //if keycode didn't set. for example from manual event (see codemirror)
-                if(event.key === "Escape"){
+                if (event.key === "Escape") {
                     this._onEscPress();
                 }
                 break;
@@ -337,7 +351,7 @@ class Redaxtor {
 
     _onEscPress() {
         let state = this.store.getState();
-        if(state.pieces.activeId && state.pieces.activeId.length > 0){
+        if (state.pieces.activeId && state.pieces.activeId.length > 0) {
             this.store.dispatch(deactivatePiece(state.pieces.activeId[0]));
         } else {
             this.setEditorActive(false);
@@ -372,15 +386,16 @@ class Redaxtor {
         options.navBarRoot.appendChild(this.barNode);
 
     }
+
     /**
      * Renders tbe hover overlay
      */
-    showHoverOverlay(root){
+    showHoverOverlay(root) {
         this.overlayNode = document.createElement("redaxtor-overlay");
         ReactDOM.render(
             <Provider store={this.store}>
                 <div>
-                    <HoverOverlay components={this.pieces.components} />
+                    <HoverOverlay components={this.pieces.components}/>
                 </div>
             </Provider>,
             this.overlayNode
@@ -397,7 +412,6 @@ class Redaxtor {
             this.addPiece(el);
         }
     }
-
 
 
     /**
@@ -487,10 +501,10 @@ class Redaxtor {
         const state = this.store.getState();
         const pieces = state.pieces && state.pieces.byId || {};
         let out = {};
-        for(let pieceId of Object.keys(pieces)) {
+        for (let pieceId of Object.keys(pieces)) {
             out[pieceId] = { // Clone piece, so outer code can't affect it
                 ...pieces[pieceId],
-                data: pieces[pieceId].data? {...pieces[pieceId].data} : void 0,
+                data: pieces[pieceId].data ? {...pieces[pieceId].data} : void 0,
             };
         }
         return out;
@@ -502,7 +516,7 @@ class Redaxtor {
     destroyAllPieces() {
         const state = this.store.getState();
         const pieces = state.pieces && state.pieces.byId || {};
-        for(let pieceId of Object.keys(pieces)) {
+        for (let pieceId of Object.keys(pieces)) {
             this.destroyPiece(pieceId);
         }
     }
@@ -555,12 +569,12 @@ class Redaxtor {
         this.store.dispatch(initI18N());
     }
 
-    applyEditor(node, editorType, data){
+    applyEditor(node, editorType, data) {
         let componentObj = this.pieces.components[editorType];
-        if(componentObj){
-          componentObj.applyEditor && componentObj.applyEditor(node, data);
+        if (componentObj) {
+            componentObj.applyEditor && componentObj.applyEditor(node, data);
         } else {
-          throw new Error(`Unknown editor type '${editorType}'`);
+            throw new Error(`Unknown editor type '${editorType}'`);
         }
     }
 }
