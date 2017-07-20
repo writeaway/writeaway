@@ -104,10 +104,14 @@ export default class RedaxtorBar extends React.Component {
             pieceNameGroupSeparator: this.props.options.pieceNameGroupSeparator
         };
 
+        const r_bar_class = classNames({
+            "r_bar": true,
+            "rx_non-expert": !this.props.expert,
+        });
 
         return (
             <div className="r_reset">
-                <div ref="bar" className="r_bar">
+                <div ref="bar" className={r_bar_class}>
                     <PanelHandler isCollapsable={this.state.isCollapsible}
                                   isOpen={!isCollapsed}
                                   onMouseDown={this.onMouseDown.bind(this)}

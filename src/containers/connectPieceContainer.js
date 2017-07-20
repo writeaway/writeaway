@@ -9,7 +9,8 @@ const PieceContainer = (props) => {
     return <props.component {...props} api={getConfig().api} options={pieceOptions} className={classNames({
         "r_editor": true,
         "r_edit": props.editorActive,
-        "r_highlight": props.editorActive
+        "r_highlight": props.editorActive,
+        "rx_non-expert": !props.expert,
       })} wrapper={"redaxtor-" + props.type}/>
 };
 
@@ -17,6 +18,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         ...state.pieces.byId[ownProps.id],
         highlight: state.pieces.highlight,
+        expert: state.global.expert,
         editorActive: !state.pieces.byId[ownProps.id].destroy && state.pieces.editorActive && state.pieces[`editorEnabled:${state.pieces.byId[ownProps.id].type}`]!==false //Note strict comparison to false. Undefined is treated as true
     };
 };

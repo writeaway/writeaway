@@ -10,7 +10,7 @@ import {getConfig} from "./config";
 import RedaxtorContainer from "./containers/RedaxtorContainer";
 import reducers from "./reducers";
 import {initI18N} from "./actions/i18n";
-import {piecesToggleNavBar} from "./actions/index";
+import {piecesToggleNavBar, setExpert} from "./actions/index";
 import {
     addPiece,
     hoverPiece,
@@ -155,7 +155,8 @@ class Redaxtor {
 
         const defaultState = {
             global: {
-                navBarCollapsed: true
+                navBarCollapsed: true,
+                expert: false,
             }
         };
 
@@ -532,6 +533,15 @@ class Redaxtor {
     }
 
     /**
+     * Check if expert mode
+     * @returns {boolean}
+     */
+    isExpertMode() {
+        let state = this.store.getState();
+        return state.global.expert != undefined ? state.global.expert : false;
+    }
+
+    /**
      * Set the active state for editors
      * @param editorActive {boolean} new state
      * @param editorType {string} type of editor, optional. By default applies to "all" toggle.
@@ -552,6 +562,14 @@ class Redaxtor {
         if (navBarActive != isCollapseNow) {
             this.store.dispatch(piecesToggleNavBar());
         }
+    }
+
+    /**
+     * Visualize expert features
+     * @param expert {boolean} new state
+     */
+    setExpertMode(expert) {
+        this.store.dispatch(setExpert(!!expert));
     }
 
 

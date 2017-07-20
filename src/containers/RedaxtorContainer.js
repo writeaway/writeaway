@@ -7,6 +7,7 @@ const mapStateToProps = (state) => {
         message: state.message,
         enabled: state.pieces.editorActive,
         navBarCollapsed: state.global.navBarCollapsed,
+        expert: state.global.expert,
         hoveredId: state.pieces.hoveredId,
         hoveredRect: state.pieces.hoveredRect,
         hoveredPiece: state.pieces.hoveredId ? state.pieces.byId[state.pieces.hoveredId] : null
