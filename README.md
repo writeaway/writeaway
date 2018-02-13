@@ -1,5 +1,5 @@
-# Redaxtor
-Redaxtor is a JavaScript library for editing CMS pieces, pages and internationalisation on the client side.
+# WriteAway
+WriteAway is a JavaScript library for editing CMS pieces, pages and internationalisation on the client side.
 Based on [React](https://facebook.github.io/react/) and [Redux](http://redux.js.org/).
 Built with [Webpack](https://webpack.github.io/).
 Written in ES2015.
