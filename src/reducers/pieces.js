@@ -45,6 +45,10 @@ const piece = (piece = {initialized: false}, action) => {
             return {...piece, manualActivation: true};
         case C.PIECES_ACTIVATION_SENT_PIECE:
             return {...piece, manualActivation: false};
+        case C.PIECES_DEACTIVATE_PIECE:
+            return {...piece, manualDeactivation: true};
+        case C.PIECES_DEACTIVATION_SENT_PIECE:
+            return {...piece, manualDeactivation: false};
         case C.PIECES_EDITOR_ACTIVE:
             return {...piece, active: action.active};
         default:
@@ -57,7 +61,7 @@ const piecesDefault = {
     highlight: true,
     sourceId: null,
     hoveredId: null,
-    activeId: null
+    activeId: []
 };
 
 const pieces = (pieces = piecesDefault, action) => {
@@ -79,6 +83,8 @@ const pieces = (pieces = piecesDefault, action) => {
                 return {...pieces, editorActive: false};
             }
 
+        case C.PIECES_SET_SOURCE_ID:
+            return {...pieces, sourceId: action.id};
 
         case C.PIECE_ADD:
             return {
@@ -119,6 +125,8 @@ const pieces = (pieces = piecesDefault, action) => {
         case C.PIECE_SET_MESSAGE:
         case C.PIECES_ACTIVATE_PIECE:
         case C.PIECES_ACTIVATION_SENT_PIECE:
+        case C.PIECES_DEACTIVATE_PIECE:
+        case C.PIECES_DEACTIVATION_SENT_PIECE:
 
         case C.PIECE_FETCHING:
         case C.PIECE_FETCHED:
@@ -130,9 +138,26 @@ const pieces = (pieces = piecesDefault, action) => {
             };
 
         case C.PIECES_EDITOR_ACTIVE:
+            let activeList = pieces.activeId || [];
+            if(action.active) {
+                if(activeList.indexOf(action.id) == -1) {
+                    return {
+                        ...pieces,
+                        activeId: [...activeList, action.id],
+                        byId: {...pieces.byId, [action.id]: piece(pieces.byId[action.id], action)}
+                    };
+                }
+            } else {
+                if(activeList.indexOf(action.id) != -1) {
+                    return {
+                        ...pieces,
+                        activeId: activeList.filter(function(e) { return e !== action.id }),
+                        byId: {...pieces.byId, [action.id]: piece(pieces.byId[action.id], action)}
+                    };
+                }
+            }
             return {
                 ...pieces,
-                activeId: action.active ? action.id : null,
                 byId: {...pieces.byId, [action.id]: piece(pieces.byId[action.id], action)}
             };
 

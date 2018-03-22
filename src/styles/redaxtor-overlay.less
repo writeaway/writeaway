@@ -1,0 +1,64 @@
+.r_overlay {
+  .r_pointer-div {
+    pointer-events: none;
+    border: 2px solid @rx-background-base;
+    position: absolute;
+
+    transition-duration: 0.3s;
+    transition-timing-function: ease;
+    transition-property: top, left, width, height, opacity;
+
+    box-shadow: 0 0 0 1px @rx-border-base, 0 0 0 10000px fade(@rx-background-base, 50%);
+    box-sizing: border-box;
+
+    .r_pointer-div-label {
+      font-family: "Helvetica", arial, sans-serif;
+      color: @rx-text-base;
+      font-size: 14px;
+      line-height: 25px;
+      height: 25px;
+      top: -27px;
+      position: absolute;
+      background: @rx-background-base;
+      padding-left: 5px;
+      padding-right: 10px;
+      left: -2px;
+      right: -2px;
+      text-align: center;
+    }
+
+    &.too-high {
+      .r_pointer-div-label {
+        top: 0;
+      }
+    }
+
+    &.touches-top {
+      .r_pointer-div-label {
+        top: auto;
+        bottom: -27px;
+      }
+
+      &.too-high {
+        .r_pointer-div-label {
+          top: auto;
+          bottom: 0;
+        }
+      }
+    }
+
+    .r_pointer-edit-icon {
+      position: absolute;
+      right: 1px;
+      font-size: 15px;
+      line-height: 20px;
+      height: 20px;
+      top: 1px;
+    }
+  }
+  &.r_active-editor {
+    .r_pointer-div {
+      box-shadow: 0 0 0 1px @rx-border-base, 0 0 0 10000px fade(@rx-background-base, 40%);
+    }
+  }
+}

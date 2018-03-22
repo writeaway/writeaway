@@ -1,27 +1,75 @@
 "use strict";
 import React from "react";
 import ReactDOM from "react-dom";
-import {createStore, applyMiddleware} from 'redux';
-import {Provider} from 'react-redux';
-import thunk from 'redux-thunk';
-import ReduxToastr from 'react-redux-toastr'
-
-import {setStore} from './store';
-import {setConfig, getConfig} from './config';
-
-import {compose} from 'redux';
-
+import {createStore, applyMiddleware, compose} from "redux";
+import {Provider} from "react-redux";
+import thunk from "redux-thunk";
+import ReduxToastr from "react-redux-toastr";
+import {setStore} from "./store";
+import {getConfig} from "./config";
 import RedaxtorContainer from "./containers/RedaxtorContainer";
-
-
 import reducers from "./reducers";
-import {initI18N} from './actions/i18n';
-import {piecesToggleNavBar} from './actions/index';
-import {addPiece, hoverPiece, removePiece, pieceUnmount, setPieceData, piecesToggleEdit, pieceGet} from './actions/pieces';
-import {pagesGet, pagesGetLayouts} from './actions/pages';
-import {configureFetch} from './helpers/callFetch'
+import {initI18N} from "./actions/i18n";
+import {piecesToggleNavBar, setExpert} from "./actions/index";
+import {
+    addPiece,
+    hoverPiece,
+    removePiece,
+    pieceUnmount,
+    setPieceData,
+    piecesToggleEdit,
+    pieceGet,
+    deactivatePiece
+} from "./actions/pieces";
+import {pagesGet, pagesGetLayouts} from "./actions/pages";
+import {configureFetch} from "./helpers/callFetch";
+import HoverOverlay from "./containers/HoverOverlayContainer";
 
 let config = getConfig();
+
+
+/**
+ * Calculate node bounding rect and it's capture area (that is recommended to be with small padding to node rect)
+ * If "hover" area not returned, only "node" area is used and it is assumed node fit is too tight to enable paddings
+ * @param piece {RedaxtorPiece}
+ * @param padding {number} padding to add. Optional. Defaults to 10.
+ * @param piece.node {HTMLElement}
+ * @param piece.type {string}
+ * @returns {{hover: {ClientRect}, node: {ClientRect}}}
+ */
+export const getNodeRect = function (piece, padding) {
+    const _padding = typeof (padding) === 'undefined' ? 10 : +padding;
+
+    let node = piece.node.getBoundingClientRect();
+
+    let hover = {
+        left: node.left - _padding,
+        right: node.right + _padding,
+        top: node.top - _padding,
+        bottom: node.bottom + _padding,
+        width: node.width + _padding * 2,
+        height: node.height + _padding * 2,
+    };
+
+    if (hover.left + window.scrollX < 0 || hover.top + window.scrollY < 0 || hover.width + hover.left + window.scrollX > document.body.scrollWidth || hover.height + hover.top + window.scrollY > document.body.scrollHeight) {
+        return {
+            node
+        }
+    } else {
+        return {
+            node,
+            hover
+        }
+    }
+};
+
+export const isNodeVisible = function (piece) {
+    const computedStyle = getComputedStyle(piece.node);
+    if (computedStyle.display === 'none' || computedStyle.opacity === 0) {
+        return false;
+    }
+    return true;
+};
 
 /**
  * Default minimum api allows basic editing without saving anything
@@ -31,6 +79,8 @@ let config = getConfig();
 export const defaultMinimumApi = {
     getImageList: false,
     uploadImage: false,
+    getNodeRect: getNodeRect,
+    isNodeVisible: isNodeVisible,
     getPieceData: function (piece) {
         if (piece.type == "source" || piece.type == "html") {
             return Promise.resolve({
@@ -47,19 +97,21 @@ export const defaultMinimumApi = {
                 data: {
                     src: piece.node.src,
                     alt: piece.node.alt,
+                    title: piece.node.title,
                 }
             });
         }
         if (piece.type == "background") {
+            const computedStyle = getComputedStyle(piece.node);
             return Promise.resolve({
                 ...piece,
                 data: {
-                    url: piece.node.style.backgroundImage && piece.node.style.backgroundImage.slice(4, -1).replace(/"/g, ""),
-                    bgColor: piece.node.style.backgroundColor,
-                    bgRepeat: piece.node.style.backgroundRepeat,
-                    bgSize: piece.node.style.backgroundSize,
-                    bgPosition: piece.node.style.backgroundPosition,
-                    alt: piece.node.title || ""
+                    url: computedStyle.backgroundImage && computedStyle.backgroundImage.slice(4, -1).replace(/"/g, ""),
+                    bgColor: computedStyle.backgroundColor,
+                    bgRepeat: computedStyle.backgroundRepeat,
+                    bgSize: computedStyle.backgroundSize,
+                    bgPosition: computedStyle.backgroundPosition,
+                    title: piece.node.title || ""
                 }
             });
         }
@@ -74,7 +126,6 @@ export const defaultMinimumApi = {
         return Promise.resolve();
     }
 };
-
 
 class Redaxtor {
     constructor(options) {
@@ -104,7 +155,8 @@ class Redaxtor {
 
         const defaultState = {
             global: {
-                navBarCollapsed: true
+                navBarCollapsed: true,
+                expert: false,
             }
         };
 
@@ -177,12 +229,14 @@ class Redaxtor {
             ));
 
         setStore(this.store);
+
         if (options.ajax) configureFetch(options.ajax);
 
         /**
          * options.piecesRoot - say where search for pieces
          */
         options.pieces && this.initPieces(options.piecesRoot || document);
+
 
         /**
          * default options for navbar
@@ -207,6 +261,11 @@ class Redaxtor {
         this.showBar(barOptions);
 
         /**
+         * options.overlayRoot - say where search for pieces
+         */
+        this.showHoverOverlay(options.overlayRoot || document.body);
+
+        /**
          * Enable pieces editing if set option 'editorActive'
          */
         if (options.editorActive) {
@@ -215,6 +274,13 @@ class Redaxtor {
 
         this.onHoverTrack = this._onHoverTrack.bind(this);
         document.addEventListener("mousemove", this.onHoverTrack);
+
+        this.handleKeyUpBinded = this._handleClick.bind(this);
+        this._initKeys();
+    }
+
+    destroy() {
+        document.removeEventListener('keyup', this.handleKeyUpBinded);
     }
 
     /**
@@ -222,13 +288,17 @@ class Redaxtor {
      */
     _onHoverTrack(e) {
         const state = this.store.getState();
-        const pieces  = state.pieces;
-        const pieceHovered  = state.pieces.hoveredId;
-        const pieceActive  = state.pieces.activeId;
+        const pieces = state.pieces;
+        const pieceHovered = state.pieces.hoveredId;
+        const pieceActive = state.pieces.activeId;
         let foundId = null;
         let foundRect = null;
+        let foundNode = null;
 
-        if(pieceActive) {
+        if (pieceActive && pieceActive.length) {
+            return;
+        }
+        if (!pieces.byId) {
             return;
         }
         Object.keys(pieces.byId).forEach((pieceId)=> {
@@ -241,19 +311,53 @@ class Redaxtor {
             let enabled = pieces['editorEnabled:' + piece.type];
 
             if (enabled) {
-                let rect = piece.node.getBoundingClientRect();
-                if(rect.top + window.scrollY <= e.pageY && rect.bottom + window.scrollY >= e.pageY &&
-                    rect.left <= e.pageX && rect.right >= e.pageX) {
-                    foundId = pieceId;
-                    foundRect = rect;
+                const nodeVisible = getConfig().api.isNodeVisible(piece);
+                if (nodeVisible) {
+                    const nodeRect = getConfig().api.getNodeRect(piece);
+                    let rect = nodeRect.hover || nodeRect.node;
+                    if (rect.top + window.scrollY <= e.pageY && rect.bottom + window.scrollY >= e.pageY &&
+                        rect.left <= e.pageX && rect.right >= e.pageX) {
+
+                        if (!foundNode || foundNode.contains(piece.node)) {
+                            foundId = pieceId;
+                            foundRect = rect;
+                            foundNode = piece.node;
+                        }
+                    }
                 }
             }
         });
 
-        if(pieceHovered != foundId) {
+        if (pieceHovered != foundId) {
             this.store.dispatch(hoverPiece(foundId, foundRect));
         }
 
+    }
+
+    _initKeys() {
+        document.addEventListener('keyup', this.handleKeyUpBinded);
+    }
+
+    _handleClick(event) {
+        switch (event.keyCode) {
+            case 27: //is escape
+                this._onEscPress();
+                break;
+            case 0: //if keycode didn't set. for example from manual event (see codemirror)
+                if (event.key === "Escape") {
+                    this._onEscPress();
+                }
+                break;
+        }
+    }
+
+    _onEscPress() {
+        let state = this.store.getState();
+        if (state.pieces.activeId && state.pieces.activeId.length > 0) {
+            this.store.dispatch(deactivatePiece(state.pieces.activeId[0]));
+        } else {
+            this.setEditorActive(false);
+        }
     }
 
     /**
@@ -282,6 +386,23 @@ class Redaxtor {
             this.barNode
         );
         options.navBarRoot.appendChild(this.barNode);
+
+    }
+
+    /**
+     * Renders tbe hover overlay
+     */
+    showHoverOverlay(root) {
+        this.overlayNode = document.createElement("redaxtor-overlay");
+        ReactDOM.render(
+            <Provider store={this.store}>
+                <div>
+                    <HoverOverlay components={this.pieces.components}/>
+                </div>
+            </Provider>,
+            this.overlayNode
+        );
+        root.appendChild(this.overlayNode);
     }
 
     initPieces(contextNode) {
@@ -293,6 +414,7 @@ class Redaxtor {
             this.addPiece(el);
         }
     }
+
 
     /**
      * Add a piece from specific node
@@ -374,12 +496,49 @@ class Redaxtor {
     }
 
     /**
+     * Get a list of all active pieces information
+     * @returns {{[pieceId: string]: IRedaxtorPiece}}
+     */
+    getPieceList() {
+        const state = this.store.getState();
+        const pieces = state.pieces && state.pieces.byId || {};
+        let out = {};
+        for (let pieceId of Object.keys(pieces)) {
+            out[pieceId] = { // Clone piece, so outer code can't affect it
+                ...pieces[pieceId],
+                data: pieces[pieceId].data ? {...pieces[pieceId].data} : void 0,
+            };
+        }
+        return out;
+    }
+
+    /**
+     * Destroy all existing pieces
+     */
+    destroyAllPieces() {
+        const state = this.store.getState();
+        const pieces = state.pieces && state.pieces.byId || {};
+        for (let pieceId of Object.keys(pieces)) {
+            this.destroyPiece(pieceId);
+        }
+    }
+
+    /**
      * Check if navbar is collapsed
      * @returns {boolean}
      */
     isNavBarCollapsed() {
         let state = this.store.getState();
         return state.global.navBarCollapsed != undefined ? state.global.navBarCollapsed : true;
+    }
+
+    /**
+     * Check if expert mode
+     * @returns {boolean}
+     */
+    isExpertMode() {
+        let state = this.store.getState();
+        return state.global.expert != undefined ? state.global.expert : false;
     }
 
     /**
@@ -405,6 +564,14 @@ class Redaxtor {
         }
     }
 
+    /**
+     * Visualize expert features
+     * @param expert {boolean} new state
+     */
+    setExpertMode(expert) {
+        this.store.dispatch(setExpert(!!expert));
+    }
+
 
     /**
      * @deprecated
@@ -419,6 +586,15 @@ class Redaxtor {
      */
     initI18N() {
         this.store.dispatch(initI18N());
+    }
+
+    applyEditor(node, editorType, data) {
+        let componentObj = this.pieces.components[editorType];
+        if (componentObj) {
+            componentObj.applyEditor && componentObj.applyEditor(node, data);
+        } else {
+            throw new Error(`Unknown editor type '${editorType}'`);
+        }
     }
 }
 

@@ -8,6 +8,7 @@ export const navBarExpand = () => ({type: C.NAVBAR_EXPAND});
 
 export const navBarCollapse = () => ({type: C.NAVBAR_COLLAPSE});
 
+export const setExpert = (e) => ({type: C.EXPERT_MODE, payload: e});
 
 export const piecesToggleNavBar = () => (dispatch, getState) => {
     let state = getState();

@@ -14,6 +14,9 @@ const global = (state = {}, action) => {
         case C.NAVBAR_EXPAND:
             return {...state, navBarCollapsed: false};
 
+        case C.EXPERT_MODE:
+            return {...state, expert: action.payload};
+
         case C.GLOBAL_SHOW_MESSAGE:
             return {...state, message: action.message};
         default:

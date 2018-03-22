@@ -1,12 +1,14 @@
 import React from "react"
 import ReactDOM from "react-dom"
 import {Provider} from 'react-redux'
+import {toastr} from 'react-redux-toastr'
 
 import C from "../constants"
 import {getStore} from '../store'
 import {getConfig} from '../config'
 
 import Container from '../containers/connectPieceContainer';
+
 
 export const piecesEnableEdit = (subType) => ({type: C.PIECES_ENABLE_EDIT, subType});
 
@@ -49,6 +51,10 @@ export const activatePiece = id => ({type: C.PIECES_ACTIVATE_PIECE, id});
 
 export const onActivationSentPiece = id => ({type: C.PIECES_ACTIVATION_SENT_PIECE, id});
 
+export const deactivatePiece = id => ({type: C.PIECES_DEACTIVATE_PIECE, id});
+
+export const onDeactivationSentPiece = id => ({type: C.PIECES_DEACTIVATION_SENT_PIECE, id});
+
 export const updatePiece = (id, piece, notChanged) => ({type: C.PIECE_UPDATE, id, piece, notChanged});
 
 export const resetPiece = (id) => ({type: C.PIECE_RESET, id});
@@ -57,7 +63,38 @@ export const addPiece = piece => ({type: C.PIECE_ADD, id: piece.id, piece});
 
 export const hoverPiece = (pieceId, rect) => ({type: C.PIECES_HOVERED, id: pieceId, rect: rect});
 
-export const onEditorActive = (pieceId, active) => ({type: C.PIECES_EDITOR_ACTIVE, id: pieceId, active: active});
+export const onEditorActive = (pieceId, active) => (dispatch, getState) => {
+
+    const activeId = getState().pieces.activeId || [];
+
+    /**
+     * Before actually activating, check if we need to force a hover over elements becoming active
+     * TODO: Reducer is a better place for that, but how to use getBoundingClientRect there and not mess up reducers purity?
+     */
+    if(active && activeId.length == 0) {
+        // That editor is now the active editor, invoke hover
+        const piece = getState().pieces.byId[pieceId];
+        const nodeRect = getConfig().api.getNodeRect(piece);
+        dispatch(hoverPiece(pieceId, nodeRect.hover || nodeRect.node));
+    }
+
+    if(!active && activeId.length == 2) {
+        // That editor is `other` one, after disactivation, only one is left
+        const newHoverId = (pieceId === activeId[0])?activeId[1]:activeId[0];
+        const piece = getState().pieces.byId[newHoverId];
+        const nodeRect = getConfig().api.getNodeRect(piece);
+        dispatch(hoverPiece(newHoverId, nodeRect.hover || nodeRect.node));
+    }
+
+    if(!active && activeId.length == 1 && pieceId === activeId[0]) {
+        // We are going to disactivate all. Good chance to disable hover overlay too
+        dispatch(hoverPiece(null));
+    }
+
+    dispatch({type: C.PIECES_EDITOR_ACTIVE, id: pieceId, active: active});
+};
+
+
 
 export const onNodeResized = (pieceId)  => (dispatch, getState) => {
     const piece = getState().pieces.byId[pieceId];
@@ -65,7 +102,8 @@ export const onNodeResized = (pieceId)  => (dispatch, getState) => {
     const activeId = getState().pieces.activeId;
 
     if(hoveredId == pieceId) {
-        dispatch(hoverPiece(pieceId, piece.node.getBoundingClientRect()));
+        const nodeRect = getConfig().api.getNodeRect(piece);
+        dispatch(hoverPiece(pieceId, nodeRect.hover || nodeRect.node));
     }
 };
 
@@ -111,7 +149,18 @@ export const setPieceMessage = (id, message, messageLevel) => dispatch => {
         throw new Error(`Wrong message level '${messageLevel}' for PieceId: ${id}`);
     }
 
-    dispatch(pieceMessageSetted(id, message, messageLevel))
+    //chaining actions
+    Promise.resolve(dispatch(pieceMessageSetted(id, message, messageLevel)))
+        .then(()=>{
+        switch (messageLevel) {
+            case "error":
+                toastr.error('Error', `Piece '${id}': ${message}`);
+                break;
+            case "warning":
+                toastr.warning('Warning', `Piece '${id}': ${message}`);
+                break;
+        }
+    })
 };
 
 
@@ -144,10 +193,33 @@ export const pieceGet = id => (dispatch, getState) => {
 
     dispatch(pieceFetching(id));
 
-    getConfig().api.getPieceData(piece).then((updatedPiece)=> {
-        dispatch(pieceFetched(id, updatedPiece));
-        const piece = getState().pieces.byId[id];
-        pieceRender(piece);
+    /**
+     * Generate a copy that anyone from external API can modify and send back without immutability worries
+     * @type {IRedaxtorPiece}
+     */
+    const mutableCopy = {
+        ...piece,
+        data: piece.data? {...piece.data} : void 0,
+    };
+
+    getConfig().api.getPieceData(mutableCopy).then((updatedPiece)=> {
+        if(!updatedPiece.data) {
+            dispatch(pieceFetchingError(id, "Api method generated no data"));
+        } else {
+            /**
+             * Generate a copy again so evil user can't modify our object by storing reference
+             * Note we don't care what is done to `dataset` field
+             * @type {IRedaxtorPiece}
+             */
+            const updatedMutableCopy = {
+                ...updatedPiece,
+                data: {...updatedPiece.data}
+            };
+
+            dispatch(pieceFetched(id, updatedMutableCopy));
+            const piece = getState().pieces.byId[id];
+            pieceRender(piece);
+        }
     }, (error)=> {
         dispatch(pieceFetchingError(id, error));
     });

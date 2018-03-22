@@ -5,6 +5,8 @@ import classNames from 'classnames';
 
 import PanelHandler from './PanelHandler'
 import Pieces from './pieces/PiecesContainer'
+
+
 // import Pages from './pages/PagesContainer'
 // import I18N from './i18n/I18NContainer'
 
@@ -95,46 +97,21 @@ export default class RedaxtorBar extends React.Component {
         }
     }
 
-    getHoverRectStyles() {
-        const padding = 10;
-        if(this.props.hoveredId) {
-            return {
-                opacity: 1,
-                top: (this.props.hoveredRect.top - padding + window.scrollY) + "px",
-                left: (this.props.hoveredRect.left - padding) + "px",
-                width: (this.props.hoveredRect.right - this.props.hoveredRect.left + 2 * padding) + "px",
-                height: (this.props.hoveredRect.bottom - this.props.hoveredRect.top + 2 * padding) + "px",
-            };
-        } else {
-            return {
-                opacity: 0,
-                top: window.scrollY + "px",
-                left: 0,
-                width: "100%",
-                height: "100%"
-            }
-        }
-    }
-
     render() {
+
         let isCollapsed = this.props.navBarCollapsed != undefined && this.props.navBarCollapsed != null ? this.props.navBarCollapsed : true;
         let piecesOptions = {
             pieceNameGroupSeparator: this.props.options.pieceNameGroupSeparator
         };
-        const hoverRectStyles =  this.getHoverRectStyles();
-        const hoverLabel = this.props.hoveredPiece?(this.props.hoveredPiece.name || this.props.hoveredPiece.id):false;
+
+        const r_bar_class = classNames({
+            "r_bar": true,
+            "rx_non-expert": !this.props.expert,
+        });
 
         return (
             <div className="r_reset">
-
-                <div ref="overlay" className="r_overlay">
-                    <div className="r_pointer-div" style={hoverRectStyles}>
-                        <div className="r_pointer-div-label">{hoverLabel}</div>
-                        <div className="r_pointer-edit-icon"><i className="r_icon-pencil r_btn">&nbsp;</i></div>
-                    </div>
-                </div>
-
-                <div ref="bar" className="r_bar">
+                <div ref="bar" className={r_bar_class}>
                     <PanelHandler isCollapsable={this.state.isCollapsible}
                                   isOpen={!isCollapsed}
                                   onMouseDown={this.onMouseDown.bind(this)}

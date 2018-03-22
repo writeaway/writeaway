@@ -1,6 +1,6 @@
 {
   "name": "redaxtor",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "Redaxtor is a JavaScript library for editing CMS pieces, pages and internationalisation on the client side.",
   "main": "./lib/index.js",
   "types": "./src/index.d.ts",
@@ -18,15 +18,17 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "check:src": "npm run lint",
     "build:less": "npm run build:less:commonjs && npm run build:less:umd && npm run build:less:umd:min",
-    "build:less:commonjs": "lessc --source-map src/styles/redaxtor.less lib/redaxtor.css",
-    "build:less:umd": "lessc --source-map src/styles/redaxtor.less dist/redaxtor.css",
-    "build:less:umd:min": "lessc --compress --source-map src/styles/redaxtor.less dist/redaxtor.min.css",
+    "build:less:commonjs": "lessc -ru --source-map src/styles/redaxtor.less lib/redaxtor.css",
+    "build:less:umd": "lessc -ru --source-map src/styles/redaxtor.less dist/redaxtor.css",
+    "build:less:umd:min": "lessc -ru --compress --source-map src/styles/redaxtor.less dist/redaxtor.min.css",
     "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
     "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
     "build:umd": "cross-env NODE_ENV=development webpack src/index.js dist/redaxtor.js",
     "build:umd:min": "cross-env NODE_ENV=production webpack src/index.js dist/redaxtor.min.js",
     "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min && npm run build:less",
-    "prepublish": "npm run clean && npm run check:src && npm run build"
+    "prepublish": "npm run clean && npm run check:src && npm run build",
+    "postinstall": "rimraf typings/ && typings install",
+    "typings": "rimraf typings/ && typings install"
   },
   "author": "SpiralScout",
   "license": "MIT",
@@ -66,8 +68,9 @@
     "postcss": "^5.0.19",
     "postcss-loader": "^0.8.2",
     "react-modal": "^1.1.0",
-    "rimraf": "^2.5.2",
+    "rimraf": "^2.6.1",
     "style-loader": "^0.13.1",
+    "typings": "^2.1.0",
     "webpack": "^1.12.14"
   }
 }

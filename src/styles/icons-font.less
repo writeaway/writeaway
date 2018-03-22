@@ -1,1 +1,102 @@
-@import (inline) "../font/fontello/css/r_-embedded.css";
+//@import (inline) "../font/fontello/css/r_-embedded.css";
+@import "../font/redaxtor/style";
+
+.redaxtor-medium-editor {
+  .pull-right {
+    float: right;
+  }
+
+  &.medium-editor-toolbar li .medium-editor-action-underline {
+    text-decoration: none;
+  }
+
+  i.fa {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'redaxtor' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+
+
+    &.fa-bold {
+      &:before {
+        content: @rx_icon-format_bold;
+      }
+    }
+    &.fa-italic {
+      &:before {
+        content: @rx_icon-format_italic;
+      }
+    }
+    &.fa-underline {
+      &:before {
+        content: @rx_icon-format_underlined;
+      }
+    }
+    &.fa-strikethrough {
+      &:before {
+        content: @rx_icon-strikethrough_s;
+      }
+    }
+
+    &.fa-header {
+      font-size: 0.8em;
+      &:before {
+        content: @rx_icon-header;
+      }
+      sup {
+        font-family: 'Helvetica', Arial, sans-serif;
+      }
+    }
+
+
+    &.fa-list-ul {
+      &:before {
+        content: @rx_icon-format_list_bulleted;
+      }
+    }
+    &.fa-list-ol {
+      &:before {
+        content: @rx_icon-format_list_numbered;
+      }
+    }
+    &.fa-align-justify {
+      &:before {
+        content: @rx_icon-format_align_justify;
+      }
+    }
+    &.fa-align-center {
+      &:before {
+        content: @rx_icon-format_align_center;
+      }
+    }
+    &.fa-align-left {
+      &:before {
+        content: @rx_icon-format_align_left;
+      }
+    }
+    &.fa-align-right {
+      &:before {
+        content: @rx_icon-format_align_right;
+      }
+    }
+    &.fa-quote-right {
+      &:before {
+        content: @rx_icon-format_quote;
+      }
+    }
+    &.fa-code {
+      &:before {
+        content: @rx_icon-code;
+      }
+    }
+  }
+}

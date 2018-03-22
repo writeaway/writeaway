@@ -1,0 +1,16 @@
+@import "redaxtor-base";
+
+.r_editor {
+  &.r_edit {
+    outline: rgba(red(@rx-css-hover-base), green(@rx-css-hover-base), blue(@rx-css-hover-base), 0.5) solid 1px;
+    transition: outline 0.2s ease;
+    &:hover {
+      outline: @rx-css-hover-base solid 3px;
+      box-shadow: 0px 0px 0px 4px @rx-css-hover-base-outline;
+    }
+  }
+}
+
+.r_overlay {
+  display: none;
+}

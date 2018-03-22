@@ -1,7 +1,9 @@
-import React from 'react'
-import PiecesList from './PiecesList'
+import React from 'react';
+import PiecesList from './PiecesList';
 
-import Toggle from 'react-toggle'
+import RxCheckBox from '../RxCheckBox';
+
+import i18n from '../../i18n';
 
 export default class PiecesComponent extends React.Component {
 
@@ -36,19 +38,20 @@ export default class PiecesComponent extends React.Component {
         return (
             <div>
                 {sourceEditor}
-                <div className="r_list-header">
-                    <label>All Editors</label>
-                    <Toggle checked={this.props.editorActive}
-                            onChange={this.toggleAllEditors.bind(this)}/>
+                <div className="r_list-header-container">
+                    <div className="r_list-header" onClick={this.toggleAllEditors.bind(this)}>
+                        <label>{i18n.bar.editAll}</label>
+                        <RxCheckBox checked={this.props.editorActive}/>
+                    </div>
+                    {   Object.keys(this.props.components).map((object, index) =>
+                        representPieceTypes[object] && (<div className={"r_list-header r_list-subheader r_list-subheader-"+object} key={index} onClick={() => this.props.piecesToggleEdit(object)}>
+                            <label>{this.props.components[object].__name || object}</label>
+                            <RxCheckBox checked={this.props[`editorEnabled:${object}`]}
+                                    disabled={!this.props.editorActive}
+                                    />
+                        </div>)
+                    ) }
                 </div>
-                {   Object.keys(this.props.components).map((object, index) =>
-                    representPieceTypes[object] && (<div className="r_list-header r_list-subheader" key={index}>
-                        <label>{this.props.components[object].__name || object}</label>
-                        <Toggle checked={this.props[`editorEnabled:${object}`]}
-                                disabled={!this.props.editorActive}
-                                onChange={() => this.props.piecesToggleEdit(object)}/>
-                    </div>)
-                ) }
                 <PiecesList editorActive={this.props.editorActive } pieces={this.props.byId || {}}
                             source={this.props['editorEnabled:source'] && this.props.components.source}
                             allProps={this.props} // TODO: This is ugly
