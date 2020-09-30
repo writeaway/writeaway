@@ -1,4 +1,4 @@
-import C from '../constants'
+import C from '../constants.js'
 
 const page = (page = {}, action) => {
     switch (action.type) {

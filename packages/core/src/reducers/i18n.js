@@ -1,4 +1,4 @@
-import C from '../constants'
+import C from '../constants.js'
 
 const i18n = (i18n = {}, action) => {
     switch (action.type) {

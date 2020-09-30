@@ -5,12 +5,12 @@ import {createStore, applyMiddleware, compose} from "redux";
 import {Provider} from "react-redux";
 import thunk from "redux-thunk";
 import ReduxToastr from "react-redux-toastr";
-import {setStore} from "./store";
-import {getConfig} from "./config";
-import RedaxtorContainer from "./containers/RedaxtorContainer";
+import {setStore} from "./store.js";
+import {getConfig} from "./config.js";
+import RedaxtorContainer from "./containers/RedaxtorContainer.js";
 import reducers from "./reducers";
-import {initI18N} from "./actions/i18n";
-import {piecesToggleNavBar, setExpert} from "./actions/index";
+import {initI18N} from "./actions/i18n.js";
+import {piecesToggleNavBar, setExpert} from "./actions";
 import {
     addPiece,
     hoverPiece,
@@ -20,10 +20,10 @@ import {
     piecesToggleEdit,
     pieceGet,
     deactivatePiece
-} from "./actions/pieces";
-import {pagesGet, pagesGetLayouts} from "./actions/pages";
-import {configureFetch} from "./helpers/callFetch";
-import HoverOverlay from "./containers/HoverOverlayContainer";
+} from "./actions/pieces.js";
+import {pagesGet, pagesGetLayouts} from "./actions/pages.js";
+import {configureFetch} from "./helpers/callFetch.js";
+import HoverOverlay from "./containers/HoverOverlayContainer.js";
 
 let config = getConfig();
 

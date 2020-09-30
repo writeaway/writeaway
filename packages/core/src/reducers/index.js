@@ -1,10 +1,10 @@
 import {combineReducers} from 'redux'
 import {reducer as toastr} from 'react-redux-toastr'
 
-import C from '../constants'
-import pieces from './pieces'
-import pages from './pages'
-import i18n from './i18n'
+import C from '../constants.js'
+import pieces from './pieces.js'
+import pages from './pages.js'
+import i18n from './i18n.js'
 
 const global = (state = {}, action) => {
     switch (action.type) {

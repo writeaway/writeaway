@@ -18,7 +18,7 @@ npm install --save redaxtor-seo
 
 ## The Gist (CommonJS)
 
-See [Typescript Typings](./src/index.d.ts) for more details
+See [Typescript Typings](packages/core/src/index.d.ts) for more details
 
 ```javascript
     // Include redaxtor and it's default styles

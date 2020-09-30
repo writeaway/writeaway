@@ -1,0 +1,34 @@
+{
+  "name": "redaxtor",
+  "version": "2.0.0",
+  "description": "Redaxtor is a JavaScript library for editing CMS pieces, pages and internationalisation on the client side.",
+  "main": "./lib/core.js",
+  "types": "./lib/core.d.ts",
+  "files": [
+    "lib",
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/redaxtor/redaxtor.git"
+  },
+  "scripts": {
+    "clean": "rimraf lib dist",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "build": "npm run build:prod",
+    "build:prod": "cross-env NODE_ENV=production webpack",
+    "build:dev": "cross-env NODE_ENV=development webpack",
+    "watch": "cross-env NODE_ENV=development webpack --watch",
+    "pre-publish": "npm run clean && npm run lint && npm run build"
+  },
+  "author": "SpiralScout",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^16.13.1",
+    "react-redux": "^7.2.1",
+    "redux": "^4.0.5",
+    "typescript": "^4.0.3"
+  },
+  "devDependencies": {}
+}

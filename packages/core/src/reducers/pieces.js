@@ -1,4 +1,4 @@
-import C from '../constants'
+import C from '../constants.js'
 
 const piece = (piece = {initialized: false}, action) => {
     switch (action.type) {

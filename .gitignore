@@ -1,11 +1,5 @@
 .idea
-.DS_Store
-*.log
-
+yarn-error.log
+packages/*/yarn-error.log
 node_modules
-
-dist
-lib
-es
-coverage
-typings/
+packages/*/node_modules
