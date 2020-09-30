@@ -1,8 +1,8 @@
 import React, {Component} from "react"
 import {connect} from 'react-redux'
-import {updateI18NData} from '../actions/i18n'
+import {updateI18NData} from '../actions/i18n.js'
 
-import Portal from '../components/Portal'
+import Portal from '../components/Portal.js'
 
 class Element extends Component {
     constructor(props){

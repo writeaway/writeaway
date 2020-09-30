@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
-import PiecesComponent from './PiecesComponent';
-import * as piecesActions from '../../actions/pieces';
+import PiecesComponent from './PiecesComponent.js';
+import * as piecesActions from '../../actions/pieces.js';
 
 const mapStateToProps = (state) => {
     return state.pieces

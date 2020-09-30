@@ -7,7 +7,7 @@ import AddPage from 'material-ui/lib/svg-icons/action/note-add';
 import Edit from 'material-ui/lib/svg-icons/editor/mode-edit';
 import Delete from 'material-ui/lib/svg-icons/action/delete';
 
-import PageDialog from './PageDialog'
+import PageDialog from './PageDialog.js'
 
 export default class Pages extends React.Component {
 

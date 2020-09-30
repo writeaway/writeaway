@@ -1,9 +1,9 @@
 import React from 'react';
-import PiecesList from './PiecesList';
+import PiecesList from './PiecesList.js';
 
-import RxCheckBox from '../RxCheckBox';
+import RxCheckBox from '../RxCheckBox.js';
 
-import i18n from '../../i18n';
+import i18n from '../../i18n.js';
 
 export default class PiecesComponent extends React.Component {
 

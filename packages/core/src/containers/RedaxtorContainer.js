@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import {showMessage, piecesToggleNavBar} from '../actions';
-import RedaxtorBarComponent from '../components/RedaxtorBar';
+import RedaxtorBarComponent from '../components/RedaxtorBar.js';
 
 const mapStateToProps = (state) => {
     return {

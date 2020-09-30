@@ -1,5 +1,5 @@
 import React from 'react'
-import I18NList from './I18NList'
+import I18NList from './I18NList.js'
 
 import Toggle from 'react-toggle'
 

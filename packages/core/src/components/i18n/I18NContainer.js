@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
-import I18NComponent from './I18NComponent';
-import * as actions from '../../actions/i18n';
+import I18NComponent from './I18NComponent.js';
+import * as actions from '../../actions/i18n.js';
 
 const mapStateToProps = (state) => {
     return state.i18n

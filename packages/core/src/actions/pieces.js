@@ -3,11 +3,11 @@ import ReactDOM from "react-dom"
 import {Provider} from 'react-redux'
 import {toastr} from 'react-redux-toastr'
 
-import C from "../constants"
-import {getStore} from '../store'
-import {getConfig} from '../config'
+import C from "../constants.js"
+import {getStore} from '../store.js'
+import {getConfig} from '../config.js'
 
-import Container from '../containers/connectPieceContainer';
+import Container from '../containers/connectPieceContainer.js';
 
 
 export const piecesEnableEdit = (subType) => ({type: C.PIECES_ENABLE_EDIT, subType});

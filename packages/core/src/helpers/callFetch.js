@@ -1,5 +1,5 @@
 import {showMessage} from '../actions'
-import {getStore} from '../store'
+import {getStore} from '../store.js'
 import {toastr} from 'react-redux-toastr'
 
 let defaults = {

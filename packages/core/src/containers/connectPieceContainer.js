@@ -1,8 +1,8 @@
 import React, {Component} from "react"
 import {connect} from 'react-redux'
 import classNames from 'classnames';
-import {updatePiece, onEditorActive, onNodeResized, savePiece, setPieceMessage, resetPiece, setSourceId, onActivationSentPiece, onDeactivationSentPiece} from '../actions/pieces'
-import {getConfig} from '../config'
+import {updatePiece, onEditorActive, onNodeResized, savePiece, setPieceMessage, resetPiece, setSourceId, onActivationSentPiece, onDeactivationSentPiece} from '../actions/pieces.js'
+import {getConfig} from '../config.js'
 
 const PieceContainer = (props) => {
     let pieceOptions = getConfig().options[props.type] || {};

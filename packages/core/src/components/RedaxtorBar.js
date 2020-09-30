@@ -3,8 +3,8 @@ import ReactDOM from "react-dom"
 
 import classNames from 'classnames';
 
-import PanelHandler from './PanelHandler'
-import Pieces from './pieces/PiecesContainer'
+import PanelHandler from './PanelHandler.js'
+import Pieces from './pieces/PiecesContainer.js'
 
 
 // import Pages from './pages/PagesContainer'

@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import HoverOverlayComponent from '../components/HoverOverlay';
+import HoverOverlayComponent from '../components/HoverOverlay.js';
 
 const mapStateToProps = (state) => {
     return {

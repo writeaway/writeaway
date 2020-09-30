@@ -2,11 +2,11 @@ import React from "react"
 import ReactDOM from "react-dom"
 import {Provider} from 'react-redux'
 
-import C from "../constants"
-import callFetch from '../helpers/callFetch'
-import {getStore} from '../store'
+import C from "../constants.js"
+import callFetch from '../helpers/callFetch.js'
+import {getStore} from '../store.js'
 
-import I18NElementContainer from '../containers/I18NElementContainer'
+import I18NElementContainer from '../containers/I18NElementContainer.js'
 
 export const initI18N = () => {
     return (dispatch, getState) => {
