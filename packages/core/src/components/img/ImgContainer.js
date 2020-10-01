@@ -1,8 +1,9 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 
-//todo img component
-
+/**
+ * TODO: Is deprecated?
+ */
 class ImgComponent extends Component {
     render() {
         return <this.props.wrapper>

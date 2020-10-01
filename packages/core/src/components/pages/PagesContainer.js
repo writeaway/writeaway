@@ -6,6 +6,9 @@ const mapStateToProps = (state) => {
     return state.pages
 };
 
+/**
+ * @deprecated
+ */
 const PagesContainer = connect(
     mapStateToProps,
     pagesActions

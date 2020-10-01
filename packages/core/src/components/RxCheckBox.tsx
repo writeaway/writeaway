@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 
-export const RxCheckBox = ({ checked, onChange, disabled }: { checked: boolean, onChange: (e: React.SyntheticEvent) => void, disabled: boolean }) => {
+export const RxCheckBox = ({ checked, onChange, disabled }: { checked: boolean, onChange?: (e: React.SyntheticEvent) => void, disabled?: boolean }) => {
   const styles = {
     opacity: disabled ? 0.5 : 1,
     cursor: disabled ? 'default' : 'pointer'

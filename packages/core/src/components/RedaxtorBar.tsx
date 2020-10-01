@@ -3,12 +3,23 @@ import ReactDOM from "react-dom"
 
 import classNames from 'classnames';
 
-import PanelHandler from './PanelHandler.js'
-import Pieces from './pieces/PiecesContainer.js'
+import PanelHandler from './PanelHandler'
+import Pieces from './pieces/PiecesContainer'
 
+export interface RedaxtorBar
 
-// import Pages from './pages/PagesContainer'
-// import I18N from './i18n/I18NContainer'
+export const RedaxtorBar = ()=>{
+    const onMouseUp = (e) {
+        //ignore if don't set draggable option
+        if (!this.props.options.navBarDraggable) {
+            return;
+        }
+
+        this.setState({dragging: false});
+        e.stopPropagation();
+        e.preventDefault();
+    }
+}
 
 export default class RedaxtorBar extends React.Component {
 
@@ -74,16 +85,7 @@ export default class RedaxtorBar extends React.Component {
         e.preventDefault();
     }
 
-    onMouseUp(e) {
-        //ignore if don't set draggable option
-        if (!this.props.options.navBarDraggable) {
-            return;
-        }
 
-        this.setState({dragging: false});
-        e.stopPropagation();
-        e.preventDefault();
-    }
 
     toggleOpen() {
         //ignore if don't set draggable option

@@ -9,6 +9,9 @@ import Delete from 'material-ui/lib/svg-icons/action/delete';
 
 import PageDialog from './PageDialog.js'
 
+/**
+ * @deprecated
+ */
 export default class Pages extends React.Component {
 
     pageFieldUpdate(fieldName, value) {

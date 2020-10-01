@@ -6,6 +6,9 @@ const mapStateToProps = (state) => {
     return state.i18n
 };
 
+/**
+ * @deprecated
+ */
 const I18NContainer = connect(
     mapStateToProps,
     actions

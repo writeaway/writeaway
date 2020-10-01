@@ -5,6 +5,9 @@ import TextField from 'material-ui/lib/text-field';
 import IconButton from 'material-ui/lib/icon-button';
 import AddPage from 'material-ui/lib/svg-icons/action/note-add';
 
+/**
+ * @deprecated
+ */
 export default class PageDialog extends React.Component {
     constructor(props) {
         super(props);
