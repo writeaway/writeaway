@@ -1,19 +1,28 @@
-import React, {Component} from "react";
-import i18n from '../i18n.js';
+import React from 'react';
+import i18n from '../i18n';
 
-class PanelHandler extends Component {
-
-    render() {
-        return (
-            <div className="r_bar-header" onMouseDown={this.props.onMouseDown} onClick={this.props.toggleOpen}>
-                <span>{i18n.bar.title}</span>
-                {this.props.isCollapsable &&
-                    <button className="r_bar-header-button">
-                        {this.props.isOpen ? <i className="rx_icon rx_icon-keyboard_arrow_down"></i> : <i className="rx_icon rx_icon-keyboard_arrow_up"></i>}
-                    </button>}
-                {this.props.message ? <div className="r_message r_message-{this.prop.message.type}">{this.prop.message.content}</div>:""}
-            </div>
-        )
-    }
+export interface IPanelHandlerProps {
+  isCollapsable: boolean,
+  onMouseDown: (e: React.MouseEvent) => void,
+  toggleOpen: (e: React.MouseEvent) => void,
+  isOpen: boolean,
+  message?: {
+    content: string
+  }
 }
+
+export const PanelHandler = (
+  { isCollapsable, toggleOpen, onMouseDown, isOpen, message }: IPanelHandlerProps
+) => (
+  <div className="r_bar-header" onMouseDown={onMouseDown} onClick={toggleOpen}>
+    <span>{i18n.bar.title}</span>
+    {isCollapsable &&
+    <button className="r_bar-header-button">
+      {isOpen ? <i className="rx_icon rx_icon-keyboard_arrow_down"></i> :
+        <i className="rx_icon rx_icon-keyboard_arrow_up"></i>}
+    </button>}
+    {message ? <div className="r_message r_message-{this.prop.message.type}">{message.content}</div> : ''}
+  </div>
+);
+
 export default PanelHandler

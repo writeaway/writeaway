@@ -1,8 +1,9 @@
 import {connect} from 'react-redux';
-import PiecesComponent from './PiecesComponent.js';
-import * as piecesActions from '../../actions/pieces.js';
+import { IWriteAwayState } from 'types';
+import PiecesComponent from './PiecesComponent';
+import * as piecesActions from '../../actions/pieces';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: IWriteAwayState) => {
     return state.pieces
 };
 

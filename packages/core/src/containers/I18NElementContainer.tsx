@@ -1,9 +1,12 @@
 import React, {Component} from "react"
 import {connect} from 'react-redux'
-import {updateI18NData} from '../actions/i18n.js'
+import {updateI18NData} from '../actions/i18n'
 
-import Portal from '../components/Portal.js'
+import Portal from '../components/Portal'
 
+/**
+ * @deprecated
+ */
 class Element extends Component {
     constructor(props){
         super(props);

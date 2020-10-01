@@ -1,65 +1,99 @@
-import React from 'react';
-import PiecesList from './PiecesList.js';
+import React, { useCallback, useEffect, useMemo } from 'react';
+import { IComponent, IPiece, IPieceState, PieceType } from 'types';
+import PiecesList from './PiecesList';
 
-import RxCheckBox from '../RxCheckBox.js';
+import { RxCheckBox } from '../RxCheckBox';
 
-import i18n from '../../i18n.js';
+import i18n from '../../i18n';
 
-export default class PiecesComponent extends React.Component {
+export interface IPiecesComponentProps {
+  sourceId: string,
+  setSourceId: (id?: string) => void,
+  savePiece: (id: string) => void,
+  updatePiece: (id: string, update: any) => void,
+  piecesToggleEdit: (b: boolean) => void,
+  piecesInit: () => void,
+  byId: Record<string, IPieceState>,
+  components: Record<PieceType, IComponent>,
+  editorEnabled: Record<PieceType, boolean>,
+  editorActive: boolean,
+  activatePiece: (id: string) => void,
+  pieceNameGroupSeparator: string,
+}
 
-    savePiece(html) {
-        let id = this.props.sourceId;
-        this.props.updatePiece(id, {data: {html: html}});
-        this.props.savePiece(id);
-        this.props.setSourceId(null);
-    }
+export const PiecesComponent = (
+  {
+    sourceId,
+    setSourceId,
+    savePiece,
+    updatePiece,
+    piecesInit,
+    piecesToggleEdit,
+    pieceNameGroupSeparator,
+    activatePiece,
+    byId,
+    editorEnabled,
+    editorActive,
+    components,
+  }: IPiecesComponentProps) => {
+
+  useEffect(() => {
+    piecesInit();
+  }, []);
+
+  const savePieceFn = React.useCallback((html: string) => {
+    updatePiece(sourceId, { data: { html: html } });
+    savePiece(sourceId);
+    setSourceId(undefined);
+  }, [updatePiece, savePiece, setSourceId, sourceId]);
+
+  const toggleAllEditors = useCallback(() => {
+    piecesToggleEdit(false);
+  }, [piecesToggleEdit]);
+
+  const existingPieceTypes = useMemo(() => {
+    const result = new Set<string>();
+    Object.keys(byId || {}).forEach(pieceId => result.add(byId[pieceId].type));
+    return result;
+  }, [byId]); // TODO: not really memoizes anything right now, need to use keys
 
 
-    componentDidMount() {
-        this.props.piecesInit();
-    }
+  var sourceEditor = null;
+  if (components.source && sourceId) {
+    sourceEditor = <components.source wrapper="redaxtor-modal"
+                                      html={byId[sourceId].data.html}
+                                      onClose={() => setSourceId(undefined)}
+                                      onSave={(id: string) => savePiece(id)}/>
+  }
 
-    toggleAllEditors(e) {
-        this.props.piecesToggleEdit(false);
-    }
-
-    render() {
-        let representPieceTypes = {};
-        this.props.byId && Object.keys(this.props.byId).forEach(pieceId => representPieceTypes[this.props.byId[pieceId].type] = true);
-
-
-        var sourceEditor = null;
-        if (this.props.components.source && this.props.sourceId) {
-            sourceEditor = <this.props.components.source wrapper="redaxtor-modal"
-                                                         html={this.props.byId[this.props.sourceId].data.html}
-                                                         onClose={() => this.props.setSourceId(null)}
-                                                         onSave={(html) => this.savePiece(html)}/>
-        }
-        return (
-            <div>
-                {sourceEditor}
-                <div className="r_list-header-container">
-                    <div className="r_list-header" onClick={this.toggleAllEditors.bind(this)}>
-                        <label>{i18n.bar.editAll}</label>
-                        <RxCheckBox checked={this.props.editorActive}/>
-                    </div>
-                    {   Object.keys(this.props.components).map((object, index) =>
-                        representPieceTypes[object] && (<div className={"r_list-header r_list-subheader r_list-subheader-"+object} key={index} onClick={() => this.props.piecesToggleEdit(object)}>
-                            <label>{this.props.components[object].__name || object}</label>
-                            <RxCheckBox checked={this.props[`editorEnabled:${object}`]}
-                                    disabled={!this.props.editorActive}
-                                    />
-                        </div>)
-                    ) }
-                </div>
-                <PiecesList editorActive={this.props.editorActive } pieces={this.props.byId || {}}
-                            source={this.props['editorEnabled:source'] && this.props.components.source}
-                            allProps={this.props} // TODO: This is ugly
-                            setSourceId={this.props.setSourceId}
-                            activatePiece={this.props.activatePiece}
-                            pieceNameGroupSeparator={this.props.options.pieceNameGroupSeparator}
-                            savePiece={this.props.savePiece} updatePiece={this.props.updatePiece}/>
-            </div>
-        )
-    }
+  return (
+    <div>
+      {sourceEditor}
+      <div className="r_list-header-container">
+        <div className="r_list-header" onClick={toggleAllEditors}>
+          <label>{i18n.bar.editAll}</label>
+          <RxCheckBox checked={editorActive} />
+        </div>
+        {Object.keys(components).map((pieceType, index) =>
+          existingPieceTypes.has(pieceType) && (
+            <div className={'r_list-header r_list-subheader r_list-subheader-' + pieceType} key={index}
+                 onClick={() => piecesToggleEdit(pieceType as PieceType)}>
+              <label>{components[pieceType].name || pieceType}</label>
+              <RxCheckBox checked={editorEnabled[pieceType]}
+                          disabled={!editorActive}
+              />
+            </div>)
+        )}
+      </div>
+      <PiecesList editorActive={editorActive}
+                  pieces={byId || {}}
+                  source={editorEnabled.source && !!components.source}
+                  editorEnabled={editorEnabled}
+                  setSourceId={setSourceId}
+                  activatePiece={activatePiece}
+                  pieceNameGroupSeparator={pieceNameGroupSeparator}
+                  savePiece={savePiece}
+      />
+    </div>
+  )
 }

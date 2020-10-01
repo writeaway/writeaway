@@ -1,79 +1,91 @@
-import React, {Component} from "react";
-import classNames from "classnames";
+import React, { useMemo } from 'react';
+import classNames from 'classnames';
+import { IComponent, IPiece, PieceType, Rect } from 'types';
 
-export default class HoverOverlay extends React.Component {
+export interface OverlayProps {
+  triggeredByActionId: boolean,
+  hoveredPiece?: IPiece,
+  hoveredId?: string,
+  hoveredRect?: Rect ,
+  enabled: boolean,
+  components: Record<PieceType, IComponent>
+}
 
-    render() {
-        let componentLabel = this.props.hoveredPiece ? (this.props.components[this.props.hoveredPiece.type].__editLabel) : false;
-        let hoverRectStyles = this.getHoverRectStyles();
-        const overlayClass = `r_pointer-div ${hoverRectStyles.className}`;
-        delete hoverRectStyles.className;
+export const HoverOverlay = ({ components, hoveredId, hoveredRect, enabled, hoveredPiece, triggeredByActionId }: OverlayProps) => {
 
-        return (
-            <div className="r_reset">
-                <div ref="overlay" className={classNames({'r_overlay': true, 'r_active-editor': this.props.triggeredByActionId})}>
-                    <div className={overlayClass} style={hoverRectStyles}>
-                        {!this.props.triggeredByActionId &&
-                        <div className="r_pointer-div-label">{componentLabel}
-                        </div>
-                        }
-                        <div className="r_pointer-edit-icon"></div>
-                    </div>
-                </div>
-            </div>
-        )
-    }
+  const { style, className } = useMemo(() => {
+    // let shrinked = false;
+    const labelHeight = 27;
 
-    getHoverRectStyles() {
-        let shrinked = false;
-        const labelHeight = 27;
-
-        if (this.props.enabled && this.props.hoveredId) {
-            let base = {
-                className: 'normal',
-                top: (this.props.hoveredRect.top + window.scrollY),
-                left: (this.props.hoveredRect.left + window.scrollX),
-                width: (this.props.hoveredRect.right - this.props.hoveredRect.left),
-                height: (this.props.hoveredRect.bottom - this.props.hoveredRect.top),
-            };
-            if (base.left <= 0 || base.top <= 0 || base.width + base.left >= document.body.scrollWidth || base.height + base.top >= document.body.scrollHeight) {
-                /**
-                 * We are touching edges, switch to shrinked styles
-                 */
-                shrinked = true;
-                base.className = 'shrinked';
-            }
-
-            if(this.props.hoveredRect.top - labelHeight < 0 && this.props.hoveredRect.bottom + labelHeight> window.innerHeight) {
-                base.className += ' too-high';
-            }
-
-            if(this.props.hoveredRect.top - labelHeight < 0) {
-                base.className+= ' touches-top';
-            }
-
-            if(this.props.hoveredRect.bottom + labelHeight > window.innerHeight) {
-                base.className+= ' touches-bottom';
-            }
-
-            return {
-                opacity: 1,
-                className: base.className,
-                top: base.top + "px",
-                left: base.left + "px",
-                width: base.width + "px",
-                height: base.height + "px",
-            };
-        } else {
-            return {
-                opacity: 0,
-                className: "none",
-                top: window.scrollY + "px",
-                left: 0,
-                width: "100%",
-                height: "100%"
-            }
+    if (enabled && hoveredId && hoveredRect) {
+      let base = {
+        className: 'normal',
+        style: {
+          top: (hoveredRect.top + window.scrollY),
+          left: (hoveredRect.left + window.scrollX),
+          width: (hoveredRect.right - hoveredRect.left),
+          height: (hoveredRect.bottom - hoveredRect.top),
         }
+      }
+      if (base.style.left <= 0 || base.style.top <= 0 || base.style.width + base.style.left >= document.body.scrollWidth || base.style.height + base.style.top >= document.body.scrollHeight) {
+        /**
+         * We are touching edges, switch to shrinked styles
+         */
+        // shrinked = true;
+        base.className = 'shrinked';
+      }
+
+      if (hoveredRect.top - labelHeight < 0 && hoveredRect.bottom + labelHeight > window.innerHeight) {
+        base.className += ' too-high';
+      }
+
+      if (hoveredRect.top - labelHeight < 0) {
+        base.className += ' touches-top';
+      }
+
+      if (hoveredRect.bottom + labelHeight > window.innerHeight) {
+        base.className += ' touches-bottom';
+      }
+
+      return {
+        className: base.className,
+        style: {
+          opacity: 1,
+          top: base.style.top + 'px',
+          left: base.style.left + 'px',
+          width: base.style.width + 'px',
+          height: base.style.height + 'px',
+        }
+      }
+    } else {
+      return {
+        className: 'none', style: {
+          opacity: 0,
+          top: window.scrollY + 'px',
+          left: 0,
+          width: '100%',
+          height: '100%'
+        }
+      }
     }
+  }, [enabled, hoveredId, hoveredRect]);
+
+  let componentLabel = hoveredPiece ? (components[hoveredPiece.type].editLabel) : false;
+
+  const overlayClass = `r_pointer-div ${className}`;
+
+  return (
+    <div className="r_reset">
+      <div ref="overlay" className={classNames({ 'r_overlay': true, 'r_active-editor': triggeredByActionId })}>
+        <div className={overlayClass} style={style}>
+          {!triggeredByActionId &&
+          <div className="r_pointer-div-label">{componentLabel}
+          </div>
+          }
+          <div className="r_pointer-edit-icon"></div>
+        </div>
+      </div>
+    </div>
+  )
 
 }

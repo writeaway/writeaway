@@ -1,6 +1,9 @@
 import React from 'react'
 import Portal from 'react-portal'
 
+/**
+ * @deprecated
+ */
 export default class FormPortal extends React.Component {
     constructor(props) {
         super(props);

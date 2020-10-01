@@ -1,20 +1,18 @@
 import {connect} from 'react-redux';
-import HoverOverlayComponent from '../components/HoverOverlay.js';
+import { IWriteAwayState } from 'types';
+import { HoverOverlay as HoverOverlayComponent } from '../components/HoverOverlay';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: IWriteAwayState) => {
     return {
-
         enabled: state.pieces.editorActive,
-        triggeredByActionId: state.pieces.activeId && state.pieces.activeId.length > 0 && state.pieces.activeId[0] == state.pieces.hoveredId,
+        triggeredByActionId: !!state.pieces.activeIds && state.pieces.activeIds.length > 0 && state.pieces.activeIds[0] === state.pieces.hoveredId,
         hoveredId: state.pieces.hoveredId,
         hoveredRect: state.pieces.hoveredRect,
-        hoveredPiece: state.pieces.hoveredId ? state.pieces.byId[state.pieces.hoveredId] : null
+        hoveredPiece: state.pieces.hoveredId ? state.pieces.byId[state.pieces.hoveredId] : undefined
     }
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {}
-};
+const mapDispatchToProps = () => ({});
 
 const HoverOverlay = connect(
     mapStateToProps,

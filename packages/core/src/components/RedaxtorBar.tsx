@@ -1,133 +1,144 @@
-import React from "react"
-import ReactDOM from "react-dom"
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import classNames from 'classnames';
+import { IComponent, PieceType } from 'types';
 
 import PanelHandler from './PanelHandler'
 import Pieces from './pieces/PiecesContainer'
 
-export interface RedaxtorBar
-
-export const RedaxtorBar = ()=>{
-    const onMouseUp = (e) {
-        //ignore if don't set draggable option
-        if (!this.props.options.navBarDraggable) {
-            return;
-        }
-
-        this.setState({dragging: false});
-        e.stopPropagation();
-        e.preventDefault();
-    }
+export interface RedaxtorBarProps {
+  options: {
+    navBarDraggable: boolean,
+    navBarCollapsable: boolean,
+    pieceNameGroupSeparator: string,
+  },
+  message?: {
+    content: string
+  },
+  navBarCollapsed: boolean,
+  expert: boolean,
+  components: Record<PieceType, IComponent>,
+  piecesToggleNavBar: () => void,
 }
 
-export default class RedaxtorBar extends React.Component {
+export const RedaxtorBar = ({
+                              message,
+                              navBarCollapsed,
+                              piecesToggleNavBar,
+                              options,
+                              components,
+  expert,
+                            }: RedaxtorBarProps
+) => {
+  const [dragging, setDragging] = useState<boolean>(false);
+  const [dragged, setDragged] = useState<boolean>(false);
+  const [value, setValue] = useState<string>('pieces');
+  const node = useRef<HTMLElement>(null);
+  const rel = useRef<{
+    x: number,
+    y: number,
+    startX: number,
+    startY: number
+  }>({ x: 0, y: 0, startX: 0, startY: 0 });
 
-    constructor(props) {
-        super(props);
+  const onMouseUp = useCallback((e: MouseEvent) => {
+    //ignore if don't set draggable option
+    if (!options.navBarDraggable || !dragging) {
+      return;
+    }
+    setDragging(false);
+    e.stopPropagation();
+    e.preventDefault();
+  }, [setDragging, options.navBarDraggable]);
 
-        this.state = {
-            value: 'pieces',
-            dragging: false,
-            isCollapsible: this.props.options.navBarCollapsable
-        };
-
-        this._onMouseMove = this.onMouseMove.bind(this);
-        this._onMouseUp = this.onMouseUp.bind(this);
+  const onMouseDown = useCallback((e: React.MouseEvent) => {
+    //ignore if don't set draggable option
+    if (!options.navBarDraggable) {
+      return;
     }
 
-    componentDidMount() {
-        this._node = ReactDOM.findDOMNode(this.refs["bar"]);
-        this._rel = {x: 0, y: 0, startX: 0, startY: 0};
+    // only left mouse button
+    if (e.button !== 0) return;
+    rel.current = {
+      x: e.pageX - node.current!.offsetLeft,
+      y: e.pageY - node.current!.offsetTop,
+      startX: e.pageX,
+      startY: e.pageY,
+    };
+
+    setDragged(false);
+    setDragging(true);
+    e.stopPropagation();
+    e.preventDefault();
+  }, [setDragging, options.navBarDraggable]);
+
+  const toggleOpen = useCallback(() => {
+    //ignore if don't set draggable option
+    if (!options.navBarCollapsable) {
+      return;
     }
-
-    componentDidUpdate(props, state) {
-        if (this.state.dragging && !state.dragging) {
-            document.addEventListener('mousemove', this._onMouseMove);
-            document.addEventListener('mouseup', this._onMouseUp);
-        } else if (!this.state.dragging && state.dragging) {
-            document.removeEventListener('mousemove', this._onMouseMove);
-            document.removeEventListener('mouseup', this._onMouseUp);
-        }
+    if (!dragged) {
+      piecesToggleNavBar();
     }
+  }, [setDragged, piecesToggleNavBar]);
 
-    onMouseDown(e) {
-        //ignore if don't set draggable option
-        if (!this.props.options.navBarDraggable) {
-            return;
-        }
 
-        // only left mouse button
-        if (e.button !== 0) return;
-        this._rel.x = e.pageX - this._node.offsetLeft;
-        this._rel.y = e.pageY - this._node.offsetTop;
-        this._rel.startX = e.pageX;
-        this._rel.startY = e.pageY;
-        this.setState({dragging: true, dragged: false});
-        e.stopPropagation();
-        e.preventDefault();
+  const onMouseMove = useCallback((e: MouseEvent) => {
+    //ignore if don't set draggable option
+    if (!options.navBarDraggable || !dragging) {
+      return;
     }
-
-    onMouseMove(e) {
-        //ignore if don't set draggable option
-        if (!this.props.options.navBarDraggable) {
-            return;
-        }
-
-        if (!this.state.dragging) return;
-        if (e.pageX == this._rel.startX && e.pageY == this._rel.startY) {
-            return;
-        }
-        this._node.style.left = e.pageX - this._rel.x + "px";
-        this._node.style.top = e.pageY - this._rel.y + "px";
-        this.setState({dragged: true});
-        e.stopPropagation();
-        e.preventDefault();
+    if (e.pageX === rel.current?.startX && e.pageY === rel.current?.startY) {
+      return;
     }
+    node.current!.style.left = e.pageX - rel.current!.x + 'px';
+    node.current!.style.top = e.pageY - rel.current!.y + 'px';
+    setDragged(true);
+    e.stopPropagation();
+    e.preventDefault();
+  }, [options.navBarDraggable, dragging]);
 
-
-
-    toggleOpen() {
-        //ignore if don't set draggable option
-        if (!this.props.options.navBarCollapsable) {
-            return;
-        }
-        if (!this.state.dragged) {
-            this.props.piecesToggleNavBar();
-        } else {
-            this.setState({dragged: false});
-        }
+  useEffect(() => {
+    document.addEventListener('mouseup', onMouseUp);
+    return () => {
+      document.removeEventListener('mouseup', onMouseUp);
     }
+  }, [onMouseUp]);
 
-    render() {
+  useEffect(() => {
+    document.addEventListener('mousemove', onMouseMove);
+    return () => {
+      document.removeEventListener('mousemove', onMouseMove);
+    }
+  }, [onMouseMove]);
 
-        let isCollapsed = this.props.navBarCollapsed != undefined && this.props.navBarCollapsed != null ? this.props.navBarCollapsed : true;
-        let piecesOptions = {
-            pieceNameGroupSeparator: this.props.options.pieceNameGroupSeparator
-        };
 
-        const r_bar_class = classNames({
-            "r_bar": true,
-            "rx_non-expert": !this.props.expert,
-        });
+  const r_bar_class = classNames({
+    'r_bar': true,
+    'rx_non-expert': !expert,
+  })
 
-        return (
-            <div className="r_reset">
-                <div ref="bar" className={r_bar_class}>
-                    <PanelHandler isCollapsable={this.state.isCollapsible}
-                                  isOpen={!isCollapsed}
-                                  onMouseDown={this.onMouseDown.bind(this)}
-                                  toggleOpen={this.toggleOpen.bind(this)} message={this.props.message}/>
+  let isCollapsed = navBarCollapsed??true;
+  let piecesOptions = {
+    pieceNameGroupSeparator: options.pieceNameGroupSeparator
+  };
 
-                    {!isCollapsed ?
-                        <div className="r_tabs" value={this.state.value}>
-                            <div className="r_tab-content">
-                                {this.state.value === "pieces" &&
-                                <Pieces components={this.props.components} options={piecesOptions}/>}
-                            </div>
-                        </div> : null}
-                </div>
+  return (
+    <div className="r_reset">
+      <div ref="bar" className={r_bar_class}>
+        <PanelHandler isCollapsable={options.navBarCollapsable}
+                      isOpen={!isCollapsed}
+                      onMouseDown={onMouseDown}
+                      toggleOpen={toggleOpen} message={message}/>
+
+        {!isCollapsed ?
+          <div className="r_tabs" data-value={value}>
+            <div className="r_tab-content">
+              {value === 'pieces' &&
+              <Pieces components={components} options={piecesOptions}/>}
             </div>
-        )
-    }
+          </div> : null}
+      </div>
+    </div>
+  )
 }
