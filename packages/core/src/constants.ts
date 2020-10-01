@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     /* GLOBAL */
     GLOBAL_SHOW_MESSAGE: "GLOBAL_SHOW_MESSAGE",
 
@@ -60,7 +60,7 @@ module.exports = {
     PAGE_DATA_UPDATE: "PAGE_DATA_UPDATE",
     PAGE_DATA_FIELDS_UPDATE: "PAGE_DATA_FIELDS_UPDATE",
     PAGE_DATA_FIELDS_SET: "PAGE_DATA_FIELDS_SET",
-    
+
     PAGE_ADD: "PAGE_ADD",
 
     PAGE_SAVING: "PAGE_SAVING",

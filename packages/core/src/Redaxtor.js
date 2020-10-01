@@ -22,7 +22,7 @@ import {
     deactivatePiece
 } from "./actions/pieces.js";
 import {pagesGet, pagesGetLayouts} from "./actions/pages.js";
-import {configureFetch} from "./helpers/callFetch.js";
+import {configureFetch} from "./helpers/callFetch";
 import HoverOverlay from "./containers/HoverOverlayContainer.js";
 
 let config = getConfig();
