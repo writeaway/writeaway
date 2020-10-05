@@ -1,177 +1,175 @@
-import C from '../constants.js'
+import { AnyAction, Reducer } from 'redux';
+import { IPieceControllerState, IPieceItemState, PieceType } from 'types';
+import C from '../constants.js';
 
-const piece = (piece = {initialized: false}, action) => {
-    switch (action.type) {
-        case C.PIECE_UPDATE:
-            return {
-                ...piece, ...action.piece,
-                changed: !(action.notChanged || (action.piece.data.html === piece.data.html)) || piece.changed
-            };
-        case C.PIECE_RESET:
-            return {...piece, changed: false};
-        case C.PIECE_REMOVE:
-            return {...piece, destroy: true};
-        case C.PIECE_SET_DATA:
-            //check is initiated
-            if (!piece.fetched) {
-                console.error(`Piece was not initialized before use setDate function. Piece id: ${piece.id}`);
-                return {...piece};
-            }
-            else {
-                //set data
-                return {...piece, data: {...piece.data, ... action.data}};
-            }
-        case C.PIECE_SET_MESSAGE:
-            return {...piece, message: action.message, messageLevel: action.messageLevel};
-        case C.PIECE_HAS_REMOVED:
-            return {...piece, destroyed: true};
-        case C.PIECE_SAVING:
-            return {...piece, saving: true};
-        case C.PIECE_SAVED:
-            return {...piece, changed: false, saving: false};
-        case C.PIECE_SAVING_FAILED:
-            return {...piece, error: action.error, saving: false};
+const piece = (pItem: IPieceItemState, action: AnyAction) => {
+  switch (action.type) {
+    case C.PIECE_UPDATE:
+      return {
+        ...pItem,
+        ...action.piece,
+        changed: !(action.notChanged || (action.piece.data.html === pItem.data.html)) || pItem.changed,
+      };
+    case C.PIECE_RESET:
+      return { ...pItem, changed: false };
+    case C.PIECE_REMOVE:
+      return { ...pItem, destroy: true };
+    case C.PIECE_SET_DATA:
+      // check is initiated
+      if (!pItem.fetched) {
+        console.error(`Piece was not initialized before use setDate function. Piece id: ${pItem.id}`);
+        return { ...pItem };
+      }
+      // set data
+      return { ...pItem, data: { ...pItem.data, ...action.data } };
 
-        case C.PIECE_FETCHING:
-            return {...piece, fetched: false, fetching: true};
-        case C.PIECE_FETCHED:
-            return {...piece, ...action.piece, fetched: true, fetching: false, initialized: true};
-        case C.PIECE_FETCHING_FAILED:
-            console.error(action.answer);
-            return {...piece, fetched: false, fetching: false};
-        case C.PIECE_FETCHING_ERROR:
-            return {...piece, error: action.error, fetching: false};
-        case C.PIECES_ACTIVATE_PIECE:
-            return {...piece, manualActivation: true};
-        case C.PIECES_ACTIVATION_SENT_PIECE:
-            return {...piece, manualActivation: false};
-        case C.PIECES_DEACTIVATE_PIECE:
-            return {...piece, manualDeactivation: true};
-        case C.PIECES_DEACTIVATION_SENT_PIECE:
-            return {...piece, manualDeactivation: false};
-        case C.PIECES_EDITOR_ACTIVE:
-            return {...piece, active: action.active};
-        default:
-            return piece
-    }
+    case C.PIECE_SET_MESSAGE:
+      return { ...pItem, message: action.message, messageLevel: action.messageLevel };
+    case C.PIECE_HAS_REMOVED:
+      return { ...pItem, destroyed: true };
+    case C.PIECE_SAVING:
+      return { ...pItem, saving: true };
+    case C.PIECE_SAVED:
+      return { ...pItem, changed: false, saving: false };
+    case C.PIECE_SAVING_FAILED:
+      return { ...pItem, error: action.error, saving: false };
+
+    case C.PIECE_FETCHING:
+      return { ...pItem, fetched: false, fetching: true };
+    case C.PIECE_FETCHED:
+      return {
+        ...pItem, ...action.piece, fetched: true, fetching: false, initialized: true,
+      };
+    case C.PIECE_FETCHING_FAILED:
+      console.error(action.answer);
+      return { ...pItem, fetched: false, fetching: false };
+    case C.PIECE_FETCHING_ERROR:
+      return { ...pItem, error: action.error, fetching: false };
+    case C.PIECES_ACTIVATE_PIECE:
+      return { ...pItem, manualActivation: true };
+    case C.PIECES_ACTIVATION_SENT_PIECE:
+      return { ...pItem, manualActivation: false };
+    case C.PIECES_DEACTIVATE_PIECE:
+      return { ...pItem, manualDeactivation: true };
+    case C.PIECES_DEACTIVATION_SENT_PIECE:
+      return { ...pItem, manualDeactivation: false };
+    case C.PIECES_EDITOR_ACTIVE:
+      return { ...pItem, active: action.active };
+    default:
+      return pItem;
+  }
 };
 
-const piecesDefault = {
-    editorActive: true,
-    highlight: true,
-    sourceId: null,
-    hoveredId: null,
-    activeId: []
+export const defaultPiecesState: IPieceControllerState = {
+  editorEnabled: {},
+  editorActive: true,
+  highlight: true,
+  activeIds: [],
+  byId: {},
 };
 
-const pieces = (pieces = piecesDefault, action) => {
-    switch (action.type) {
-        case C.PIECES_ENABLE_EDIT:
-            if (action.subType) {
-                let data = {...pieces, initialized: true};
-                data[`editorEnabled:${action.subType}`] = true;
-                return data;
-            } else {
-                return {...pieces, editorActive: true, initialized: true};
-            }
-        case C.PIECES_DISABLE_EDIT:
-            if (action.subType) {
-                let data = {...pieces, initialized: true};
-                data[`editorEnabled:${action.subType}`] = false;
-                return data;
-            } else {
-                return {...pieces, editorActive: false};
-            }
+const pieces: Reducer<IPieceControllerState> = (pState: IPieceControllerState = defaultPiecesState, action: AnyAction) => {
+  switch (action.type) {
+    case C.PIECES_ENABLE_EDIT:
+      if (action.subType) {
+        const data = { ...pState, initialized: true };
+        data.editorEnabled[action.subType as PieceType] = true;
+        return data;
+      }
+      return { ...pState, editorActive: true, initialized: true };
 
-        case C.PIECES_SET_SOURCE_ID:
-            return {...pieces, sourceId: action.id};
+    case C.PIECES_DISABLE_EDIT:
+      if (action.subType) {
+        const data = { ...pState, initialized: true };
+        data.editorEnabled[action.subType as PieceType] = false;
+        return data;
+      }
+      return { ...pState, editorActive: false };
 
-        case C.PIECE_ADD:
-            return {
-                ...pieces,
-                byId: {...pieces.byId, [action.id]: action.piece}
-            };
+    case C.PIECES_SET_SOURCE_ID:
+      return { ...pState, sourceId: action.id };
 
-        case C.PIECE_HAS_REMOVED:
-            let byId = {...pieces.byId, [action.id]: action.piece};
-            delete byId[action.id];
+    case C.PIECE_ADD:
+      return {
+        ...pState,
+        byId: { ...pState.byId, [action.id]: action.piece },
+      };
 
-            return {
-                ...pieces,
-                byId: byId
-            };
+    case C.PIECE_HAS_REMOVED:
+      const byId: { [id: string]: IPieceItemState } = { ...pState.byId, [action.id]: action.piece };
+      delete byId[action.id];
 
-        case C.PIECE_SET_DATA:
+      return {
+        ...pState,
+        byId,
+      };
 
-            //check to existing piece
-            if (!pieces.byId[action.id]) {
-                console.error(`You are trying to set data to an unexisting piece. Piece id: ${action.id}`);
-                return {
-                    ...pieces
-                };
-            }
+    case C.PIECE_SET_DATA:
 
-            return {
-                ...pieces,
-                byId: {...pieces.byId, [action.id]: piece(pieces.byId[action.id], action)}
-            };
+      // check to existing piece
+      if (!pState.byId[action.id]) {
+        console.error(`You are trying to set data to an unexisting piece. Piece id: ${action.id}`);
+        return {
+          ...pState,
+        };
+      }
 
+      return {
+        ...pState,
+        byId: { ...pState.byId, [action.id]: piece(pState.byId[action.id], action) },
+      };
 
-        case C.PIECE_UPDATE:
-        case C.PIECE_SAVING:
-        case C.PIECE_SAVED:
-        case C.PIECE_SAVING_FAILED:
-        case C.PIECE_REMOVE:
-        case C.PIECE_SET_MESSAGE:
-        case C.PIECES_ACTIVATE_PIECE:
-        case C.PIECES_ACTIVATION_SENT_PIECE:
-        case C.PIECES_DEACTIVATE_PIECE:
-        case C.PIECES_DEACTIVATION_SENT_PIECE:
+    case C.PIECE_UPDATE:
+    case C.PIECE_SAVING:
+    case C.PIECE_SAVED:
+    case C.PIECE_SAVING_FAILED:
+    case C.PIECE_REMOVE:
+    case C.PIECE_SET_MESSAGE:
+    case C.PIECES_ACTIVATE_PIECE:
+    case C.PIECES_ACTIVATION_SENT_PIECE:
+    case C.PIECES_DEACTIVATE_PIECE:
+    case C.PIECES_DEACTIVATION_SENT_PIECE:
+    case C.PIECE_FETCHING:
+    case C.PIECE_FETCHED:
+    case C.PIECE_FETCHING_FAILED:
+    case C.PIECE_FETCHING_ERROR:
+      return {
+        ...pState,
+        byId: { ...pState.byId, [action.id]: piece(pState.byId[action.id], action) },
+      };
 
-        case C.PIECE_FETCHING:
-        case C.PIECE_FETCHED:
-        case C.PIECE_FETCHING_FAILED:
-        case C.PIECE_FETCHING_ERROR:
-            return {
-                ...pieces,
-                byId: {...pieces.byId, [action.id]: piece(pieces.byId[action.id], action)}
-            };
+    case C.PIECES_EDITOR_ACTIVE:
+      const activeList = pState.activeIds || [];
+      if (action.active) {
+        if (activeList.indexOf(action.id) === -1) {
+          return {
+            ...pState,
+            activeId: [...activeList, action.id],
+            byId: { ...pState.byId, [action.id]: piece(pState.byId[action.id], action) },
+          };
+        }
+      } else if (activeList.indexOf(action.id) !== -1) {
+        return {
+          ...pState,
+          activeIds: activeList.filter((aid: string) => aid !== action.id),
+          byId: { ...pState.byId, [action.id]: piece(pState.byId[action.id], action) },
+        };
+      }
+      return {
+        ...pState,
+        byId: { ...pState.byId, [action.id]: piece(pState.byId[action.id], action) },
+      };
 
-        case C.PIECES_EDITOR_ACTIVE:
-            let activeList = pieces.activeId || [];
-            if(action.active) {
-                if(activeList.indexOf(action.id) == -1) {
-                    return {
-                        ...pieces,
-                        activeId: [...activeList, action.id],
-                        byId: {...pieces.byId, [action.id]: piece(pieces.byId[action.id], action)}
-                    };
-                }
-            } else {
-                if(activeList.indexOf(action.id) != -1) {
-                    return {
-                        ...pieces,
-                        activeId: activeList.filter(function(e) { return e !== action.id }),
-                        byId: {...pieces.byId, [action.id]: piece(pieces.byId[action.id], action)}
-                    };
-                }
-            }
-            return {
-                ...pieces,
-                byId: {...pieces.byId, [action.id]: piece(pieces.byId[action.id], action)}
-            };
+    case C.PIECES_HOVERED:
+      return {
+        ...pState,
+        hoveredId: action.id,
+        hoveredRect: action.rect,
+      };
 
-        case C.PIECES_HOVERED:
-            return {
-                ...pieces,
-                hoveredId: action.id,
-                hoveredRect: action.rect
-            };
-
-        default:
-            return pieces
-    }
+    default:
+      return pState;
+  }
 };
 
 export default pieces;
-

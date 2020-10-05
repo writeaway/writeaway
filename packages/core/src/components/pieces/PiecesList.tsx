@@ -1,16 +1,14 @@
 import { PieceLine } from 'components/pieces/PieceLine';
 import React from 'react';
-import { IPieceState, PieceType } from 'types';
-
-;
+import { IPieceItemState, PieceType } from 'types';
 
 export interface IPiecesListProps {
-  pieces: Record<string, IPieceState>,
+  pieces: Record<string, IPieceItemState>,
   setSourceId: (id: string) => void,
   savePiece: (id: string) => void,
   pieceNameGroupSeparator: string,
   activatePiece: (id: string) => void,
-  editorEnabled: Record<PieceType, boolean | undefined>
+  editorEnabled: Partial<Record<PieceType, boolean>>
   editorActive: boolean,
   source: boolean,
 }
@@ -24,17 +22,18 @@ export const PiecesList = (
     source,
     setSourceId,
     pieceNameGroupSeparator,
-    editorActive
-  }: IPiecesListProps
+    editorActive,
+  }: IPiecesListProps,
 ) => {
   const ids = Object.keys(pieces);
   return (
     <div className="r_list">
       {ids.map((id, index) => {
-          if (editorEnabled[pieces[id].type]) {
-            const prevPieceName = index > 0 ? ids[index - 1] : '';
+        if (editorEnabled[pieces[id].type]) {
+          const prevPieceName = index > 0 ? ids[index - 1] : '';
 
-            return <PieceLine
+          return (
+            <PieceLine
               key={id}
               piece={pieces[id]}
               savePiece={() => savePiece(id)}
@@ -43,13 +42,13 @@ export const PiecesList = (
               setSourceId={setSourceId}
               pieceNameGroupSeparator={pieceNameGroupSeparator}
               prevPieceName={prevPieceName}
-              editorActive={editorActive}/>
-          } else {
-            return null;
-          }
+              editorActive={editorActive}
+            />
+          );
         }
-      )}
+        return null;
+      })}
     </div>
   );
-}
-export default PiecesList
+};
+export default PiecesList;

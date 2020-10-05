@@ -7,12 +7,12 @@
  * @param piece.type {string}
  * @returns {{hover: {ClientRect}, node: {ClientRect}}}
  */
-import { IPiece } from 'types';
+import { IPiece, Rect } from 'types';
 
 export const getNodeRect = function (piece: IPiece, padding: number = 10) {
-  let node = piece.node.getBoundingClientRect();
+  const node = piece.node.getBoundingClientRect();
 
-  let hover = {
+  const hover: Rect = {
     left: node.left - padding,
     right: node.right + padding,
     top: node.top - padding,
@@ -23,12 +23,11 @@ export const getNodeRect = function (piece: IPiece, padding: number = 10) {
 
   if (hover.left + window.scrollX < 0 || hover.top + window.scrollY < 0 || hover.width + hover.left + window.scrollX > document.body.scrollWidth || hover.height + hover.top + window.scrollY > document.body.scrollHeight) {
     return {
-      node
-    }
-  } else {
-    return {
       node,
-      hover
-    }
+    };
   }
+  return {
+    node,
+    hover,
+  };
 };

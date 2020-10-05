@@ -5,9 +5,7 @@
 let Config = {};
 
 export const setConfig = (config) => {
-    Config = config
+  Config = config;
 };
 
-export const getConfig = () => {
-    return Config;
-};
+export const getConfig = () => Config;

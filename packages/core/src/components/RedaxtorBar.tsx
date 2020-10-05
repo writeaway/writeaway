@@ -1,10 +1,12 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
 
 import classNames from 'classnames';
 import { IComponent, PieceType } from 'types';
 
-import PanelHandler from './PanelHandler'
-import Pieces from './pieces/PiecesContainer'
+import PanelHandler from './PanelHandler';
+import Pieces from './pieces/PiecesContainer';
 
 export interface RedaxtorBarProps {
   options: {
@@ -13,23 +15,21 @@ export interface RedaxtorBarProps {
     pieceNameGroupSeparator: string,
   },
   message?: {
-    content: string
+    content: string,
+    type: string,
   },
   navBarCollapsed: boolean,
   expert: boolean,
-  components: Record<PieceType, IComponent>,
   piecesToggleNavBar: () => void,
 }
 
 export const RedaxtorBar = ({
-                              message,
-                              navBarCollapsed,
-                              piecesToggleNavBar,
-                              options,
-                              components,
+  message,
+  navBarCollapsed,
+  piecesToggleNavBar,
+  options,
   expert,
-                            }: RedaxtorBarProps
-) => {
+}: RedaxtorBarProps) => {
   const [dragging, setDragging] = useState<boolean>(false);
   const [dragged, setDragged] = useState<boolean>(false);
   const [value, setValue] = useState<string>('pieces');
@@ -39,10 +39,12 @@ export const RedaxtorBar = ({
     y: number,
     startX: number,
     startY: number
-  }>({ x: 0, y: 0, startX: 0, startY: 0 });
+  }>({
+    x: 0, y: 0, startX: 0, startY: 0,
+  });
 
   const onMouseUp = useCallback((e: MouseEvent) => {
-    //ignore if don't set draggable option
+    // ignore if don't set draggable option
     if (!options.navBarDraggable || !dragging) {
       return;
     }
@@ -52,7 +54,7 @@ export const RedaxtorBar = ({
   }, [setDragging, options.navBarDraggable]);
 
   const onMouseDown = useCallback((e: React.MouseEvent) => {
-    //ignore if don't set draggable option
+    // ignore if don't set draggable option
     if (!options.navBarDraggable) {
       return;
     }
@@ -73,7 +75,7 @@ export const RedaxtorBar = ({
   }, [setDragging, options.navBarDraggable]);
 
   const toggleOpen = useCallback(() => {
-    //ignore if don't set draggable option
+    // ignore if don't set draggable option
     if (!options.navBarCollapsable) {
       return;
     }
@@ -82,17 +84,16 @@ export const RedaxtorBar = ({
     }
   }, [setDragged, piecesToggleNavBar]);
 
-
   const onMouseMove = useCallback((e: MouseEvent) => {
-    //ignore if don't set draggable option
+    // ignore if don't set draggable option
     if (!options.navBarDraggable || !dragging) {
       return;
     }
     if (e.pageX === rel.current?.startX && e.pageY === rel.current?.startY) {
       return;
     }
-    node.current!.style.left = e.pageX - rel.current!.x + 'px';
-    node.current!.style.top = e.pageY - rel.current!.y + 'px';
+    node.current!.style.left = `${e.pageX - rel.current!.x}px`;
+    node.current!.style.top = `${e.pageY - rel.current!.y}px`;
     setDragged(true);
     e.stopPropagation();
     e.preventDefault();
@@ -102,43 +103,44 @@ export const RedaxtorBar = ({
     document.addEventListener('mouseup', onMouseUp);
     return () => {
       document.removeEventListener('mouseup', onMouseUp);
-    }
+    };
   }, [onMouseUp]);
 
   useEffect(() => {
     document.addEventListener('mousemove', onMouseMove);
     return () => {
       document.removeEventListener('mousemove', onMouseMove);
-    }
+    };
   }, [onMouseMove]);
 
-
   const r_bar_class = classNames({
-    'r_bar': true,
+    r_bar: true,
     'rx_non-expert': !expert,
-  })
+  });
 
-  let isCollapsed = navBarCollapsed??true;
-  let piecesOptions = {
-    pieceNameGroupSeparator: options.pieceNameGroupSeparator
-  };
+  const isCollapsed = navBarCollapsed ?? true;
 
   return (
     <div className="r_reset">
       <div ref="bar" className={r_bar_class}>
-        <PanelHandler isCollapsable={options.navBarCollapsable}
-                      isOpen={!isCollapsed}
-                      onMouseDown={onMouseDown}
-                      toggleOpen={toggleOpen} message={message}/>
+        <PanelHandler
+          isCollapsable={options.navBarCollapsable}
+          isOpen={!isCollapsed}
+          onMouseDown={onMouseDown}
+          toggleOpen={toggleOpen}
+          message={message}
+        />
 
-        {!isCollapsed ?
-          <div className="r_tabs" data-value={value}>
-            <div className="r_tab-content">
-              {value === 'pieces' &&
-              <Pieces components={components} options={piecesOptions}/>}
+        {!isCollapsed
+          ? (
+            <div className="r_tabs" data-value={value}>
+              <div className="r_tab-content">
+                {value === 'pieces'
+              && <Pieces />}
+              </div>
             </div>
-          </div> : null}
+          ) : null}
       </div>
     </div>
-  )
-}
+  );
+};
