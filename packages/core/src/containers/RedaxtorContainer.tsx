@@ -14,7 +14,7 @@ const mapStateToProps = (state: IWriteAwayState) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  hideMessage: () => dispatch(showMessage(null)),
+  hideMessage: () => dispatch(showMessage()),
   piecesToggleNavBar: () => dispatch(piecesToggleNavBar()),
 });
 

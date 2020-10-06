@@ -6,6 +6,7 @@ import * as piecesActions from '../../actions/pieces';
 const mapStateToProps = (state: IWriteAwayState) => ({
   sourceId: state.pieces.sourceId,
   byId: state.pieces.byId,
+  api: state.config.api,
   editorEnabled: state.pieces.editorEnabled,
   editorActive: state.pieces.editorActive,
   components: state.config.pieces.components,

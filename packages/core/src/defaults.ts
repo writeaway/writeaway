@@ -78,7 +78,7 @@ export const defaultMinimumApi: RedaxtorAPI = {
   },
   savePieceData(piece) {
     console.warn('Using default implementation for saving piece data. This should be overriden', piece);
-    return Promise.resolve();
+    return Promise.resolve(piece);
   },
 };
 

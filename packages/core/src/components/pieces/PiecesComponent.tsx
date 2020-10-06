@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { IComponent, IPieceItemState, PieceType } from 'types';
+import { IComponent, IPieceItemState, PieceType, RedaxtorAPI } from 'types';
 import PiecesList from './PiecesList';
 
 import { RxCheckBox } from '../RxCheckBox';
@@ -7,6 +7,7 @@ import { RxCheckBox } from '../RxCheckBox';
 import i18n from '../../i18n';
 
 export interface IPiecesComponentProps {
+  api: RedaxtorAPI,
   sourceId?: string,
   setSourceId: (id?: string) => void,
   savePiece: (id: string) => void,
@@ -23,6 +24,7 @@ export interface IPiecesComponentProps {
 
 export const PiecesComponent = (
   {
+    api,
     sourceId,
     setSourceId,
     savePiece,
@@ -61,10 +63,12 @@ export const PiecesComponent = (
 
   let sourceEditor = null;
   if (components.source && sourceId) {
+    const pieceProps = byId[sourceId];
     sourceEditor = (
       <components.source
+        {...pieceProps}
+        api={api}
         wrapper="redaxtor-modal"
-        html={byId[sourceId].data.html}
         onClose={() => setSourceId(undefined)}
         onSave={(id: string) => savePiece(id)}
       />

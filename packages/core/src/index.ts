@@ -1,5 +1,5 @@
-import Redaxtor from './Redaxtor';
+import { Redaxtor } from './Redaxtor';
 
 export * from './types';
 
-module.exports = Redaxtor;
+export default Redaxtor;

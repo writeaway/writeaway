@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import {
-  IPieceItemState, IWriteAwayState, Dispatch, IOptions,
+  IPieceItemState, IWriteAwayState, Dispatch, IOptions, IComponent,
 } from 'types';
 import {
   updatePiece,
@@ -17,18 +17,21 @@ import {
 } from '../actions/pieces';
 
 export type PieceProps<T> = {
-  type: string,
   editorActive: boolean,
   expert: unknown,
-  component: React.FC<T>,
+  piece: IPieceItemState,
   config: IOptions,
 };
 
 const PieceContainer = <T extends object = any>(props: PieceProps<T>) => {
-  const pieceOptions = (props.config.options ? props.config.options[props.type] : undefined) || {};
+  const pieceOptions = (props.config.options ? props.config.options[props.piece.type] : undefined) || {};
+  const EditorComponent: IComponent | undefined = props.config.pieces.components[props.piece.type];
+  if(!EditorComponent) {
+    throw new Error(`Piece type [${props.piece.type}] not supported`);
+  }
   return (
-    <props.component
-      {...props}
+    <EditorComponent
+      {...props.piece}
       api={props.config.api}
       options={pieceOptions}
       className={classNames({
@@ -37,20 +40,19 @@ const PieceContainer = <T extends object = any>(props: PieceProps<T>) => {
         r_highlight: props.editorActive,
         'rx_non-expert': !props.expert,
       })}
-      wrapper={`redaxtor-${props.type}`}
+      wrapper={`redaxtor-${props.piece.type}`}
     />
   );
 };
 
 const mapStateToProps = (state: IWriteAwayState, ownProps: { id: string }) => ({
-  ...state.pieces.byId[ownProps.id],
+  piece: state.pieces.byId[ownProps.id],
   highlight: state.pieces.highlight,
   expert: state.global.expert,
   config: state.config,
   editorActive: !state.pieces.byId[ownProps.id].destroy
     && state.pieces.editorActive
-    && state.pieces.editorEnabled[state.pieces.byId[ownProps.id].type] !== false,
-  // Note strict comparison to false. Undefined is treated as true, TODO: make a selector or method for this
+    && (state.pieces.editorEnabled[state.pieces.byId[ownProps.id].type]??true),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

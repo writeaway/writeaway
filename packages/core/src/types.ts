@@ -1,3 +1,4 @@
+import { ComponentClass } from 'react';
 import { ToastrState } from 'react-redux-toastr';
 import { AnyAction, Store as StoreRaw } from 'redux';
 import type { ThunkAction, ThunkDispatch } from 'redux-thunk';
@@ -11,10 +12,10 @@ export type PieceDataResolver<DataType = any> =
 export interface RedaxtorAPI {
   getImageList?: () => unknown,
   uploadImage?: () => unknown,
-  isNodeVisible: (piece: unknown) => boolean,
-  getNodeRect: (piece: IPiece) => { node: Rect, hover?: Rect },
+  isNodeVisible: (piece: IPieceItemState) => boolean,
+  getNodeRect: (piece: IPieceItemState) => { node: Rect, hover?: Rect },
   getPieceData: PieceDataResolver,
-  savePieceData: (piece: IPieceWithData) => Promise<unknown>,
+  savePieceData: (piece: IPieceItemState) => Promise<IPieceItemState>,
   resolvers: Partial<Record<PieceType, PieceDataResolver>>
 }
 
@@ -121,11 +122,21 @@ export interface IWriteAwayState {
 
 export type GetIWriteAwayState = () => IWriteAwayState;
 
-export type IComponent = {
+export interface IPieceProps extends IPieceItemState {
+  wrapper?: string;
+  html?: string;
+  onClose?: ()=>void;
+  onSave?: (id: string) => void;
+  api: RedaxtorAPI;
+  options?: any;
+  className?: string;
+}
+
+export interface IComponent extends ComponentClass<IPieceProps> {
   name: string,
   editLabel: string,
   applyEditor: (node: HTMLElement, data: any) => void,
-};
+}
 
 export interface Rect {
   top: number,

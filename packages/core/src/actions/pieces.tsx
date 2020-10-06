@@ -126,7 +126,7 @@ export const pieceSavingFailed = (id: string, error: unknown) => ({ type: C.PIEC
  */
 export const savePiece = (id: string) => (dispatch: Dispatch, getState: GetIWriteAwayState) => {
   const piece = getState().pieces.byId[id];
-  if (getState().config.api.savePieceData) {
+  if (!!getState().config.api.savePieceData) {
     getState().config.api.savePieceData(piece).then((data: unknown) => {
       dispatch(pieceSaved(id, data));
     }).catch((error: unknown) => {
@@ -194,7 +194,7 @@ export const pieceGet = (id: string) => (dispatch: Dispatch, getState: GetIWrite
     data: piece.data ? { ...piece.data } : void 0,
   };
 
-  getState().config.api.getPieceData(mutableCopy).then((updatedPiece: IPieceWithData) => {
+  getState().config.api.getPieceData(mutableCopy).then((updatedPiece: IPieceItemState) => {
     if (!updatedPiece.data) {
       dispatch(pieceFetchingError(id, 'Api method generated no data'));
     } else {

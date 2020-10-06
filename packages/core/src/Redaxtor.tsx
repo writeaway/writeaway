@@ -36,7 +36,7 @@ import { configureFetch } from './helpers/callFetch';
 import reducers from './reducers';
 import { setStore } from './store';
 
-class Redaxtor {
+export class Redaxtor {
   private readonly options: IOptions;
 
   private store!: Store;
