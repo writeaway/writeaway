@@ -24,6 +24,7 @@ module.exports = {
     extensions: [
       '.js',
       '.ts',
+      '.tsx',
       '.json',
       '.web.js',
       '.less',
@@ -40,6 +41,7 @@ module.exports = {
       // loaders.js,
       loaders.ts,
       loaders.css,
+      loaders.less,
     ],
   },
 

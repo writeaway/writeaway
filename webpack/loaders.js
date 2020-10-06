@@ -1,10 +1,11 @@
 const path = require('path');
 const { readdirSync } = require('fs');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const makeIncludeFunction = (namespace) => {
   const allPackages = readdirSync(path.join(__dirname, '..', '/packages'));
   return (p) => {
-    const include = p.indexOf('@spiral-toolkit') >= 0
+    const include = p.indexOf('@writeaway') >= 0
             || !!allPackages.find((pack) => p.indexOf(`packages${path.sep}${pack}`) >= 0);
     return include;
   };
@@ -36,6 +37,23 @@ exports.css = {
     'css-loader?-url&sourceMap',
   ],
 };
+
+exports.less = {
+  test: /\.less$/,
+  use: [
+    {
+      loader: MiniCssExtractPlugin.loader,
+    },
+    {
+      loader: 'css-loader',
+    },
+    {
+      loader: 'less-loader',
+    },
+  ],
+};
+
+
 
 exports.asIs = {
   loader: 'do-nothing-loader',

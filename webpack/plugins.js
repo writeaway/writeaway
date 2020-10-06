@@ -1,5 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const basePlugins = [
   new webpack.DefinePlugin({
@@ -18,7 +20,21 @@ const basePlugins = [
 
 const devPlugins = [];
 
-const prodPlugins = [];
+
+const cssExtractorOptions = {
+  filename: 'css/[name].css',
+};
+
+const prodPlugins = [
+  new MiniCssExtractPlugin(cssExtractorOptions),
+  new BundleAnalyzerPlugin({
+    analyzerMode: 'static',
+    generateStatsFile: true,
+    reportFilename: 'bundle_report.html',
+    statsFilename: 'bundle_stats.json',
+    openAnalyzer: false,
+  }),
+];
 
 module.exports = basePlugins
   .concat(process.env.NODE_ENV === 'production' ? prodPlugins : [])

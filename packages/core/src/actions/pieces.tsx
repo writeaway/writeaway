@@ -2,10 +2,10 @@ import { pieceRender } from 'components/pieceRenderer';
 import React from 'react';
 import { toastr } from 'react-redux-toastr';
 import {
-  Dispatch, GetIWriteAwayState, IPieceControllerState, IPieceItemState, IPieceWithData, PieceType, Rect,
+  Dispatch, GetIWriteAwayState, IPieceControllerState, IPieceItemState, PieceType, Rect,
 } from 'types';
 
-import C from '../constants.js';
+import C from '../constants';
 
 export const piecesEnableEdit = (subType?: PieceType) => ({ type: C.PIECES_ENABLE_EDIT, subType });
 

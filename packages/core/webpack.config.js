@@ -16,6 +16,11 @@ const config = {
             root: 'WriteAway',
         },
     },
+
+    resolve: {
+        ...baseConfig.resolve,
+        modules: ['node_modules', 'src'],
+    }
 };
 
 module.exports = config;

@@ -1,6 +1,6 @@
 import { AnyAction, Reducer } from 'redux';
 import { IPieceControllerState, IPieceItemState, PieceType } from 'types';
-import C from '../constants.js';
+import C from '../constants';
 
 const piece = (pItem: IPieceItemState, action: AnyAction) => {
   switch (action.type) {

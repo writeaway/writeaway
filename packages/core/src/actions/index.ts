@@ -1,5 +1,5 @@
 import { Dispatch, GetIWriteAwayState } from 'types';
-import C from '../constants.js';
+import C from '../constants';
 
 export const showMessage = (messageObject?: {content: string, type: string}) => ({ type: C.GLOBAL_SHOW_MESSAGE, message: messageObject });
 
