@@ -5,18 +5,29 @@ import type { ThunkAction, ThunkDispatch } from 'redux-thunk';
 
 export type PieceDataResolver<DataType = any> =
   (piece: IPieceItemState<DataType>,
-    resolvers?: Record<PieceType,
-    PieceDataResolver<DataType>>) =>
-  Promise<IPieceItemState<DataType>>;
+   resolvers?: Record<PieceType,
+     PieceDataResolver<DataType>>) =>
+    Promise<IPieceItemState<DataType>>;
+
+export interface GalleryItem {
+  id: string,
+  src: string,
+  thumbnailSrc?: string,
+  title?: string,
+  alt?: string,
+  width?: number,
+  height?: number
+}
 
 export interface RedaxtorAPI {
-  getImageList?: () => unknown,
-  uploadImage?: () => unknown,
+  getImageList?: (piece: { id: string, dataset: Record<string, string>, type: string }) => Promise<Array<GalleryItem>>,
+  uploadImage?: (data: FormData) => Promise<GalleryItem>,
   isNodeVisible: (piece: IPieceItemState) => boolean,
   getNodeRect: (piece: IPieceItemState) => { node: Rect, hover?: Rect },
   getPieceData: PieceDataResolver,
   savePieceData: (piece: IPieceItemState) => Promise<IPieceItemState>,
-  resolvers: Partial<Record<PieceType, PieceDataResolver>>
+  resolvers: Partial<Record<PieceType, PieceDataResolver>>,
+  deleteImage?: (id: string) => Promise<any>
 }
 
 export type PieceType = 'source' | 'background' | 'html' | 'image';
@@ -125,7 +136,7 @@ export type GetIWriteAwayState = () => IWriteAwayState;
 export interface IPieceProps extends IPieceItemState {
   wrapper?: string;
   html?: string;
-  onClose?: ()=>void;
+  onClose?: () => void;
   onSave?: (id: string) => void;
   api: RedaxtorAPI;
   options?: any;

@@ -1,0 +1,88 @@
+@import url('http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css');
+.medium-toolbar-arrow-under:after {
+  border-color: #efefef transparent transparent transparent;
+  top: 30px;
+}
+.medium-toolbar-arrow-over:before {
+  border-color: transparent transparent #efefef transparent;
+}
+.medium-editor-toolbar {
+  border-radius: 2px;
+  z-index: 200000;
+  text-align: center;
+  max-width: 610px;
+}
+.medium-editor-toolbar li {
+  background-color: #efefef;
+  display: inline-block;
+  vertical-align: top;
+}
+.medium-editor-toolbar li button {
+  background-color: transparent;
+  border: none;
+  box-sizing: border-box;
+  color: #4a4a4a;
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+  transition: background-color 0.2s ease-in, color 0.2s ease-in;
+}
+.medium-editor-toolbar li button:hover {
+  background-color: #d6d6d6;
+  color: #111111;
+}
+.medium-editor-toolbar li .medium-editor-button-first {
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+}
+.medium-editor-toolbar li .medium-editor-button-last {
+  border-bottom-right-radius: 2px;
+  border-right: none;
+  border-top-right-radius: 2px;
+}
+.medium-editor-toolbar li .medium-editor-button-active {
+  background-color: #d6d6d6;
+  color: #111111;
+}
+.medium-editor-toolbar li .medium-editor-action-pre {
+  padding: 5px;
+}
+.medium-editor-toolbar-form {
+  background: #efefef;
+  border-radius: 2px;
+  color: #ffedd5;
+}
+.medium-editor-toolbar-form .medium-editor-toolbar-input {
+  background: #efefef;
+  color: #4a4a4a;
+  height: 30px;
+}
+.medium-editor-toolbar-form .medium-editor-toolbar-input::-webkit-input-placeholder {
+  color: #111111;
+  color: rgba(17, 17, 17, 0.008);
+}
+.medium-editor-toolbar-form .medium-editor-toolbar-input:-moz-placeholder {
+  /* Firefox 18- */
+  color: #111111;
+  color: rgba(17, 17, 17, 0.008);
+}
+.medium-editor-toolbar-form .medium-editor-toolbar-input::-moz-placeholder {
+  /* Firefox 19+ */
+  color: #111111;
+  color: rgba(17, 17, 17, 0.008);
+}
+.medium-editor-toolbar-form .medium-editor-toolbar-input:-ms-input-placeholder {
+  color: #111111;
+  color: rgba(17, 17, 17, 0.008);
+}
+.medium-editor-toolbar-form a {
+  color: #4a4a4a;
+}
+.medium-editor-toolbar-anchor-preview {
+  background: #efefef;
+  border-radius: 2px;
+  color: #4a4a4a;
+}
+.medium-editor-placeholder:after {
+  color: #ffffff;
+}

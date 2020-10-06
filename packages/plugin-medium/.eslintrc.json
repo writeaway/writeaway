@@ -1,0 +1,19 @@
+{
+  "extends": [
+    "airbnb-typescript"
+  ],
+  "parser":  "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "project": "tsconfig.json"
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "rules":  {
+    "import/prefer-default-export": 0,
+    "import/no-named-as-default": 0,
+    "max-len": ["error", 160]
+  }
+}
