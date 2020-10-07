@@ -48,12 +48,20 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
 
   private nodeWasUpdated: boolean = false;
 
+  get piece() {
+    return this.props.piece;
+  }
+
+  get actions() {
+    return this.props.actions;
+  }
+
   componentDidMount() {
     this.imageManagerApi = imageManagerApi({
       api: this.props.api,
       container: ReactDOM.findDOMNode(this) as HTMLElement,
     });
-    const nodeRect = this.props.api.getNodeRect(this.props);
+    const nodeRect = this.props.api.getNodeRect(this.piece);
     this.rect = nodeRect.hover || nodeRect.node;
   }
 
@@ -89,10 +97,10 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
         ...imageData,
       },
       pieceRef: {
-        type: this.props.type,
-        data: this.props.data,
-        id: this.props.id,
-        dataset: this.props.dataset,
+        type: this.piece.type,
+        data: this.piece.data,
+        id: this.piece.id,
+        dataset: this.piece.dataset,
       },
       onClose: this.cancelCallback,
       onSave: this.saveCallback,
@@ -131,7 +139,7 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
       this.medium.editor.pasteHTML(`<img ${html.join(' ')}/>`);
       this.medium.onChange();
     }
-    this.props.actions.updatePiece(this.props.id, { data: { html: this.medium.editor.getContent() } });
+    this.props.actions.updatePiece(this.piece.id, { data: { html: this.medium.editor.getContent() } });
   }
 
   @boundMethod
@@ -166,13 +174,13 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
   }
 
   createEditor() {
-    const dom = this.props.node;
+    const dom = this.piece.node;
     this.editorData = undefined;
     // const dom = ReactDOM.findDOMNode(this);
     this.medium = new _MediumEditor(dom, {
       onUpdate: () => {
         this.checkifResized();
-        this.props.actions.updatePiece(this.props.id, { data: { html: this.medium ? this.medium.getEditorContent() : this.editorData } });
+        this.props.actions.updatePiece(this.piece.id, { data: { html: this.medium ? this.medium.getEditorContent() : this.editorData } });
       },
       onNeedResizeCheck: () => {
         this.checkifResized();
@@ -180,13 +188,13 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
       onSave: () => {
         this.props.actions.savePiece(this.props.piece.id);
       },
-      onLeave: (resetCallback) => {
+      onLeave: () => {
         /* if(resetCallback) {
                  if(confirm("Save changes?")) {
-                 this.props.savePiece(this.props.id);
+                 this.props.savePiece(this.piece.id);
                  } else {
                  resetCallback();
-                 this.props.resetPiece(this.props.id);
+                 this.props.resetPiece(this.piece.id);
                  }
                  } else {
                  //
@@ -207,7 +215,7 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
         this.props.actions.onEditorActive && this.props.actions.onEditorActive(this.props.piece.id, active);
       },
     });
-    this.props.node.addEventListener('click', this.onClick);
+    this.piece.node.addEventListener('click', this.onClick);
   }
 
   shouldComponentUpdate(nextProps: IPieceProps) {
@@ -217,14 +225,14 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
     if (nextProps.expert !== this.props.expert) {
       return true;
     }
-    return nextProps.data.html !== this.props.data.html;
+    return nextProps.piece.data.html !== this.props.piece.data.html;
   }
 
   destroyEditor() {
     if (this.medium) {
       this.editorData = this.medium.getEditorContent();
       this.medium.destroy();
-      this.props.node.removeEventListener('click', this.onClick);
+      this.piece.node.removeEventListener('click', this.onClick);
       delete this.medium;
     }
   }
@@ -233,15 +241,15 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
      * Updates rendering of props that are not updated by react
      * Here that updates styles of background
      */
-  renderNonReactAttributes(data) {
-    // console.log('Re-Rendered?', this.props.id);
+  renderNonReactAttributes(data: { html: string }) {
+    // console.log('Re-Rendered?', this.piece.id);
     if (this.props.editorActive) {
       if (!this.medium) {
         this.createEditor();
-        this.props.piece.node.classList.add(...this.props.className.split(' '));
+        this.props.piece.node.classList.add(...(this.props.className || '').split(' '));
       }
     } else {
-      this.props.piece.node.classList.remove(...this.props.className.split(' '));
+      this.props.piece.node.classList.remove(...(this.props.className || '').split(' '));
 
       // the destroyEditor method called also from  the shouldComponentUpdate method and this. medium can not exist here
       if (this.medium) {
@@ -253,7 +261,7 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
     if (this.medium) {
       const content = this.medium.getEditorContent();
       if (content != data.html) {
-        // console.log('Re-Rendered HARD', this.props.id);
+        // console.log('Re-Rendered HARD', this.piece.id);
         this.medium.editor.setContent(data.html);
         this.nodeWasUpdated = true;
       }
@@ -265,13 +273,13 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
         toolbar.toolbar.classList.add('rx_non-expert');
       }
     } else {
-      this.nodeWasUpdated = RedaxtorMedium.applyEditor(this.props.node, data);
+      this.nodeWasUpdated = RedaxtorMedium.applyEditor(this.piece.node, data);
     }
   }
 
   componentWillUnmount() {
     this.destroyEditor();
-    console.log(`Medium editor ${this.props.id} unmounted`);
+    console.log(`Medium editor ${this.piece.id} unmounted`);
   }
 
   componentDidUpdate() {
@@ -279,11 +287,11 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
   }
 
   checkifResized() {
-    const nodeRect = this.props.api.getNodeRect(this.props);
+    const nodeRect = this.props.api.getNodeRect(this.piece);
     const rect = nodeRect.hover || nodeRect.node;
     if (this.changedBoundingRect(rect)) {
       this.setBoundingRect(rect);
-      this.props.actions.onNodeResized && this.props.actions.onNodeResized(this.props.piece.id);
+      this.props.actions.onNodeResized && this.props.actions.onNodeResized(this.piece.id);
     }
   }
 
@@ -308,7 +316,7 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
   }
 
   render() {
-    this.renderNonReactAttributes(this.props.data);
+    this.renderNonReactAttributes(this.piece.data);
     return React.createElement(this.props.wrapper, {});
   }
 }

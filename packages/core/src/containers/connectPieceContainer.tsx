@@ -19,7 +19,7 @@ import {
 export type PieceProps<T> = {
   actions: PieceActions,
   editorActive: boolean,
-  expert: unknown,
+  expert: boolean,
   piece: IPieceItemState,
   config: IOptions,
 };
@@ -34,6 +34,7 @@ const PieceContainer = <T extends object = any>(props: PieceProps<T>) => {
     <EditorComponent
       piece={props.piece}
       actions={props.actions}
+      expert={props.expert}
       editorActive={props.editorActive}
       api={props.config.api}
       options={pieceOptions}

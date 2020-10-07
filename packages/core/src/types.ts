@@ -158,6 +158,7 @@ export type PieceActions = {
 export interface IPieceProps {
   piece: IPieceItemState;
   actions: PieceActions;
+  expert: boolean;
   editorActive: boolean;
   wrapper: string;
   onClose?: () => void;

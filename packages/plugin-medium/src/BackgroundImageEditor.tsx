@@ -52,7 +52,7 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
   constructor(props: IPieceProps) {
     super(props);
     this.active = false;// TODO: Think how to do that more "react" way. This flag allows to handle events bound to PARENT node. Ideally we should not have parent node at all.
-    this.targetDiv = props.node;
+    this.targetDiv = props.piece.node;
   }
 
   componentDidMount() {
@@ -80,11 +80,11 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
 
   componentWillReceiveProps(newProps: IPieceProps) {
     if (newProps.piece.manualActivation) {
-      this.actions.onManualActivation(this.props.id);
+      this.actions.onManualActivation(this.piece.id);
       this.activateEditor();
     }
     if (newProps.piece.manualDeactivation) {
-      this.actions.onManualDeactivation(this.props.id);
+      this.actions.onManualDeactivation(this.piece.id);
       this.deactivateEditor();
     }
   }
@@ -101,10 +101,10 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
         title: this.targetDiv.getAttribute('title') || '',
       },
       pieceRef: {
-        type: this.props.type,
-        data: this.props.data,
-        id: this.props.id,
-        dataset: this.props.dataset,
+        type: this.piece.type,
+        data: this.piece.data,
+        id: this.piece.id,
+        dataset: this.piece.dataset,
       },
       onClose: this.cancelCallback.bind(this),
       onSave: this.saveCallback.bind(this),
@@ -114,7 +114,7 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
       },
     });
     this.imageManager!.showPopup();
-    this.actions.onEditorActive && this.actions.onEditorActive(this.props.id, true);
+    this.actions.onEditorActive && this.actions.onEditorActive(this.piece.id, true);
   }
 
   closePopup() {
@@ -123,7 +123,7 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
 
   saveCallback(data: RedaxtorImageData) {
     this.renderNonReactAttributes(data);
-    this.actions.updatePiece(this.props.id, {
+    this.actions.updatePiece(this.piece.id, {
       data: {
         src: data.src,
         title: data.title,
@@ -133,12 +133,12 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
         bgColor: data.bgColor,
       },
     });
-    this.actions.savePiece(this.props.id);
-    this.actions.onEditorActive && this.actions.onEditorActive(this.props.id, false);
+    this.actions.savePiece(this.piece.id);
+    this.actions.onEditorActive && this.actions.onEditorActive(this.piece.id, false);
   }
 
   cancelCallback() {
-    this.actions.onEditorActive && this.actions.onEditorActive(this.props.id, false);
+    this.actions.onEditorActive && this.actions.onEditorActive(this.piece.id, false);
   }
 
   findRedaxtor(_el: Element) {
@@ -176,11 +176,11 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
   }
 
   shouldComponentUpdate(nextProps: IPieceProps, nextState: RedaxtorBackgroundEditorState) {
-    return (nextProps.data.src !== this.props.data.src
-      || nextProps.data.bgColor !== this.props.data.bgColor
-      || nextProps.data.bgSize !== this.props.data.bgSize
-      || nextProps.data.bgRepeat !== this.props.data.bgRepeat
-      || nextProps.data.bgPosition !== this.props.data.bgPosition
+    return (nextProps.piece.data.src !== this.piece.data.src
+      || nextProps.piece.data.bgColor !== this.piece.data.bgColor
+      || nextProps.piece.data.bgSize !== this.piece.data.bgSize
+      || nextProps.piece.data.bgRepeat !== this.piece.data.bgRepeat
+      || nextProps.piece.data.bgPosition !== this.piece.data.bgPosition
       || nextProps.editorActive !== this.props.editorActive);
   }
 
@@ -217,12 +217,12 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
 
   componentWillUnmount() {
     this.die();
-    console.log(`Background editor ${this.props.id} unmounted`);
+    console.log(`Background editor ${this.piece.id} unmounted`);
   }
 
   render() {
     this.check();
-    this.renderNonReactAttributes(this.props.data);
+    this.renderNonReactAttributes(this.piece.data);
     return React.createElement(this.props.wrapper, {});
   }
 }

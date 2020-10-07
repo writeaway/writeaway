@@ -66,6 +66,7 @@ export const PiecesComponent = (
     const pieceProps = byId[sourceId];
     sourceEditor = (
       <components.source
+        expert={false}
         editorActive={editorActive}
         actions={{} as any}
         piece={pieceProps}

@@ -26,19 +26,27 @@ export default class RedaxtorImageTag extends Component<IPieceProps> {
 
   private active: boolean; // TODO: Refactor to store in state?
 
-  private rect: Rect; // TODO: Refactor to store in state?
+  private rect?: Rect; // TODO: Refactor to store in state?
 
   private imageManagerApi?: ImageManager;
 
   constructor(props: IPieceProps) {
     super(props);
 
-    if (this.props.piece.node.nodeName !== 'IMG') {
+    if (this.piece.node.nodeName !== 'IMG') {
       throw new Error('Image editor should be set on image');
     }
 
     this.state = { firstRun: true };
     this.active = false;// TODO: Think how to do that more "react" way. This flag allows to handle events bound to PARENT node. Ideally we should not have parent node at all.
+  }
+
+  get piece() {
+    return this.props.piece;
+  }
+
+  get actions() {
+    return this.props.actions;
   }
 
   /**
@@ -58,11 +66,11 @@ export default class RedaxtorImageTag extends Component<IPieceProps> {
 
   componentWillReceiveProps(newProps: IPieceProps) {
     if (newProps.piece.manualActivation) {
-      this.props.actions.onManualActivation(this.props.piece.id);
+      this.props.actions.onManualActivation(this.piece.id);
       this.activateEditor();
     }
     if (newProps.piece.manualDeactivation) {
-      this.props.actions.onManualDeactivation(this.props.piece.id);
+      this.props.actions.onManualDeactivation(this.piece.id);
       this.deactivateEditor();
     }
   }
@@ -73,24 +81,24 @@ export default class RedaxtorImageTag extends Component<IPieceProps> {
       container: ReactDOM.findDOMNode(this) as HTMLElement,
     });
     this.check();
-    const nodeRect = this.props.api.getNodeRect(this.props);
+    const nodeRect = this.props.api.getNodeRect(this.piece);
     this.rect = nodeRect.hover || nodeRect.node;
   }
 
   onToggleImagePopup() {
     this.imageManagerApi!.setImageData({
       data: {
-        src: this.props.piece.node.src,
-        alt: this.props.piece.node.alt || '',
-        title: this.props.piece.node.getAttribute('title') || '',
-        width: this.props.piece.node.width,
-        height: this.props.piece.node.height,
+        src: (this.piece.node as HTMLImageElement).src,
+        alt: (this.piece.node as HTMLImageElement).alt || '',
+        title: this.piece.node.getAttribute('title') || '',
+        width: (this.piece.node as HTMLImageElement).width,
+        height: (this.piece.node as HTMLImageElement).height,
       },
       pieceRef: {
-        type: this.props.piece.type,
-        data: this.props.piece.data,
-        id: this.props.piece.id,
-        dataset: this.props.piece.dataset,
+        type: this.piece.type,
+        data: this.piece.data,
+        id: this.piece.id,
+        dataset: this.piece.dataset,
       },
       onClose: this.cancelCallback,
       onSave: this.saveCallback,
@@ -100,7 +108,7 @@ export default class RedaxtorImageTag extends Component<IPieceProps> {
       },
     });
     this.imageManagerApi!.showPopup();
-    this.props.onEditorActive && this.props.onEditorActive(this.props.piece.id, true);
+    this.actions.onEditorActive && this.actions.onEditorActive(this.piece.id, true);
   }
 
   closePopup() {
@@ -109,14 +117,14 @@ export default class RedaxtorImageTag extends Component<IPieceProps> {
 
   @boundMethod
   saveCallback(data: RedaxtorImageTagData) {
-    this.props.updatePiece(this.props.piece.id, { data: { src: data.src, alt: data.alt, title: data.title } });
-    this.props.savePiece(this.props.piece.id);
-    this.props.onEditorActive && this.props.onEditorActive(this.props.piece.id, false);
+    this.actions.updatePiece(this.piece.id, { data: { src: data.src, alt: data.alt, title: data.title } });
+    this.actions.savePiece(this.piece.id);
+    this.actions.onEditorActive && this.actions.onEditorActive(this.piece.id, false);
   }
 
   @boundMethod
   cancelCallback() {
-    this.props.onEditorActive && this.props.onEditorActive(this.props.piece.id, false);
+    this.actions.onEditorActive && this.actions.onEditorActive(this.piece.id, false);
   }
 
   @boundMethod
@@ -130,18 +138,18 @@ export default class RedaxtorImageTag extends Component<IPieceProps> {
      * Ensures editor is enabled
      */
   componentInit() {
-    if (!this.active && this.props.piece.node) {
-      this.props.piece.node.addEventListener('click', this.onClick);
-      this.props.piece.node.classList.add('r_editor');
-      this.props.piece.node.classList.add('r_edit');
+    if (!this.active && this.piece.node) {
+      this.piece.node.addEventListener('click', this.onClick);
+      this.piece.node.classList.add('r_editor');
+      this.piece.node.classList.add('r_edit');
       this.active = true;
     }
   }
 
   shouldComponentUpdate(nextProps: IPieceProps & {data: RedaxtorImageTagData}, nextState: IPieceProps & {data: RedaxtorImageTagData}) {
-    return (nextProps.data.src !== this.props.piece.node.src
-        || nextProps.data.alt !== this.props.piece.node.alt
-        || nextProps.data.title !== this.props.piece.node.title
+    return (nextProps.data.src !== (this.piece.node as HTMLImageElement).src
+        || nextProps.data.alt !== (this.piece.node as HTMLImageElement).alt
+        || nextProps.data.title !== this.piece.node.title
         || nextProps.editorActive !== this.props.editorActive);
   }
 
@@ -149,10 +157,10 @@ export default class RedaxtorImageTag extends Component<IPieceProps> {
      * Ensures editor is disabled
      */
   die() {
-    if (this.active && this.props.piece.node) {
-      this.props.piece.node.removeEventListener('click', this.onClick);
-      this.props.piece.node.classList.remove('r_editor');
-      this.props.piece.node.classList.remove('r_edit');
+    if (this.active && this.piece.node) {
+      this.piece.node.removeEventListener('click', this.onClick);
+      this.piece.node.classList.remove('r_editor');
+      this.piece.node.classList.remove('r_edit');
       this.active = false;
     }
   }
@@ -173,17 +181,17 @@ export default class RedaxtorImageTag extends Component<IPieceProps> {
      * Here that updates IMG tag src and alt
      */
   renderNonReactAttributes(data: RedaxtorImageTagData) {
-    RedaxtorImageTag.applyEditor(this.props.piece.node, data);
+    RedaxtorImageTag.applyEditor((this.piece.node as HTMLImageElement), data);
   }
 
   componentWillUnmount() {
     this.die();
-    console.log(`Image editor ${this.props.piece.id} unmounted`);
+    console.log(`Image editor ${this.piece.id} unmounted`);
   }
 
   render() {
     this.check();
-    this.renderNonReactAttributes(this.props.piece.data);
+    this.renderNonReactAttributes(this.piece.data);
     return React.createElement(this.props.wrapper, {});
   }
 
@@ -192,11 +200,11 @@ export default class RedaxtorImageTag extends Component<IPieceProps> {
   }
 
   checkifResized() {
-    const nodeRect = this.props.api.getNodeRect(this.props);
+    const nodeRect = this.props.api.getNodeRect(this.piece);
     const rect = nodeRect.hover || nodeRect.node;
-    if (false && this.changedBoundingRect(rect)) { // TODO was checking 'this.nodeWasUpdated' here that is never changed anywhere
+    if (this.changedBoundingRect(rect)) { // TODO was checking 'this.nodeWasUpdated' here that is never changed anywhere
       this.setBoundingRect(rect);
-      this.props.actions.onNodeResized && this.props.actions.onNodeResized(this.props.id); // TODO: onNodeResized is never used anywhere
+      this.props.actions.onNodeResized && this.props.actions.onNodeResized(this.piece.id); // TODO: onNodeResized is never used anywhere
     }
   }
 
