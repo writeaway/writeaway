@@ -2,11 +2,11 @@ import MediumEditor from 'medium-editor';
 
 export const ToolbarSeparator = (MediumEditor as any).Extension.extend({
   name: 'separator',
-  init: function () {
+  init() {
     this.button = this.document.createElement('div');
     this.button.classList.add('separator');
   },
-  getButton: function () {
+  getButton() {
     return this.button;
   },
 });

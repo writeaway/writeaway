@@ -2,7 +2,7 @@ import MediumEditor from 'medium-editor';
 
 export const ResetButton = (MediumEditor as any).Extension.extend({
   name: 'reset',
-  init: function () {
+  init() {
     this.button = this.document.createElement('button');
     this.button.classList.add('medium-editor-action', 'reset-button');
     this.button.innerHTML = '<i class="rx_icon rx_icon-rewind"></i>';
@@ -11,15 +11,15 @@ export const ResetButton = (MediumEditor as any).Extension.extend({
     this.resetToHTML = this.base.getContent();
     this.on(this.button, 'click', this.handleClickBinded);
   },
-  getButton: function () {
+  getButton() {
     return this.button;
   },
-  handleClick: function () {
+  handleClick() {
     (this.base.getContent() !== this.resetToHTML) && (this.base.setContent(this.resetToHTML));
   },
-  destroy: function () {
+  destroy() {
     this.off(this.button, 'click', this.handleClickBinded);
-  }
+  },
 });
 
 (MediumEditor as any).extensions.resetButton = ResetButton;

@@ -1,3 +1,11 @@
+import {
+  onActivationSentPiece,
+  onDeactivationSentPiece,
+  onEditorActive, onNodeResized,
+  resetPiece,
+  savePiece, setPieceMessage, setSourceId,
+  updatePiece
+} from 'actions/pieces';
 import { ComponentClass } from 'react';
 import { ToastrState } from 'react-redux-toastr';
 import { AnyAction, Store as StoreRaw } from 'redux';
@@ -20,8 +28,8 @@ export interface GalleryItem {
 }
 
 export interface RedaxtorAPI {
-  getImageList?: (piece: { id: string, dataset: Record<string, string>, type: string }) => Promise<Array<GalleryItem>>,
-  uploadImage?: (data: FormData) => Promise<GalleryItem>,
+  getImageList?: (piece: { id: string, dataset?: { [k: string]: string }}) => Promise<Array<GalleryItem>>,
+  uploadImage?: (file: File | FileList) => Promise<GalleryItem | GalleryItem[]>,
   isNodeVisible: (piece: IPieceItemState) => boolean,
   getNodeRect: (piece: IPieceItemState) => { node: Rect, hover?: Rect },
   getPieceData: PieceDataResolver,
@@ -36,12 +44,14 @@ export interface IPiece<DataType = any> {
   node: HTMLElement;
   type: PieceType;
   data?: DataType;
-  dataset?: Record<string, string | undefined>;
+  dataset?: { [k: string]: string };
 }
 
 export interface IPieceItemState<DataType = any> extends IPiece<DataType> {
   id: string,
   name: string,
+  manualActivation?: boolean,
+  manualDeactivation?: boolean,
   messageLevel: string,
   message: string,
   changed?: boolean,
@@ -133,9 +143,23 @@ export interface IWriteAwayState {
 
 export type GetIWriteAwayState = () => IWriteAwayState;
 
-export interface IPieceProps extends IPieceItemState {
-  wrapper?: string;
-  html?: string;
+export type PieceActions = {
+  onManualActivation: (id: string) => void,
+  onManualDeactivation: (id: string) => void,
+  updatePiece: (id: string, piece: Partial<IPieceItemState>) => void,
+  resetPiece: (id: string) =>  void,
+  savePiece: (id: string) => void,
+  onEditorActive: (id: string, active: boolean) => void,
+  onNodeResized: (id: string) => void,
+  setPieceMessage: (id: string, message: string, messageLevel: string) => void,
+  setCurrentSourcePieceId: (id: string) => void,
+}
+
+export interface IPieceProps {
+  piece: IPieceItemState;
+  actions: PieceActions;
+  editorActive: boolean;
+  wrapper: string;
   onClose?: () => void;
   onSave?: (id: string) => void;
   api: RedaxtorAPI;

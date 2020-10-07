@@ -26,7 +26,7 @@ console.log(`\x1b[30m\x1b[47m ${isDebug ? 'Debug build' : 'Production build'} in
 
 if (execute && execute.length) {
   execute.forEach((module) => {
-    execSync(`npx lerna run ${cmd} --scope=@spiral-toolkit/${module} --stream`, {
+    execSync(`npx lerna run ${cmd} --scope=@writeaway/${module} --stream`, {
       stdio: 'inherit',
       stderr: 'inherit',
     });

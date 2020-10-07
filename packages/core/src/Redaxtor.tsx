@@ -91,7 +91,7 @@ export class Redaxtor {
       name: 'WriteAway',
     });
 
-    this.store = createStore<IWriteAwayState, AnyAction, {dispatch: Dispatch}, {}>(
+    this.store = createStore<IWriteAwayState, AnyAction, { dispatch: Dispatch }, {}>(
       reducers,
       state,
       composeEnhancers(
@@ -254,7 +254,7 @@ export class Redaxtor {
     ReactDOM.render(
       <Provider store={this.store}>
         <div>
-          <HoverOverlay components={this.options.pieces.components} />
+          <HoverOverlay components={this.options.pieces.components}/>
         </div>
       </Provider>,
       this.overlayNode,
@@ -286,7 +286,7 @@ export class Redaxtor {
    * @param options.data {Object} Optional. Set of data associated with piece in format of piece component.
    If not specified will be fetched.
    */
-  addPiece(node: HTMLElement, options: {id?: string, name?: string, type?: string, data?: any, dataset?: Record<string, string | undefined>} = {}) {
+  addPiece(node: HTMLElement, options: { id?: string, name?: string, type?: string, data?: any, dataset?: { [k: string]: string } } = {}) {
     const piece: IPieceItemState = {
       node,
       type: ((options && options.type) || node.getAttribute(this.options.pieces.attribute)) as PieceType,
@@ -295,7 +295,7 @@ export class Redaxtor {
       changed: false,
       message: '',
       messageLevel: '',
-      dataset: (options && options.dataset) || { ...node.dataset },
+      dataset: { ...options.dataset, ...(node.dataset as any) },
       data: options.data,
     };
     if (!piece.id) throw new Error('Can\'t add piece with undefined id');

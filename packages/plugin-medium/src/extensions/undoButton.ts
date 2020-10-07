@@ -2,7 +2,7 @@ import MediumEditor from 'medium-editor';
 
 export const UndoButton = (MediumEditor as any).Extension.extend({
   name: 'undo',
-  init: function () {
+  init() {
     this.button = this.document.createElement('button');
     this.button.classList.add('medium-editor-action');
     this.button.innerHTML = '<i class="rx_icon rx_icon-undo"></i>';
@@ -10,24 +10,24 @@ export const UndoButton = (MediumEditor as any).Extension.extend({
     this.handleClickBinded = this.handleClick.bind(this);
     this.on(this.button, 'click', this.handleClickBinded);
   },
-  getButton: function () {
+  getButton() {
     return this.button;
   },
-  handleClick: function (e) {
+  handleClick(e: MouseEvent) {
     // console.log("UNDO");
     e.preventDefault();
     e.stopPropagation();
-    let undoContent = this.base.historyManager.undo();
-    let selection = this.base.exportSelection();
+    const undoContent = this.base.historyManager.undo();
+    const selection = this.base.exportSelection();
     if (undoContent) {
       // console.log("UNDO", undoContent);
       this.base.setContent(undoContent.html);
       this.base.importSelection(undoContent.caret || selection);
     }
   },
-  destroy: function () {
+  destroy() {
     this.off(this.button, 'click', this.handleClickBinded);
-  }
+  },
 });
 
 (MediumEditor as any).extensions.undoButton = UndoButton;

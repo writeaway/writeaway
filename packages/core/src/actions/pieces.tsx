@@ -51,7 +51,7 @@ export const deactivatePiece = (id: string) => ({ type: C.PIECES_DEACTIVATE_PIEC
 
 export const onDeactivationSentPiece = (id: string) => ({ type: C.PIECES_DEACTIVATION_SENT_PIECE, id });
 
-export const updatePiece = (id: string, piece: IPieceItemState, notChanged?: boolean) => ({
+export const updatePiece = (id: string, piece: Partial<IPieceItemState>, notChanged?: boolean) => ({
   type: C.PIECE_UPDATE, id, piece, notChanged,
 });
 

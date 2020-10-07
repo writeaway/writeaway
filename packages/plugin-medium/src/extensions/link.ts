@@ -70,8 +70,7 @@ export const Link = (MediumEditor as any).extensions.form.extend({
   contentDefault: '<b>#</b>',
   contentFA: '<i class="rx_icon rx_icon-chain"></i>',
 
-
-  init: function () {
+  init() {
     (MediumEditor as any).extensions.form.prototype.init.apply(this, arguments);
 
     this.subscribe('editableKeydown', this.handleKeydown.bind(this));
@@ -79,23 +78,23 @@ export const Link = (MediumEditor as any).extensions.form.extend({
 
   // Called when the button the toolbar is clicked
   // Overrides ButtonExtension.handleClick
-  handleClick: function (event: MouseEvent) {
+  handleClick(event: MouseEvent) {
     event.preventDefault();
     event.stopPropagation();
 
     const range = (MediumEditor as any).selection.getSelectionRange(this.document);
     let opts: any = { url: '' };
 
-    if (range.startContainer.nodeName.toLowerCase() === 'a' ||
-      range.endContainer.nodeName.toLowerCase() === 'a' ||
-      (MediumEditor as any).util.getClosestTag((MediumEditor as any).selection.getSelectedParentElement(range), 'a')) {
+    if (range.startContainer.nodeName.toLowerCase() === 'a'
+      || range.endContainer.nodeName.toLowerCase() === 'a'
+      || (MediumEditor as any).util.getClosestTag((MediumEditor as any).selection.getSelectedParentElement(range), 'a')) {
       const node: HTMLAnchorElement = (MediumEditor as any).util.getClosestTag((MediumEditor as any).selection.getSelectedParentElement(range), 'a');
       opts = {
         url: node.getAttribute('href'),
         target: node.target || '',
-        rel: node.rel || ''
+        rel: node.rel || '',
       };
-      //return this.execAction('unlink');
+      // return this.execAction('unlink');
     }
 
     if (!this.isDisplayed()) {
@@ -106,32 +105,30 @@ export const Link = (MediumEditor as any).extensions.form.extend({
   },
 
   // Called when user hits the defined shortcut (CTRL / COMMAND + K)
-  handleKeydown: function (event: KeyboardEvent) {
+  handleKeydown(event: KeyboardEvent) {
     if ((MediumEditor as any).util.isKey(event, (MediumEditor as any).util.keyCode.K) && (MediumEditor as any).util.isMetaCtrlKey(event) && !event.shiftKey) {
       this.handleClick(event);
     }
   },
 
   // Called by medium-editor to append form to the toolbar
-  getForm: function () {
+  getForm() {
     if (!this.form) {
       this.form = this.createForm();
     }
     return this.form;
   },
 
-  getTemplate: function () {
-
-
-    var template = [
+  getTemplate() {
+    const template = [
       '<div class="medium-editor-toolbar-form-row">',
-      '<input type="text" id="urlInput' + this.getEditorId() + '" class="medium-editor-toolbar-input" placeholder="', this.placeholderText, '">'
+      `<input type="text" id="urlInput${this.getEditorId()}" class="medium-editor-toolbar-input" placeholder="`, this.placeholderText, '">',
     ];
 
     template.push(
       '<a href="#" class="medium-editor-button medium-editor-toolbar-save">',
       this.getEditorOption('buttonLabels') === 'fontawesome' ? '<i class="rx_icon rx_icon-check"></i>' : this.formSaveLabel,
-      '</a>'
+      '</a>',
     );
 
     template.push('<a href="#" class="medium-editor-button medium-editor-toolbar-close">',
@@ -140,9 +137,9 @@ export const Link = (MediumEditor as any).extensions.form.extend({
 
     template.push('<a href="#" class="medium-editor-button medium medium-editor-toolbar-unlink" title="Unlink">', '<i class="rx_icon rx_icon-chain-broken"></i></a>');
 
-    template.push('</div>'); //close tag for the <div class="medium-editor-toolbar-form-row">
+    template.push('</div>'); // close tag for the <div class="medium-editor-toolbar-form-row">
 
-    //the rel editor
+    // the rel editor
     template.push('<div class="medium-editor-toolbar-form-row">');
     template.push(`<select id="relInput${this.getEditorId()}" class="medium-editor-toolbar-input">
                 <option value="">No additional relationship value</option>
@@ -168,22 +165,22 @@ export const Link = (MediumEditor as any).extensions.form.extend({
       // figure out how to deprecate? also consider `fa-` icon default implcations.
       template.push(
         '<div class="medium-editor-toolbar-form-row">',
-        '<input type="checkbox" id="targetCheckbox' + this.getEditorId() + '" class="medium-editor-toolbar-anchor-target">',
-        '<label for="targetCheckbox' + this.getEditorId() + '">',
+        `<input type="checkbox" id="targetCheckbox${this.getEditorId()}" class="medium-editor-toolbar-anchor-target">`,
+        `<label for="targetCheckbox${this.getEditorId()}">`,
         this.targetCheckboxText,
         '</label>',
-        '</div>'
+        '</div>',
       );
     }
 
     if (this.excludeCheckbox) {
       template.push(
         '<div class="medium-editor-toolbar-form-row">',
-        '<input type="checkbox" id="excludeCheckbox' + this.getEditorId() + '" class="medium-editor-toolbar-anchor-exclude">',
-        '<label for="excludeCheckbox' + this.getEditorId() + '">',
+        `<input type="checkbox" id="excludeCheckbox${this.getEditorId()}" class="medium-editor-toolbar-anchor-exclude">`,
+        `<label for="excludeCheckbox${this.getEditorId()}">`,
         this.excludeCheckboxText,
         '</label>',
-        '</div>'
+        '</div>',
       );
     }
 
@@ -196,47 +193,46 @@ export const Link = (MediumEditor as any).extensions.form.extend({
         '<label for="anchorCheckbox">',
         this.customClassOptionText,
         '</label>',
-        '</div>'
+        '</div>',
       );
     }
 
     return template.join('');
-
   },
 
   // Used by medium-editor when the default toolbar is to be displayed
-  isDisplayed: function () {
+  isDisplayed() {
     return (MediumEditor as any).extensions.form.prototype.isDisplayed.apply(this);
   },
 
-  hideForm: function () {
+  hideForm() {
     (MediumEditor as any).extensions.form.prototype.hideForm.apply(this);
     this.getInput().value = '';
   },
 
-  showForm: function (opts: any) {
-    var input = this.getInput(),
-      relInput = this.getRelInput(),
-      targetCheckbox = this.getAnchorTargetCheckbox(),
-      excludeCheckbox = this.getAnchorExcludeCheckbox(),
-      buttonCheckbox = this.getAnchorButtonCheckbox(),
-      buttonUnlink = this.getUnlink();
+  showForm(opts: any) {
+    const input = this.getInput();
+    const relInput = this.getRelInput();
+    const targetCheckbox = this.getAnchorTargetCheckbox();
+    const excludeCheckbox = this.getAnchorExcludeCheckbox();
+    const buttonCheckbox = this.getAnchorButtonCheckbox();
+    const buttonUnlink = this.getUnlink();
     opts = opts || { url: '' };
     // TODO: This is for backwards compatability
     // We don't need to support the 'string' argument in 6.0.0
     if (typeof opts === 'string') {
       opts = {
-        url: opts
+        url: opts,
       };
     }
     if (opts.url) {
-      input.style.width = 'calc(100% - 161px)'; //update input width pto place all the buttons in one line
+      input.style.width = 'calc(100% - 161px)'; // update input width pto place all the buttons in one line
       relInput.style.width = 'calc(100% - 161px)';
-      buttonUnlink.style.display = 'inline-block'
+      buttonUnlink.style.display = 'inline-block';
     } else {
       input.style.width = 'calc(100% - 130px)';
       relInput.style.width = 'calc(100% - 130px)';
-      buttonUnlink.style.display = 'none'
+      buttonUnlink.style.display = 'none';
     }
 
     this.base.saveSelection();
@@ -247,8 +243,8 @@ export const Link = (MediumEditor as any).extensions.form.extend({
     input.value = opts.url;
     input.focus();
 
-    let relValue = opts.rel ? opts.rel.split(' ') : [];
-    let index = relValue.indexOf('nofollow');
+    const relValue = opts.rel ? opts.rel.split(' ') : [];
+    const index = relValue.indexOf('nofollow');
     if (index >= 0) {
       relValue.splice(index, 1);
     }
@@ -264,14 +260,13 @@ export const Link = (MediumEditor as any).extensions.form.extend({
     // If we have a custom class checkbox, we want it to be checked/unchecked
     // based on whether an existing link already has the class
     if (buttonCheckbox) {
-      var classList = opts.buttonClass ? opts.buttonClass.split(' ') : [];
+      const classList = opts.buttonClass ? opts.buttonClass.split(' ') : [];
       buttonCheckbox.checked = (classList.indexOf(this.customClassOption) !== -1);
     }
-
   },
 
   // Called by core when tearing down medium-editor (destroy)
-  destroy: function () {
+  destroy() {
     if (!this.form) {
       return false;
     }
@@ -285,15 +280,15 @@ export const Link = (MediumEditor as any).extensions.form.extend({
 
   // core methods
 
-  getFormOpts: function () {
+  getFormOpts() {
     // no notion of private functions? wanted `_getFormOpts`
-    const targetCheckbox = this.getAnchorTargetCheckbox(),
-      relInput = this.getRelInput(),
-      excludeCheckbox = this.getAnchorExcludeCheckbox(),
-      buttonCheckbox = this.getAnchorButtonCheckbox(),
-      opts: any = {
-        url: this.getInput().value.trim()
-      };
+    const targetCheckbox = this.getAnchorTargetCheckbox();
+    const relInput = this.getRelInput();
+    const excludeCheckbox = this.getAnchorExcludeCheckbox();
+    const buttonCheckbox = this.getAnchorButtonCheckbox();
+    const opts: any = {
+      url: this.getInput().value.trim(),
+    };
 
     if (this.linkValidation) {
       opts.url = this.checkLinkFormat(opts.url);
@@ -306,9 +301,9 @@ export const Link = (MediumEditor as any).extensions.form.extend({
 
     opts.rel = relInput.value.trim(); // trim from input
     if (excludeCheckbox && excludeCheckbox.checked) {
-      opts.rel += ' nofollow'
+      opts.rel += ' nofollow';
     }
-    opts.rel = opts.rel.trim(); //trim for 'nofollow'
+    opts.rel = opts.rel.trim(); // trim for 'nofollow'
 
     if (buttonCheckbox && buttonCheckbox.checked) {
       opts.buttonClass = this.customClassOption;
@@ -317,53 +312,51 @@ export const Link = (MediumEditor as any).extensions.form.extend({
     return opts;
   },
 
-  doFormSave: function () {
-    var opts = this.getFormOpts();
+  doFormSave() {
+    const opts = this.getFormOpts();
     this.completeFormSave(opts);
   },
 
-  completeFormSave: function (opts: any) {
+  completeFormSave(opts: any) {
     this.base.restoreSelection();
     const node = (MediumEditor as any).util.getClosestTag((MediumEditor as any).selection.getSelectedParentElement((MediumEditor as any).selection.getSelectionRange(this.document)), 'a');
     node && this.base.selectElement(node);
 
     this.execAction(this.action, opts);
 
-    //a node an be crated after exec action. MediumEditor have no options to set the rel attribute
+    // a node an be crated after exec action. MediumEditor have no options to set the rel attribute
     const createdNode = (MediumEditor as any).util.getClosestTag((MediumEditor as any).selection.getSelectedParentElement((MediumEditor as any).selection.getSelectionRange(this.document)), 'a') || node;
     createdNode && (createdNode.rel = opts.rel);
 
     this.base.checkSelection();
   },
 
-  checkLinkFormat: function (value: string) {
+  checkLinkFormat(value: string) {
     // Matches any alphabetical characters followed by ://
     // Matches protocol relative "//"
     // Matches common external protocols "mailto:" "tel:" "maps:"
-    var urlSchemeRegex = /^([a-z]+:)?\/\/|^(mailto|tel|maps):/i,
-      // var te is a regex for checking if the string is a telephone number
-      telRegex = /^\+?\s?\(?(?:\d\s?\-?\)?){3,20}$/;
+    const urlSchemeRegex = /^([a-z]+:)?\/\/|^(mailto|tel|maps):/i;
+    // var te is a regex for checking if the string is a telephone number
+    const telRegex = /^\+?\s?\(?(?:\d\s?\-?\)?){3,20}$/;
     if (telRegex.test(value)) {
-      return 'tel:' + value;
-    } else {
-      // Check for URL scheme and default to http:// if none found
-      return (urlSchemeRegex.test(value) ? '' : 'http://') + encodeURI(value);
+      return `tel:${value}`;
     }
+    // Check for URL scheme and default to http:// if none found
+    return (urlSchemeRegex.test(value) ? '' : 'http://') + encodeURI(value);
   },
 
-  doFormCancel: function () {
+  doFormCancel() {
     this.base.restoreSelection();
     this.base.checkSelection();
   },
 
   // form creation and event handling
-  attachFormEvents: function (form: HTMLFormElement) {
-    var close = form.querySelector('.medium-editor-toolbar-close'),
-      save = form.querySelector('.medium-editor-toolbar-save'),
-      input = form.querySelector('#urlInput' + this.getEditorId() + '.medium-editor-toolbar-input'),
-      relInput = form.querySelector('#relInput' + this.getEditorId() + '.medium-editor-toolbar-input'),
-      unlink = form.querySelector('.medium-editor-toolbar-unlink');
-
+  attachFormEvents(form: HTMLFormElement) {
+    const close = form.querySelector('.medium-editor-toolbar-close');
+    const save = form.querySelector('.medium-editor-toolbar-save');
+    const input = form.querySelector(`#urlInput${this.getEditorId()}.medium-editor-toolbar-input`);
+    const relInput = form.querySelector(`#relInput${this.getEditorId()}.medium-editor-toolbar-input`);
+    const unlink = form.querySelector('.medium-editor-toolbar-unlink');
 
     // Handle clicks on the form itself
     this.on(form, 'click', this.handleFormClick.bind(this));
@@ -379,52 +372,50 @@ export const Link = (MediumEditor as any).extensions.form.extend({
 
     // Handle unlink button clicks (capture)
     this.on(unlink, 'click', this.handleUnlinkClick.bind(this));
-
-
   },
 
-  createForm: function () {
-    var doc = this.document,
-      form = doc.createElement('div');
+  createForm() {
+    const doc = this.document;
+    const form = doc.createElement('div');
 
     // Anchor Form (div)
     form.className = 'medium-editor-toolbar-form medium-editor-link-form-toolbar';
-    form.id = 'medium-editor-toolbar-form-anchor-' + this.getEditorId();
+    form.id = `medium-editor-toolbar-form-anchor-${this.getEditorId()}`;
     form.innerHTML = this.getTemplate();
     this.attachFormEvents(form);
 
     return form;
   },
 
-  getInput: function () {
-    return this.getForm().querySelector('input#urlInput' + this.getEditorId() + '.medium-editor-toolbar-input');
+  getInput() {
+    return this.getForm().querySelector(`input#urlInput${this.getEditorId()}.medium-editor-toolbar-input`);
   },
 
-  getRelInput: function () {
-    return this.getForm().querySelector('#relInput' + this.getEditorId() + '.medium-editor-toolbar-input');
+  getRelInput() {
+    return this.getForm().querySelector(`#relInput${this.getEditorId()}.medium-editor-toolbar-input`);
   },
 
-  getUnlink: function () {
+  getUnlink() {
     return this.getForm().querySelector('.medium-editor-toolbar-unlink');
   },
 
-  getAnchorTargetCheckbox: function () {
+  getAnchorTargetCheckbox() {
     return this.getForm().querySelector('.medium-editor-toolbar-anchor-target');
   },
 
-  getAnchorExcludeCheckbox: function () {
+  getAnchorExcludeCheckbox() {
     return this.getForm().querySelector('.medium-editor-toolbar-anchor-exclude');
   },
 
-  getAnchorButtonCheckbox: function () {
+  getAnchorButtonCheckbox() {
     return this.getForm().querySelector('.medium-editor-toolbar-anchor-button');
   },
 
-  getAnchorTargetCheckboxLabel: function () {
-    return this.getForm().querySelector('.medium-editor-toolbar-anchor-target + label')
+  getAnchorTargetCheckboxLabel() {
+    return this.getForm().querySelector('.medium-editor-toolbar-anchor-target + label');
   },
 
-  handleTextboxKeyup: function (event: KeyboardEvent) {
+  handleTextboxKeyup(event: KeyboardEvent) {
     // For ENTER -> create the anchor
     if (event.keyCode === (MediumEditor as any).util.keyCode.ENTER) {
       event.preventDefault();
@@ -439,31 +430,29 @@ export const Link = (MediumEditor as any).extensions.form.extend({
     }
   },
 
-  handleFormClick: function (event: MouseEvent) {
+  handleFormClick(event: MouseEvent) {
     // make sure not to hide form when clicking inside the form
     event.stopPropagation();
   },
 
-  handleSaveClick: function (event: MouseEvent) {
+  handleSaveClick(event: MouseEvent) {
     // Clicking Save -> create the anchor
     event.preventDefault();
     this.doFormSave();
   },
 
-  handleCloseClick: function (event: MouseEvent) {
+  handleCloseClick(event: MouseEvent) {
     // Click Close -> close the form
     event.preventDefault();
     this.doFormCancel();
   },
 
-
-  handleUnlinkClick: function (event: MouseEvent) {
+  handleUnlinkClick(event: MouseEvent) {
     this.base.restoreSelection();
     const node = (MediumEditor as any).util.getClosestTag((MediumEditor as any).selection.getSelectedParentElement((MediumEditor as any).selection.getSelectionRange(this.document)), 'a');
     node && this.base.selectElement(node);
-    this.execAction('unlink')
-  }
+    this.execAction('unlink');
+  },
 });
 
 (MediumEditor as any).extensions.link = Link;
-

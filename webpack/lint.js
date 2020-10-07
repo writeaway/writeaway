@@ -24,7 +24,7 @@ const execute = ((packages && packages.length) ? packages.filter((p) => (allPack
 console.log(`\x1b[30m\x1b[47m Watching libs in following order \x1b[31m`, execute.join('->'), '\x1b[0m');
 
 if (execute && execute.length) {
-  const commands = execute.map(module=>({command: `npx lerna run lint:fix --scope=@spiral-toolkit/${module} --stream`, name: module}));
+  const commands = execute.map(module=>({command: `npx lerna run lint:fix --scope=@writeaway/${module} --stream`, name: module}));
   concurrently(commands, {prefix: '{name}:{time}'});
 } else {
   // eslint-disable-next-line no-console

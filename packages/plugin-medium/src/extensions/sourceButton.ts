@@ -2,7 +2,7 @@ import MediumEditor from 'medium-editor';
 
 export const SourceButton = (MediumEditor as any).Extension.extend({
   name: 'source',
-  init: function () {
+  init() {
     this.button = this.document.createElement('button');
     this.button.classList.add('medium-editor-action');
     this.button.classList.add('rx_expert-mode');
@@ -11,16 +11,16 @@ export const SourceButton = (MediumEditor as any).Extension.extend({
     this.handleClickBinded = this.handleClick.bind(this);
     this.on(this.button, 'click', this.handleClickBinded);
   },
-  getButton: function () {
+  getButton() {
     return this.button;
   },
-  handleClick: function () {
+  handleClick() {
     this.base.getExtensionByName('toolbar').hideToolbar();
     this.base.trigger('setCurrentSourcePieceId', {}, this.base);
   },
-  destroy: function () {
+  destroy() {
     this.off(this.button, 'click', this.handleClickBinded);
-  }
+  },
 });
 
 (MediumEditor as any).extensions.sourceButton = SourceButton;

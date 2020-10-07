@@ -9,13 +9,13 @@ export const ColorPicker = (MediumEditor as any).extensions.button.extend({
   pickerColors,
   contentDefault: '<i class=\'rx_icon rx_icon-brush editor-color-picker\' aria-hidden=\'true\'></i>',
 
-  handleClick: function (e: MouseEvent) {
+  handleClick(e: MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
 
     this.selectionState = this.base.exportSelection();
 
-    var emptySelection = false;
+    let emptySelection = false;
     // If no text selected, select everything and remember empty selection to recover it later
     if (this.selectionState && (this.selectionState.end - this.selectionState.start === 0)) {
       emptySelection = this.selectionState;
@@ -23,9 +23,9 @@ export const ColorPicker = (MediumEditor as any).extensions.button.extend({
       this.selectionState = this.base.exportSelection();
     }
 
-    var picker = vanillaColorPicker(this.document.querySelector('.medium-editor-toolbar-active .editor-color-picker'));
-    picker.set('customColors', this.pickerColors);
-    picker.set('positionOnTop');
+    const picker = vanillaColorPicker(this.document.querySelector('.medium-editor-toolbar-active .editor-color-picker'));
+    picker.emit('customColors', this.pickerColors);
+    picker.emit('positionOnTop');
     picker.openPicker();
     picker.on('colorChosen', (color: string) => {
       if (emptySelection) {
@@ -43,7 +43,7 @@ export const ColorPicker = (MediumEditor as any).extensions.button.extend({
         this.base.importSelection(emptySelection);
       }
     });
-  }
+  },
 });
 
 (MediumEditor as any).extensions.colorPicker = ColorPicker;

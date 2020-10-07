@@ -66,7 +66,9 @@ export const PiecesComponent = (
     const pieceProps = byId[sourceId];
     sourceEditor = (
       <components.source
-        {...pieceProps}
+        editorActive={editorActive}
+        actions={{} as any}
+        piece={pieceProps}
         api={api}
         wrapper="redaxtor-modal"
         onClose={() => setSourceId(undefined)}

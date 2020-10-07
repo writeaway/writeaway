@@ -25,6 +25,7 @@
   "author": "SpiralScout",
   "license": "MIT",
   "dependencies": {
+    "@writeaway/core": "2.0.0",
     "autobind-decorator": "^2.4.0",
     "classnames": "^2.2.6",
     "medium-editor": "^5.23.3",
@@ -39,10 +40,10 @@
   },
   "devDependencies": {
     "@types/classnames": "^2.2.10",
-    "@types/react-redux": "^7.1.9",
-    "@types/react-redux-toastr": "^7.6.0",
     "@types/medium-editor": "^5.0.3",
     "@types/react": "^16.9.51",
-    "@types/react-dom": "^16.9.8"
+    "@types/react-dom": "^16.9.8",
+    "@types/react-redux": "^7.1.9",
+    "@types/react-redux-toastr": "^7.6.0"
   }
 }

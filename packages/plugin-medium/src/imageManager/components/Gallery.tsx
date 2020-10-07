@@ -1,72 +1,105 @@
-import React, {Component} from "react"
-import Popup from './Popup'
-import Portal from './Portal'
+import { GalleryItem, RedaxtorAPI } from '@writeaway/core';
+import React, { useCallback, useState } from 'react';
+import Popup from './Popup';
+import Portal from './Portal';
 
-export default class Gallery extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
-
-    confirmDelete() {
-        this.props.onDelete && this.props.onDelete(this.state.image.id || this.state.image.url);
-        this.setState({image: null});
-    }
-
-    cancelDelete() {
-        this.setState({image: null});
-    }
-
-    render() {
-        return (
-            <div className="gallery-wrapper">
-                <h5 style={{textAlign: "center"}}>Pick From Uploaded</h5>
-                <div className="gallery-container">
-                    {Object.keys(this.props.gallery).map(index =>
-                        <div key={this.props.gallery[index].id} className="gallery-item-container">
-                            <div className="gallery-item"
-                                 onClick={() => {
-                                     this.props.onChange(this.props.gallery[index])
-                                 }}
-                                 style={{backgroundImage: "url(" + (this.props.gallery[index].thumbnailUrl ? this.props.gallery[index].thumbnailUrl : this.props.gallery[index]) + ")"}}>
-                                <span className="hover-shadow"></span>
-                                {this.props.api.deleteImage &&
-                                <span className="delete-icon"
-                                      onClick={(e) => {
-                                          e.stopPropagation();
-                                          this.setState({image: this.props.gallery[index]})
-                                      }}>
-                                    <i className="fa fa-trash-o" aria-hidden="true"></i>
-                                </span>}
-                            </div>
-                            <div
-                                className="item-title">{this.props.gallery[index].url.split('/').pop() || "N/A"} {(this.props.gallery[index].width && this.props.gallery[index].height) && (this.props.gallery[index].width + "×" + this.props.gallery[index].height)}
-                            </div>
-                        </div>
-                    )}
-                    {Object.keys(this.props.gallery).length==0 &&
-                        <div style={{textAlign: "center"}}>
-                            <p>&nbsp;</p>
-                            <p>No Images Uploaded</p>
-                            <p>&nbsp;</p>
-                        </div>
-                    }
-                </div>
-                {this.state.image &&
-                <Portal portalId={"confirm"}>
-                    <Popup contentClass={"confirm"}>
-                        <div style={{textAlign: 'center'}}>
-                            <p>Delete this image?</p>
-                            <img className="gallery-item" src={this.state.image.url}
-                                 style={{maxWidth: '200px', maxHeight: '200px'}}>
-                            </img>
-                        </div>
-                        <div className="actions-bar" style={{textAlign: 'center'}}>
-                            <div className="button button-cancel" onClick={this.cancelDelete.bind(this)}>Cancel</div>
-                            <div className="button button-save" onClick={this.confirmDelete.bind(this)}>Confirm</div>
-                        </div>
-                    </Popup>
-                </Portal>}
-            </div>)
-    }
+export interface GalleryProps {
+  gallery: Array<GalleryItem>,
+  api: RedaxtorAPI,
+  onChange: (item: GalleryItem) => void,
+  onDelete: (id: string) => void,
 }
+
+export const Gallery = (
+  {
+    gallery,
+    api,
+    onChange,
+    onDelete,
+  }: GalleryProps,
+) => {
+  const [image, setImage] = useState<GalleryItem>();
+
+  const confirmDelete = useCallback(() => {
+    if (image) {
+      if (onDelete) {
+        onDelete(image.id || image.src);
+      }
+      setImage(undefined);
+    }
+  }, [image, onDelete, setImage]);
+
+  const cancelDelete = useCallback(() => {
+    setImage(undefined);
+  }, [setImage]);
+
+  return (
+    <div className="gallery-wrapper">
+      <h5 style={{ textAlign: 'center' }}>Pick From Uploaded</h5>
+      <div className="gallery-container">
+        {Object.values(gallery).map((item: GalleryItem, index: number) => (
+          <div key={item.id || index} className="gallery-item-container">
+            <div
+              role="button"
+              tabIndex={-1}
+              className="gallery-item"
+              onClick={() => onChange(item)}
+              style={{ backgroundImage: `url(${item.thumbnailSrc ? item.thumbnailSrc : item.src})` }}
+            >
+              <span className="hover-shadow"/>
+              {api.deleteImage
+              && (
+                <span
+                  className="delete-icon"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setImage(item);
+                  }}
+                >
+                <i className="fa fa-trash-o" aria-hidden="true"/>
+              </span>
+              )}
+            </div>
+            <div
+              className="item-title"
+            >
+              {item.src.split('/').pop() || 'N/A'}
+              {' '}
+              {(item.width && item.height) && (`${item.width}×${item.height}`)}
+            </div>
+          </div>
+        ))}
+        {Object.keys(gallery).length === 0
+        && (
+          <div style={{ textAlign: 'center' }}>
+            <p>&nbsp;</p>
+            <p>No Images Uploaded</p>
+            <p>&nbsp;</p>
+          </div>
+        )}
+      </div>
+      {image
+      && (
+        <Portal portalId="confirm">
+          <Popup contentClass="confirm">
+            <div style={{ textAlign: 'center' }}>
+              <p>Delete this image?</p>
+              <img
+                className="gallery-item"
+                src={image.src}
+                alt={image.alt}
+                style={{ maxWidth: '200px', maxHeight: '200px' }}
+              />
+            </div>
+            <div className="actions-bar" style={{ textAlign: 'center' }}>
+              <div className="button button-cancel" onClick={cancelDelete}>Cancel</div>
+              <div className="button button-save" onClick={confirmDelete}>Confirm</div>
+            </div>
+          </Popup>
+        </Portal>
+      )}
+    </div>
+  );
+};
+
+export default Gallery;
