@@ -188,7 +188,7 @@ var components = {
     source: RedaxtorCodemirror
 };
 
-var redaxtor = new Redaxtor({
+var redaxtor = new WriteAwayCore({
     pieces: {
         components: components,
         options: {

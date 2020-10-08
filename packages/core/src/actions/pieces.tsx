@@ -1,5 +1,4 @@
 import { pieceRender } from 'components/pieceRenderer';
-import React from 'react';
 import { toastr } from 'react-redux-toastr';
 import {
   Dispatch, GetIWriteAwayState, IPieceControllerState, IPieceItemState, PieceType, Rect,
@@ -12,7 +11,8 @@ export const piecesEnableEdit = (subType?: PieceType) => ({ type: C.PIECES_ENABL
 export const piecesDisableEdit = (subType?: PieceType) => ({ type: C.PIECES_DISABLE_EDIT, subType });
 
 const piecesRunInit = (dispatch: Dispatch, pieces: IPieceControllerState) => {
-  pieces.byId && Object.keys(pieces.byId).forEach((id: string) => {
+  Object.keys(pieces.byId || {}).forEach((id: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     dispatch(pieceGet(id));
   });
 };
@@ -68,14 +68,14 @@ export const onEditorActive = (pieceId: string, active: boolean) => (dispatch: D
      * Before actually activating, check if we need to force a hover over elements becoming active
      * TODO: Reducer is a better place for that, but how to use getBoundingClientRect there and not mess up reducers purity?
      */
-  if (active && activeId.length == 0) {
+  if (active && activeId.length === 0) {
     // That editor is now the active editor, invoke hover
     const piece = getState().pieces.byId[pieceId];
     const nodeRect = getState().config.api.getNodeRect(piece);
     dispatch(hoverPiece(pieceId, nodeRect.hover || nodeRect.node));
   }
 
-  if (!active && activeId.length == 2) {
+  if (!active && activeId.length === 2) {
     // That editor is `other` one, after disactivation, only one is left
     const newHoverId = (pieceId === activeId[0]) ? activeId[1] : activeId[0];
     const piece = getState().pieces.byId[newHoverId];
@@ -83,7 +83,7 @@ export const onEditorActive = (pieceId: string, active: boolean) => (dispatch: D
     dispatch(hoverPiece(newHoverId, nodeRect.hover || nodeRect.node));
   }
 
-  if (!active && activeId.length == 1 && pieceId === activeId[0]) {
+  if (!active && activeId.length === 1 && pieceId === activeId[0]) {
     // We are going to disactivate all. Good chance to disable hover overlay too
     dispatch(hoverPiece());
   }
@@ -95,7 +95,7 @@ export const onNodeResized = (pieceId: string) => (dispatch: Dispatch, getState:
   const piece = getState().pieces.byId[pieceId];
   const { hoveredId } = getState().pieces;
 
-  if (hoveredId == pieceId) {
+  if (hoveredId === pieceId) {
     const nodeRect = getState().config.api.getNodeRect(piece);
     dispatch(hoverPiece(pieceId, nodeRect.hover || nodeRect.node));
   }
@@ -120,24 +120,6 @@ export const pieceSaved = (id: string, answer: unknown) => ({ type: C.PIECE_SAVE
 
 export const pieceSavingFailed = (id: string, error: unknown) => ({ type: C.PIECE_SAVING_FAILED, id, error });
 
-/**
- * Triggers saving piece to server
- * TODO: Extract this to external API
- */
-export const savePiece = (id: string) => (dispatch: Dispatch, getState: GetIWriteAwayState) => {
-  const piece = getState().pieces.byId[id];
-  if (!!getState().config.api.savePieceData) {
-    getState().config.api.savePieceData(piece).then((data: unknown) => {
-      dispatch(pieceSaved(id, data));
-    }).catch((error: unknown) => {
-      dispatch(pieceSavingFailed(id, error));
-      setPieceMessage(id, 'Couldn\'t save', 'error')(dispatch);
-    });
-  } else {
-    dispatch(pieceSaved(id, {}));
-  }
-};
-
 export const setPieceMessage = (id: string, message: string, messageLevel: string) => (dispatch: Dispatch) => {
   if (!['warning', 'info', 'error'].includes(messageLevel)) {
     throw new Error(`Wrong message level '${messageLevel}' for PieceId: ${id}`);
@@ -153,8 +135,29 @@ export const setPieceMessage = (id: string, message: string, messageLevel: strin
         case 'warning':
           toastr.warning('Warning', `Piece '${id}': ${message}`);
           break;
+        default:
+          break;
       }
     });
+};
+
+/**
+ * Triggers saving piece to server
+ * TODO: Extract this to external API
+ */
+export const savePiece = (id: string) => (dispatch: Dispatch, getState: GetIWriteAwayState) => {
+  const piece = getState().pieces.byId[id];
+  // eslint-disable-next-line no-extra-boolean-cast
+  if (!!getState().config.api.savePieceData) {
+    getState().config.api.savePieceData(piece).then((data: unknown) => {
+      dispatch(pieceSaved(id, data));
+    }).catch((error: unknown) => {
+      dispatch(pieceSavingFailed(id, error));
+      setPieceMessage(id, 'Couldn\'t save', 'error')(dispatch);
+    });
+  } else {
+    dispatch(pieceSaved(id, {}));
+  }
 };
 
 export const savePieces = (pieces: Record<string, IPieceItemState>) => (dispatch: Dispatch) => {
@@ -187,11 +190,10 @@ export const pieceGet = (id: string) => (dispatch: Dispatch, getState: GetIWrite
 
   /**
      * Generate a copy that anyone from external API can modify and send back without immutability worries
-     * @type {IRedaxtorPiece}
      */
-  const mutableCopy = {
+  const mutableCopy: IPieceItemState = {
     ...piece,
-    data: piece.data ? { ...piece.data } : void 0,
+    data: piece.data ? { ...piece.data } : undefined,
   };
 
   getState().config.api.getPieceData(mutableCopy).then((updatedPiece: IPieceItemState) => {
@@ -203,8 +205,8 @@ export const pieceGet = (id: string) => (dispatch: Dispatch, getState: GetIWrite
         data: { ...updatedPiece.data },
       };
       dispatch(pieceFetched(id, updatedCopy));
-      const piece = getState().pieces.byId[id];
-      pieceRender(piece);
+      const pieceUpdated = getState().pieces.byId[id];
+      pieceRender(pieceUpdated);
     }
   }, (error) => {
     dispatch(pieceFetchingError(id, error));

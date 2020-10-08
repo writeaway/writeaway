@@ -69,6 +69,18 @@ exports.ts = {
   },
 };
 
+exports.js = {
+  test: /\.jsx?$/,
+  loader: 'ts-loader',
+  exclude: /node_modules/,
+  options: {
+    compilerOptions: {
+      allowJs: true,
+    },
+    transpileOnly: false,
+  },
+};
+
 exports.svg = makeUrlLoader(/\.svg$/);
 exports.woff = makeUrlLoader(/\.woff$/);
 exports.woff2 = makeUrlLoader(/\.woff2$/);

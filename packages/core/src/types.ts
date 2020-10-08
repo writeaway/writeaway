@@ -4,7 +4,7 @@ import {
   onEditorActive, onNodeResized,
   resetPiece,
   savePiece, setPieceMessage, setSourceId,
-  updatePiece
+  updatePiece,
 } from 'actions/pieces';
 import { ComponentClass } from 'react';
 import { ToastrState } from 'react-redux-toastr';
@@ -13,9 +13,9 @@ import type { ThunkAction, ThunkDispatch } from 'redux-thunk';
 
 export type PieceDataResolver<DataType = any> =
   (piece: IPieceItemState<DataType>,
-   resolvers?: Record<PieceType,
-     PieceDataResolver<DataType>>) =>
-    Promise<IPieceItemState<DataType>>;
+    resolvers?: Record<PieceType,
+    PieceDataResolver<DataType>>) =>
+  Promise<IPieceItemState<DataType>>;
 
 export interface GalleryItem {
   id: string,
@@ -143,21 +143,21 @@ export interface IWriteAwayState {
 
 export type GetIWriteAwayState = () => IWriteAwayState;
 
-export type PieceActions = {
+export type PieceActions<DataType = any> = {
   onManualActivation: (id: string) => void,
   onManualDeactivation: (id: string) => void,
-  updatePiece: (id: string, piece: Partial<IPieceItemState>) => void,
-  resetPiece: (id: string) =>  void,
+  updatePiece: (id: string, piece: Partial<IPieceItemState<DataType>>) => void,
+  resetPiece: (id: string) => void,
   savePiece: (id: string) => void,
   onEditorActive: (id: string, active: boolean) => void,
   onNodeResized: (id: string) => void,
   setPieceMessage: (id: string, message: string, messageLevel: string) => void,
   setCurrentSourcePieceId: (id: string) => void,
-}
+};
 
-export interface IPieceProps {
-  piece: IPieceItemState;
-  actions: PieceActions;
+export interface IPieceProps<DataType = any> {
+  piece: IPieceItemState<DataType>;
+  actions: PieceActions<DataType>;
   expert: boolean;
   editorActive: boolean;
   wrapper: string;
@@ -168,8 +168,8 @@ export interface IPieceProps {
   className?: string;
 }
 
-export interface IComponent extends ComponentClass<IPieceProps> {
-  name: string,
+export interface IComponent<Data = any> extends ComponentClass<IPieceProps<Data>> {
+  label: string,
   editLabel: string,
   applyEditor: (node: HTMLElement, data: any) => void,
 }

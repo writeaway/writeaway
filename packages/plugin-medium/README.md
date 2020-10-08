@@ -41,7 +41,7 @@ var components = {
     html: RedaxtorMedium.HTMLEditor
 }
 
-var redaxtor = new Redaxtor({
+var redaxtor = new WriteAwayCore({
     pieces: {
         components: components
     }

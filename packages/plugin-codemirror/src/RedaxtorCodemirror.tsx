@@ -1,13 +1,14 @@
 import { IPieceProps } from '@writeaway/core';
 import { boundMethod } from 'autobind-decorator';
+import { html as html_beautify } from 'js-beautify';
 import React, { Component } from 'react';
 import Codemirror from 'react-codemirror';
-import { html as html_beautify } from 'js-beautify';
 import Modal from 'react-modal';
+import { RedaxtorCodeMirrorData, RedaxtorCodeMirrorState } from 'types';
 
 require('codemirror/mode/htmlmixed/htmlmixed');
 
-export default class CodeMirror extends Component<IPieceProps> {
+export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirrorData>, RedaxtorCodeMirrorState> {
   /**
    * Specify component should be rendered inside target node and capture all inside html
    * @type {string}
@@ -18,11 +19,12 @@ export default class CodeMirror extends Component<IPieceProps> {
 
   static readonly label = 'Source code';
 
-  static readonly applyEditor = function (node: HTMLElement, data: { updateNode: boolean, html: string }) {
+  static readonly applyEditor = (node: HTMLElement, data: RedaxtorCodeMirrorData) => {
     if (node) {
       const content = node.innerHTML;
       const needRender = data.updateNode ?? true;
       if (content !== data.html && needRender) {
+        // eslint-disable-next-line no-param-reassign
         node.innerHTML = data.html;
         return true;
       }
@@ -34,16 +36,15 @@ export default class CodeMirror extends Component<IPieceProps> {
     wrap_line_length: 140,
   };
 
-  state: {
-    sourceEditorActive: boolean
-  } = {
-    sourceEditorActive: false,
-  };
+  // eslint-disable-next-line react/state-in-constructor
+  state: RedaxtorCodeMirrorState;
 
   private modalNode!: HTMLElement;
 
-  private initDataKeys: string[];
+  private initDataKeys: Array<keyof RedaxtorCodeMirrorData>;
+
   private nodeWasUpdated: boolean = false;
+
   private code: string = '';
 
   constructor(props: IPieceProps) {
@@ -51,35 +52,17 @@ export default class CodeMirror extends Component<IPieceProps> {
     // this.code = this.props.piece.data && this.props.piece.data.html;
 
     if (this.props.piece.data) {
-      this.initDataKeys = Object.keys(this.props.piece.data);
+      this.initDataKeys = Object.keys(this.props.piece.data) as Array<keyof RedaxtorCodeMirrorData>;
     } else {
       this.initDataKeys = [];
     }
+
+    this.state = {
+      sourceEditorActive: false,
+    };
   }
 
-  setEditorActive(active: boolean) {
-    if (active !== this.state.sourceEditorActive) {
-      this.setState({ sourceEditorActive: active });
-      this.props.actions.onEditorActive && this.props.actions.onEditorActive(this.props.piece.id, active);
-    }
-  }
-
-  /**
-   * That is a common public method that should activate component editor if it presents
-   */
-  activateEditor() {
-    if (this.props.editorActive && !this.state.sourceEditorActive) {
-      this.setEditorActive(true);
-    }
-  }
-
-  deactivateEditor() {
-    if (this.props.editorActive && this.state.sourceEditorActive) {
-      this.setEditorActive(false);
-    }
-  }
-
-  componentWillReceiveProps(newProps: IPieceProps) {
+  UNSAFE_componentWillReceiveProps(newProps: IPieceProps) {
     if (newProps.piece.manualActivation) {
       this.props.actions.onManualActivation(this.props.piece.id);
       this.activateEditor();
@@ -88,6 +71,23 @@ export default class CodeMirror extends Component<IPieceProps> {
       this.props.actions.onManualDeactivation(this.props.piece.id);
       this.deactivateEditor();
     }
+  }
+
+  shouldComponentUpdate(nextProps: IPieceProps) {
+    const { data } = this.props.piece;
+    if (data) {
+      const needRender = data.updateNode ?? true;
+      if (!needRender && nextProps.piece.data !== data) {
+        let isChanged: boolean = false;
+        this.initDataKeys.forEach((key) => {
+          isChanged = isChanged && (nextProps.piece.data![key] !== this.props.piece.data![key]);
+        });
+        if (this.props.actions.setPieceMessage) {
+          this.props.actions.setPieceMessage(this.props.piece.id, 'Page refresh is required', 'warning');
+        }
+      }
+    }
+    return true;
   }
 
   componentDidUpdate() {
@@ -105,32 +105,15 @@ export default class CodeMirror extends Component<IPieceProps> {
     this.code = newCode;
   }
 
-  shouldComponentUpdate(nextProps: IPieceProps) {
-    const { data } = this.props.piece;
-    if (data) {
-      const needRender = data.updateNode ?? true;
-      if (!needRender && nextProps.piece.data !== data) {
-        let isChanged: boolean = false;
-        this.initDataKeys.forEach((key: string) => {
-          isChanged = isChanged && (nextProps.piece.data[key] !== this.props.piece.data[key]);
-        });
-        if (this.props.actions.setPieceMessage) {
-          this.props.actions.setPieceMessage(this.props.piece.id, 'Page refresh is required', 'warning')
-        }
-      }
-    }
-    return true;
-  }
-
   onSave() {
     if (this.props.onSave) {
-      this.props.onSave(this.code)
+      this.props.onSave(this.code);
     }
     if (this.props.actions.updatePiece) {
       this.props.actions.updatePiece(this.props.piece.id, {
         data: {
           html: this.code,
-          updateNode: this.props.piece.data.updateNode,
+          updateNode: !!this.props.piece.data?.updateNode,
         },
       });
     }
@@ -144,8 +127,9 @@ export default class CodeMirror extends Component<IPieceProps> {
   onClose() {
     if (this.props.piece.node) {
       this.setEditorActive(false);
-    } else {
-      (this.props.onClose && this.props.onClose());
+    }
+    if (this.props.onClose) {
+      this.props.onClose();
     }
   }
 
@@ -175,7 +159,7 @@ export default class CodeMirror extends Component<IPieceProps> {
       }
     }
     // render new data
-    this.nodeWasUpdated = CodeMirror.applyEditor(this.props.piece.node, this.props.piece.data);
+    this.nodeWasUpdated = CodeMirror.applyEditor(this.props.piece.node, this.props.piece.data!);
   }
 
   @boundMethod
@@ -185,34 +169,64 @@ export default class CodeMirror extends Component<IPieceProps> {
     this.setEditorActive(true);
   }
 
+  setEditorActive(active: boolean) {
+    if (active !== this.state.sourceEditorActive) {
+      this.setState({ sourceEditorActive: active });
+      if (this.props.actions.onEditorActive) {
+        this.props.actions.onEditorActive(this.props.piece.id, active);
+      }
+    }
+  }
+
+  /**
+   * That is a common public method that should activate component editor if it presents
+   */
+  activateEditor() {
+    if (this.props.editorActive && !this.state.sourceEditorActive) {
+      this.setEditorActive(true);
+    }
+  }
+
+  deactivateEditor() {
+    if (this.props.editorActive && this.state.sourceEditorActive) {
+      this.setEditorActive(false);
+    }
+  }
+
   @boundMethod
-  handleCloseModal(event: KeyboardEvent) {
-    if (event.type === 'keydown' && event.keyCode === 27 && this.modalNode) {
+  handleCloseModal(event: React.MouseEvent | React.KeyboardEvent) {
+    if (event.type === 'keydown' && (event as React.KeyboardEvent).keyCode === 27 && this.modalNode) {
       this.modalNode.parentNode!.dispatchEvent(new KeyboardEvent('keyDown', { key: 'Escape' }));
     }
   }
 
   render() {
     let codemirror: any = null;
+    // if there is no this.props.node, it means this component is invoked manually with custom html directly in props and should be just rendered
+    // if this.state.sourceEditorActive and this.props.node presents,
+    // it means that is a regular piece with control over node and sourceEditorActive means modal is open
     if (this.state.sourceEditorActive || !this.props.piece.node) {
-      // if there is no this.props.node, it means this component is invoked manually with custom html directly in props and should be just rendered
-      // if this.state.sourceEditorActive and this.props.node presents, it means that is a regular piece with control over node and sourceEditorActive means modal is open
       const options = {
         lineNumbers: true,
         mode: 'htmlmixed',
       };
-      const { html } = this.props.piece.data;
+      const { html } = this.props.piece.data!;
       codemirror = (
         <Modal
           contentLabel="Edit source"
           isOpen
           overlayClassName="r_modal-overlay r_reset r_visible"
           className="r_modal-content"
-          ref={(modal) => this.modalNode = (modal && modal.node)}
+          ref={(modal: any) => { this.modalNode = (modal && modal.node); }}
           onRequestClose={this.handleCloseModal}
         >
           <div className="r_modal-title">
-            <div className="r_modal-close" onClick={this.onClose}>
+            <div
+              role="button"
+              tabIndex={-1}
+              className="r_modal-close"
+              onClick={this.onClose}
+            >
               <i className="rx_icon rx_icon-close">&nbsp;</i>
             </div>
             <span>Edit Source Code</span>
@@ -224,6 +238,8 @@ export default class CodeMirror extends Component<IPieceProps> {
           />
           <div className="r_modal-actions-bar">
             <div
+              role="button"
+              tabIndex={-1}
               className="button button-save"
               onClick={this.onSave}
             >

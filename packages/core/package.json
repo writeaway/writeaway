@@ -24,10 +24,7 @@
   },
   "author": "SpiralScout",
   "license": "MIT",
-  "dependencies": {
-    "@types/classnames": "^2.2.10",
-    "@types/react-redux": "^7.1.9",
-    "@types/react-redux-toastr": "^7.6.0",
+  "peerDependencies": {
     "autobind-decorator": "^2.4.0",
     "classnames": "^2.2.6",
     "react": "^16.13.1",
@@ -36,10 +33,13 @@
     "react-redux-toastr": "^7.6.5",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
-    "redux-thunk": "^2.3.0",
-    "typescript": "^4.0.3"
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
+    "@types/classnames": "^2.2.10",
+    "@types/react-redux": "^7.1.9",
+    "@types/react-redux-toastr": "^7.6.0",
+    "typescript": "^4.0.3",
     "@types/react": "^16.9.51",
     "@types/react-dom": "^16.9.8"
   }

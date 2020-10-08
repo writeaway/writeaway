@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { IComponent, IPieceItemState, PieceType, RedaxtorAPI } from 'types';
+import {
+  IComponent, IPieceItemState, PieceType, RedaxtorAPI,
+} from 'types';
 import PiecesList from './PiecesList';
 
 import { RxCheckBox } from '../RxCheckBox';

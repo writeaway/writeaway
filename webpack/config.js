@@ -38,7 +38,7 @@ module.exports = {
     rules: [
       loaders.jsmap,
       // loaders.asIs,
-      // loaders.js,
+      loaders.js,
       loaders.ts,
       loaders.css,
       loaders.less,

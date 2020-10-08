@@ -36,7 +36,7 @@ import { configureFetch } from './helpers/callFetch';
 import reducers from './reducers';
 import { setStore } from './store';
 
-export class Redaxtor {
+export class WriteAwayCore {
   private readonly options: IOptions;
 
   private store!: Store;
@@ -114,7 +114,7 @@ export class Redaxtor {
     /**
      * options.piecesRoot - say where search for pieces
      */
-    this.options.pieces && this.initPieces(this.options.piecesRoot || document);
+    this.initPieces(this.options.piecesRoot || document);
 
     /**
      * default options for navbar
@@ -211,6 +211,8 @@ export class Redaxtor {
       case 'Escape': // is escape
         this.onEscPress();
         break;
+      default:
+        break;
     }
   }
 
@@ -254,7 +256,7 @@ export class Redaxtor {
     ReactDOM.render(
       <Provider store={this.store}>
         <div>
-          <HoverOverlay components={this.options.pieces.components}/>
+          <HoverOverlay components={this.options.pieces.components} />
         </div>
       </Provider>,
       this.overlayNode,
@@ -266,7 +268,7 @@ export class Redaxtor {
     const selector = this.options.pieces.attribute.indexOf('data-') === 0 ? `[${this.options.pieces.attribute}]` : this.options.pieces.attribute;
     const nodes = contextNode.querySelectorAll(selector);
 
-    for (let i = 0; i < nodes.length; ++i) {
+    for (let i = 0; i < nodes.length; i += 1) {
       this.addPiece(nodes[i] as HTMLElement);
     }
   }
@@ -286,8 +288,8 @@ export class Redaxtor {
    * @param options.data {Object} Optional. Set of data associated with piece in format of piece component.
    If not specified will be fetched.
    */
-  addPiece(node: HTMLElement, options: { id?: string, name?: string, type?: string, data?: any, dataset?: { [k: string]: string } } = {}) {
-    const piece: IPieceItemState = {
+  addPiece<Data = any>(node: HTMLElement, options: { id?: string, name?: string, type?: string, data?: Data, dataset?: { [k: string]: string } } = {}) {
+    const piece: IPieceItemState<Data> = {
       node,
       type: ((options && options.type) || node.getAttribute(this.options.pieces.attribute)) as PieceType,
       id: ((options && options.id) || node.getAttribute(this.options.pieces.attributeId)) as string,
@@ -342,9 +344,9 @@ export class Redaxtor {
     const state = this.store.getState();
 
     if (editorType) {
-      return state.pieces.editorEnabled[editorType] != undefined ? state.pieces.editorEnabled[editorType] : false;
+      return state.pieces.editorEnabled[editorType] ?? false;
     }
-    return state.pieces.editorActive != undefined ? state.pieces.editorActive : false;
+    return state.pieces.editorActive ?? false;
   }
 
   /**
@@ -353,12 +355,12 @@ export class Redaxtor {
    */
   getPieceList() {
     const state = this.store.getState();
-    const pieces = state.pieces && state.pieces.byId || {};
+    const pieces = (state.pieces && state.pieces.byId) || {};
     const out: Record<string, IPieceItemState> = {};
     for (const pieceId of Object.keys(pieces)) {
       out[pieceId] = { // Clone piece, so outer code can't affect it
         ...pieces[pieceId],
-        data: pieces[pieceId].data ? { ...pieces[pieceId].data } : void 0,
+        data: pieces[pieceId].data ? { ...pieces[pieceId].data } : undefined,
       };
     }
     return out;
@@ -369,10 +371,8 @@ export class Redaxtor {
    */
   destroyAllPieces() {
     const state = this.store.getState();
-    const pieces = state.pieces && state.pieces.byId || {};
-    for (const pieceId of Object.keys(pieces)) {
-      this.destroyPiece(pieceId);
-    }
+    const pieces = (state.pieces && state.pieces.byId) || {};
+    Object.keys(pieces).forEach((pieceId: string) => this.destroyPiece(pieceId));
   }
 
   /**
@@ -381,7 +381,7 @@ export class Redaxtor {
    */
   isNavBarCollapsed() {
     const state = this.store.getState();
-    return state.global.navBarCollapsed != undefined ? state.global.navBarCollapsed : true;
+    return state.global.navBarCollapsed ?? true;
   }
 
   /**
@@ -390,7 +390,7 @@ export class Redaxtor {
    */
   isExpertMode() {
     const state = this.store.getState();
-    return state.global.expert != undefined ? state.global.expert : false;
+    return state.global.expert ?? false;
   }
 
   /**
@@ -411,7 +411,7 @@ export class Redaxtor {
    */
   setNavBarCollapsed(navBarActive: boolean) {
     const isCollapseNow = this.isNavBarCollapsed();
-    if (navBarActive != isCollapseNow) {
+    if (navBarActive !== isCollapseNow) {
       this.store.dispatch(piecesToggleNavBar());
     }
   }
@@ -427,11 +427,13 @@ export class Redaxtor {
   applyEditor(node: HTMLElement, editorType: PieceType, data: any) {
     const componentObj = this.options.pieces.components[editorType];
     if (componentObj) {
-      componentObj.applyEditor && componentObj.applyEditor(node, data);
+      if (componentObj.applyEditor) {
+        componentObj.applyEditor(node, data);
+      }
     } else {
       throw new Error(`Unknown editor type '${editorType}'`);
     }
   }
 }
 
-export default Redaxtor;
+export default WriteAwayCore;

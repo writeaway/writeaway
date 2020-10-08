@@ -27,7 +27,7 @@ export type PieceProps<T> = {
 const PieceContainer = <T extends object = any>(props: PieceProps<T>) => {
   const pieceOptions = (props.config.options ? props.config.options[props.piece.type] : undefined) || {};
   const EditorComponent: IComponent | undefined = props.config.pieces.components[props.piece.type];
-  if(!EditorComponent) {
+  if (!EditorComponent) {
     throw new Error(`Piece type [${props.piece.type}] not supported`);
   }
   return (
@@ -56,7 +56,7 @@ const mapStateToProps = (state: IWriteAwayState, ownProps: { id: string }) => ({
   config: state.config,
   editorActive: !state.pieces.byId[ownProps.id].destroy
     && state.pieces.editorActive
-    && (state.pieces.editorEnabled[state.pieces.byId[ownProps.id].type]??true),
+    && (state.pieces.editorEnabled[state.pieces.byId[ownProps.id].type] ?? true),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -70,7 +70,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     onNodeResized: (id: string) => dispatch(onNodeResized(id)),
     setPieceMessage: (id: string, message: string, messageLevel: string) => dispatch(setPieceMessage(id, message, messageLevel)),
     setCurrentSourcePieceId: (id: string) => dispatch(setSourceId(id)),
-  }
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PieceContainer);
