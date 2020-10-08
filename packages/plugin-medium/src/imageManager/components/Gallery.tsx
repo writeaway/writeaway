@@ -46,7 +46,7 @@ export const Gallery = (
               onClick={() => onChange(item)}
               style={{ backgroundImage: `url(${item.thumbnailSrc ? item.thumbnailSrc : item.src})` }}
             >
-              <span className="hover-shadow"/>
+              <span className="hover-shadow" />
               {api.deleteImage
               && (
                 <span
@@ -56,8 +56,8 @@ export const Gallery = (
                     setImage(item);
                   }}
                 >
-                <i className="fa fa-trash-o" aria-hidden="true"/>
-              </span>
+                  <i className="fa fa-trash-o" aria-hidden="true" />
+                </span>
               )}
             </div>
             <div

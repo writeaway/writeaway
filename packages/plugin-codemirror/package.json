@@ -1,0 +1,57 @@
+{
+  "name": "@writeaway/plugin-codemirror",
+  "version": "2.0.0",
+  "description": "Redaxtor is a JavaScript library for editing CMS pieces, pages and internationalisation on the client side.",
+  "main": "./dist/plugin-codemirror.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "lib",
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/redaxtor/redaxtor.git"
+  },
+  "scripts": {
+    "clean": "rimraf lib dist",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "build": "npm run build:prod",
+    "build:prod": "cross-env NODE_ENV=production webpack",
+    "build:dev": "cross-env NODE_ENV=development webpack",
+    "watch": "cross-env NODE_ENV=development webpack --watch",
+    "pre-publish": "npm run clean && npm run lint && npm run build"
+  },
+  "author": "SpiralScout",
+  "license": "MIT",
+  "dependencies": {
+    "@writeaway/core": "2.0.0",
+    "autobind-decorator": "^2.4.0",
+    "classnames": "^2.2.6",
+    "codemirror": "^5.58.1",
+    "js-beautify": "^1.13.0",
+    "medium-editor": "^5.23.3",
+    "react": "^16.13.1",
+    "react-codemirror": "^1.0.0",
+    "react-dom": "^16.13.1",
+    "react-modal": "^3.11.2",
+    "react-redux": "^7.2.1",
+    "react-redux-toastr": "^7.6.5",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-thunk": "^2.3.0",
+    "typescript": "^4.0.3"
+  },
+  "devDependencies": {
+    "@types/classnames": "^2.2.10",
+    "@types/codemirror": "^0.0.98",
+    "@types/js-beautify": "^1.11.0",
+    "@types/medium-editor": "^5.0.3",
+    "@types/react": "^16.9.51",
+    "@types/react-codemirror": "^1.0.3",
+    "@types/react-dom": "^16.9.8",
+    "@types/react-modal": "^3.10.6",
+    "@types/react-redux": "^7.1.9",
+    "@types/react-redux-toastr": "^7.6.0"
+  }
+}
