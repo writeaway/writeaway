@@ -20,7 +20,7 @@ export default {
     },
   },
   richText: {
-    __floatingEditLabel: 'Click to Edit',
-    __checkboxName: 'Rich Text',
+    floatingEditLabel: 'Click to Edit',
+    checkboxName: 'Rich Text',
   },
 };

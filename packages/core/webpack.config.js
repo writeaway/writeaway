@@ -9,7 +9,7 @@ const config = {
 
   output: {
     ...baseConfig.output,
-    libraryExport: 'default',
+    // libraryExport: 'default',
     library: {
       amd: '@writeaway/core',
       commonjs: '@writeaway/core',

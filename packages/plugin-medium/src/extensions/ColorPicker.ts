@@ -1,5 +1,5 @@
 import { pickerColors } from 'contants';
-import MediumEditor from 'medium-editor';
+import * as MediumEditor from 'medium-editor';
 import vanillaColorPicker from '../helpers/VanillaColorPicker';
 
 export const ColorPicker = (MediumEditor as any).extensions.button.extend({

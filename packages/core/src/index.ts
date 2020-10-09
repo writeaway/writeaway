@@ -8,4 +8,6 @@ export const version = `Version ${process.env.VERSION}, built at ${process.env.B
 
 export const WriteAwayCore = core;
 
+export { defaultMinimumApi, defaultOptions, defaultPieces } from 'defaults';
+
 export default WriteAwayCore;

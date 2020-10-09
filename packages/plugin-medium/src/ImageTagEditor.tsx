@@ -17,11 +17,12 @@ export default class RedaxtorImageTag extends Component<IPieceProps> {
 
   static readonly label: string = 'Images';
 
-  static readonly applyEditor = (node: HTMLImageElement, data: RedaxtorImageTagData) => {
+  static readonly applyEditor = (node: HTMLElement, data: RedaxtorImageTagData) => {
     if (!node) { return; }
-    node.src = data.src || '';
-    node.alt = data.alt || '';
-    node.setAttribute('title', data.title || '');
+    const n: HTMLImageElement = node as HTMLImageElement;
+    n.src = data.src || '';
+    n.alt = data.alt || '';
+    n.setAttribute('title', data.title || '');
   };
 
   private active: boolean; // TODO: Refactor to store in state?

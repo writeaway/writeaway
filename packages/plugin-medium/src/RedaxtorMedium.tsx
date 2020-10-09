@@ -17,14 +17,14 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
    */
   static readonly __renderType = 'BEFORE';
 
-  static readonly editLabel = i18n.richText.__floatingEditLabel;
+  static readonly editLabel = i18n.richText.floatingEditLabel;
 
-  static readonly label = i18n.richText.__checkboxName;
+  static readonly label = i18n.richText.checkboxName;
 
   static readonly applyEditor = function (node: HTMLElement, data: { html: string }) {
     if (node) {
       const content = node.innerHTML;
-      if (content != data.html) {
+      if (content !== data.html) {
         node.innerHTML = data.html;
         return true;
       }

@@ -1,10 +1,14 @@
+import { IComponent } from '@writeaway/core';
+import { RedaxtorImageData } from 'types';
 import RedaxtorMedium from './RedaxtorMedium';
 import ImageTag from './ImageTagEditor';
 import BackgroundImageEditor from './BackgroundImageEditor';
 
-export const WriteAwayImageTag = ImageTag;
-export const WriteAwayBackground = BackgroundImageEditor;
-export const WriteAwayMedium = RedaxtorMedium;
+import 'redaxtor-medium.less';
+
+export const WriteAwayImageTag: IComponent<RedaxtorImageData> = ImageTag;
+export const WriteAwayBackground: IComponent<RedaxtorImageData> = BackgroundImageEditor;
+export const WriteAwayMedium: IComponent<{ html: string }> = RedaxtorMedium;
 
 export * from './types';
 

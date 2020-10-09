@@ -1,7 +1,7 @@
 import { AnyAction, combineReducers, Reducer } from 'redux';
 import { reducer as toastr } from 'react-redux-toastr';
 import { IGlobalState, IOptions } from 'types';
-import { defaultGlobalState } from '../defaults';
+import { defaultGlobalState, defaultOptions } from '../defaults';
 
 import C from '../constants';
 import pieces from './pieces';
@@ -25,7 +25,7 @@ const global: Reducer<IGlobalState> = (state: IGlobalState = defaultGlobalState,
 };
 
 const reducers = combineReducers({
-  pieces, toastr, global, config: ((s: IOptions) => s) as Reducer<IOptions>,
+  pieces, toastr, global, config: ((s: IOptions) => s || defaultOptions) as Reducer<IOptions>,
 });
 
 export default reducers;

@@ -1,12 +1,14 @@
 import { IPieceProps } from '@writeaway/core';
 import { boundMethod } from 'autobind-decorator';
+
 import { html as html_beautify } from 'js-beautify';
 import React, { Component } from 'react';
-import Codemirror from 'react-codemirror';
+import Codemirror from 'react-codemirror2';
 import Modal from 'react-modal';
 import { RedaxtorCodeMirrorData, RedaxtorCodeMirrorState } from 'types';
 
-require('codemirror/mode/htmlmixed/htmlmixed');
+import * as codemirror from 'codemirror';
+// require('codemirror/mode/htmlmixed/htmlmixed');
 
 export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirrorData>, RedaxtorCodeMirrorState> {
   /**
@@ -101,8 +103,8 @@ export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirror
   }
 
   @boundMethod
-  updateCode(newCode: string) {
-    this.code = newCode;
+  updateCode(editor: codemirror.Editor, data: codemirror.EditorChange, value: string) {
+    this.code = value;
   }
 
   onSave() {
@@ -231,7 +233,7 @@ export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirror
             </div>
             <span>Edit Source Code</span>
           </div>
-          <Codemirror
+          <Codemirror.UnControlled
             value={html_beautify(html)}
             onChange={this.updateCode}
             options={options}

@@ -18,11 +18,13 @@ const basePlugins = [
   new webpack.ContextReplacementPlugin(/moment[\/\\]locale/, /en/),
 ];// .concat(sourceMap);
 
-const devPlugins = [];
-
 const cssExtractorOptions = {
   filename: 'css/[name].css',
 };
+
+const devPlugins = [
+  new MiniCssExtractPlugin(cssExtractorOptions),
+];
 
 const prodPlugins = [
   new MiniCssExtractPlugin(cssExtractorOptions),

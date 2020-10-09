@@ -1,16 +1,16 @@
-import MediumEditor from 'medium-editor';
+import * as MediumEditor from 'medium-editor';
 
-import ('./extensions/resetButton');
-import ('./extensions/undoButton');
-import ('./extensions/redoButton');
-import ('./extensions/saveButton');
-import ('./extensions/sourceButton');
-import ('./extensions/imageInsertButton');
-import ('./extensions/link');
-import ('./extensions/imageDrag');
-import ('./extensions/ToolbarSeparator');
-import ('./extensions/ToolbarNewLineSeparator');
-import ('./extensions/ColorPicker');
+import './extensions/resetButton';
+import './extensions/undoButton';
+import './extensions/redoButton';
+import './extensions/saveButton';
+import './extensions/sourceButton';
+import './extensions/imageInsertButton';
+import './extensions/link';
+import './extensions/imageDrag';
+import './extensions/ToolbarSeparator';
+import './extensions/ToolbarNewLineSeparator';
+import './extensions/ColorPicker';
 
 const editor = MediumEditor as any;
 

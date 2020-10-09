@@ -13,8 +13,7 @@ import type { ThunkAction, ThunkDispatch } from 'redux-thunk';
 
 export type PieceDataResolver<DataType = any> =
   (piece: IPieceItemState<DataType>,
-    resolvers?: Record<PieceType,
-    PieceDataResolver<DataType>>) =>
+    resolvers?: Partial<Record<PieceType, PieceDataResolver>>) =>
   Promise<IPieceItemState<DataType>>;
 
 export interface GalleryItem {
@@ -38,7 +37,7 @@ export interface RedaxtorAPI {
   deleteImage?: (id: string) => Promise<any>
 }
 
-export type PieceType = 'source' | 'background' | 'html' | 'image';
+export type PieceType = 'source' | 'background' | 'html' | 'image' | 'seo';
 
 export interface IPiece<DataType = any> {
   node: HTMLElement;
@@ -94,6 +93,10 @@ export interface IOptions {
    * Can navbar be collapsed
    */
   navBarCollapsable: boolean,
+  /**
+   * Can navbar be collapsed
+   */
+  expert?: boolean,
   /**
    * Starting state
    */

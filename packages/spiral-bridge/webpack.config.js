@@ -1,26 +1,29 @@
 const baseConfig = require('../../webpack/config');
 
 const config = {
-    ...baseConfig,
+  ...baseConfig,
 
-    entry: {
-        'writeaway-spiral': ['./src/index.ts'],
+  entry: {
+    'writeaway-spiral': ['./src/index.ts'],
+  },
+
+  output: {
+    ...baseConfig.output,
+    libraryExport: 'default',
+    library: {
+      amd: '@writeaway/spiral',
+      commonjs: '@writeaway/spiral',
+      root: 'WriteAwaySpiral',
     },
+  },
 
-    output: {
-        ...baseConfig.output,
-        libraryExport: 'default',
-        library: {
-            amd: '@writeaway/spiral',
-            commonjs: '@writeaway/spiral',
-            root: 'WriteAwaySpiral',
-        },
+  resolve: {
+    ...baseConfig.resolve,
+    modules: ['node_modules', 'src'],
+    alias: {
+      'medium-editor$': 'medium-editor/dist/js/medium-editor',
     },
-
-    resolve: {
-        ...baseConfig.resolve,
-        modules: ['node_modules', 'src'],
-    }
+  },
 };
 
 module.exports = config;

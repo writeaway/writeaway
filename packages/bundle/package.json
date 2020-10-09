@@ -2,7 +2,7 @@
   "name": "@writeaway/bundle",
   "version": "2.0.0",
   "description": "Redaxtor is a JavaScript library for editing CMS pieces, pages and internationalisation on the client side.",
-  "main": "./dist/bundle.js",
+  "main": "./dist/writeaway.js",
   "types": "./dist/index.d.ts",
   "files": [
     "lib",
@@ -16,6 +16,7 @@
     "clean": "rimraf lib dist",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
+    "prebuild": "npm run clean",
     "build": "npm run build:prod",
     "build:prod": "cross-env NODE_ENV=production webpack",
     "build:dev": "cross-env NODE_ENV=development webpack",

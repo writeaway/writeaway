@@ -66,7 +66,7 @@ export const defaultMinimumApi: RedaxtorAPI = {
       },
     }),
   },
-  getPieceData: async <T extends object = any>(piece: IPieceItemState<T>, resolvers?: Record<PieceType, PieceDataResolver<T>>) => {
+  getPieceData: async <T extends object = any>(piece: IPieceItemState<T>, resolvers?: Partial<Record<PieceType, PieceDataResolver<T>>>) => {
     const resolver = resolvers ? resolvers[piece.type] : undefined;
     if (!piece.data && !resolver) {
       throw new Error(`Piece type ${piece.type} has no initial data and has no resolver`);

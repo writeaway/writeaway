@@ -1,14 +1,15 @@
 import { IPieceProps } from '@writeaway/core';
 import { boundMethod } from 'autobind-decorator';
+import * as codemirror from 'codemirror';
 import { html as html_beautify } from 'js-beautify';
 import React, { Component } from 'react';
-import Codemirror from 'react-codemirror';
+import Codemirror from 'react-codemirror2';
 import Modal from 'react-modal';
 import { shallowEqual } from 'react-redux';
 import { RedaxtorSeoData, RedaxtorSeoKeyField, RedaxtorSeoState } from 'types';
 import i18n from './i18n';
 
-require('codemirror/mode/htmlmixed/htmlmixed');
+// require('codemirror/mode/htmlmixed/htmlmixed');
 
 export class RedaxtorSeo extends Component<IPieceProps<RedaxtorSeoData>, RedaxtorSeoState> {
   /**
@@ -77,8 +78,8 @@ export class RedaxtorSeo extends Component<IPieceProps<RedaxtorSeoData>, Redaxto
     // console.log(`SEO editor ${this.props.piece.id} unmounted`);
   }
 
-  updateCode(newCode: string) {
-    this.updateValue('header', newCode);
+  updateCode(editor: codemirror.Editor, data: codemirror.EditorChange, value: string) {
+    this.updateValue('header', value);
   }
 
   UNSAFE_componentWillReceiveProps(nextProps: IPieceProps) {
@@ -274,7 +275,7 @@ export class RedaxtorSeo extends Component<IPieceProps<RedaxtorSeoData>, Redaxto
                 {i18n.meta}
               </label>
               )
-              <Codemirror
+              <Codemirror.UnControlled
                 value={html}
                 onChange={this.updateCode}
                 options={options}

@@ -1,0 +1,8 @@
+{
+  "status": 200,
+  "piece": {
+    "data": {
+      "html": "<h1>Hey! You did it!</h1><p>This text has changed, because it was fetched from server before editing. Next block just directly uses content and is not fetching anything.</p>"
+    }
+  }
+}

@@ -1,16 +1,14 @@
-require('whatwg-fetch');
-
 /**
  * check status of response
  * @param {any} response
  * @return {any}
  */
-function checkStatus(response) {
+function checkStatus(response: Response) {
   if (response.status >= 200 && response.status < 300) {
     return response;
   }
   const error = new Error(response.statusText);
-  error.response = response;
+  (error as any).response = response;
   throw error;
 }
 
@@ -18,16 +16,16 @@ function checkStatus(response) {
  * Perform a post data request to server with data to json serialization
  * @param {string} path
  * @param {*} data any data that can be wrapped in JSON.stringify
- * @return {Promise<TResult>}
+ * @return {Promise<Object>}
  */
-export function post(path, data) {
+export function post(path: string, data: any) {
   return fetch(path, {
     method: 'post',
     credentials: 'same-origin',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      'X-CSRF-TOKEN': window.csrfToken,
+      'X-CSRF-TOKEN': (window as any).csrfToken,
     },
     body: JSON.stringify(data),
   })
@@ -39,15 +37,15 @@ export function post(path, data) {
  * Perform a postfile  request to server without data serialization
  * @param {string} path
  * @param {*} data any data that can be wrapped in JSON.stringify
- * @return {Promise<TResult>}
+ * @return {Promise<Object>}
  */
-export function postFile(path, data) {
+export function postFile(path: string, data: FormData) {
   return fetch(path, {
     method: 'post',
     credentials: 'same-origin',
     headers: {
       Accept: 'application/json',
-      'X-CSRF-TOKEN': window.csrfToken,
+      'X-CSRF-TOKEN': (window as any).csrfToken,
     },
     body: data,
   })
@@ -61,9 +59,10 @@ export function postFile(path, data) {
  * @param {*} data flat object to onvert to URL-encoded string
  * @return {Promise<TResult>}
  */
-export function get(path, data) {
-  const appendGetData = [];
+export function get(path: string, data?: any) {
+  const appendGetData: string[] = [];
   if (data) {
+    // eslint-disable-next-line no-restricted-syntax
     for (const key of data) {
       appendGetData.push(`${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`);
     }
@@ -74,7 +73,7 @@ export function get(path, data) {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      'X-CSRF-TOKEN': window.csrfToken,
+      'X-CSRF-TOKEN': (window as any).csrfToken,
     },
   })
     .then(checkStatus)

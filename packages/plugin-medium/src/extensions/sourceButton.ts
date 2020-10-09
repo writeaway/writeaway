@@ -1,4 +1,4 @@
-import MediumEditor from 'medium-editor';
+import * as MediumEditor from 'medium-editor';
 
 export const SourceButton = (MediumEditor as any).Extension.extend({
   name: 'source',

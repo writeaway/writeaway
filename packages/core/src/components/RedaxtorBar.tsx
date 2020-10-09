@@ -24,12 +24,12 @@ export interface RedaxtorBarProps {
 }
 
 export const RedaxtorBar = ({
-  message,
-  navBarCollapsed,
-  piecesToggleNavBar,
-  options,
-  expert,
-}: RedaxtorBarProps) => {
+                              message,
+                              navBarCollapsed,
+                              piecesToggleNavBar,
+                              options,
+                              expert,
+                            }: RedaxtorBarProps) => {
   const [dragging, setDragging] = useState<boolean>(false);
   const [dragged, setDragged] = useState<boolean>(false);
   const [value, setValue] = useState<string>('pieces');
@@ -122,7 +122,9 @@ export const RedaxtorBar = ({
 
   return (
     <div className="r_reset">
-      <div ref="bar" className={r_bar_class}>
+      <div
+        className={r_bar_class}
+      >
         <PanelHandler
           isCollapsable={options.navBarCollapsable}
           isOpen={!isCollapsed}
@@ -136,7 +138,7 @@ export const RedaxtorBar = ({
             <div className="r_tabs" data-value={value}>
               <div className="r_tab-content">
                 {value === 'pieces'
-              && <Pieces />}
+                && <Pieces/>}
               </div>
             </div>
           ) : null}

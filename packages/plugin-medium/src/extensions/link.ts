@@ -1,4 +1,4 @@
-import MediumEditor from 'medium-editor';
+import * as MediumEditor from 'medium-editor';
 
 export const Link = (MediumEditor as any).extensions.form.extend({
   /* Anchor Form Options */

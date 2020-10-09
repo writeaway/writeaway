@@ -7,8 +7,8 @@ const [node, path, ...packages] = argv;
 const isDebug = process.env.NODE_ENV !== 'production';
 const cmd = isDebug ? 'build:dev' : 'build';
 const allPackages = readdirSync('./packages');
-const firstToGo = [];
-const lastToGo = [];
+const firstToGo = ['core'];
+const lastToGo = ['spiral-bridge', 'bundle'];
 
 const execute = ((packages && packages.length) ? packages.filter((p) => (allPackages.indexOf(p) >= 0)) : allPackages).sort((a, b) => {
   if (firstToGo.indexOf(a) >= 0 || lastToGo.indexOf(b) >= 0) {

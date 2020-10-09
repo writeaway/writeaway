@@ -16,6 +16,7 @@
     "clean": "rimraf lib dist",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
+    "prebuild": "npm run clean",
     "build": "npm run build:prod",
     "build:prod": "cross-env NODE_ENV=production webpack",
     "build:dev": "cross-env NODE_ENV=development webpack",
@@ -24,21 +25,18 @@
   },
   "author": "SpiralScout",
   "license": "MIT",
-  "dependencies": {
+  "peerDependencies": {
     "@writeaway/core": "2.0.0",
     "autobind-decorator": "^2.4.0",
     "classnames": "^2.2.6",
-    "medium-editor": "^5.23.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-redux": "^7.2.1",
-    "react-redux-toastr": "^7.6.5",
-    "redux": "^4.0.5",
-    "redux-devtools-extension": "^2.13.8",
-    "redux-thunk": "^2.3.0",
-    "typescript": "^4.0.3"
+    "medium-editor": "^5.23.3"
+  },
+  "dependencies": {
   },
   "devDependencies": {
+    "typescript": "^4.0.3",
     "@types/classnames": "^2.2.10",
     "@types/medium-editor": "^5.0.3",
     "@types/react": "^16.9.51",
