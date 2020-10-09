@@ -3,7 +3,7 @@ import { boundMethod } from 'autobind-decorator';
 import * as codemirror from 'codemirror';
 import { html as html_beautify } from 'js-beautify';
 import React, { Component } from 'react';
-import Codemirror from 'react-codemirror2';
+import { UnControlled } from 'react-codemirror2';
 import Modal from 'react-modal';
 import { shallowEqual } from 'react-redux';
 import { RedaxtorSeoData, RedaxtorSeoKeyField, RedaxtorSeoState } from 'types';
@@ -275,7 +275,7 @@ export class RedaxtorSeo extends Component<IPieceProps<RedaxtorSeoData>, Redaxto
                 {i18n.meta}
               </label>
               )
-              <Codemirror.UnControlled
+              <UnControlled
                 value={html}
                 onChange={this.updateCode}
                 options={options}

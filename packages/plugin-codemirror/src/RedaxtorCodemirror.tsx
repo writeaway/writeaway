@@ -3,7 +3,7 @@ import { boundMethod } from 'autobind-decorator';
 
 import { html as html_beautify } from 'js-beautify';
 import React, { Component } from 'react';
-import Codemirror from 'react-codemirror2';
+import { UnControlled } from 'react-codemirror2';
 import Modal from 'react-modal';
 import { RedaxtorCodeMirrorData, RedaxtorCodeMirrorState } from 'types';
 
@@ -233,7 +233,7 @@ export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirror
             </div>
             <span>Edit Source Code</span>
           </div>
-          <Codemirror.UnControlled
+          <UnControlled
             value={html_beautify(html)}
             onChange={this.updateCode}
             options={options}
