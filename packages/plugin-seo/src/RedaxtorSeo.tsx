@@ -9,7 +9,7 @@ import { shallowEqual } from 'react-redux';
 import { RedaxtorSeoData, RedaxtorSeoKeyField, RedaxtorSeoState } from 'types';
 import i18n from './i18n';
 
-// require('codemirror/mode/htmlmixed/htmlmixed');
+require('codemirror/mode/htmlmixed/htmlmixed');
 
 export class RedaxtorSeo extends Component<IPieceProps<RedaxtorSeoData>, RedaxtorSeoState> {
   /**
@@ -78,6 +78,7 @@ export class RedaxtorSeo extends Component<IPieceProps<RedaxtorSeoData>, Redaxto
     // console.log(`SEO editor ${this.props.piece.id} unmounted`);
   }
 
+  @boundMethod
   updateCode(editor: codemirror.Editor, data: codemirror.EditorChange, value: string) {
     this.updateValue('header', value);
   }

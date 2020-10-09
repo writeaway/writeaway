@@ -8,7 +8,7 @@ import Modal from 'react-modal';
 import { RedaxtorCodeMirrorData, RedaxtorCodeMirrorState } from 'types';
 
 import * as codemirror from 'codemirror';
-// require('codemirror/mode/htmlmixed/htmlmixed');
+require('codemirror/mode/htmlmixed/htmlmixed');
 
 export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirrorData>, RedaxtorCodeMirrorState> {
   /**
