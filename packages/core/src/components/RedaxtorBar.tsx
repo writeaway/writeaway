@@ -23,17 +23,19 @@ export interface RedaxtorBarProps {
   piecesToggleNavBar: () => void,
 }
 
-export const RedaxtorBar = ({
-                              message,
-                              navBarCollapsed,
-                              piecesToggleNavBar,
-                              options,
-                              expert,
-                            }: RedaxtorBarProps) => {
+export const RedaxtorBar = (
+  {
+    message,
+    navBarCollapsed,
+    piecesToggleNavBar,
+    options,
+    expert,
+  }: RedaxtorBarProps,
+) => {
   const [dragging, setDragging] = useState<boolean>(false);
   const [dragged, setDragged] = useState<boolean>(false);
-  const [value, setValue] = useState<string>('pieces');
-  const node = useRef<HTMLElement>(null);
+  const value = 'pieces';
+  const node = useRef<HTMLDivElement>(null);
   const rel = useRef<{
     x: number,
     y: number,
@@ -44,6 +46,7 @@ export const RedaxtorBar = ({
   });
 
   const onMouseUp = useCallback((e: MouseEvent) => {
+    console.log('mouseup');
     // ignore if don't set draggable option
     if (!options.navBarDraggable || !dragging) {
       return;
@@ -51,7 +54,7 @@ export const RedaxtorBar = ({
     setDragging(false);
     e.stopPropagation();
     e.preventDefault();
-  }, [setDragging, options.navBarDraggable]);
+  }, [setDragging, options.navBarDraggable, dragging]);
 
   const onMouseDown = useCallback((e: React.MouseEvent) => {
     // ignore if don't set draggable option
@@ -123,6 +126,7 @@ export const RedaxtorBar = ({
   return (
     <div className="r_reset">
       <div
+        ref={node}
         className={r_bar_class}
       >
         <PanelHandler
@@ -138,7 +142,7 @@ export const RedaxtorBar = ({
             <div className="r_tabs" data-value={value}>
               <div className="r_tab-content">
                 {value === 'pieces'
-                && <Pieces/>}
+                && <Pieces />}
               </div>
             </div>
           ) : null}
