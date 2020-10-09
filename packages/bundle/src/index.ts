@@ -123,16 +123,29 @@ const writeaway = new WriteAwaySampleBundle({
     getImageList: (data: any) => ((data && data.type === 'background') ? Promise.resolve(imageListBg.data.list) : Promise.resolve(imageList.data.list)),
     /* example of api for delete images */
     deleteImage: () => Promise.resolve(true),
-    uploadImage: () => new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          src: 'http://cdn2-www.dogtime.com/assets/uploads/gallery/30-impossibly-cute-puppies/impossibly-cute-puppy-8.jpg',
-          thumbnailSrc: 'http://cdn2-www.dogtime.com/assets/uploads/gallery/30-impossibly-cute-puppies/impossibly-cute-puppy-8.jpg',
-          width: 680,
-          height: 606,
-          id: Date.now().toString(),
-        });
-      }, 1000);
+    uploadImage: (file: File | FileList) => new Promise((resolve) => {
+      if ((file as FileList).length && (file as FileList).item(0)!.size <= 200 * 1024) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          console.log(e.target!.result);
+          resolve({
+            src: e.target!.result as any,
+            id: Date.now().toString(),
+          });
+        };
+        reader.readAsDataURL((file as FileList).item(0)!);
+      } else {
+        alert('Try file smaller than 200Kb to see it directly, demo one will be used instead');
+        setTimeout(() => {
+          resolve({
+            src: 'http://cdn2-www.dogtime.com/assets/uploads/gallery/30-impossibly-cute-puppies/impossibly-cute-puppy-8.jpg',
+            thumbnailSrc: 'http://cdn2-www.dogtime.com/assets/uploads/gallery/30-impossibly-cute-puppies/impossibly-cute-puppy-8.jpg',
+            width: 680,
+            height: 606,
+            id: Date.now().toString(),
+          });
+        }, 100);
+      }
     }),
     getPieceData(piece: IPieceItemState) {
       return BasicApi.getPieceData(piece, BasicApi.resolvers).then((p: IPieceItemState) => {

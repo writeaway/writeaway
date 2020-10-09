@@ -4,5 +4,6 @@ export interface RedaxtorCodeMirrorData {
 }
 
 export interface RedaxtorCodeMirrorState {
-  sourceEditorActive: boolean
+  sourceEditorActive: boolean,
+  html: string,
 }

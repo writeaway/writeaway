@@ -1,15 +1,20 @@
 import { IPieceProps } from '@writeaway/core';
 import { boundMethod } from 'autobind-decorator';
-import * as codemirror from 'codemirror';
 import { html as html_beautify } from 'js-beautify';
 import React, { Component } from 'react';
-import { UnControlled } from 'react-codemirror2';
+
 import Modal from 'react-modal';
 import { shallowEqual } from 'react-redux';
 import { RedaxtorSeoData, RedaxtorSeoKeyField, RedaxtorSeoState } from 'types';
 import i18n from './i18n';
 
-require('codemirror/mode/htmlmixed/htmlmixed');
+import Editor from 'react-simple-code-editor';
+// @ts-ignore
+import { highlight, languages } from 'prismjs/components/prism-core';
+import 'prismjs/components/prism-clike';
+import 'prismjs/components/prism-css';
+import 'prismjs/components/prism-markup';
+import 'prismjs/components/prism-javascript';
 
 export class RedaxtorSeo extends Component<IPieceProps<RedaxtorSeoData>, RedaxtorSeoState> {
   /**
@@ -79,7 +84,7 @@ export class RedaxtorSeo extends Component<IPieceProps<RedaxtorSeoData>, Redaxto
   }
 
   @boundMethod
-  updateCode(editor: codemirror.Editor, data: codemirror.EditorChange, value: string) {
+  updateCode(value: string) {
     this.updateValue('header', value);
   }
 
@@ -90,7 +95,7 @@ export class RedaxtorSeo extends Component<IPieceProps<RedaxtorSeoData>, Redaxto
       title: data.title || '',
       keywords: data.keywords || '',
       description: data.description || '',
-      header: data.header || '',
+      header: html_beautify(data.header || '', this.beautifyOptions),
     });
 
     if (nextProps.piece.manualActivation) {
@@ -137,7 +142,7 @@ export class RedaxtorSeo extends Component<IPieceProps<RedaxtorSeoData>, Redaxto
             title: this.state.title || '',
             keywords: this.state.keywords || '',
             description: this.state.description || '',
-            header: this.state.header || '',
+            header: html_beautify(this.state.header || '', this.beautifyOptions),
           },
         });
     }
@@ -193,11 +198,6 @@ export class RedaxtorSeo extends Component<IPieceProps<RedaxtorSeoData>, Redaxto
     let modalDiv = null;
 
     if (this.state.sourceEditorActive) {
-      const options = {
-        lineNumbers: true,
-        mode: 'htmlmixed',
-      };
-
       const { title, description, keywords } = this.state;
       const descr = description.length > 156 ? (`${description.substring(0, 153)}...`) : description;
 
@@ -209,7 +209,7 @@ export class RedaxtorSeo extends Component<IPieceProps<RedaxtorSeoData>, Redaxto
         paddingRight: '131px',
       }; */
       const { id } = this.props.piece;
-      const html = html_beautify(this.state.header, this.beautifyOptions);
+      const html = this.state.header;
 
       modalDiv = (
         <Modal
@@ -271,15 +271,20 @@ export class RedaxtorSeo extends Component<IPieceProps<RedaxtorSeoData>, Redaxto
                 <div className="description">Keep to 5 keywords or less</div>
               </div>
             </div>
-            <div className="r_col">
+            <div className="r_col r_source_editor">
               <label htmlFor={`r_${id}_description`}>
                 {i18n.meta}
               </label>
-              )
-              <UnControlled
+              <Editor
                 value={html}
-                onChange={this.updateCode}
-                options={options}
+                onValueChange={this.updateCode}
+                highlight={(code: string) => highlight(code, languages.markup)}
+                padding={10}
+                style={{
+                  fontFamily: '"Fira Code", "Menlo", monospace',
+                  background: 'white',
+                  fontSize: 12,
+                }}
               />
               <div className="codemirror-hint">{i18n.metaDescription}</div>
             </div>

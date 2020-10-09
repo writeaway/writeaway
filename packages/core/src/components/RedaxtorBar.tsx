@@ -46,7 +46,6 @@ export const RedaxtorBar = (
   });
 
   const onMouseUp = useCallback((e: MouseEvent) => {
-    console.log('mouseup');
     // ignore if don't set draggable option
     if (!options.navBarDraggable || !dragging) {
       return;

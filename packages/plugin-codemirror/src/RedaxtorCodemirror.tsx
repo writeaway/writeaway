@@ -3,12 +3,16 @@ import { boundMethod } from 'autobind-decorator';
 
 import { html as html_beautify } from 'js-beautify';
 import React, { Component } from 'react';
-import { UnControlled } from 'react-codemirror2';
 import Modal from 'react-modal';
 import { RedaxtorCodeMirrorData, RedaxtorCodeMirrorState } from 'types';
 
-import * as codemirror from 'codemirror';
-require('codemirror/mode/htmlmixed/htmlmixed');
+import Editor from 'react-simple-code-editor';
+// @ts-ignore
+import { highlight, languages } from 'prismjs/components/prism-core';
+import 'prismjs/components/prism-clike';
+import 'prismjs/components/prism-css';
+import 'prismjs/components/prism-markup';
+import 'prismjs/components/prism-javascript';
 
 export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirrorData>, RedaxtorCodeMirrorState> {
   /**
@@ -51,7 +55,6 @@ export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirror
 
   constructor(props: IPieceProps) {
     super(props);
-    // this.code = this.props.piece.data && this.props.piece.data.html;
 
     if (this.props.piece.data) {
       this.initDataKeys = Object.keys(this.props.piece.data) as Array<keyof RedaxtorCodeMirrorData>;
@@ -61,6 +64,7 @@ export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirror
 
     this.state = {
       sourceEditorActive: false,
+      html: this.props.piece.data?.html || '',
     };
   }
 
@@ -73,6 +77,7 @@ export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirror
       this.props.actions.onManualDeactivation(this.props.piece.id);
       this.deactivateEditor();
     }
+    this.setState({ html: html_beautify(newProps.piece.data?.html || '', this.beautifyOptions) });
   }
 
   shouldComponentUpdate(nextProps: IPieceProps) {
@@ -103,10 +108,11 @@ export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirror
   }
 
   @boundMethod
-  updateCode(editor: codemirror.Editor, data: codemirror.EditorChange, value: string) {
-    this.code = value;
+  updateCode(value: string) {
+    this.setState({ html: value });
   }
 
+  @boundMethod
   onSave() {
     if (this.props.onSave) {
       this.props.onSave(this.code);
@@ -114,7 +120,7 @@ export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirror
     if (this.props.actions.updatePiece) {
       this.props.actions.updatePiece(this.props.piece.id, {
         data: {
-          html: this.code,
+          html: html_beautify(this.state.html, this.beautifyOptions),
           updateNode: !!this.props.piece.data?.updateNode,
         },
       });
@@ -208,17 +214,13 @@ export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirror
     // if this.state.sourceEditorActive and this.props.node presents,
     // it means that is a regular piece with control over node and sourceEditorActive means modal is open
     if (this.state.sourceEditorActive || !this.props.piece.node) {
-      const options = {
-        lineNumbers: true,
-        mode: 'htmlmixed',
-      };
-      const { html } = this.props.piece.data!;
+      const { html } = this.state;
       codemirror = (
         <Modal
           contentLabel="Edit source"
           isOpen
           overlayClassName="r_modal-overlay r_reset r_visible"
-          className="r_modal-content"
+          className="r_modal-content r_source_editor"
           ref={(modal: any) => { this.modalNode = (modal && modal.node); }}
           onRequestClose={this.handleCloseModal}
         >
@@ -233,10 +235,16 @@ export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirror
             </div>
             <span>Edit Source Code</span>
           </div>
-          <UnControlled
-            value={html_beautify(html)}
-            onChange={this.updateCode}
-            options={options}
+          <Editor
+            value={html}
+            onValueChange={this.updateCode}
+            highlight={(code: string) => highlight(code, languages.markup)}
+            padding={10}
+            style={{
+              fontFamily: '"Fira Code", "Menlo", monospace',
+              background: 'white',
+              fontSize: 12,
+            }}
           />
           <div className="r_modal-actions-bar">
             <div
