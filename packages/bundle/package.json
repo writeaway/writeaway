@@ -27,6 +27,9 @@
   "license": "MIT",
   "dependencies": {
     "@writeaway/core": "2.0.0",
+    "@writeaway/plugin-medium": "2.0.0",
+    "@writeaway/plugin-seo": "2.0.0",
+    "@writeaway/plugin-codemirror": "2.0.0",
     "autobind-decorator": "^2.4.0",
     "classnames": "^2.2.6",
     "medium-editor": "^5.23.3",
