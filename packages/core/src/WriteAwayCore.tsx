@@ -52,11 +52,11 @@ export class WriteAwayCore {
     };
 
     /** More complex merges */
-    if (options.pieces) {
-      this.options.pieces = {
+    if (options.piecesOptions) {
+      this.options.piecesOptions = {
         ...defaultPieces,
-        ...options.pieces,
-        components: { ...this.options.pieces.components, ...options.pieces.components },
+        ...options.piecesOptions,
+        components: { ...this.options.piecesOptions.components, ...options.piecesOptions.components },
       };
     }
     this.options.api = { ...defaultMinimumApi, ...options.api };
@@ -64,7 +64,7 @@ export class WriteAwayCore {
     /**
      * Checks
      */
-    if (!this.options.pieces) {
+    if (!this.options.piecesOptions) {
       throw new Error('pieces config is mandatory');
     }
 
@@ -78,7 +78,7 @@ export class WriteAwayCore {
      * Init state
      */
     const editorEnabled: Partial<Record<PieceType, boolean | undefined>> = {};
-    Object.keys(this.options.pieces.components).forEach((key) => {
+    Object.keys(this.options.piecesOptions.components).forEach((key) => {
       editorEnabled[key as PieceType] = true;
     });
     const piecesState: IPieceControllerState = { ...defaultState.pieces, editorEnabled };
@@ -86,6 +86,7 @@ export class WriteAwayCore {
       ...defaultState,
       pieces: piecesState,
       ...this.options.state,
+      config: this.options,
     };
     const composeEnhancers = composeWithDevTools({
       name: 'WriteAway',
@@ -153,7 +154,7 @@ export class WriteAwayCore {
   }
 
   get piecesConfig(): IPiecesOptions {
-    return this.config.pieces;
+    return this.config.piecesOptions;
   }
 
   get state(): IWriteAwayState {
@@ -256,7 +257,7 @@ export class WriteAwayCore {
     ReactDOM.render(
       <Provider store={this.store}>
         <div>
-          <HoverOverlay components={this.options.pieces.components} />
+          <HoverOverlay components={this.options.piecesOptions.components} />
         </div>
       </Provider>,
       this.overlayNode,
@@ -265,7 +266,7 @@ export class WriteAwayCore {
   }
 
   initPieces(contextNode: HTMLElement) {
-    const selector = this.options.pieces.attribute.indexOf('data-') === 0 ? `[${this.options.pieces.attribute}]` : this.options.pieces.attribute;
+    const selector = this.options.piecesOptions.attribute.indexOf('data-') === 0 ? `[${this.options.piecesOptions.attribute}]` : this.options.piecesOptions.attribute;
     const nodes = contextNode.querySelectorAll(selector);
 
     for (let i = 0; i < nodes.length; i += 1) {
@@ -291,9 +292,9 @@ export class WriteAwayCore {
   addPiece<Data = any>(node: HTMLElement, options: { id?: string, name?: string, type?: string, data?: Data, dataset?: { [k: string]: string } } = {}) {
     const piece: IPieceItemState<Data> = {
       node,
-      type: ((options && options.type) || node.getAttribute(this.options.pieces.attribute)) as PieceType,
-      id: ((options && options.id) || node.getAttribute(this.options.pieces.attributeId)) as string,
-      name: ((options && options.name) || node.getAttribute(this.options.pieces.attributeName)) as string,
+      type: ((options && options.type) || node.getAttribute(this.options.piecesOptions.attribute)) as PieceType,
+      id: ((options && options.id) || node.getAttribute(this.options.piecesOptions.attributeId)) as string,
+      name: ((options && options.name) || node.getAttribute(this.options.piecesOptions.attributeName)) as string,
       changed: false,
       message: '',
       messageLevel: '',
@@ -302,7 +303,7 @@ export class WriteAwayCore {
     };
     if (!piece.id) throw new Error('Can\'t add piece with undefined id');
     if (!piece.type) throw new Error('Can\'t add piece with undefined type');
-    if (!this.options.pieces.components[piece.type as PieceType]) throw new Error(`Can't add piece with unsupported type "${piece.type}"`);
+    if (!this.options.piecesOptions.components[piece.type as PieceType]) throw new Error(`Can't add piece with unsupported type "${piece.type}"`);
 
     this.store.dispatch(addPiece(piece));
     this.store.dispatch(pieceGet(piece.id));
@@ -425,7 +426,7 @@ export class WriteAwayCore {
   }
 
   applyEditor(node: HTMLElement, editorType: PieceType, data: any) {
-    const componentObj = this.options.pieces.components[editorType];
+    const componentObj = this.options.piecesOptions.components[editorType];
     if (componentObj) {
       if (componentObj.applyEditor) {
         componentObj.applyEditor(node, data);

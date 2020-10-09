@@ -144,7 +144,7 @@ const pieces: Reducer<IPieceControllerState> = (pState: IPieceControllerState = 
         if (activeList.indexOf(action.id) === -1) {
           return {
             ...pState,
-            activeId: [...activeList, action.id],
+            activeIds: [...activeList, action.id],
             byId: { ...pState.byId, [action.id]: piece(pState.byId[action.id], action) },
           };
         }

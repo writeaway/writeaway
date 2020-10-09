@@ -62,28 +62,28 @@ export const addPiece = (piece: IPieceItemState) => ({ type: C.PIECE_ADD, id: pi
 export const hoverPiece = (pieceId?: string, rect?: Rect) => ({ type: C.PIECES_HOVERED, id: pieceId, rect });
 
 export const onEditorActive = (pieceId: string, active: boolean) => (dispatch: Dispatch, getState: GetIWriteAwayState) => {
-  const activeId = getState().pieces.activeIds || [];
+  const activeIds = getState().pieces.activeIds || [];
 
   /**
      * Before actually activating, check if we need to force a hover over elements becoming active
      * TODO: Reducer is a better place for that, but how to use getBoundingClientRect there and not mess up reducers purity?
      */
-  if (active && activeId.length === 0) {
+  if (active && activeIds.length === 0) {
     // That editor is now the active editor, invoke hover
     const piece = getState().pieces.byId[pieceId];
     const nodeRect = getState().config.api.getNodeRect(piece);
     dispatch(hoverPiece(pieceId, nodeRect.hover || nodeRect.node));
   }
 
-  if (!active && activeId.length === 2) {
+  if (!active && activeIds.length === 2) {
     // That editor is `other` one, after disactivation, only one is left
-    const newHoverId = (pieceId === activeId[0]) ? activeId[1] : activeId[0];
+    const newHoverId = (pieceId === activeIds[0]) ? activeIds[1] : activeIds[0];
     const piece = getState().pieces.byId[newHoverId];
     const nodeRect = getState().config.api.getNodeRect(piece);
     dispatch(hoverPiece(newHoverId, nodeRect.hover || nodeRect.node));
   }
 
-  if (!active && activeId.length === 1 && pieceId === activeId[0]) {
+  if (!active && activeIds.length === 1 && pieceId === activeIds[0]) {
     // We are going to disactivate all. Good chance to disable hover overlay too
     dispatch(hoverPiece());
   }

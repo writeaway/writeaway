@@ -26,7 +26,7 @@ export type PieceProps<T> = {
 
 const PieceContainer = <T extends object = any>(props: PieceProps<T>) => {
   const pieceOptions = (props.config.options ? props.config.options[props.piece.type] : undefined) || {};
-  const EditorComponent: IComponent | undefined = props.config.pieces.components[props.piece.type];
+  const EditorComponent: IComponent | undefined = props.config.piecesOptions.components[props.piece.type];
   if (!EditorComponent) {
     throw new Error(`Piece type [${props.piece.type}] not supported`);
   }

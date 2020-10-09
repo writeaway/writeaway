@@ -88,7 +88,7 @@ class WriteAwaySampleBundle extends WriteAwayCore {
 
 const writeaway = new WriteAwaySampleBundle({
   ...defaultOptions,
-  pieces: {
+  piecesOptions: {
     ...defaultPieces,
     components,
   },
@@ -120,7 +120,7 @@ const writeaway = new WriteAwaySampleBundle({
   api: {
     ...BasicApi,
     /* api for get gallery image list */
-    getImageList: (data: any) => ((data && data.type === 'background') ? imageListBg.data.list : imageList.data.list),
+    getImageList: (data: any) => ((data && data.type === 'background') ? Promise.resolve(imageListBg.data.list) : Promise.resolve(imageList.data.list)),
     /* example of api for delete images */
     deleteImage: () => Promise.resolve(true),
     uploadImage: () => new Promise((resolve) => {

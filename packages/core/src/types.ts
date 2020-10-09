@@ -107,7 +107,7 @@ export interface IOptions {
    */
   ajax: Partial<RequestInit>;
   api: RedaxtorAPI;
-  pieces: IPiecesOptions;
+  piecesOptions: IPiecesOptions;
   pieceNameGroupSeparator: string;
   state?: Partial<IWriteAwayState>;
   /**

@@ -3,24 +3,24 @@
   "data": {
     "list": [
       {
-        "url": "api/images/sakura.png",
-        "thumbnailUrl": "api/images/sakura.png"
+        "src": "../src/api/images/sakura.png",
+        "thumbnailSrc": "../src/api/images/sakura.png"
       },
       {
-        "url": "api/images/weather.png",
-        "thumbnailUrl": "api/images/weather.png"
+        "src": "../src/api/images/weather.png",
+        "thumbnailSrc": "../src/api/images/weather.png"
       },
       {
-        "url": "api/images/wov.png",
-        "thumbnailUrl": "api/images/wov.png"
+        "src": "../src/api/images/wov.png",
+        "thumbnailSrc": "../src/api/images/wov.png"
       },
       {
-        "url": "api/images/sayagata-400px.png",
-        "thumbnailUrl": "api/images/sayagata-400px.png"
+        "src": "../src/api/images/sayagata-400px.png",
+        "thumbnailSrc": "../src/api/images/sayagata-400px.png"
       },
       {
-        "url": "api/images/ep_naturalwhite.png",
-        "thumbnailUrl": "api/images/ep_naturalwhite.png"
+        "src": "../src/api/images/ep_naturalwhite.png",
+        "thumbnailSrc": "../src/api/images/ep_naturalwhite.png"
       }
     ]
   }

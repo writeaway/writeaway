@@ -88,13 +88,15 @@ export const PiecesComponent = (
           <label>{i18n.bar.editAll}</label>
           <RxCheckBox checked={editorActive} />
         </div>
-        {Object.keys(components).map((pieceType, index) => existingPieceTypes.has(pieceType) && (
+        {Object.keys(components).map((pieceType) => existingPieceTypes.has(pieceType) && (
         <div
           className={`r_list-header r_list-subheader r_list-subheader-${pieceType}`}
-          key={index}
+          key={pieceType}
+          role="button"
+          tabIndex={-1}
           onClick={() => piecesToggleEdit(pieceType as PieceType)}
         >
-          <label>{components[pieceType as PieceType]!.name || pieceType}</label>
+          <label>{components[pieceType as PieceType]!.label || pieceType}</label>
           <RxCheckBox
             checked={editorEnabled[pieceType as PieceType] ?? true}
             disabled={!editorActive}

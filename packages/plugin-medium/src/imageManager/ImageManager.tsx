@@ -92,10 +92,10 @@ function BackgroundInputs(
 
 function BackgroundColor(
   {
-    ref, colorDivRef, onChange, onClick, bgColor,
+    colorInput, colorDivRef, onChange, onClick, bgColor,
   }:
   {
-    ref: (input: HTMLInputElement) => void,
+    colorInput: (input: HTMLInputElement) => void,
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
     onClick: (e: React.MouseEvent<HTMLElement>) => void,
     bgColor?: string,
@@ -107,7 +107,7 @@ function BackgroundColor(
       <label>Specify Background Color</label>
       <div className="input-container">
         <input
-          ref={ref}
+          ref={colorInput}
           onChange={onChange}
           onClick={onClick}
           placeholder="CSS Color"
@@ -115,6 +115,8 @@ function BackgroundColor(
           style={{ width: '130px', marginRight: '5px' }}
         />
         <div
+          role="button"
+          tabIndex={-1}
           color={bgColor}
           ref={colorDivRef}
           onClick={onClick}
@@ -159,7 +161,12 @@ function ImageDimensions({
           style={{ width: '65px', marginLeft: '10px' }}
         />
       </div>
-      <div className="proportions-checkbox" onClick={onClick}>
+      <div
+        className="proportions-checkbox"
+        onClick={onClick}
+        role="button"
+        tabIndex={-1}
+      >
         <RxCheckBox checked={checked} />
         <label>Constrain proportions</label>
       </div>
@@ -208,25 +215,43 @@ export default class ImageManager extends Component<ImageManagerProps, ImageMana
   @boundMethod
   onClose() {
     this.toggleImagePopup();
-    this.state.onClose && this.state.onClose();
+    if (this.state.onClose) {
+      this.state.onClose();
+    }
     this.resetData();
   }
 
   @boundMethod
   onSave() {
     this.toggleImagePopup();
-    this.state.onSave && this.state.onSave(this.getImageData());
+    if (this.state.onSave) {
+      this.state.onSave(this.getImageData());
+    }
     this.resetData();
   }
 
   @boundMethod
   onUrlChange(imageData: RedaxtorImageData) {
-    this.setState({ data: { ...this.state.data, src: imageData.src, alt: '' } });
-    this.getImageSize(imageData);
+    this.updateData(
+      {
+        src: imageData.src,
+        alt: imageData.alt,
+        title: imageData.title,
+      }, () => {
+        this.getImageSize(imageData);
+      },
+    );
   }
 
-  updateData(data: Partial<RedaxtorImageData>) {
-    this.setState({ data: { ...this.state.data, ...data } });
+  updateData(data: Partial<RedaxtorImageData>, callback?: ()=>void) {
+    this.setState((state) => ({
+      ...state,
+      data: {
+        ...state.data,
+        ...data,
+      },
+    }
+    ), callback);
   }
 
   getImageSize(imageData: RedaxtorImageData, getOriginalSizeOnly: boolean = false) {
@@ -401,12 +426,11 @@ export default class ImageManager extends Component<ImageManagerProps, ImageMana
    */
   @boundMethod
   selectGalleryItem(data: RedaxtorImageData) {
-    // change URL
-    if (data.src !== this.state.data?.src) {
-      this.onUrlChange(data);
-    }
-    // data.pieceRef = this.state.pieceRef;
-    this.setImageData({ data });
+    this.updateData(data, () => {
+      if (data?.src) {
+        this.getImageSize(data, !!data.width);
+      }
+    });
   }
 
   @boundMethod
@@ -435,25 +459,25 @@ export default class ImageManager extends Component<ImageManagerProps, ImageMana
     return (
       <div>
         {this.state.isVisible && (
-        <Popup>
-          <div className="r_modal-title">
-            <div className="r_modal-close" onClick={this.onClose}>
-              <i className="rx_icon rx_icon-close">&nbsp;</i>
-            </div>
-            <span>Insert Image</span>
-          </div>
-          <div className="image-inputs-container">
-            <div className="image-left-part">
-              <div className="item-form">
-                <label>Enter Image URL</label>
-                <input
-                  onChange={(e) => this.onUrlChange({ src: e.target.value })}
-                  placeholder="http://domain.com/image.png"
-                  value={data?.src || ''}
-                />
+          <Popup>
+            <div className="r_modal-title">
+              <div className="r_modal-close" onClick={this.onClose}>
+                <i className="rx_icon rx_icon-close">&nbsp;</i>
               </div>
-              {!this.state.settings.editBackground
-                  && (
+              <span>Insert Image</span>
+            </div>
+            <div className="image-inputs-container">
+              <div className="image-left-part">
+                <div className="item-form">
+                  <label>Enter Image URL</label>
+                  <input
+                    onChange={(e) => this.onUrlChange({ src: e.target.value })}
+                    placeholder="http://domain.com/image.png"
+                    value={data?.src || ''}
+                  />
+                </div>
+                {!this.state.settings.editBackground
+                && (
                   <div className="item-form">
                     <label
                       title="The term ALT tag is a common shorthand term used to refer to the ALT attribute within in the IMG tag. Any time you use an image, be sure to include an ALT tag or ALT text within the IMG tag. Doing so will provide a clear text alternative of the image for screen reader users. If you have an image that’s used as a button to buy product X, the alt text would say: “button to buy product X”"
@@ -469,17 +493,17 @@ export default class ImageManager extends Component<ImageManagerProps, ImageMana
                       value={data?.alt || ''}
                     />
                   </div>
-                  )}
-              <div className="item-form">
-                <label>Enter Title Tag</label>
-                <input
-                  onChange={(e) => this.updateData({ title: e.target.value })}
-                  placeholder="Image title"
-                  value={data?.title || ''}
-                />
-              </div>
-              {this.state.settings.editDimensions
-                  && (
+                )}
+                <div className="item-form">
+                  <label>Enter Title Tag</label>
+                  <input
+                    onChange={(e) => this.updateData({ title: e.target.value })}
+                    placeholder="Image title"
+                    value={data?.title || ''}
+                  />
+                </div>
+                {this.state.settings.editDimensions
+                && (
                   <ImageDimensions
                     onChange={this.onWidthChange}
                     height={data?.height}
@@ -490,9 +514,9 @@ export default class ImageManager extends Component<ImageManagerProps, ImageMana
                     }}
                     checked={this.state.proportions}
                   />
-                  )}
-              {this.state.settings.editBackground
-                  && (
+                )}
+                {this.state.settings.editBackground
+                && (
                   <BackgroundInputs
                     bgPosition={data?.bgPosition}
                     bgRepeat={data?.bgRepeat}
@@ -501,12 +525,12 @@ export default class ImageManager extends Component<ImageManagerProps, ImageMana
                     onChangeRepeat={this.setBgRepeat}
                     onChangePosition={this.setBgPosition}
                   />
-                  )}
-              <div />
-              {this.state.settings.editBackground
-                  && (
+                )}
+                <div />
+                {this.state.settings.editBackground
+                && (
                   <BackgroundColor
-                    ref={(input) => {
+                    colorInput={(input) => {
                       this.colorInput = input;
                     }}
                     onChange={this.setBgColor}
@@ -516,49 +540,49 @@ export default class ImageManager extends Component<ImageManagerProps, ImageMana
                       this.colorDiv = div;
                     }}
                   />
-                  )}
-            </div>
-            <div className="image-right-part">
-              <div
-                className={`preview-wrapper ${this.props.api.uploadImage ? 'upload' : 'no-upload'}${this.state.uploading ? ' uploading' : ''}`}
-                style={{ backgroundImage: `url(${data?.src})` }}
-              >
-                {this.props.api.uploadImage
-                      && (
-                      <input
-                        type="file"
-                        className="upload"
-                        title="Choose a file to upload"
-                        onChange={(e) => {
-                          e.target.files && this.sendFile(e.target.files);
-                        }}
-                      />
-                      )}
+                )}
               </div>
-              {!this.state.uploadError && this.props.api.uploadImage
-                  && <p style={{ textAlign: 'center' }}>Click Image to Upload</p>}
-              {this.state.uploadError
-                  && <p style={{ color: 'red', textAlign: 'center' }}>{this.state.uploadError}</p>}
+              <div className="image-right-part">
+                <div
+                  className={`preview-wrapper ${this.props.api.uploadImage ? 'upload' : 'no-upload'}${this.state.uploading ? ' uploading' : ''}`}
+                  style={{ backgroundImage: `url(${data?.src})` }}
+                >
+                  {this.props.api.uploadImage
+                  && (
+                    <input
+                      type="file"
+                      className="upload"
+                      title="Choose a file to upload"
+                      onChange={(e) => {
+                        e.target.files && this.sendFile(e.target.files);
+                      }}
+                    />
+                  )}
+                </div>
+                {!this.state.uploadError && this.props.api.uploadImage
+                && <p style={{ textAlign: 'center' }}>Click Image to Upload</p>}
+                {this.state.uploadError
+                && <p style={{ color: 'red', textAlign: 'center' }}>{this.state.uploadError}</p>}
+              </div>
             </div>
-          </div>
 
-          <div className="r_modal-actions-bar r_modal-actions-bar-im">
-            <div className="button button-save" onClick={this.onSave}>Save</div>
-          </div>
+            <div className="r_modal-actions-bar r_modal-actions-bar-im">
+              <div className="button button-save" onClick={this.onSave}>Save</div>
+            </div>
 
-          {
-            this.state.gallery
-            && (
-            <Gallery
-              gallery={this.state.gallery}
-              api={this.props.api}
-              onChange={this.selectGalleryItem}
-              onDelete={this.deleteGalleryItem}
-            />
-            )
-          }
+            {
+              this.state.gallery
+              && (
+                <Gallery
+                  gallery={this.state.gallery}
+                  api={this.props.api}
+                  onChange={this.selectGalleryItem}
+                  onDelete={this.deleteGalleryItem}
+                />
+              )
+            }
 
-        </Popup>
+          </Popup>
         )}
       </div>
     );

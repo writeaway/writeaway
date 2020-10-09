@@ -9,7 +9,7 @@ const mapStateToProps = (state: IWriteAwayState) => ({
   api: state.config.api,
   editorEnabled: state.pieces.editorEnabled,
   editorActive: state.pieces.editorActive,
-  components: state.config.pieces.components,
+  components: state.config.piecesOptions.components,
   pieceNameGroupSeparator: state.config.pieceNameGroupSeparator,
 });
 

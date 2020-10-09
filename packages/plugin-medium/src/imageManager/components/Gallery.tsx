@@ -63,7 +63,7 @@ export const Gallery = (
             <div
               className="item-title"
             >
-              {item.src.split('/').pop() || 'N/A'}
+              {(item.src && item.src.split('/').pop()) || 'N/A'}
               {' '}
               {(item.width && item.height) && (`${item.width}×${item.height}`)}
             </div>

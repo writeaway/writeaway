@@ -36,7 +36,7 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
 
   private rect?: Rect;
 
-  private imageManagerApi?: ImageManager;
+  private imageManagerApi: ImageManager | null = null;
 
   private savedRange?: Range;
 
@@ -57,9 +57,12 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
   }
 
   componentDidMount() {
-    this.imageManagerApi = imageManagerApi({
+    imageManagerApi({
       api: this.props.api,
       container: ReactDOM.findDOMNode(this) as HTMLElement,
+      ref: (i: ImageManager | null) => {
+        this.imageManagerApi = i;
+      },
     });
     const nodeRect = this.props.api.getNodeRect(this.piece);
     this.rect = nodeRect.hover || nodeRect.node;
@@ -81,7 +84,6 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
 
   onToggleImagePopup() {
     let imageData: RedaxtorImageData = {};
-    console.trace('Having image?', this.img);
     if (this.img) {
       imageData = {
         src: this.img.getAttribute('src') || '',
@@ -92,7 +94,10 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
       };
     }
 
-    this.imageManagerApi!.setImageData({
+    if (!this.imageManagerApi) {
+      throw new Error('Trying to toggle popup with non existing ImageManager');
+    }
+    this.imageManagerApi.setImageData({
       data: {
         ...imageData,
       },
@@ -111,7 +116,7 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
     });
 
     this.medium.editor.saveSelection();
-    this.imageManagerApi!.showPopup();
+    this.imageManagerApi.showPopup();
   }
 
   @boundMethod
@@ -161,7 +166,6 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
       this.img = undefined;
     } else {
       this.img = e.target as HTMLImageElement;
-      console.trace('Found Image');
     }
     if (target.tagName.toLowerCase() !== 'img') return;
     const sel = window.getSelection();

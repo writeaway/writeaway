@@ -7,7 +7,7 @@ import { RedaxtorImageData } from 'types';
 import { imageManagerApi } from './imageManager/index';
 
 export interface RedaxtorBackgroundEditorState {
-  firstRun: boolean;
+  firstRun?: boolean;
 }
 
 export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
@@ -33,13 +33,13 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
     node.title = data.title || '';
   };
 
-  state: RedaxtorBackgroundEditorState = { firstRun: true };
+  state: RedaxtorBackgroundEditorState = {};
 
   private active: boolean;
 
   private targetDiv: HTMLElement;
 
-  private imageManager?: ImageManager;
+  private imageManager: ImageManager | null = null;
 
   get piece() {
     return this.props.piece;
@@ -56,9 +56,12 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
   }
 
   componentDidMount() {
-    this.imageManager = imageManagerApi({
+    imageManagerApi({
       api: this.props.api,
-      container: ReactDOM.findDOMNode(this) as Element,
+      container: ReactDOM.findDOMNode(this) as HTMLElement,
+      ref: (i: ImageManager | null) => {
+        this.imageManager = i;
+      },
     });
     this.check();
   }
@@ -67,13 +70,13 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
    * That is a common public method that should activate component editor if it presents
    */
   activateEditor() {
-    if (this.props.editorActive && !this.imageManager!.state.isVisible) {
+    if (this.props.editorActive && !this.imageManager?.state.isVisible) {
       this.onToggleImagePopup();
     }
   }
 
   deactivateEditor() {
-    if (this.props.editorActive && this.imageManager!.state.isVisible) {
+    if (this.props.editorActive && this.imageManager?.state.isVisible) {
       this.closePopup();
     }
   }
@@ -91,7 +94,10 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
 
   onToggleImagePopup() {
     const computedStyle = getComputedStyle(this.targetDiv);
-    this.imageManager!.setImageData({
+    if (!this.imageManager) {
+      throw new Error('Trying to toggle popup with non existing ImageManager');
+    }
+    this.imageManager.setImageData({
       data: {
         src: computedStyle.backgroundImage && computedStyle.backgroundImage.slice(4, -1).replace(/"/g, ''),
         bgColor: computedStyle.backgroundColor,
@@ -106,21 +112,24 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
         id: this.piece.id,
         dataset: this.piece.dataset,
       },
-      onClose: this.cancelCallback.bind(this),
-      onSave: this.saveCallback.bind(this),
+      onClose: this.cancelCallback,
+      onSave: this.saveCallback,
       settings: {
         editDimensions: false,
         editBackground: true,
       },
     });
-    this.imageManager!.showPopup();
-    this.actions.onEditorActive && this.actions.onEditorActive(this.piece.id, true);
+    this.imageManager.showPopup();
+    if (this.actions.onEditorActive) {
+      this.actions.onEditorActive(this.piece.id, true);
+    }
   }
 
   closePopup() {
-    this.imageManager!.onClose();
+    this.imageManager?.onClose();
   }
 
+  @boundMethod
   saveCallback(data: RedaxtorImageData) {
     this.renderNonReactAttributes(data);
     this.actions.updatePiece(this.piece.id, {
@@ -134,11 +143,16 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
       },
     });
     this.actions.savePiece(this.piece.id);
-    this.actions.onEditorActive && this.actions.onEditorActive(this.piece.id, false);
+    if (this.actions.onEditorActive) {
+      this.actions.onEditorActive(this.piece.id, false);
+    }
   }
 
+  @boundMethod
   cancelCallback() {
-    this.actions.onEditorActive && this.actions.onEditorActive(this.piece.id, false);
+    if (this.actions.onEditorActive) {
+      this.actions.onEditorActive(this.piece.id, false);
+    }
   }
 
   findRedaxtor(_el: Element) {
@@ -175,7 +189,7 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
     }
   }
 
-  shouldComponentUpdate(nextProps: IPieceProps, nextState: RedaxtorBackgroundEditorState) {
+  shouldComponentUpdate(nextProps: IPieceProps) {
     return (nextProps.piece.data.src !== this.piece.data.src
       || nextProps.piece.data.bgColor !== this.piece.data.bgColor
       || nextProps.piece.data.bgSize !== this.piece.data.bgSize

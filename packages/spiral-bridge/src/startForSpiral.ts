@@ -149,7 +149,7 @@ export const startForSpiral = (urls: Urls, seoHtml: string, options?: { [pieceTy
 
   const writeaway = new WriteAwaySpiralBundle({
     ...defaultOptions,
-    pieces: {
+    piecesOptions: {
       ...defaultPieces,
       components,
     },

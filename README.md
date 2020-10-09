@@ -189,7 +189,7 @@ var components = {
 };
 
 var redaxtor = new WriteAwayCore({
-    pieces: {
+    piecesOptions: {
         components: components,
         options: {
                 html: { //Pass options to HTML Editor

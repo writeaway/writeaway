@@ -42,7 +42,7 @@ var components = {
 }
 
 var redaxtor = new WriteAwayCore({
-    pieces: {
+    piecesOptions: {
         components: components
     }
 });

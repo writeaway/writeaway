@@ -34,7 +34,7 @@ export const defaultMinimumApi: RedaxtorAPI = {
       return Promise.resolve({
         ...piece,
         data: {
-          url: computedStyle.backgroundImage && computedStyle.backgroundImage.slice(4, -1).replace(/"/g, ''),
+          src: computedStyle.backgroundImage && computedStyle.backgroundImage.slice(4, -1).replace(/"/g, ''),
           bgColor: computedStyle.backgroundColor,
           bgRepeat: computedStyle.backgroundRepeat,
           bgSize: computedStyle.backgroundSize,
@@ -83,7 +83,7 @@ export const defaultMinimumApi: RedaxtorAPI = {
 };
 
 export const defaultOptions: IOptions = {
-  pieces: defaultPieces,
+  piecesOptions: defaultPieces,
   ajax: {},
   enableEdit: true,
   navBarCollapsable: true,
