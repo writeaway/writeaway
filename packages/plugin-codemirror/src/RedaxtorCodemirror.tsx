@@ -166,8 +166,10 @@ export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirror
         this.props.piece.node.classList.remove(...(this.props.className || '').split(' '));
       }
     }
-    // render new data
-    this.nodeWasUpdated = CodeMirror.applyEditor(this.props.piece.node, this.props.piece.data!);
+    if (this.props.piece.data) {
+      // render new data
+      this.nodeWasUpdated = CodeMirror.applyEditor(this.props.piece.node, this.props.piece.data!);
+    }
   }
 
   @boundMethod

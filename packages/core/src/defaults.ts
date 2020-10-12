@@ -4,8 +4,7 @@ import { defaultPiecesState } from 'reducers/pieces';
 import {
   IGlobalState,
   IOptions,
-  IPiece, IPieceItemState,
-  IPieceWithData,
+  IPieceItemState,
   IWriteAwayState,
   PieceDataResolver,
   PieceType,
@@ -77,6 +76,7 @@ export const defaultMinimumApi: RedaxtorAPI = {
     return piece;
   },
   savePieceData(piece) {
+    // eslint-disable-next-line no-console
     console.warn('Using default implementation for saving piece data. This should be overriden', piece);
     return Promise.resolve(piece);
   },
@@ -91,6 +91,7 @@ export const defaultOptions: IOptions = {
   navBarRoot: document.body,
   overlayRoot: document.body,
   piecesRoot: document.body,
+  editorRoot: document.body,
   api: defaultMinimumApi,
   pieceNameGroupSeparator: ',',
 };

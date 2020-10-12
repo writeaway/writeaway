@@ -41,7 +41,8 @@ export default class RedaxtorImageTag extends Component<IPieceProps> {
     }
 
     this.state = {};
-    this.active = false;// TODO: Think how to do that more "react" way. This flag allows to handle events bound to PARENT node. Ideally we should not have parent node at all.
+    this.active = false; // TODO: Think how to do that more "react" way.
+    // This flag allows to handle events bound to PARENT node. Ideally we should not have parent node at all.
   }
 
   get piece() {
@@ -67,7 +68,7 @@ export default class RedaxtorImageTag extends Component<IPieceProps> {
     }
   }
 
-  componentWillReceiveProps(newProps: IPieceProps) {
+  UNSAFE_componentWillReceiveProps(newProps: IPieceProps) {
     if (newProps.piece.manualActivation) {
       this.props.actions.onManualActivation(this.piece.id);
       this.activateEditor();
@@ -163,9 +164,9 @@ export default class RedaxtorImageTag extends Component<IPieceProps> {
   }
 
   shouldComponentUpdate(nextProps: IPieceProps) {
-    return (nextProps.piece.data.src !== this.piece.data.src
-      || nextProps.piece.data.alt !== this.piece.data.alt
-      || nextProps.piece.data.title !== this.piece.data.title
+    return (nextProps.piece.data?.src !== this.piece.data?.src
+      || nextProps.piece.data?.alt !== this.piece.data?.alt
+      || nextProps.piece.data?.title !== this.piece.data?.title
       || nextProps.editorActive !== this.props.editorActive);
   }
 
@@ -196,8 +197,10 @@ export default class RedaxtorImageTag extends Component<IPieceProps> {
    * Updates rendering of props that are not updated by react
    * Here that updates IMG tag src and alt
    */
-  renderNonReactAttributes(data: RedaxtorImageTagData) {
-    RedaxtorImageTag.applyEditor((this.piece.node as HTMLImageElement), data);
+  renderNonReactAttributes(data?: RedaxtorImageTagData) {
+    if (data) {
+      RedaxtorImageTag.applyEditor((this.piece.node as HTMLImageElement), data);
+    }
   }
 
   componentWillUnmount() {

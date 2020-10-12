@@ -20,7 +20,7 @@ export type PieceProps<T> = {
   actions: PieceActions,
   editorActive: boolean,
   expert: boolean,
-  piece: IPieceItemState,
+  piece: IPieceItemState<T>,
   config: IOptions,
 };
 

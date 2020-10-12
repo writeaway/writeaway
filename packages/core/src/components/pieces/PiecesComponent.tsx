@@ -30,7 +30,6 @@ export const PiecesComponent = (
     sourceId,
     setSourceId,
     savePiece,
-    updatePiece,
     piecesInit,
     piecesToggleEdit,
     pieceNameGroupSeparator,
@@ -44,14 +43,6 @@ export const PiecesComponent = (
   useEffect(() => {
     piecesInit();
   }, []);
-
-  const savePieceFn = React.useCallback((html: string) => {
-    if (sourceId) {
-      updatePiece(sourceId, { data: { html } });
-      savePiece(sourceId);
-      setSourceId(undefined);
-    }
-  }, [updatePiece, savePiece, setSourceId, sourceId]);
 
   const toggleAllEditors = useCallback(() => {
     piecesToggleEdit(undefined);
@@ -84,8 +75,8 @@ export const PiecesComponent = (
     <div>
       {sourceEditor}
       <div className="r_list-header-container">
-        <div className="r_list-header" onClick={toggleAllEditors}>
-          <label>{i18n.bar.editAll}</label>
+        <div role="button" tabIndex={-1} className="r_list-header" onClick={toggleAllEditors}>
+          <label htmlFor="fake">{i18n.bar.editAll}</label>
           <RxCheckBox checked={editorActive} />
         </div>
         {Object.keys(components).map((pieceType) => existingPieceTypes.has(pieceType) && (
@@ -96,7 +87,7 @@ export const PiecesComponent = (
           tabIndex={-1}
           onClick={() => piecesToggleEdit(pieceType as PieceType)}
         >
-          <label>{components[pieceType as PieceType]!.label || pieceType}</label>
+          <label htmlFor="fake">{components[pieceType as PieceType]!.label || pieceType}</label>
           <RxCheckBox
             checked={editorEnabled[pieceType as PieceType] ?? true}
             disabled={!editorActive}

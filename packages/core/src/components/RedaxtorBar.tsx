@@ -3,7 +3,6 @@ import React, {
 } from 'react';
 
 import classNames from 'classnames';
-import { IComponent, PieceType } from 'types';
 
 import PanelHandler from './PanelHandler';
 import Pieces from './pieces/PiecesContainer';
@@ -115,7 +114,7 @@ export const RedaxtorBar = (
     };
   }, [onMouseMove]);
 
-  const r_bar_class = classNames({
+  const rBarClass = classNames({
     r_bar: true,
     'rx_non-expert': !expert,
   });
@@ -126,7 +125,7 @@ export const RedaxtorBar = (
     <div className="r_reset">
       <div
         ref={node}
-        className={r_bar_class}
+        className={rBarClass}
       >
         <PanelHandler
           isCollapsable={options.navBarCollapsable}

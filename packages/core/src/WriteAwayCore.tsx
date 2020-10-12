@@ -1,7 +1,8 @@
 import { boundMethod } from 'autobind-decorator';
-import { pieceUnmount } from 'components/pieceRenderer';
+import { PieceEditors } from 'containers/PieceEditors';
 import {
   defaultMinimumApi, defaultOptions, defaultPieces, defaultState,
+// eslint-disable-next-line import/no-extraneous-dependencies
 } from 'defaults';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -23,7 +24,7 @@ import {
 import { piecesToggleNavBar, setExpert } from './actions';
 import {
   addPiece,
-  deactivatePiece,
+  deactivatePiece, hasRemovedPiece,
   hoverPiece,
   pieceGet,
   piecesToggleEdit,
@@ -116,6 +117,7 @@ export class WriteAwayCore {
      * options.piecesRoot - say where search for pieces
      */
     this.initPieces(this.options.piecesRoot || document);
+    this.renderPieceEditors(this.options.editorRoot || document);
 
     /**
      * default options for navbar
@@ -266,7 +268,9 @@ export class WriteAwayCore {
   }
 
   initPieces(contextNode: HTMLElement) {
-    const selector = this.options.piecesOptions.attribute.indexOf('data-') === 0 ? `[${this.options.piecesOptions.attribute}]` : this.options.piecesOptions.attribute;
+    const selector = this.options.piecesOptions.attribute.indexOf('data-') === 0
+      ? `[${this.options.piecesOptions.attribute}]`
+      : this.options.piecesOptions.attribute;
     const nodes = contextNode.querySelectorAll(selector);
 
     for (let i = 0; i < nodes.length; i += 1) {
@@ -316,7 +320,8 @@ export class WriteAwayCore {
    */
   destroyPiece(id: string) {
     this.store.dispatch(removePiece(id));// TODO: Might be deprecated
-    this.store.dispatch(pieceUnmount(this.state.pieces.byId[id]));// Remove element from dom and trigger removing from state
+    // this.store.dispatch(pieceUnmount(this.state.pieces.byId[id])); // Remove element from dom and trigger removing from state
+    this.store.dispatch(hasRemovedPiece(id));// Trigger removing from state that will trigger dom removal as well
   }
 
   /**
@@ -358,12 +363,12 @@ export class WriteAwayCore {
     const state = this.store.getState();
     const pieces = (state.pieces && state.pieces.byId) || {};
     const out: Record<string, IPieceItemState> = {};
-    for (const pieceId of Object.keys(pieces)) {
+    Object.keys(pieces).forEach((pieceId) => {
       out[pieceId] = { // Clone piece, so outer code can't affect it
         ...pieces[pieceId],
         data: pieces[pieceId].data ? { ...pieces[pieceId].data } : undefined,
       };
-    }
+    });
     return out;
   }
 
@@ -428,12 +433,23 @@ export class WriteAwayCore {
   applyEditor(node: HTMLElement, editorType: PieceType, data: any) {
     const componentObj = this.options.piecesOptions.components[editorType];
     if (componentObj) {
-      if (componentObj.applyEditor) {
+      if (componentObj.applyEditor && data) {
         componentObj.applyEditor(node, data);
       }
     } else {
       throw new Error(`Unknown editor type '${editorType}'`);
     }
+  }
+
+  private renderPieceEditors(container: HTMLElement) {
+    const div = document.createElement('redaxtor-editors');
+    container.appendChild(div);
+    ReactDOM.render(
+      <Provider store={this.store}>
+        <PieceEditors />
+      </Provider>,
+      div,
+    );
   }
 }
 

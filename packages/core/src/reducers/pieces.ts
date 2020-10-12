@@ -17,6 +17,7 @@ const piece = (pItem: IPieceItemState, action: AnyAction) => {
     case C.PIECE_SET_DATA:
       // check is initiated
       if (!pItem.fetched) {
+        // eslint-disable-next-line no-console
         console.error(`Piece was not initialized before use setDate function. Piece id: ${pItem.id}`);
         return { ...pItem };
       }
@@ -41,7 +42,8 @@ const piece = (pItem: IPieceItemState, action: AnyAction) => {
         ...pItem, ...action.piece, fetched: true, fetching: false, initialized: true,
       };
     case C.PIECE_FETCHING_FAILED:
-      console.error(action.answer);
+      // eslint-disable-next-line no-console
+      console.error(action);
       return { ...pItem, fetched: false, fetching: false };
     case C.PIECE_FETCHING_ERROR:
       return { ...pItem, error: action.error, fetching: false };
@@ -95,7 +97,7 @@ const pieces: Reducer<IPieceControllerState> = (pState: IPieceControllerState = 
         byId: { ...pState.byId, [action.id]: action.piece },
       };
 
-    case C.PIECE_HAS_REMOVED:
+    case C.PIECE_HAS_REMOVED: {
       const byId: { [id: string]: IPieceItemState } = { ...pState.byId, [action.id]: action.piece };
       delete byId[action.id];
 
@@ -103,11 +105,13 @@ const pieces: Reducer<IPieceControllerState> = (pState: IPieceControllerState = 
         ...pState,
         byId,
       };
+    }
 
     case C.PIECE_SET_DATA:
 
       // check to existing piece
       if (!pState.byId[action.id]) {
+        // eslint-disable-next-line no-console
         console.error(`You are trying to set data to an unexisting piece. Piece id: ${action.id}`);
         return {
           ...pState,
@@ -138,7 +142,7 @@ const pieces: Reducer<IPieceControllerState> = (pState: IPieceControllerState = 
         byId: { ...pState.byId, [action.id]: piece(pState.byId[action.id], action) },
       };
 
-    case C.PIECES_EDITOR_ACTIVE:
+    case C.PIECES_EDITOR_ACTIVE: {
       const activeList = pState.activeIds || [];
       if (action.active) {
         if (activeList.indexOf(action.id) === -1) {
@@ -159,6 +163,7 @@ const pieces: Reducer<IPieceControllerState> = (pState: IPieceControllerState = 
         ...pState,
         byId: { ...pState.byId, [action.id]: piece(pState.byId[action.id], action) },
       };
+    }
 
     case C.PIECES_HOVERED:
       return {

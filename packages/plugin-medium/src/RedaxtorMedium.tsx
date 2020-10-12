@@ -229,7 +229,7 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
     if (nextProps.expert !== this.props.expert) {
       return true;
     }
-    return nextProps.piece.data.html !== this.props.piece.data.html;
+    return nextProps.piece.data?.html !== this.props.piece.data?.html;
   }
 
   destroyEditor() {
@@ -245,7 +245,7 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
      * Updates rendering of props that are not updated by react
      * Here that updates styles of background
      */
-  renderNonReactAttributes(data: { html: string }) {
+  renderNonReactAttributes(data?: { html: string }) {
     // console.log('Re-Rendered?', this.piece.id);
     if (this.props.editorActive) {
       if (!this.medium) {
@@ -264,10 +264,12 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
     this.nodeWasUpdated = false;
     if (this.medium) {
       const content = this.medium.getEditorContent();
-      if (content != data.html) {
-        // console.log('Re-Rendered HARD', this.piece.id);
-        this.medium.editor.setContent(data.html);
-        this.nodeWasUpdated = true;
+      if (data) {
+        if (content !== data.html) {
+          // console.log('Re-Rendered HARD', this.piece.id);
+          this.medium.editor.setContent(data.html);
+          this.nodeWasUpdated = true;
+        }
       }
 
       const toolbar = this.medium.editor.getExtensionByName('toolbar');
@@ -276,7 +278,7 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
       } else {
         toolbar.toolbar.classList.add('rx_non-expert');
       }
-    } else {
+    } else if (data) {
       this.nodeWasUpdated = RedaxtorMedium.applyEditor(this.piece.node, data);
     }
   }

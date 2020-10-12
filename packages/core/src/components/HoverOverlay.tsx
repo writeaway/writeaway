@@ -30,7 +30,11 @@ export const HoverOverlay = ({
           height: (hoveredRect.bottom - hoveredRect.top),
         },
       };
-      if (base.style.left <= 0 || base.style.top <= 0 || base.style.width + base.style.left >= document.body.scrollWidth || base.style.height + base.style.top >= document.body.scrollHeight) {
+      if (
+        base.style.left <= 0
+        || base.style.top <= 0
+        || base.style.width + base.style.left >= document.body.scrollWidth
+        || base.style.height + base.style.top >= document.body.scrollHeight) {
         /**
          * We are touching edges, switch to shrinked styles
          */

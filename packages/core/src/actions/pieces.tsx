@@ -1,4 +1,3 @@
-import { pieceRender } from 'components/pieceRenderer';
 import { toastr } from 'react-redux-toastr';
 import {
   Dispatch, GetIWriteAwayState, IPieceControllerState, IPieceItemState, PieceType, Rect,
@@ -205,8 +204,8 @@ export const pieceGet = (id: string) => (dispatch: Dispatch, getState: GetIWrite
         data: { ...updatedPiece.data },
       };
       dispatch(pieceFetched(id, updatedCopy));
-      const pieceUpdated = getState().pieces.byId[id];
-      pieceRender(pieceUpdated);
+      // const pieceUpdated = getState().pieces.byId[id];
+      // pieceRender(getState, pieceUpdated);
     }
   }, (error) => {
     dispatch(pieceFetchingError(id, error));

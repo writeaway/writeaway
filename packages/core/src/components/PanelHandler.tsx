@@ -17,11 +17,11 @@ export const PanelHandler = (
     isCollapsable, toggleOpen, onMouseDown, isOpen, message,
   }: IPanelHandlerProps,
 ) => (
-  <div className="r_bar-header" onMouseDown={onMouseDown} onClick={toggleOpen}>
+  <div role="button" tabIndex={-1} className="r_bar-header" onMouseDown={onMouseDown} onClick={toggleOpen}>
     <span>{i18n.bar.title}</span>
     {isCollapsable
     && (
-    <button className="r_bar-header-button">
+    <button className="r_bar-header-button" type="button">
       {isOpen ? <i className="rx_icon rx_icon-keyboard_arrow_down" />
         : <i className="rx_icon rx_icon-keyboard_arrow_up" />}
     </button>

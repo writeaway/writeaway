@@ -8,6 +8,7 @@ export const version = `Version ${process.env.VERSION}, built at ${process.env.B
 
 export const WriteAwayCore = core;
 
+// eslint-disable-next-line import/no-extraneous-dependencies
 export { defaultMinimumApi, defaultOptions, defaultPieces } from 'defaults';
 
 export default WriteAwayCore;

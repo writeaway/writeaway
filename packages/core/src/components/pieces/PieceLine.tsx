@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { IPieceItemState } from 'types';
+/* eslint-disable react/no-array-index-key */
 
 export interface IPieceLineProps {
   piece: IPieceItemState,
@@ -35,7 +36,7 @@ export const PieceLine = (
 
     return name.map((namePart, index) => {
       let omit = '';
-      if (noOmit && (name.length > 1 && prevName.length > 1 && namePart == prevName[index])) {
+      if (noOmit && (name.length > 1 && prevName.length > 1 && namePart === prevName[index])) {
         omit = 'omit';
       } else {
         noOmit = false; // Skip rest once met unmatch
@@ -43,7 +44,7 @@ export const PieceLine = (
       return (
         <span
           className={`level-${name.length > 1 ? index : 1} ${omit}`}
-          key={index}
+          key={`${namePart}-${index}`}
         >
           {namePart}
         </span>
@@ -59,19 +60,21 @@ export const PieceLine = (
         </span>
         <span className="r_item-right">
           {source && editorActive && piece.data && piece.data.html && !hasActionOpen
-                        && <i className="rx_icon rx_icon-code r_btn" onClick={() => setSourceId(id)} />}
+                        && <i aria-label="Edit Source" role="button" tabIndex={-1} className="rx_icon rx_icon-code r_btn" onClick={() => setSourceId(id)} />}
 
-          {piece.changed && <i className="r_icon-floppy r_btn" onClick={savePiece} />}
+          {piece.changed && <i aria-label="Save" role="button" tabIndex={-1} className="r_icon-floppy r_btn" onClick={savePiece} />}
 
           {editorActive && piece.data && hasActionOpen
-          && <i className="rx_icon rx_icon-mode_edit r_btn" onClick={() => activatePiece(id)} />}
+          && <i aria-label="Edit" role="button" tabIndex={-1} className="rx_icon rx_icon-mode_edit r_btn" onClick={() => activatePiece(id)} />}
         </span>
       </div>
       {piece.message
       && (
       <div
+        role="button"
+        tabIndex={-1}
         className={`r_item-message r_item-${piece.messageLevel}`}
-        onClick={(e) => {
+        onClick={() => {
           if (piece.messageLevel === 'warning') {
             window.location.reload(); // TODO: Need better hack for that
           }

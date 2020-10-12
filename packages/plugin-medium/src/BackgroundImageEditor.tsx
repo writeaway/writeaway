@@ -190,11 +190,11 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
   }
 
   shouldComponentUpdate(nextProps: IPieceProps) {
-    return (nextProps.piece.data.src !== this.piece.data.src
-      || nextProps.piece.data.bgColor !== this.piece.data.bgColor
-      || nextProps.piece.data.bgSize !== this.piece.data.bgSize
-      || nextProps.piece.data.bgRepeat !== this.piece.data.bgRepeat
-      || nextProps.piece.data.bgPosition !== this.piece.data.bgPosition
+    return (nextProps.piece.data?.src !== this.piece.data?.src
+      || nextProps.piece.data?.bgColor !== this.piece.data?.bgColor
+      || nextProps.piece.data?.bgSize !== this.piece.data?.bgSize
+      || nextProps.piece.data?.bgRepeat !== this.piece.data?.bgRepeat
+      || nextProps.piece.data?.bgPosition !== this.piece.data?.bgPosition
       || nextProps.editorActive !== this.props.editorActive);
   }
 
@@ -225,8 +225,10 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
    * Updates rendering of props that are not updated by react
    * Here that updates styles of background
    */
-  renderNonReactAttributes(data: RedaxtorImageData) {
-    RedaxtorBackgroundEditor.applyEditor(this.targetDiv, data);
+  renderNonReactAttributes(data?: RedaxtorImageData) {
+    if (data) {
+      RedaxtorBackgroundEditor.applyEditor(this.targetDiv, data);
+    }
   }
 
   componentWillUnmount() {

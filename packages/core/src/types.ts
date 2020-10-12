@@ -1,11 +1,3 @@
-import {
-  onActivationSentPiece,
-  onDeactivationSentPiece,
-  onEditorActive, onNodeResized,
-  resetPiece,
-  savePiece, setPieceMessage, setSourceId,
-  updatePiece,
-} from 'actions/pieces';
 import { ComponentClass } from 'react';
 import { ToastrState } from 'react-redux-toastr';
 import { AnyAction, Store as StoreRaw } from 'redux';
@@ -74,9 +66,13 @@ export interface IPiecesOptions {
 
 export interface IOptions {
   /**
-   * Optional. Set document by default. Set root  element for pieces
+   * Optional. Default: document. Sets where to search for pieces in stand-alone mode
    */
   piecesRoot: HTMLElement,
+  /**
+   * Optional. Default: document. Sets where to append piece editors
+   */
+  editorRoot: HTMLElement,
   /**
    * Optional. Default: false, If set enables everything editors for pieces after loading
    */
