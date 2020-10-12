@@ -32,14 +32,13 @@ export const setCookie = (name: string, value: string) => {
  */
 export const getCookie = (name: string) => {
   const matches = document.cookie.match(new RegExp(
+    // eslint-disable-next-line
     `(?:^|; )${name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1')}=([^;]*)`,
   ));
   return matches ? decodeURIComponent(matches[1]) : undefined;
 };
 
-export const globMeta = () => {
-  return (window as any).metadata as ({[id: string]: string} | undefined);
-};
+export const globMeta = () => (window as any).metadata as ({[id: string]: string} | undefined);
 
 export const VAR_E_ACTIVE = 'r_editorActive';
 

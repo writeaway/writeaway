@@ -15,7 +15,7 @@ const lazy: {
 const lazyGetImageManager = (
   api: RedaxtorAPI,
   container: Element,
-  ref: (manager: ImageManager | null) => void
+  ref: (manager: ImageManager | null) => void,
 ) => {
   if (lazy.rendred) {
     if (lazy.imageManager) {

@@ -6,11 +6,11 @@ import React, { Component } from 'react';
 import Modal from 'react-modal';
 import { shallowEqual } from 'react-redux';
 import { RedaxtorSeoData, RedaxtorSeoKeyField, RedaxtorSeoState } from 'types';
-import i18n from './i18n';
 
 import Editor from 'react-simple-code-editor';
 // @ts-ignore
 import { highlight, languages } from 'prismjs/components/prism-core';
+import i18n from './i18n';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-css';
 import 'prismjs/components/prism-markup';
@@ -27,8 +27,9 @@ export class RedaxtorSeo extends Component<IPieceProps<RedaxtorSeoData>, Redaxto
 
   static readonly label = i18n.checkboxName;
 
-  static readonly applyEditor = (node: HTMLElement, data: RedaxtorSeoData) => {
-    throw new Error('SEO editor data can\'t be applied to DOM node, update that data on server side');
+  static readonly applyEditor = () => {
+    // eslint-disable-next-line no-console
+    console.warn('SEO editor data can\'t be applied to DOM node, update that data on server side');
   };
 
   private beautifyOptions: { wrap_line_length: number } = {
@@ -223,7 +224,7 @@ export class RedaxtorSeo extends Component<IPieceProps<RedaxtorSeoData>, Redaxto
           onRequestClose={this.handleCloseModal}
         >
           <div className="r_modal-title">
-            <div className="r_modal-close" onClick={this.onClose}>
+            <div role="button" tabIndex={-1} className="r_modal-close" onClick={this.onClose}>
               <i className="rx_icon rx_icon-close">&nbsp;</i>
             </div>
             <span>{i18n.header}</span>
@@ -298,7 +299,7 @@ export class RedaxtorSeo extends Component<IPieceProps<RedaxtorSeoData>, Redaxto
                 <div className="google-description">{descr}</div>
               </div>
             </div>
-            <label>{i18n.google}</label>
+            <label htmlFor={`r_${id}_meta`}>{i18n.google}</label>
           </div>
 
           <div className="r_modal-actions-bar">
