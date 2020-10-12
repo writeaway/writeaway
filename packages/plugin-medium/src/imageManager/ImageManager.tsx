@@ -84,6 +84,11 @@ function BackgroundInputs(
         >
           <option value="50% 50%">Center</option>
           <option value="0px 0px">Top Left</option>
+          <option value="50% 0px">Top Center</option>
+          <option value="100% 0px">Top Right</option>
+          <option value="0px 100%">Bottom Left</option>
+          <option value="50% 100%">Bottom Center</option>
+          <option value="100% 100%">Bottom Right</option>
         </select>
       </div>
     </div>
@@ -292,6 +297,7 @@ export default class ImageManager extends Component<ImageManagerProps, ImageMana
     this.attachPickerAndInvoke();
   }
 
+  @boundMethod
   setBgRepeat(e: React.ChangeEvent<HTMLSelectElement>) {
     const bgRepeat = e.target.value;
     this.updateData({ bgRepeat });
@@ -339,7 +345,7 @@ export default class ImageManager extends Component<ImageManagerProps, ImageMana
       const newWidth: number = +e.target.value;
       this.updateData({ width: newWidth });
       if (this.state.proportions && this.state.data?.originalHeight && this.state.data?.originalWidth) {
-        this.updateData({ height: Math.floor(newWidth * this.state.data.originalHeight / this.state.data.originalWidth) });
+        this.updateData({ height: Math.floor((newWidth * this.state.data.originalHeight) / this.state.data.originalWidth) });
       }
     }
   }
@@ -350,7 +356,7 @@ export default class ImageManager extends Component<ImageManagerProps, ImageMana
       const newHeight = +e.target.value;
       this.updateData({ height: newHeight });
       if (this.state.proportions && this.state.data?.originalHeight && this.state.data?.originalWidth) {
-        this.updateData({ width: Math.floor(newHeight * this.state.data.originalWidth / this.state.data.originalHeight) });
+        this.updateData({ width: Math.floor((newHeight * this.state.data.originalWidth) / this.state.data.originalHeight) });
       }
     }
   }
