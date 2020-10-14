@@ -21,10 +21,19 @@ const config = {
 
   plugins: [
     ...baseConfig.plugins,
+    new HtmlWebpackPlugin({
+      template: 'examples/index.html',
+      filename: 'index.html',
+    }),
+    new HtmlWebpackPlugin({
+      template: 'examples/charlesmudy.html',
+      filename: 'charlesmudy.html',
+    }),
     new CopyPlugin({
       patterns: [
-        { from: 'examples', to: '' },
+        // { from: 'examples', to: '' },
         { from: '../core/docs', to: 'docs' },
+        { from: './src/api/images', to: 'images' },
       ],
     }),
   ],
