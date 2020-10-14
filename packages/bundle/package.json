@@ -1,6 +1,6 @@
 {
   "name": "@writeaway/bundle",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Redaxtor is a JavaScript library for editing CMS pieces, pages and internationalisation on the client side.",
   "main": "./dist/writeaway.js",
   "types": "./dist/index.d.ts",
@@ -26,10 +26,10 @@
   "author": "SpiralScout",
   "license": "MIT",
   "dependencies": {
-    "@writeaway/core": "^2.0.2",
-    "@writeaway/plugin-codemirror": "^2.0.2",
-    "@writeaway/plugin-medium": "^2.0.2",
-    "@writeaway/plugin-seo": "^2.0.2",
+    "@writeaway/core": "^2.0.3",
+    "@writeaway/plugin-codemirror": "^2.0.3",
+    "@writeaway/plugin-medium": "^2.0.3",
+    "@writeaway/plugin-seo": "^2.0.3",
     "autobind-decorator": "^2.4.0",
     "classnames": "^2.2.6",
     "medium-editor": "^5.23.3",
