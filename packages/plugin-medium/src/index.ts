@@ -4,7 +4,7 @@ import RedaxtorMedium from './RedaxtorMedium';
 import ImageTag from './ImageTagEditor';
 import BackgroundImageEditor from './BackgroundImageEditor';
 
-import 'redaxtor-medium.less';
+import 'writeaway-medium.less';
 
 export const WriteAwayImageTag: IComponent<RedaxtorImageData> = ImageTag;
 export const WriteAwayBackground: IComponent<RedaxtorImageData> = BackgroundImageEditor;

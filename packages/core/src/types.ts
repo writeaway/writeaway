@@ -200,7 +200,7 @@ export interface IOptions {
    */
   navBarRoot: HTMLElement,
   /**
-   * Optional. Default: true, If set `true` enables dragging of the redaxtor panel
+   * Optional. Default: true, If set `true` enables dragging of the WriteAway panel
    */
   navBarDraggable: boolean,
   /**

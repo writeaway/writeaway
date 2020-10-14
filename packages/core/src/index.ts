@@ -1,5 +1,5 @@
 import { WriteAwayCore as core } from './WriteAwayCore';
-import 'styles/redaxtor.less';
+import 'styles/writeaway.less';
 
 export * from './types';
 

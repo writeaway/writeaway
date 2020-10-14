@@ -14,7 +14,7 @@ module.exports = {
     path: path.resolve('./dist'),
     filename: '[name].js',
     publicPath: '/',
-    sourceMapFilename: '[name].js.map',
+    sourceMapFilename: '[name].map',
     chunkFilename: '[id].chunk.js',
     libraryTarget: 'umd',
     umdNamedDefine: true,

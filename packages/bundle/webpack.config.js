@@ -1,3 +1,5 @@
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const baseConfig = require('../../webpack/config');
 
 const config = {
@@ -16,6 +18,15 @@ const config = {
       root: 'writeaway',
     },
   },
+
+  plugins: [
+    ...baseConfig.plugins,
+    new CopyPlugin({
+      patterns: [
+        { from: 'examples', to: '' },
+      ],
+    }),
+  ],
 
   resolve: {
     ...baseConfig.resolve,

@@ -20,6 +20,7 @@ const basePlugins = [
 
 const cssExtractorOptions = {
   filename: 'css/[name].css',
+  sourceMapFilename: 'css/[name].map',
 };
 
 const devPlugins = [

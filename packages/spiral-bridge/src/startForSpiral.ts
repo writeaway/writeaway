@@ -81,7 +81,7 @@ export const startForSpiral = (urls: Urls, seoHtml: string, options?: { [pieceTy
     getImageList() {
       return new Promise((resolve, reject) => {
         fetchApi.get(urls.imageGalleryUrl, {}).then((data) => {
-          resolve((data.list || data).map(
+          resolve((data.data || data).map(
             (image: GalleryItem & {
               url?: string,
               uri?: string,
@@ -90,6 +90,8 @@ export const startForSpiral = (urls: Urls, seoHtml: string, options?: { [pieceTy
             }) => ({
               id: image.id || image.url || image.uri,
               src: image.src || image.url || image.uri,
+              alt: image.alt ?? '',
+              title: image.title ?? '',
               thumbnailUrl: image.thumbnailUrl || image.thumbnail_uri || image.thumbnailSrc || image.src || image.url || image.uri,
               width: image.width,
               height: image.height,
@@ -126,7 +128,9 @@ export const startForSpiral = (urls: Urls, seoHtml: string, options?: { [pieceTy
       const thumb = data.thumbnailSrc || data.thumbnailUrl || data.thumbnail_uri || data.src || data.url || data.uri;
       return ({
         id: data.id || data.url || data.uri,
-        src: data.url || data.uri,
+        src: data.src || data.url || data.uri,
+        alt: data.alt ?? '',
+        title: data.title ?? '',
         thumbnailSrc: thumb,
         width: data.width,
         height: data.height,
@@ -142,7 +146,7 @@ export const startForSpiral = (urls: Urls, seoHtml: string, options?: { [pieceTy
       // formData is FormData with image field. Add rest to formData if needed and submit.
       const data = await fetchApi.post(urls.deleteImageUrl!, { id });
       return ({
-        id: data.id || data.url || data.uri,
+        id: data.id || data.src || data.url || data.uri,
       });
     } : undefined,
   };
@@ -152,9 +156,9 @@ export const startForSpiral = (urls: Urls, seoHtml: string, options?: { [pieceTy
     piecesOptions: {
       ...defaultPieces,
       components,
+      nameGroupSeparator: ':',
+      options: options || {},
     },
-    pieceNameGroupSeparator: ':',
-    options: options || {},
     api: spiralApi,
   });
 

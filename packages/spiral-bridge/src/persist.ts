@@ -38,7 +38,7 @@ export const getCookie = (name: string) => {
   return matches ? decodeURIComponent(matches[1]) : undefined;
 };
 
-export const globMeta = () => (window as any).metadata as ({[id: string]: string} | undefined);
+export const globMeta = () => (window as any).SEO_META as ({[id: string]: string} | undefined);
 
 export const VAR_E_ACTIVE = 'r_editorActive';
 
