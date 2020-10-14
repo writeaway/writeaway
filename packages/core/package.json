@@ -5,7 +5,8 @@
   "main": "./dist/core.js",
   "types": "./dist/index.d.ts",
   "files": [
-    "lib",
+    "dist",
+    "docs",
     "src"
   ],
   "repository": {

@@ -5,7 +5,7 @@
   "main": "./dist/plugin-seo.js",
   "types": "./dist/index.d.ts",
   "files": [
-    "lib",
+    "dist",
     "src"
   ],
   "repository": {

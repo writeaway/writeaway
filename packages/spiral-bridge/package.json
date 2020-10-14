@@ -5,7 +5,8 @@
   "main": "./dist/writeaway-spiral.js",
   "types": "./dist/index.d.ts",
   "files": [
-    "lib",
+    "index.php",
+    "dist",
     "src"
   ],
   "repository": {
