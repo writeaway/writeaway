@@ -353,7 +353,6 @@ Response should have `data` field as array of following structures:
   }
 ```
 
-
 ## Advanced usage
 
 Make a custom bundle yourself based on this package as a sample.

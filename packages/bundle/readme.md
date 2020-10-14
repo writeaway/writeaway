@@ -1,79 +1,139 @@
-This repository is a helper tool that allows to bundle all WriteAway stuff in one file for usage with Spiral
+# WriteAway
+WriteAway is a JavaScript library for editing CMS pieces inline on pages on the client side.
 
-1. Clone [WriteAway repositories](https://github.com/writeaway) in some folder with subfolders `redaxtor` `redaxtor-medium` `redaxtor-codemirror`  `redaxtor-seo` (Note naming) 
-2. Clone this repository in same folder. Name does not matter.
-3. Run `npm install`
-4. Run `npm run build:umd` or `npm run build:umd:min` 
+Based on [React](https://facebook.github.io/react/) and [Redux](http://redux.js.org/)
 
-Most recent build is available as minified file directly in repository.
-Typical usage:
+Created by [SpiralScout](http://spiralscout.com).
 
-```
-    <script src="writeaway.js"></script>
-    <script>
-        var writeaway = new WriteAway({
-            pieces: {
-            },
-            api: {
-                 getImageList: function (data) {
-                    const dataUrl = (data && data.type == "background") ? "api/imagesBg.json" : "api/images.json";
-                    return new Promise(function(resolve, reject) {
-                        $.get({
-                            url: dataUrl ,
-                            dataType: "json"
-                        }).done(function(data) {
-                            resolve(data.data.list);
-                        }).fail(function(error) {
-                            reject(error);
-                        });
-                    });
-                },
-                uploadImage: function() {
+WriteAway comes like a core controller with set of plugins for different types of media.
 
-                },
-                savePieceData: function(piece) {
-                    console.info("Saving to server", piece);
-                    return Promise.resolve();
-                }
-            }
-        });
-    </script>
+[@writeaway/core](/packages/core) - Core controller for all plugins, includes editor floating bar and manages state of editors
+
+[@writeaway/plugin-medium](/packages/plugin-medium) - Plugin for supporting rich text editing, editing images and block backgrounds
+
+[@writeaway/plugin-coremirror](/packages/plugin-codemirror) - Plugin for editing block's source code, i.e. for embedded iframes or scrips
+
+[@writeaway/plugin-seo](/packages/plugin-seo) - Plugin for editing SEO meta tags
+
+## Installation On Top Of Existing Project
+
+To use on top of existing project you would need to create a custom bundle using your favorite packaging tool. You can see 2 samples of such bundles [on demo website](/packages/bundle) and in [spiral framework bridge](/packages/spiral-bridge)
+
+This bundle will scan an existing page for specific selectors and will attach editors on them
 
 ```
-
-Read about configuring WriteAway on [WriteAway repositories](https://github.com/writeaway)
- 
-Styling notes
-========
-
-This bundle wraps text editors into `redaxtor` DOM element that has `display: block` by default.
-
-Image and background editors are attached in a node before target one in `redaxtor-before` DOM element. This block is `0px x 0px` by default.
-
-Default styles are applied by attaching `r_editor r_edit` classes to target node. This applies to all editor types.
-
-Default CSS styles can be found in [WriteAway repositories](https://github.com/writeaway)
-
-This bundle includes:
-
+npm install --save @writeaway/core
+npm install --save @writeaway/plugin-medium
+npm install --save @writeaway/plugin-codemirror
+npm install --save @writeaway/plugin-seo
 ```
 
-require('/redaxtor/dist/redaxtor.css'); //Styles for editable blocks hilighting and redaxtor floating bar
+And then in code of bundle
 
-require('/redaxtor-medium/dist/medium-editor.css');//Styles for HTML editor
-require('/redaxtor-medium/dist/redaxtor-medium.css');//Redaxtor-specific overrides
-
-require('/node_modules/codemirror/lib/codemirror.css');//Styles for Codemirror editor
-
+```typescript
+    import { WriteAwayCore } from '@writeaway/core';
+    import { WriteAwaySeo } from '@writeaway/plugin-seo';
+    import { WriteAwayCodeMirror } from '@writeaway/plugin-codemirror';
+    import { WriteAwayBackground, WriteAwayImageTag, WriteAwayMedium } from '@writeaway/plugin-medium';
+    
+    // Define which piece type is handled by which editor
+    const components = {
+      html: WriteAwayMedium,
+      image: WriteAwayImageTag,
+      background: WriteAwayBackground,
+      source: WriteAwayCodeMirror,
+      seo: WriteAwaySeo,
+    };
+    
+    const writeaway = new WriteAwayCore({
+      piecesOptions: {
+        selector: '.js-piece', // Selector to look for
+        attribute: 'data-type', // Attribute containing piece type, that will define what editor to attach
+        attributeId: 'data-id', // Attribute containing unique piece id
+        attributeName: 'data-name', // Attribute containing human readable piece name that will be shown as header in hover block
+        components,
+      },
+    });
 ```
 
-Scripting notes
-========
+Attach resulting bundle in bottom of the page
 
-WriteAway is expected to be one and the only JS events handler. Don't attach it to nodes with other handlers or disable them before activating WriteAway.
+For styling you can either write own styles or include default to bundle `.less` file like so
+
+```less
+@import "~@writeaway/core/src/styles/writeaway";
+@import "~@writeaway/plugin-medium/src/medium-editor";
+@import "~@writeaway/plugin-medium/src/writeaway-medium";
+@import "~@writeaway/plugin-seo/src/google-preview";
+@import "~@writeaway/plugin-seo/src/styles";
+```
+
+Alternatively, include compiled CSS files
+
+```less
+@import "~@writeaway/core/dist/css/core.css";
+@import "~@writeaway/plugin-medium/dist/css/plugin-medium.css";
+@import "~@writeaway/plugin-seo/dist/css/plugin-seo.css";
+```
+
+## Integrating in React application
+
+TBD:
+
+## WriteAwayCore constructor options
+
+WriteAwayCore accepts [IOptions](/packages/core/src/types.ts#68) object in constructor
+
+| Option      | Default | Description  |
+| :---        |    :---   |          :--- |
+| api      | [defaultMinimumApi](/packages/core/src/default.ts#27) | data API to work with pieces. See details in WriteAway API section.   |
+| piecesOptions   | [defaultPieces](/packages/core/src/default.ts#21) | Options for pieces initialization  |
+| piecesOptions.selector   | `[data-piece]` | Selector that will be looked for during initialization for auto-attaching to nodes |
+| piecesOptions.attribute   | `data-piece` | Attribute having `type` property for Piece initialization |
+| piecesOptions.attributeId   | `data-id` | Attribute having `id` property for Piece initialization |
+| piecesOptions.attributeName   | `data-name` | Attribute having `name` property for Piece initialization |
+| piecesOptions.components   | {} | Maps piece type to [IComponent](/packages/core/src/types.ts) that are launched as piece editor |
+| piecesOptions.options   | {} | Maps piece type to options that will be passed to each of editor instances |
+| piecesOptions.nameGroupSeparator   | `,` | Name separator for piece names, i.e. if separator is ':' names like 'Body:Article' and 'Body:About' will be grouped under 'Body' with 'Article' and 'About' names |
+| piecesRoot   | `document.body` | DOM Element where nodes matching `piecesOptions.selector` will be searched for |
+| editorRoot   | `document.body` | DOM Element where editors can put their DOM components, i.e. modals and overlays |
+| navBarRoot   | `document.body` | DOM Element where floating navigation bar with core edit controls will be attached to |
+| navBarCollapsible   | `true` | If navbar can be collapsed |
+| navBarCollapsed   | `false` | Initial collapsed state for navbar |
+| navBarDraggable   | `true` | Can navbar be dragged |
+| enableEdit   | `true` | Initially enable editors or not |
+| expert   | `false` | Initially enable expert mode. Expert mode enables individual piece tracking in nav bar. |
+| overlayRoot   | `document.body` | DOM Element where floating hover overlay |
+| ajax | `undefined` | If specified, will be passed to default callFetch helper implementation. Refer to code for details. |
+| state | `undefined` | If specified, will be used as initial redux state |
+
+## WriteAway API
+
+Specifying `api` params allows to customize where editors are taking data from and where data is saved. Additionally developer can customize how node position is calculated, see [advanced documentation](/packages/core/src/types.ts) and code for that.
+
+| Option | Type | Description  |
+| :--- | :--- | :--- |
+| getPieceData | async (piece: [IPieceItem](/packages/core/src/types.ts)) => [IPieceItem](/packages/core/src/types.ts) | Async function to resolve complete piece data. Typically that means resolving `data` by `id` or extracting data directly from `node`  |
+| savePieceData | async (piece: [IPieceItem](/packages/core/src/types.ts)) => void | Async function to save complete piece data  |
+| getImageList | async (ref: {id: string, type: string, data: any, dataset: any}) => Array<[IGalleryItem](/packages/core/src/types.ts)> | Optional. If specified will fetch images for this piece and show image options |
+| uploadImage | async (file: File or FileList) => [IGalleryItem](/packages/core/src/types.ts) or Array<[IGalleryItem](/packages/core/src/types.ts)> | Optional. If specified enable upload functionality |
+| deleteImage | async (id: string) => void | Optional. If specified will enable image deletion functionality and will be used to delete images from gallery  |
 
 
-Customise bundle
-========
 
-To customize bundle edit `src/index.js` and re-rerun build
+## Usage with Spiral Framework
+
+When using with spiral framework, use `@writeaway/spiral-bridge` bundle or pre-compiled scripts
+
+[See documentation here](/packages/spiral-bridge)
+
+
+## Developing and building
+
+ ```bash
+ yarn
+ yarn build
+ ```
+
+## License
+MIT
