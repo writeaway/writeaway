@@ -1,0 +1,10 @@
+{
+  "out": "docs",
+  "excludeExternals": true,
+  "excludePrivate": true,
+  "ignoreCompilerErrors": true,
+  "toc": [
+    "WriteAwayCore",
+    "Types"
+  ]
+}

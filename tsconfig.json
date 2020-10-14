@@ -1,18 +1,21 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
+        "sourceMap": true,
+        "inlineSources": true,
         "target": "es5",
-        "jsx": "react",
-        "emitDecoratorMetadata": true,
+        "incremental": true,
+        "downlevelIteration": true,
+        "declaration": true,
+        "declarationMap": false,
+        "composite": true,
         "experimentalDecorators": true,
-        "noImplicitAny": false,
-        "removeComments": false,
-        "sourceMap": false,
-        "inlineSourceMap": true
-    },
-    "exclude": [
-        "node_modules",
-        "dist",
-        "lib"
-    ]
+        "pretty": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "isolatedModules": true,
+    }
 }

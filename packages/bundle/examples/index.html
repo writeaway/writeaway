@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WriteAway Example</title>
+    <meta name="description" content="WriteAway is front end page editor for your website. It lays on top of any CMS and is Open Source.">
+
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+
+        }
+
+        .bs-docs-header {
+            margin-bottom: 40px;
+            font-size: 20px;
+            color: #fff;
+            background-color: #1a3e53;
+        }
+
+        .bs-docs-header h1 {
+            margin-top: 0;
+            color: #fff;
+        }
+
+        .bs-docs-header p {
+            margin-bottom: 0;
+            font-weight: 300;
+            line-height: 1.4;
+        }
+
+        .bs-docs-header .container {
+            position: relative;
+        }
+
+        .bs-docs-header {
+            padding-top: 60px;
+            padding-bottom: 60px;
+            font-size: 24px;
+            text-align: left;
+        }
+
+        .bs-docs-header h1 {
+            font-size: 60px;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body>
+<div class="bs-docs-header" data-piece="background" data-id="bg-0" data-name="Header:Background">
+    <div class="container">
+        <div data-piece="html" data-id="pieceHTML" data-name="Header:Base">
+            <h1>WriteAway Page Editor</h1>
+            <p>WriteAway is a front end page editor that sits on top of your website and allows you to visually edit any text or media file in real time. Click inside this highlighted area to start</p>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col col-md-6">
+            <div data-piece="html" data-id="html-1" data-name="Body:Try It Out">
+                <h2>Try it out!</h2>
+                <p>1. Open WriteAway by clicking the floating panel in the header and enable or disable edit mode.</p>
+                <p>2. Edit this block! It's that simple!</p>
+                <p>&nbsp;</p>
+                <p>See how it appears when <a href="./email-samples/charlesmudy.html">editing email templates</a> too!</p>
+            </div>
+        </div>
+        <div class="col col-md-6">
+            <div data-piece="html" data-id="html-2" data-name="Body:GitHub">
+                <h2>If you're an engineer, who wants to use WriteAway in a project, Visit our documentation</h2>
+                <p>WriteAway is OpenSource with an MIT licence and is distributed on <a href="https://github.com/redaxtor/redaxtor">GitHub</a></p>
+                <p>WriteAway comes with a default set of plugins for <a href="https://github.com/redaxtor/redaxtor-medium">Rich Text</a> editing, <a href="https://github.com/redaxtor/redaxtor-codemirror">Source Code</a> editing, <a href="https://github.com/redaxtor/redaxtor-medium">Background Graphics, JPEG Images</a> and <a href="https://github.com/redaxtor/redaxtor-seo">on page SEO metadata</a> editing.</p>
+                <p>As a developer, you can add your own <a href="https://github.com/redaxtor/redaxtor/blob/master/src/index.d.ts#L252-L323">page editing plugin</a>as long as you follow these simple rules. You can refer to this <a href="https://github.com/redaxtor/redaxtor.github.io">bundle sample</a> for reference as well.</p>
+            </div>
+        </div>
+    </div>
+    <p>&nbsp;</p>
+</div>
+
+
+<div data-piece="background" data-id="bg-1" data-name="Body:Background" style="background-image: url('../src/api/images/sayagata-400px.png'); background-repeat: repeat;">
+    <br/><br/>
+    <div class="container">
+        <div class="row">
+
+            <div class="col col-md-6">
+                <div>
+                    <h3>Edit uploaded images!</h3>
+                    <p>You can force a user to modify an existing image without adding or removing new ones</p>
+                    <p>This is helpful for when you want a strict structure or have custom image styling you don't want to
+                        interfere with</p>
+                    <p style="text-align: center"><img data-piece="image" data-id="image-1" data-name="Body:Image"
+                                                       style="width: 300px; border: 10px solid #f8f8f8; box-shadow: 2px 2px 10px rgba(0,0,0,0.3); border-radius: 10px"
+                                                       src="../src/api/images/image-06.jpg"
+                                                       alt="Happy smile"></p>
+                </div>
+            </div>
+            <div class="col col-md-6">
+                <div data-piece="source" data-id="source-1" data-name="Body:Source">
+                    <h3>Edit widget code!</h3>
+                    <p>If you have an iframe or scripts on your page, source editor is your friend</p>
+                    <iframe style="width: 100%; min-height: 300px"
+                            src="https://www.youtube.com/embed/qRC4Vk6kisY?ecver=1" frameborder="0"
+                            allowfullscreen></iframe>
+                    <script></script>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/><br/>
+</div>
+
+
+<div data-piece="background" data-id="bg-2" data-name="Body:Background 2" style="background-image: url('../src/api/images/weather.png');background-repeat: repeat;">
+    <br/><br/>
+    <div class="container">
+        <div class="row">
+            <div class="col col-md-6">
+                <div data-piece="html" data-id="html-3" data-name="Body:Backgrounds Text">
+                    <h3>Edit Background Image!</h3>
+                    <p>You can change the color or background image for this area</p>
+                    <p>You can set a different image for usage in backgrounds and normal images on your site</p>
+                </div>
+            </div>
+            <div class="col col-md-6">
+                <div data-piece="html" data-id="errorSample" data-name="Body:Error Sample">
+                    <h3>This block will highlight an error</h3>
+                    <p>When something happens that isn't quite right, the notification system will highlight the problem area</p>
+                    <p>If you like, you can ignore this</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/><br/>
+</div>
+
+
+<div data-piece="background" data-id="bg-3" data-name="Body:Background 3" >
+    <br/><br/>
+    <div class="container">
+        <div class="row">
+            <div class="col col-md-12">
+                <div>
+                    <h3>SEO Meta Manager</h3>
+                    <p>You can also edit SEO information that is not directly seen by page visitors</p>
+                    <p>Only search engine crawlers will see this metadata so they can index your page! As a site admin, you can edit the title, description and keywords using the SEO button.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/><br/>
+</div>
+<p>&nbsp;</p>
+
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400" rel="stylesheet">
+<link href="./css/writeaway.css" rel="stylesheet">
+<style>
+    body {
+        padding: 0;
+        margin: 0;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 300;
+    }
+</style>
+<script src="./writeaway.js"></script>
+</body>
+</html>

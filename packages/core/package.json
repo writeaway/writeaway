@@ -1,0 +1,48 @@
+{
+  "name": "@writeaway/core",
+  "version": "2.0.1",
+  "description": "Redaxtor is a JavaScript library for editing CMS pieces, pages and internationalisation on the client side.",
+  "main": "./dist/core.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "lib",
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/redaxtor/redaxtor.git"
+  },
+  "scripts": {
+    "clean": "rimraf lib dist",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "prebuild": "npm run clean",
+    "build": "npm run build:prod",
+    "build:prod": "cross-env NODE_ENV=production webpack",
+    "build:dev": "cross-env NODE_ENV=development webpack",
+    "watch": "cross-env NODE_ENV=development webpack --watch",
+    "pre-publish": "npm run clean && npm run lint && npm run build",
+    "typedoc": "rimraf docs && typedoc src/types.ts src/defaults.ts src/WriteAwayCore.tsx"
+  },
+  "author": "SpiralScout",
+  "license": "MIT",
+  "peerDependencies": {
+    "autobind-decorator": "^2.4.0",
+    "classnames": "^2.2.6",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-redux": "^7.2.1",
+    "react-redux-toastr": "^7.6.5",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-thunk": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/classnames": "^2.2.10",
+    "@types/react": "^16.9.51",
+    "@types/react-dom": "^16.9.8",
+    "@types/react-redux": "^7.1.9",
+    "@types/react-redux-toastr": "^7.6.0",
+    "typescript": "^4.0.3"
+  }
+}

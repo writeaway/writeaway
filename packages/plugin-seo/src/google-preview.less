@@ -1,0 +1,64 @@
+.r_modal-content {
+  .google-preview {
+    width: 600px;
+    font-family: arial, sans-serif;
+    text-align: left;
+    background: white;
+    font-size: small;
+
+    .google-header {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 18px;
+      font-weight: normal;
+      margin: 0;
+      padding: 0;
+      text-decoration: none;
+      color: #1a0dab;
+      line-height: 1.2;
+    }
+    .google-website {
+      color: #006621;
+      font-style: normal;
+      height: 18px;
+      font-size: 14px;
+      white-space: nowrap;
+      line-height: 16px;
+    }
+    .google-description {
+      color: #545454;
+      font-size: small;
+      line-height: 1.4;
+      word-wrap: break-word;
+    }
+  }
+
+  .google-preview-wrapper {
+    border: 1px solid #f0f0f0;
+    padding: 10px;
+    background-color: #ffffff;
+  }
+
+
+
+  &.r_modal-content-seo {
+    .item-form textarea,
+    .item-form input {
+      padding-right: 20px;
+    }
+
+    .item-form textarea + .number-badge,
+    .item-form input + .number-badge {
+      font-size: 12px;
+      &.warning {
+        color: red;
+      }
+    }
+  }
+
+  .codemirror-hint {
+
+  }
+}

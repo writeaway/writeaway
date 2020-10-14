@@ -1,0 +1,14 @@
+import { WriteAwayCore as core } from './WriteAwayCore';
+import 'styles/writeaway.less';
+
+export * from './types';
+
+// Includes version and time in bundle
+export const version = `Version ${process.env.VERSION}, built at ${process.env.BUILD_TIME}`;
+
+export const WriteAwayCore = core;
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+export { defaultMinimumApi, defaultOptions, defaultPieces } from 'defaults';
+
+export default WriteAwayCore;
