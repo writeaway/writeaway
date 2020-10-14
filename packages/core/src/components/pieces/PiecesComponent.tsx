@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 import {
-  IComponent, IPieceItemState, PieceType, RedaxtorAPI,
+  IComponent, IPieceItem, PieceType, IPiecesAPI,
 } from 'types';
 import PiecesList from './PiecesList';
 
@@ -9,14 +9,15 @@ import { RxCheckBox } from '../RxCheckBox';
 import i18n from '../../i18n';
 
 export interface IPiecesComponentProps {
-  api: RedaxtorAPI,
+  api: IPiecesAPI,
+  editorRoot: HTMLElement,
   sourceId?: string,
   setSourceId: (id?: string) => void,
   savePiece: (id: string) => void,
   updatePiece: (id: string, update: any) => void,
   piecesToggleEdit: (piece?: PieceType) => void,
   piecesInit: () => void,
-  byId: Record<string, IPieceItemState>,
+  byId: Record<string, IPieceItem>,
   components: Partial<Record<PieceType, IComponent>>,
   editorEnabled: Partial<Record<PieceType, boolean>>,
   editorActive: boolean,
@@ -28,6 +29,7 @@ export const PiecesComponent = (
   {
     api,
     sourceId,
+    editorRoot,
     setSourceId,
     savePiece,
     piecesInit,
@@ -56,15 +58,16 @@ export const PiecesComponent = (
 
   let sourceEditor = null;
   if (components.source && sourceId) {
+    console.log('Here');
     const pieceProps = byId[sourceId];
     sourceEditor = (
       <components.source
+        wrapper={editorRoot}
         expert={false}
         editorActive={editorActive}
         actions={{} as any}
         piece={pieceProps}
         api={api}
-        wrapper="redaxtor-modal"
         onClose={() => setSourceId(undefined)}
         onSave={(id: string) => savePiece(id)}
       />

@@ -82,7 +82,7 @@ export default class RedaxtorImageTag extends Component<IPieceProps> {
   componentDidMount() {
     imageManagerApi({
       api: this.props.api,
-      container: ReactDOM.findDOMNode(this) as HTMLElement,
+      container: this.props.wrapper,
       ref: (i: ImageManager | null) => {
         this.imageManagerApi = i;
       },
@@ -211,7 +211,7 @@ export default class RedaxtorImageTag extends Component<IPieceProps> {
   render() {
     this.check();
     this.renderNonReactAttributes(this.piece.data);
-    return React.createElement(this.props.wrapper, {});
+    return <div data-editor-for={this.piece.name} />;
   }
 
   componentDidUpdate() {

@@ -1,11 +1,11 @@
-import { GalleryItem, RedaxtorAPI } from '@writeaway/core';
+import { GalleryItem, IPiecesAPI } from '@writeaway/core';
 import React, { useCallback, useState } from 'react';
 import Popup from './Popup';
 import Portal from './Portal';
 
 export interface GalleryProps {
   gallery: Array<GalleryItem>,
-  api: RedaxtorAPI,
+  api: IPiecesAPI,
   onChange: (item: GalleryItem) => void,
   onDelete: (id: string) => void,
 }

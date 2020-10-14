@@ -1,4 +1,4 @@
-import { RedaxtorAPI } from '@writeaway/core';
+import { IPiecesAPI } from '@writeaway/core';
 import ReactDOM from 'react-dom';
 import React from 'react';
 import ImageManager from './ImageManager';
@@ -6,14 +6,14 @@ import ImageManager from './ImageManager';
 const lazy: {
   rendred?: boolean,
   imageManager: ImageManager | null,
-  api?: RedaxtorAPI,
+  api?: IPiecesAPI,
   ref: Array<(manager: ImageManager | null) => void>
 } = {
   imageManager: null, ref: [],
 };
 
 const lazyGetImageManager = (
-  api: RedaxtorAPI,
+  api: IPiecesAPI,
   container: Element,
   ref: (manager: ImageManager | null) => void,
 ) => {
@@ -43,7 +43,7 @@ const lazyGetImageManager = (
 };
 
 export const imageManagerApi = (data: {
-  api: RedaxtorAPI,
+  api: IPiecesAPI,
   container?: Element,
   ref: (manager: ImageManager | null) => void
 }) => {

@@ -106,4 +106,6 @@ export class WriteAwaySpiralBundle extends WriteAwayCore {
 
 export const defaultApi = BasicApi;
 
+export const start = startForSpiral;
+
 export default WriteAwaySpiralBundle;

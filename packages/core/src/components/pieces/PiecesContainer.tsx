@@ -7,10 +7,11 @@ const mapStateToProps = (state: IWriteAwayState) => ({
   sourceId: state.pieces.sourceId,
   byId: state.pieces.byId,
   api: state.config.api,
+  editorRoot: state.config.editorRoot,
   editorEnabled: state.pieces.editorEnabled,
   editorActive: state.pieces.editorActive,
   components: state.config.piecesOptions.components,
-  pieceNameGroupSeparator: state.config.pieceNameGroupSeparator,
+  pieceNameGroupSeparator: state.config.piecesOptions.nameGroupSeparator,
 });
 
 const PiecesContainer = connect(

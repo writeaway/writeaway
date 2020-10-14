@@ -1,6 +1,6 @@
 import { toastr } from 'react-redux-toastr';
 import {
-  Dispatch, GetIWriteAwayState, IPieceControllerState, IPieceItemState, PieceType, Rect,
+  Dispatch, GetIWriteAwayState, IPieceControllerState, IPieceItem, PieceType, Rect,
 } from 'types';
 
 import C from '../constants';
@@ -50,13 +50,13 @@ export const deactivatePiece = (id: string) => ({ type: C.PIECES_DEACTIVATE_PIEC
 
 export const onDeactivationSentPiece = (id: string) => ({ type: C.PIECES_DEACTIVATION_SENT_PIECE, id });
 
-export const updatePiece = (id: string, piece: Partial<IPieceItemState>, notChanged?: boolean) => ({
+export const updatePiece = (id: string, piece: Partial<IPieceItem>, notChanged?: boolean) => ({
   type: C.PIECE_UPDATE, id, piece, notChanged,
 });
 
 export const resetPiece = (id: string) => ({ type: C.PIECE_RESET, id });
 
-export const addPiece = (piece: IPieceItemState) => ({ type: C.PIECE_ADD, id: piece.id, piece });
+export const addPiece = (piece: IPieceItem) => ({ type: C.PIECE_ADD, id: piece.id, piece });
 
 export const hoverPiece = (pieceId?: string, rect?: Rect) => ({ type: C.PIECES_HOVERED, id: pieceId, rect });
 
@@ -159,13 +159,13 @@ export const savePiece = (id: string) => (dispatch: Dispatch, getState: GetIWrit
   }
 };
 
-export const savePieces = (pieces: Record<string, IPieceItemState>) => (dispatch: Dispatch) => {
+export const savePieces = (pieces: Record<string, IPieceItem>) => (dispatch: Dispatch) => {
   Object.keys(pieces).forEach((id: string) => dispatch(savePiece(id)));
 };
 
 export const pieceFetching = (id: string) => ({ type: C.PIECE_FETCHING, id });
 
-export const pieceFetched = (id: string, piece: IPieceItemState) => ({ type: C.PIECE_FETCHED, id, piece });
+export const pieceFetched = (id: string, piece: IPieceItem) => ({ type: C.PIECE_FETCHED, id, piece });
 
 export const pieceFetchingFailed = (id: string, answer: unknown) => ({ type: C.PIECE_FETCHING_FAILED, id, answer });
 
@@ -190,12 +190,12 @@ export const pieceGet = (id: string) => (dispatch: Dispatch, getState: GetIWrite
   /**
      * Generate a copy that anyone from external API can modify and send back without immutability worries
      */
-  const mutableCopy: IPieceItemState = {
+  const mutableCopy: IPieceItem = {
     ...piece,
     data: piece.data ? { ...piece.data } : undefined,
   };
 
-  getState().config.api.getPieceData(mutableCopy).then((updatedPiece: IPieceItemState) => {
+  getState().config.api.getPieceData(mutableCopy).then((updatedPiece: IPieceItem) => {
     if (!updatedPiece.data) {
       dispatch(pieceFetchingError(id, 'Api method generated no data'));
     } else {

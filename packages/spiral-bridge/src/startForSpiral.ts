@@ -1,5 +1,5 @@
 import {
-  defaultOptions, defaultPieces, defaultMinimumApi as BasicApi, GalleryItem, IPieceItemState, RedaxtorAPI,
+  defaultOptions, defaultPieces, defaultMinimumApi as BasicApi, GalleryItem, IPieceItem, IPiecesAPI,
 } from '@writeaway/core';
 import { components } from 'components';
 import WriteAwaySpiralBundle from 'index';
@@ -29,12 +29,12 @@ export const startForSpiral = (urls: Urls, seoHtml: string, options?: { [pieceTy
     throw new Error('Seems Redaxtor is already started');
   }
 
-  const spiralApi: RedaxtorAPI = {
+  const spiralApi: IPiecesAPI = {
     ...BasicApi,
     /**
      * Fetch RX details
      */
-    getPieceData: async (piece: IPieceItemState) => {
+    getPieceData: async (piece: IPieceItem) => {
       if (piece.dataset && !piece.dataset.nonupdateable) {
         return BasicApi.getPieceData(piece, BasicApi.resolvers);
       }
@@ -56,8 +56,8 @@ export const startForSpiral = (urls: Urls, seoHtml: string, options?: { [pieceTy
     },
     /**
      * Save RX details
-     * @param {IPieceItemState} piece
-     * @return {Promise<IPieceItemState>}
+     * @param {IPieceItem} piece
+     * @return {Promise<IPieceItem>}
      */
     savePieceData: async (piece) => {
       if (piece.type === 'seo') {

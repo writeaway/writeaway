@@ -1,9 +1,9 @@
 import { PieceLine } from 'components/pieces/PieceLine';
 import React from 'react';
-import { IPieceItemState, PieceType } from 'types';
+import { IPieceItem, PieceType } from 'types';
 
 export interface IPiecesListProps {
-  pieces: Record<string, IPieceItemState>,
+  pieces: Record<string, IPieceItem>,
   setSourceId: (id: string) => void,
   savePiece: (id: string) => void,
   pieceNameGroupSeparator: string,

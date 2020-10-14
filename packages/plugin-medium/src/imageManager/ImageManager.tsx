@@ -1,4 +1,4 @@
-import { GalleryItem, RedaxtorAPI } from '@writeaway/core';
+import { GalleryItem, IPiecesAPI } from '@writeaway/core';
 import { boundMethod } from 'autobind-decorator';
 import { pickerColors } from 'contants';
 import vanillaColorPicker, { PickerHolder } from 'helpers/VanillaColorPicker';
@@ -9,7 +9,7 @@ import Gallery from './components/Gallery';
 import { RxCheckBox } from './components/RxCheckBox';
 
 export interface ImageManagerProps {
-  api: RedaxtorAPI;
+  api: IPiecesAPI;
 }
 
 export interface ImageManagerState {

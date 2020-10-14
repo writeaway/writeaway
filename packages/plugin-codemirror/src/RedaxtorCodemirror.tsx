@@ -216,6 +216,7 @@ export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirror
     // if this.state.sourceEditorActive and this.props.node presents,
     // it means that is a regular piece with control over node and sourceEditorActive means modal is open
     if (this.state.sourceEditorActive || !this.props.piece.node) {
+      console.log('That');
       const { html } = this.state;
       codemirror = (
         <Modal
@@ -261,7 +262,7 @@ export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirror
         </Modal>
       );
     } else {
-      codemirror = React.createElement(this.props.wrapper, {});
+      codemirror = <div data-editor-for={this.props.piece.name} />;
     }
 
     this.renderNonReactAttributes();

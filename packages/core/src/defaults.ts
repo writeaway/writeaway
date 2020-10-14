@@ -1,22 +1,29 @@
+/**
+ * @packageDocumentation
+ * @module Defaults
+ */
+
 import { getNodeRect } from 'helpers/getNodeRect';
 import { isNodeVisible } from 'helpers/isNodeVisible';
 import { defaultPiecesState } from 'reducers/pieces';
 import {
   IGlobalState,
   IOptions,
-  IPieceItemState,
+  IPieceItem,
   IWriteAwayState,
   PieceDataResolver,
   PieceType,
-  RedaxtorAPI,
+  IPiecesAPI, IPiecesOptions,
 } from 'types';
 
-export const defaultPieces = {
+export const defaultPieces: IPiecesOptions = {
+  nameGroupSeparator: ',',
+  selector: '[data-piece]',
   attribute: 'data-piece',
   attributeId: 'data-id',
   attributeName: 'data-name',
   components: {},
-  initialState: {},
+  options: {},
 };
 
 /**
@@ -24,11 +31,11 @@ export const defaultPieces = {
  * No Uploads and gallery
  * TODO: Note this implementation is dependent on submodules. Reimplement as multi-extendable
  */
-export const defaultMinimumApi: RedaxtorAPI = {
+export const defaultMinimumApi: IPiecesAPI = {
   getNodeRect,
   isNodeVisible,
   resolvers: {
-    background: async (piece: IPieceItemState) => {
+    background: async (piece: IPieceItem) => {
       const computedStyle = getComputedStyle(piece.node);
       return Promise.resolve({
         ...piece,
@@ -42,21 +49,21 @@ export const defaultMinimumApi: RedaxtorAPI = {
         },
       });
     },
-    html: async (piece1: IPieceItemState) => ({
+    html: async (piece1: IPieceItem) => ({
       ...piece1,
       data: {
         html: piece1.node.innerHTML,
         updateNode: true,
       },
     }),
-    source: async (piece1: IPieceItemState) => ({
+    source: async (piece1: IPieceItem) => ({
       ...piece1,
       data: {
         html: piece1.node.innerHTML,
         updateNode: true,
       },
     }),
-    image: async (piece: IPieceItemState) => ({
+    image: async (piece: IPieceItem) => ({
       ...piece,
       data: {
         src: (piece.node as HTMLImageElement).src,
@@ -65,7 +72,7 @@ export const defaultMinimumApi: RedaxtorAPI = {
       },
     }),
   },
-  getPieceData: async <T extends object = any>(piece: IPieceItemState<T>, resolvers?: Partial<Record<PieceType, PieceDataResolver<T>>>) => {
+  getPieceData: async <T extends object = any>(piece: IPieceItem<T>, resolvers?: Partial<Record<PieceType, PieceDataResolver<T>>>) => {
     const resolver = resolvers ? resolvers[piece.type] : undefined;
     if (!piece.data && !resolver) {
       throw new Error(`Piece type ${piece.type} has no initial data and has no resolver`);
@@ -93,7 +100,6 @@ export const defaultOptions: IOptions = {
   piecesRoot: document.body,
   editorRoot: document.body,
   api: defaultMinimumApi,
-  pieceNameGroupSeparator: ',',
 };
 
 export const defaultState: IWriteAwayState = {

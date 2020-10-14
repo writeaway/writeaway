@@ -199,6 +199,7 @@ export class RedaxtorSeo extends Component<IPieceProps<RedaxtorSeoData>, Redaxto
     let modalDiv = null;
 
     if (this.state.sourceEditorActive) {
+      console.log('This');
       const { title, description, keywords } = this.state;
       const descr = description.length > 156 ? (`${description.substring(0, 153)}...`) : description;
 
@@ -323,7 +324,7 @@ export class RedaxtorSeo extends Component<IPieceProps<RedaxtorSeoData>, Redaxto
         </Modal>
       );
     } else {
-      modalDiv = React.createElement(this.props.wrapper, {});
+      modalDiv = <div data-editor-for={this.props.piece.name} />;
     }
 
     this.renderNonReactAttributes();

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import {
-  IPieceItemState, IWriteAwayState, Dispatch, IOptions, IComponent, PieceActions,
+  IPieceItem, IWriteAwayState, Dispatch, IOptions, IComponent, PieceActions,
 } from 'types';
 import {
   updatePiece,
@@ -20,12 +20,12 @@ export type PieceProps<T> = {
   actions: PieceActions,
   editorActive: boolean,
   expert: boolean,
-  piece: IPieceItemState<T>,
+  piece: IPieceItem<T>,
   config: IOptions,
 };
 
 const PieceContainer = <T extends object = any>(props: PieceProps<T>) => {
-  const pieceOptions = (props.config.options ? props.config.options[props.piece.type] : undefined) || {};
+  const pieceOptions = (props.config.piecesOptions.options ? props.config.piecesOptions.options[props.piece.type] : undefined) || {};
   const EditorComponent: IComponent | undefined = props.config.piecesOptions.components[props.piece.type];
   if (!EditorComponent) {
     throw new Error(`Piece type [${props.piece.type}] not supported`);
@@ -33,6 +33,7 @@ const PieceContainer = <T extends object = any>(props: PieceProps<T>) => {
   return (
     <EditorComponent
       piece={props.piece}
+      wrapper={props.config.editorRoot}
       actions={props.actions}
       expert={props.expert}
       editorActive={props.editorActive}
@@ -44,7 +45,6 @@ const PieceContainer = <T extends object = any>(props: PieceProps<T>) => {
         r_highlight: props.editorActive,
         'rx_non-expert': !props.expert,
       })}
-      wrapper={`redaxtor-${props.piece.type}`}
     />
   );
 };
@@ -63,7 +63,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   actions: {
     onManualActivation: (id: string) => dispatch(onActivationSentPiece(id)),
     onManualDeactivation: (id: string) => dispatch(onDeactivationSentPiece(id)),
-    updatePiece: (id: string, piece: Partial<IPieceItemState>) => dispatch(updatePiece(id, piece)),
+    updatePiece: (id: string, piece: Partial<IPieceItem>) => dispatch(updatePiece(id, piece)),
     resetPiece: (id: string) => dispatch(resetPiece(id)),
     savePiece: (id: string) => dispatch(savePiece(id)),
     onEditorActive: (id: string, active: boolean) => dispatch(onEditorActive(id, active)),

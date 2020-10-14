@@ -1,3 +1,8 @@
+/**
+ * @packageDocumentation
+ * @module WriteAway
+ */
+
 import { boundMethod } from 'autobind-decorator';
 import { PieceEditors } from 'containers/PieceEditors';
 import {
@@ -14,11 +19,11 @@ import thunk, { ThunkMiddleware } from 'redux-thunk';
 import {
   IOptions,
   IPiecesOptions,
-  IPieceItemState,
+  IPieceItem,
   IWriteAwayState,
   PieceType,
   Rect,
-  RedaxtorAPI,
+  IPiecesAPI,
   IPieceControllerState, Dispatch, Store, BarOptions,
 } from 'types';
 import { piecesToggleNavBar, setExpert } from './actions';
@@ -111,7 +116,7 @@ export class WriteAwayCore {
     setStore(this.store);
   }
 
-  start() {
+  private start() {
     const { options } = this;
     /**
      * options.piecesRoot - say where search for pieces
@@ -126,7 +131,7 @@ export class WriteAwayCore {
       navBarRoot: options.navBarRoot || document.body,
       navBarDraggable: (options.navBarDraggable !== undefined && options.navBarDraggable !== null) ? options.navBarDraggable : true,
       navBarCollapsable: (options.navBarCollapsable !== undefined && options.navBarCollapsable !== null) ? options.navBarCollapsable : true,
-      pieceNameGroupSeparator: options.pieceNameGroupSeparator,
+      pieceNameGroupSeparator: options.piecesOptions.nameGroupSeparator,
     };
     this.setNavBarCollapsed(options.navBarCollapsed ?? false);
     this.showBar(barOptions);
@@ -151,7 +156,7 @@ export class WriteAwayCore {
     document.removeEventListener('mousemove', this.onHoverTrack);
   }
 
-  get api(): RedaxtorAPI {
+  get api(): IPiecesAPI {
     return this.config.api;
   }
 
@@ -231,7 +236,7 @@ export class WriteAwayCore {
   /**
    * Renders a top Redaxtor bar with controls and attach it to body
    */
-  showBar(options: BarOptions) {
+  private showBar(options: BarOptions) {
     this.barNode = document.createElement('DIV');
     ReactDOM.render(
       <Provider store={this.store}>
@@ -254,7 +259,7 @@ export class WriteAwayCore {
   /**
    * Renders tbe hover overlay
    */
-  showHoverOverlay(root: HTMLElement) {
+  private showHoverOverlay(root: HTMLElement) {
     this.overlayNode = document.createElement('redaxtor-overlay');
     ReactDOM.render(
       <Provider store={this.store}>
@@ -267,14 +272,12 @@ export class WriteAwayCore {
     root.appendChild(this.overlayNode);
   }
 
-  initPieces(contextNode: HTMLElement) {
-    const selector = this.options.piecesOptions.attribute.indexOf('data-') === 0
-      ? `[${this.options.piecesOptions.attribute}]`
-      : this.options.piecesOptions.attribute;
-    const nodes = contextNode.querySelectorAll(selector);
-
-    for (let i = 0; i < nodes.length; i += 1) {
-      this.addPiece(nodes[i] as HTMLElement);
+  private initPieces(contextNode: HTMLElement) {
+    if (this.options.piecesOptions.selector) {
+      const nodes = contextNode.querySelectorAll(this.options.piecesOptions.selector);
+      for (let i = 0; i < nodes.length; i += 1) {
+        this.addPiece(nodes[i] as HTMLElement);
+      }
     }
   }
 
@@ -294,7 +297,7 @@ export class WriteAwayCore {
    If not specified will be fetched.
    */
   addPiece<Data = any>(node: HTMLElement, options: { id?: string, name?: string, type?: string, data?: Data, dataset?: { [k: string]: string } } = {}) {
-    const piece: IPieceItemState<Data> = {
+    const piece: IPieceItem<Data> = {
       node,
       type: ((options && options.type) || node.getAttribute(this.options.piecesOptions.attribute)) as PieceType,
       id: ((options && options.id) || node.getAttribute(this.options.piecesOptions.attributeId)) as string,
@@ -327,9 +330,9 @@ export class WriteAwayCore {
   /**
    * Set new data to a piece by piece id
    * @param pieceId {string} id of piece
-   * @param data {Object} new data
+   * @param data {Data} `data` of the pieces
    */
-  setData(pieceId: string, data: any) {
+  setData<Data>(pieceId: string, data: Data) {
     const state = this.store.getState();
     const currentPiece = state.pieces && state.pieces.byId && state.pieces.byId[pieceId];
     if (!currentPiece) {
@@ -343,7 +346,7 @@ export class WriteAwayCore {
 
   /**
    * Checks if editor toggle is active
-   * @param editorType {string} editor type. Optional. If not specified, returns state of "all" toggle
+   * @param editorType {PieceType} editor type. Optional. If not specified, returns state of "all" toggle
    * @returns {boolean}
    */
   isEditorActive(editorType?: PieceType) {
@@ -357,19 +360,19 @@ export class WriteAwayCore {
 
   /**
    * Get a list of all active pieces information
-   * @returns {{ [pieceId: string]: IRedaxtorPiece}}
+   * @returns {{ [pieceId: string]: IPieceItem}}
    */
   getPieceList() {
     const state = this.store.getState();
     const pieces = (state.pieces && state.pieces.byId) || {};
-    const out: Record<string, IPieceItemState> = {};
+    const out: Record<string, IPieceItem> = {};
     Object.keys(pieces).forEach((pieceId) => {
       out[pieceId] = { // Clone piece, so outer code can't affect it
         ...pieces[pieceId],
         data: pieces[pieceId].data ? { ...pieces[pieceId].data } : undefined,
-      };
+      } as IPieceItem;
     });
-    return out;
+    return out as { [pieceId: string]: IPieceItem};
   }
 
   /**
@@ -402,7 +405,7 @@ export class WriteAwayCore {
   /**
    * Set the active state for editors
    * @param editorActive {boolean} new state
-   * @param editorType {string} type of editor, optional. By default applies to "all" toggle.
+   * @param editorType {PieceType} type of editor, optional. By default applies to "all" toggle.
    */
   setEditorActive(editorActive: boolean, editorType?: PieceType) {
     const isActiveNow = this.isEditorActive(editorType);

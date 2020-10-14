@@ -51,14 +51,15 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
 
   constructor(props: IPieceProps) {
     super(props);
-    this.active = false;// TODO: Think how to do that more "react" way. This flag allows to handle events bound to PARENT node. Ideally we should not have parent node at all.
+    this.active = false;// TODO: Think how to do that more "react" way.
+    // This flag allows to handle events bound to PARENT node. Ideally we should not have parent node at all.
     this.targetDiv = props.piece.node;
   }
 
   componentDidMount() {
     imageManagerApi({
       api: this.props.api,
-      container: ReactDOM.findDOMNode(this) as HTMLElement,
+      container: this.props.wrapper,
       ref: (i: ImageManager | null) => {
         this.imageManager = i;
       },
@@ -239,6 +240,6 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
   render() {
     this.check();
     this.renderNonReactAttributes(this.piece.data);
-    return React.createElement(this.props.wrapper, {});
+    return null;
   }
 }

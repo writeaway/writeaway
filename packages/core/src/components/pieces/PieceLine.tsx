@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
-import { IPieceItemState } from 'types';
+import { IPieceItem } from 'types';
 /* eslint-disable react/no-array-index-key */
 
 export interface IPieceLineProps {
-  piece: IPieceItemState,
+  piece: IPieceItem,
   editorActive: boolean,
   source: boolean,
   prevPieceName: string,

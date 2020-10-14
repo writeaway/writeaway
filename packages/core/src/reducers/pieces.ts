@@ -1,8 +1,8 @@
 import { AnyAction, Reducer } from 'redux';
-import { IPieceControllerState, IPieceItemState, PieceType } from 'types';
+import { IPieceControllerState, IPieceItem, PieceType } from 'types';
 import C from '../constants';
 
-const piece = (pItem: IPieceItemState, action: AnyAction) => {
+const piece = (pItem: IPieceItem, action: AnyAction) => {
   switch (action.type) {
     case C.PIECE_UPDATE:
       return {
@@ -98,7 +98,7 @@ const pieces: Reducer<IPieceControllerState> = (pState: IPieceControllerState = 
       };
 
     case C.PIECE_HAS_REMOVED: {
-      const byId: { [id: string]: IPieceItemState } = { ...pState.byId, [action.id]: action.piece };
+      const byId: { [id: string]: IPieceItem } = { ...pState.byId, [action.id]: action.piece };
       delete byId[action.id];
 
       return {

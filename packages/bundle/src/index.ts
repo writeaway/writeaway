@@ -3,7 +3,7 @@ import {
   defaultPieces,
   defaultMinimumApi as BasicApi,
   WriteAwayCore,
-  IPieceItemState, IOptions,
+  IPieceItem, IOptions,
 } from '@writeaway/core';
 import 'style.less';
 import { RedaxtorSeoData, WriteAwaySeo } from '@writeaway/plugin-seo';
@@ -147,8 +147,8 @@ const writeaway = new WriteAwaySampleBundle({
         }, 100);
       }
     }),
-    getPieceData(piece: IPieceItemState) {
-      return BasicApi.getPieceData(piece, BasicApi.resolvers).then((p: IPieceItemState) => {
+    getPieceData(piece: IPieceItem) {
+      return BasicApi.getPieceData(piece, BasicApi.resolvers).then((p: IPieceItem) => {
         if (p.id === 'pieceSource2') {
           // eslint-disable-next-line no-param-reassign
           p.data.updateNode = false;
@@ -156,7 +156,7 @@ const writeaway = new WriteAwaySampleBundle({
         return p;
       });
     },
-    savePieceData(piece: IPieceItemState) {
+    savePieceData(piece: IPieceItem) {
       console.info('Saving to server', piece);
       if (piece.id === 'errorSample') {
         throw new Error('This is a sample error');
