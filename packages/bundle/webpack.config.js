@@ -24,6 +24,7 @@ const config = {
     new CopyPlugin({
       patterns: [
         { from: 'examples', to: '' },
+        { from: '../core/docs', to: 'docs' },
       ],
     }),
   ],

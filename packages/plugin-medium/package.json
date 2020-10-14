@@ -21,7 +21,7 @@
     "build:prod": "cross-env NODE_ENV=production webpack",
     "build:dev": "cross-env NODE_ENV=development webpack",
     "watch": "cross-env NODE_ENV=development webpack --watch",
-    "pre-publish": "npm run clean && npm run lint && npm run build"
+    "prepublishOnly": "npm run lint && npm run build"
   },
   "author": "SpiralScout",
   "license": "MIT",

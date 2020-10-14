@@ -21,7 +21,7 @@
     "build:prod": "cross-env NODE_ENV=production webpack",
     "build:dev": "cross-env NODE_ENV=development webpack",
     "watch": "cross-env NODE_ENV=development webpack --watch",
-    "pre-publish": "npm run clean && npm run lint && npm run build",
+    "prepublishOnly": "npm run lint && npm run typedoc && npm run build",
     "typedoc": "rimraf docs && typedoc src/types.ts src/defaults.ts src/WriteAwayCore.tsx"
   },
   "author": "SpiralScout",
