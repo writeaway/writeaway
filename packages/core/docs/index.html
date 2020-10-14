@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>@writeaway/core</title>
-	<meta name="description" content="Documentation for @writeaway/core">
+	<title>Write Away Documentation</title>
+	<meta name="description" content="Documentation for Write Away Documentation">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
 </head>
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="index.html" class="title">@writeaway/core</a>
+					<a href="index.html" class="title">Write Away Documentation</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -54,7 +54,7 @@
 					<a href="globals.html">Globals</a>
 				</li>
 			</ul>
-			<h1>@writeaway/core</h1>
+			<h1>Write Away Documentation</h1>
 		</div>
 	</div>
 </header>
@@ -108,9 +108,9 @@
     });</code></pre>
 				<p>Attach resulting bundle in bottom of the page</p>
 				<p>For styling you can either write own styles or include default to bundle <code>.less</code> file like so</p>
-				<pre><code class="language-less"><span class="hljs-keyword">@import</span> <span class="hljs-string">&quot;~@writeaway/core/src/styles/redaxtor&quot;</span>;
+				<pre><code class="language-less"><span class="hljs-keyword">@import</span> <span class="hljs-string">&quot;~@writeaway/core/src/styles/writeaway&quot;</span>;
 <span class="hljs-keyword">@import</span> <span class="hljs-string">&quot;~@writeaway/plugin-medium/src/medium-editor&quot;</span>;
-<span class="hljs-keyword">@import</span> <span class="hljs-string">&quot;~@writeaway/plugin-medium/src/redaxtor-medium&quot;</span>;
+<span class="hljs-keyword">@import</span> <span class="hljs-string">&quot;~@writeaway/plugin-medium/src/writeaway-medium&quot;</span>;
 <span class="hljs-keyword">@import</span> <span class="hljs-string">&quot;~@writeaway/plugin-seo/src/google-preview&quot;</span>;
 <span class="hljs-keyword">@import</span> <span class="hljs-string">&quot;~@writeaway/plugin-seo/src/styles&quot;</span>;</code></pre>
 				<p>Alternatively, include compiled CSS files</p>
@@ -272,147 +272,16 @@
 							<td align="left">Optional. If specified will enable image deletion functionality and will be used to delete images from gallery</td>
 						</tr>
 				</tbody></table>
-				<a href="#the-gist-static" id="the-gist-static" style="color: inherit; text-decoration: none;">
-					<h2>The Gist (Static)</h2>
+				<a href="#usage-with-spiral-framework" id="usage-with-spiral-framework" style="color: inherit; text-decoration: none;">
+					<h2>Usage with Spiral Framework</h2>
 				</a>
-				<pre><code class="language-html">    <span class="hljs-comment">&lt;!-- Include redaxtor and it&#x27;s default styles --&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;text/javascript&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;./dist/redaxtor.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/css&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;./dist/redaxtor.min.css&quot;</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;utf-8&quot;</span>&gt;</span>
-
-
-    <span class="hljs-comment">&lt;!-- Include redaxtor HTML editor and it&#x27;s default styles --&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;text/javascript&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;./dist/redaxtor-medium.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/css&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;./dist/medium-editor.min.css&quot;</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;utf-8&quot;</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/css&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;./dist/redaxtor-medium.min.css&quot;</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;utf-8&quot;</span>&gt;</span>
-
-
-    <span class="hljs-comment">&lt;!-- Include redaxtor CODE editor and it&#x27;s default styles --&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;text/javascript&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;./dist/redaxtor-codemirror.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/css&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;./node_modules/codemirror/lib/codemirror.css&quot;</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;utf-8&quot;</span>&gt;</span>
-</code></pre>
-				<pre><code class="language-javascript">
-<span class="hljs-comment">//Attach plugins to redaxtor</span>
-<span class="hljs-keyword">var</span> components = {
-    <span class="hljs-attr">html</span>: RedaxtorMedium.HTMLEditor,
-    <span class="hljs-attr">image</span>: RedaxtorMedium.IMGTagEditor,
-    <span class="hljs-attr">background</span>: RedaxtorMedium.BackgroundImageEditor,
-    <span class="hljs-attr">source</span>: RedaxtorCodemirror
-};
-
-<span class="hljs-keyword">var</span> redaxtor = <span class="hljs-keyword">new</span> WriteAwayCore({
-    <span class="hljs-attr">piecesOptions</span>: {
-        <span class="hljs-attr">components</span>: components,
-        <span class="hljs-attr">options</span>: {
-                <span class="hljs-attr">html</span>: { <span class="hljs-comment">//Pass options to HTML Editor</span>
-                    <span class="hljs-attr">pickerColors</span>: [
-                        <span class="hljs-string">&quot;#666&quot;</span>,
-                        <span class="hljs-string">&quot;#212121&quot;</span>,
-                        <span class="hljs-string">&quot;#f39c12&quot;</span>,
-                        <span class="hljs-string">&quot;#d2d064&quot;</span>,
-                        <span class="hljs-string">&quot;#4fbbf7&quot;</span>,
-                        <span class="hljs-string">&quot;#ffffff&quot;</span>
-                    ]
-                }
-            }
-    },
-    <span class="hljs-attr">piecesRoot</span>: <span class="hljs-built_in">document</span>,  <span class="hljs-comment">//Optional. Set document by default. Set root  element for pieces</span>
-    <span class="hljs-attr">enableEdit</span>: <span class="hljs-literal">true</span>, <span class="hljs-comment">//Optional. Default: false, If set enables everything editors for pieces after loading</span>
-    <span class="hljs-attr">navBarRoot</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">&#x27;.bs-docs-header .container&#x27;</span>), <span class="hljs-comment">//Optional. Default: document.body, Set place for the Redaxtor bar</span>
-    <span class="hljs-attr">navBarDraggable</span>: <span class="hljs-literal">true</span>, <span class="hljs-comment">//Optional. Default: true, If set `true` enables dragging of the redaxtor panel</span>
-    <span class="hljs-attr">navBarCollapsable</span>: <span class="hljs-literal">true</span>, <span class="hljs-comment">//Optional. Default: true, If set `true` enables collapsing of the redaxtor panel. If set `false` set the panel to the open state and disables collapsing   </span>
-    <span class="hljs-attr">api</span>: {
-        <span class="hljs-comment">/**
-        *  Method to fetch list of image urls for gallery
-         * Should resolve into array of strings - URLS
-        */</span>
-        <span class="hljs-attr">getImageList</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">resolve, reject</span>) </span>{
-                $.get({
-                    <span class="hljs-attr">url</span>: <span class="hljs-string">&quot;api/images.json&quot;</span>,
-                    <span class="hljs-attr">dataType</span>: <span class="hljs-string">&quot;json&quot;</span>
-                }).done(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>) </span>{
-                    resolve(data.data.list);<span class="hljs-comment">//</span>
-                }).fail(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">error</span>) </span>{
-                    reject(error);
-                });
-            });
-        },
-        <span class="hljs-attr">uploadImage</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-
-        },
-        <span class="hljs-comment">/**
-        * function for delete image from server
-        * <span class="hljs-doctag">@param </span>id id of image
-        * <span class="hljs-doctag">@returns <span class="hljs-type">{Promise}</span></span>
-        */</span>
-        <span class="hljs-attr">deleteImage</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">id</span>) </span>{
-            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">resolve, reject</span>) </span>{
-                resolve();
-            });
-        },
-        <span class="hljs-comment">/**
-         *  Method to specific piece data
-         * Should resolve into piece object, having all needed properties
-        */</span>
-        <span class="hljs-attr">getPieceData</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">piece</span>) </span>{                
-            <span class="hljs-keyword">if</span> (piece.type == <span class="hljs-string">&quot;source&quot;</span> || piece.type == <span class="hljs-string">&quot;html&quot;</span>) {
-                <span class="hljs-comment">/**
-                * Source and html editors expect `html` property
-                * updateNode - define that is need to update piece after change code. Default value: true
-                */</span>
-                <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.resolve({
-                    ...piece,
-                    <span class="hljs-attr">data</span>: {
-                        <span class="hljs-attr">html</span>: piece.node.innerHTML,
-                        <span class="hljs-attr">updateNode</span>: <span class="hljs-literal">true</span>
-                    }
-                });
-            }
-            <span class="hljs-keyword">if</span> (piece.type == <span class="hljs-string">&quot;image&quot;</span>) {
-                <span class="hljs-comment">/**
-                * Image editor expects `src` property with URL of image and `alt` string 
-                */</span>
-                <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.resolve({
-                    ...piece,
-                    <span class="hljs-attr">data</span>: {
-                        <span class="hljs-attr">src</span>: piece.node.src,
-                        <span class="hljs-attr">alt</span>: piece.node.alt,
-                    }
-                });
-            }
-            <span class="hljs-keyword">if</span> (piece.type == <span class="hljs-string">&quot;background&quot;</span>) {
-                <span class="hljs-comment">/**
-                * Background editor expects a set of background styling properties 
-                */</span>
-                <span class="hljs-keyword">const</span> computedStyle = getComputedStyle(piece.node);
-                <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.resolve({
-                    ...piece,
-                    <span class="hljs-attr">data</span>: {
-                        <span class="hljs-attr">url</span>: computedStyle.backgroundImage &amp;&amp; computedStyle.backgroundImage.slice(<span class="hljs-number">4</span>, <span class="hljs-number">-1</span>).replace(<span class="hljs-regexp">/&quot;/g</span>, <span class="hljs-string">&quot;&quot;</span>),
-                        <span class="hljs-attr">bgColor</span>: computedStyle.backgroundColor,
-                        <span class="hljs-attr">bgRepeat</span>: computedStyle.backgroundRepeat,
-                        <span class="hljs-attr">bgSize</span>: computedStyle.style.backgroundSize,
-                        <span class="hljs-attr">bgPosition</span>: computedStyle.style.backgroundPosition,
-                        <span class="hljs-attr">alt</span>: piece.node.title || <span class="hljs-string">&quot;&quot;</span>
-                    }
-                });
-            }
-            <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.reject()
-        },
-        <span class="hljs-comment">/**
-        * Should resolve, if piece was saved 
-        */</span>
-        <span class="hljs-attr">savePieceData</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">piece</span>) </span>{
-            <span class="hljs-built_in">console</span>.info(<span class="hljs-string">&quot;Saving to server&quot;</span>, piece);
-            <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.resolve();
-        }
-    }
-});</code></pre>
+				<p>When using with spiral framework, use <code>@writeaway/spiral-bridge</code> bundle or pre-compiled scripts</p>
+				<p><a href="/packages/spiral-bridge">See documentation here</a></p>
 				<a href="#developing-and-building" id="developing-and-building" style="color: inherit; text-decoration: none;">
 					<h2>Developing and building</h2>
 				</a>
-				<pre><code class="language-bash">npm install
-npm run build</code></pre>
+				<pre><code class="language-bash">yarn
+yarn build</code></pre>
 				<a href="#license" id="license" style="color: inherit; text-decoration: none;">
 					<h2>License</h2>
 				</a>

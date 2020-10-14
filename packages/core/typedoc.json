@@ -1,7 +1,10 @@
 {
   "out": "docs",
+  "name": "Write Away Documentation",
   "excludeExternals": true,
   "excludePrivate": true,
+  "disableSources": true,
+  "mode": "modules",
   "ignoreCompilerErrors": true,
   "toc": [
     "WriteAwayCore",
