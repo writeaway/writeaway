@@ -71,6 +71,7 @@ export const Link = (MediumEditor as any).extensions.form.extend({
   contentFA: '<i class="rx_icon rx_icon-chain"></i>',
 
   init() {
+    // eslint-disable-next-line prefer-rest-params
     (MediumEditor as any).extensions.form.prototype.init.apply(this, arguments);
 
     this.subscribe('editableKeydown', this.handleKeydown.bind(this));
@@ -127,15 +128,22 @@ export const Link = (MediumEditor as any).extensions.form.extend({
 
     template.push(
       '<a href="#" class="medium-editor-button medium-editor-toolbar-save">',
-      this.getEditorOption('buttonLabels') === 'fontawesome' ? '<i class="rx_icon rx_icon-check"></i>' : this.formSaveLabel,
+      this.getEditorOption('buttonLabels') === 'fontawesome' ? '<i class="rx_icon rx_icon-check"></i>'
+        : this.formSaveLabel,
       '</a>',
     );
 
-    template.push('<a href="#" class="medium-editor-button medium-editor-toolbar-close">',
-      this.getEditorOption('buttonLabels') === 'fontawesome' ? '<i class="rx_icon rx_icon-close"></i>' : this.formCloseLabel,
-      '</a>');
+    template.push(
+      '<a href="#" class="medium-editor-button medium-editor-toolbar-close">',
+      this.getEditorOption('buttonLabels') === 'fontawesome' ? '<i class="rx_icon rx_icon-close"></i>'
+        : this.formCloseLabel,
+      '</a>',
+    );
 
-    template.push('<a href="#" class="medium-editor-button medium medium-editor-toolbar-unlink" title="Unlink">', '<i class="rx_icon rx_icon-chain-broken"></i></a>');
+    template.push(
+      '<a href="#" class="medium-editor-button medium medium-editor-toolbar-unlink" title="Unlink">',
+      '<i class="rx_icon rx_icon-chain-broken"></i></a>',
+    );
 
     template.push('</div>'); // close tag for the <div class="medium-editor-toolbar-form-row">
 
@@ -210,14 +218,14 @@ export const Link = (MediumEditor as any).extensions.form.extend({
     this.getInput().value = '';
   },
 
-  showForm(opts: any) {
+  showForm(opt: any) {
     const input = this.getInput();
     const relInput = this.getRelInput();
     const targetCheckbox = this.getAnchorTargetCheckbox();
     const excludeCheckbox = this.getAnchorExcludeCheckbox();
     const buttonCheckbox = this.getAnchorButtonCheckbox();
     const buttonUnlink = this.getUnlink();
-    opts = opts || { url: '' };
+    let opts = opt || { url: '' };
     // TODO: This is for backwards compatability
     // We don't need to support the 'string' argument in 6.0.0
     if (typeof opts === 'string') {
@@ -276,6 +284,7 @@ export const Link = (MediumEditor as any).extensions.form.extend({
     }
 
     delete this.form;
+    return undefined;
   },
 
   // core methods
@@ -319,14 +328,24 @@ export const Link = (MediumEditor as any).extensions.form.extend({
 
   completeFormSave(opts: any) {
     this.base.restoreSelection();
-    const node = (MediumEditor as any).util.getClosestTag((MediumEditor as any).selection.getSelectedParentElement((MediumEditor as any).selection.getSelectionRange(this.document)), 'a');
-    node && this.base.selectElement(node);
+    const node = (MediumEditor as any).util.getClosestTag(
+      (MediumEditor as any).selection.getSelectedParentElement((MediumEditor as any).selection.getSelectionRange(this.document)),
+      'a',
+    );
+    if (node) {
+      this.base.selectElement(node);
+    }
 
     this.execAction(this.action, opts);
 
     // a node an be crated after exec action. MediumEditor have no options to set the rel attribute
-    const createdNode = (MediumEditor as any).util.getClosestTag((MediumEditor as any).selection.getSelectedParentElement((MediumEditor as any).selection.getSelectionRange(this.document)), 'a') || node;
-    createdNode && (createdNode.rel = opts.rel);
+    const createdNode = (MediumEditor as any).util.getClosestTag(
+      (MediumEditor as any).selection.getSelectedParentElement((MediumEditor as any).selection.getSelectionRange(this.document)),
+      'a',
+    ) || node;
+    if (createdNode) {
+      (createdNode.rel = opts.rel);
+    }
 
     this.base.checkSelection();
   },
@@ -337,6 +356,7 @@ export const Link = (MediumEditor as any).extensions.form.extend({
     // Matches common external protocols "mailto:" "tel:" "maps:"
     const urlSchemeRegex = /^([a-z]+:)?\/\/|^(mailto|tel|maps):/i;
     // var te is a regex for checking if the string is a telephone number
+    // eslint-disable-next-line
     const telRegex = /^\+?\s?\(?(?:\d\s?\-?\)?){3,20}$/;
     if (telRegex.test(value)) {
       return `tel:${value}`;
@@ -355,7 +375,7 @@ export const Link = (MediumEditor as any).extensions.form.extend({
     const close = form.querySelector('.medium-editor-toolbar-close');
     const save = form.querySelector('.medium-editor-toolbar-save');
     const input = form.querySelector(`#urlInput${this.getEditorId()}.medium-editor-toolbar-input`);
-    const relInput = form.querySelector(`#relInput${this.getEditorId()}.medium-editor-toolbar-input`);
+    // const relInput = form.querySelector(`#relInput${this.getEditorId()}.medium-editor-toolbar-input`);
     const unlink = form.querySelector('.medium-editor-toolbar-unlink');
 
     // Handle clicks on the form itself
@@ -447,10 +467,15 @@ export const Link = (MediumEditor as any).extensions.form.extend({
     this.doFormCancel();
   },
 
-  handleUnlinkClick(event: MouseEvent) {
+  handleUnlinkClick() {
     this.base.restoreSelection();
-    const node = (MediumEditor as any).util.getClosestTag((MediumEditor as any).selection.getSelectedParentElement((MediumEditor as any).selection.getSelectionRange(this.document)), 'a');
-    node && this.base.selectElement(node);
+    const node = (MediumEditor as any).util.getClosestTag(
+      (MediumEditor as any).selection.getSelectedParentElement((MediumEditor as any).selection.getSelectionRange(this.document)),
+      'a',
+    );
+    if (node) {
+      this.base.selectElement(node);
+    }
     this.execAction('unlink');
   },
 });

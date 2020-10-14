@@ -50,6 +50,8 @@ export const Gallery = (
               {api.deleteImage
               && (
                 <span
+                  role="button"
+                  tabIndex={-1}
                   className="delete-icon"
                   onClick={(e) => {
                     e.stopPropagation();
@@ -92,8 +94,8 @@ export const Gallery = (
               />
             </div>
             <div className="actions-bar" style={{ textAlign: 'center' }}>
-              <div className="button button-cancel" onClick={cancelDelete}>Cancel</div>
-              <div className="button button-save" onClick={confirmDelete}>Confirm</div>
+              <div role="button" tabIndex={-1} className="button button-cancel" onClick={cancelDelete}>Cancel</div>
+              <div role="button" tabIndex={-1} className="button button-save" onClick={confirmDelete}>Confirm</div>
             </div>
           </Popup>
         </Portal>

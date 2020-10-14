@@ -28,9 +28,6 @@ export const ColorPicker = (MediumEditor as any).extensions.button.extend({
     picker.emit('positionOnTop');
     picker.openPicker();
     picker.on('colorChosen', (color: string) => {
-      if (emptySelection) {
-
-      }
       this.base.importSelection(this.selectionState);
       this.document.execCommand('styleWithCSS', false, true);
       if (color === 'inherit') {

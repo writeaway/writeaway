@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { IPieceControllerState, IWriteAwayState } from 'types';
 
 export const PieceEditors = () => {
-  const state: IPieceControllerState = useSelector((state: IWriteAwayState) => state.pieces);
+  const state: IPieceControllerState = useSelector((s: IWriteAwayState) => s.pieces);
   return (
     <>
       { Object.keys(state.byId).map((pieceId) => (<Container id={pieceId} key={pieceId} />)) }

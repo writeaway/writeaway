@@ -2,6 +2,7 @@ import * as MediumEditor from 'medium-editor';
 
 export const ImageDrag = (MediumEditor as any).Extension.extend({
   init() {
+    // eslint-disable-next-line prefer-rest-params
     (MediumEditor as any).Extension.prototype.init.apply(this, arguments);
     this.subscribe('editableDrag', this.handleDrag.bind(this));
     this.subscribe('editableDrop', this.handleDrop.bind(this));
@@ -9,7 +10,11 @@ export const ImageDrag = (MediumEditor as any).Extension.extend({
   },
   handleDragStart(e: DragEvent) {
     const target = e.target as HTMLElement | null;
-    (target?.tagName && target.tagName.toLocaleLowerCase() === 'img') ? this.img = true : e.preventDefault();
+    if ((target?.tagName && target.tagName.toLocaleLowerCase() === 'img')) {
+      this.img = true;
+    } else {
+      e.preventDefault();
+    }
   },
   handleDrag(event: DragEvent) {
     const target = event.target as HTMLElement | null;

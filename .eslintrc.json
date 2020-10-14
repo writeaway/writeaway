@@ -16,6 +16,9 @@
     "react/sort-comp": 0,
     "import/prefer-default-export": 0,
     "import/no-named-as-default": 0,
+    "react/require-default-props": 0,
+    "jsx-a11y/label-has-associated-control": 0,
+    "jsx-a11y/control-has-associated-label": 0,
     "react/destructuring-assignment": 0,
     "max-len": ["error", 160]
   }

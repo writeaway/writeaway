@@ -2,7 +2,6 @@ import { IPieceProps, Rect } from '@writeaway/core';
 import { boundMethod } from 'autobind-decorator';
 import ImageManager from 'imageManager/ImageManager';
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import { RedaxtorImageData } from 'types';
 import _MediumEditor from './HTMLEditor';
 import i18n from './i18n';
@@ -21,10 +20,11 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
 
   static readonly label = i18n.richText.checkboxName;
 
-  static readonly applyEditor = function (node: HTMLElement, data: { html: string }) {
+  static readonly applyEditor = (node: HTMLElement, data: { html: string }) => {
     if (node) {
       const content = node.innerHTML;
       if (content !== data.html) {
+        // eslint-disable-next-line no-param-reassign
         node.innerHTML = data.html;
         return true;
       }
@@ -32,6 +32,7 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
     return false;
   };
 
+  // eslint-disable-next-line react/state-in-constructor,react/no-unused-state
   state = { codeEditorActive: false };
 
   private rect?: Rect;
@@ -216,7 +217,9 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
       pickerColors: this.props.options.pickerColors,
       i18n: i18n.medium,
       onEditorActive: (active: boolean) => {
-        this.props.actions.onEditorActive && this.props.actions.onEditorActive(this.props.piece.id, active);
+        if (this.props.actions.onEditorActive) {
+          this.props.actions.onEditorActive(this.props.piece.id, active);
+        }
       },
     });
     this.piece.node.addEventListener('click', this.onClick);
@@ -285,7 +288,6 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
 
   componentWillUnmount() {
     this.destroyEditor();
-    console.log(`Medium editor ${this.piece.id} unmounted`);
   }
 
   componentDidUpdate() {
@@ -297,7 +299,9 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
     const rect = nodeRect.hover || nodeRect.node;
     if (this.changedBoundingRect(rect)) {
       this.setBoundingRect(rect);
-      this.props.actions.onNodeResized && this.props.actions.onNodeResized(this.piece.id);
+      if (this.props.actions.onNodeResized) {
+        this.props.actions.onNodeResized(this.piece.id);
+      }
     }
   }
 

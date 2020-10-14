@@ -1,60 +1,6 @@
 import { boundMethod } from 'autobind-decorator';
+import { HistoryManager } from 'HistoryManager';
 import MediumEditor from './mediumEditor';
-
-export class HistoryManager {
-  private history: any[];
-
-  private historyIndex: number;
-
-  public applied: boolean;
-
-  public startState: any;
-
-  constructor(start: any) {
-    this.history = [];
-    this.historyIndex = -1;
-    this.applied = false;
-    this.startState = start;
-  }
-
-  registerChange(content: any) {
-    if (this.historyIndex >= 0 && this.history[this.historyIndex].html == content.html) {
-      // console.log("Skipped pushing");
-      return; // Don't register same text as current history position
-    }
-
-    if (this.historyIndex < this.history.length - 1) {
-      // console.log("Deleting from ", this.historyIndex + 1);
-      this.history.splice(this.historyIndex + 1);
-    }
-
-    this.history.push(content);
-    this.historyIndex = this.history.length - 1;
-    // console.log("Pushed ", this.history[this.historyIndex]);
-  }
-
-  undo() {
-    this.applied = true;
-    if (this.historyIndex > 0) {
-      this.historyIndex--;
-      // console.log("Undo from history", this.historyIndex, this.history[this.historyIndex], this.history);
-      return this.history[this.historyIndex];
-    }
-    this.historyIndex = -1;
-    // console.log("Undo from initial state", this.historyIndex, this.startState);
-    return this.startState;
-  }
-
-  redo() {
-    if (this.historyIndex < this.history.length - 1) {
-      this.historyIndex++;
-      this.applied = true;
-      // console.log("Redo from history", this.historyIndex, this.history[this.historyIndex], this.history);
-      return this.history[this.historyIndex];
-    }
-    return void 0;
-  }
-}
 
 export class HTMLEditor {
   private historyManager: HistoryManager;
@@ -65,6 +11,7 @@ export class HTMLEditor {
 
   private savedContent: any;
 
+  // eslint-disable-next-line no-undef
   private blurTimeout?: NodeJS.Timeout;
 
   private onNeedResizeCheckBinded: any;
@@ -73,6 +20,7 @@ export class HTMLEditor {
 
   private onChangeDebounced!: () => void;
 
+  // eslint-disable-next-line no-undef
   private onChangeDebounceTimer?: NodeJS.Timeout;
 
   constructor(node: HTMLElement, options: any) {
@@ -267,17 +215,28 @@ export class HTMLEditor {
         sticky: true,
       },
       extensions: {
+        // eslint-disable-next-line new-cap
         imageDragging: new MediumEditor.extensions.imageDrag(),
         // imageResize: new MediumEditor.extensions.imageResize(),
+        // eslint-disable-next-line new-cap
         redo: new MediumEditor.extensions.redoButton(),
+        // eslint-disable-next-line new-cap
         undo: new MediumEditor.extensions.undoButton(),
+        // eslint-disable-next-line new-cap
         reset: new MediumEditor.extensions.resetButton(),
+        // eslint-disable-next-line new-cap
         save: new MediumEditor.extensions.saveButton(),
+        // eslint-disable-next-line new-cap
         source: new MediumEditor.extensions.sourceButton(),
+        // eslint-disable-next-line new-cap
         imageInsert: new MediumEditor.extensions.imageInsertButton(),
+        // eslint-disable-next-line new-cap
         link: new MediumEditor.extensions.link(),
+        // eslint-disable-next-line new-cap
         separator: new MediumEditor.extensions.toolbarSeparator(),
+        // eslint-disable-next-line new-cap
         newLineSeparator: new MediumEditor.extensions.toolbarNewLineSeparator(),
+        // eslint-disable-next-line new-cap
         colorPicker: new MediumEditor.extensions.colorPicker({
           pickerColors: options.pickerColors,
         }),
@@ -299,6 +258,7 @@ export class HTMLEditor {
     this.editor = new MediumEditor(node, this.options);
     this.savedContent = null;
     if (!this.editor.elements[0]) {
+      // eslint-disable-next-line no-console
       console.error('Could not create MediumEditor on node for unknown reason ', node);
       return;
     }
@@ -324,21 +284,31 @@ export class HTMLEditor {
     });
     // Add separator class on li node
     const toolbarSeparators = this.editor.getExtensionByName('toolbar').toolbar.getElementsByClassName('separator');
+    // eslint-disable-next-line no-restricted-syntax
     for (const index in toolbarSeparators) {
-      toolbarSeparators[index].parentNode && toolbarSeparators[index].parentNode.classList.add('separator');
+      if (toolbarSeparators[index].parentNode) {
+        toolbarSeparators[index].parentNode.classList.add('separator');
+      }
     }
     // Add new-line  and new-line class on li node
     const toolbarNewLineSeparators = this.editor.getExtensionByName('toolbar').toolbar.getElementsByClassName('newLineSeparator');
+    // eslint-disable-next-line no-restricted-syntax
     for (const index in toolbarNewLineSeparators) {
-      toolbarNewLineSeparators[index].parentNode && toolbarNewLineSeparators[index].parentNode.classList.add('new-line');
+      if (toolbarNewLineSeparators[index].parentNode) {
+        toolbarNewLineSeparators[index].parentNode.classList.add('new-line');
+      }
     }
 
     // pull right buttons
     Array.from(this.editor.getExtensionByName('toolbar').toolbar.getElementsByClassName('save-button')).forEach((element: any) => {
-      element.parentNode && element.parentNode.classList.add('pull-right');
+      if (element.parentNode) {
+        element.parentNode.classList.add('pull-right');
+      }
     });
     Array.from(this.editor.getExtensionByName('toolbar').toolbar.getElementsByClassName('reset-button')).forEach((element: any) => {
-      element.parentNode && element.parentNode.classList.add('pull-right');
+      if (element.parentNode) {
+        element.parentNode.classList.add('pull-right');
+      }
     });
   }
 
@@ -368,7 +338,7 @@ export class HTMLEditor {
   }
 
   needSave() {
-    return this.getEditorContent() != this.startHTML;
+    return this.getEditorContent() !== this.startHTML;
   }
 
   @boundMethod
@@ -378,22 +348,30 @@ export class HTMLEditor {
     }
 
     this.updatePiece();
-    this.options.onSave && this.options.onSave();
+    if (this.options.onSave) {
+      this.options.onSave();
+    }
     this.startHTML = this.getEditorContent();
   }
 
   @boundMethod
   setCurrentSourcePieceId() {
-    this.options.onSetCurrentSourcePieceId && this.options.onSetCurrentSourcePieceId();
+    if (this.options.onSetCurrentSourcePieceId) {
+      this.options.onSetCurrentSourcePieceId();
+    }
   }
 
   @boundMethod
   onFocus() {
-    this.options.onFocus && this.options.onFocus();
+    if (this.options.onFocus) {
+      this.options.onFocus();
+    }
     if (this.blurTimeout) {
       clearTimeout(this.blurTimeout);
     }
-    this.options.onEditorActive && this.options.onEditorActive(true);
+    if (this.options.onEditorActive) {
+      this.options.onEditorActive(true);
+    }
   }
 
   @boundMethod
@@ -404,21 +382,28 @@ export class HTMLEditor {
     this.updatePiece();
 
     /**
-     * Let blur event to settle before calling onLeave. If blur was produced by editor button click it will be followed by focus soon and we don't really need to react on it
+     * Let blur event to settle before calling onLeave.
+     * If blur was produced by editor button click it will be followed by focus soon and we don't really need to react on it
      */
     this.blurTimeout = setTimeout(() => {
       if (this.needSave()) {
-        this.options.onLeave && this.options.onLeave(() => {
-          /**
-           * This callback happens on data reset
-           */
-          this.editor && this.editor.setContent(this.startHTML);
-          this.updatePiece();
-        });
-      } else {
-        this.options.onLeave && this.options.onLeave();
+        if (this.options.onLeave) {
+          this.options.onLeave(() => {
+            /**
+             * This callback happens on data reset
+             */
+            if (this.editor) {
+              this.editor.setContent(this.startHTML);
+            }
+            this.updatePiece();
+          });
+        }
+      } else if (this.options.onLeave) {
+        this.options.onLeave();
       }
-      this.options.onEditorActive && this.options.onEditorActive(false);
+      if (this.options.onEditorActive) {
+        this.options.onEditorActive(false);
+      }
     }, 100);
   }
 
@@ -432,51 +417,10 @@ export class HTMLEditor {
 
   updatePiece() {
     if (this.needSave()) {
-      this.fixStyles();
-      this.options.onUpdate && this.options.onUpdate();
+      if (this.options.onUpdate) {
+        this.options.onUpdate();
+      }
     }
-  }
-
-  fixStyles() {
-
-    /*
-    const convertRgbToHex = (value) => (`0${parseInt(value).toString(16)}`).slice(-2);
-
-    // insert inline styles
-    const checkedStyleAttributes = ['font-family', 'font-size', 'font-weight', 'font-style', 'margin-top', 'margin-bottom', 'line-height', 'color'];
-    const editDomString = this.editor.getContent();
-
-    const domList = [].slice.call(this.editor.elements[0].children).filter((value) => value.nodeType !== 3); // it isn't text node
-
-    const rootNode = document.createElement('div');
-    rootNode.innerHTML = editDomString;
-    [].slice.call(rootNode.childNodes).filter((value) => value.nodeType !== 3) // it isn't text node
-      .forEach((node, nodeIndex) => {
-        // fill inline styles
-        const ownStyle = node.style;
-        ownStyle && checkedStyleAttributes.forEach((attribute) => {
-          if (!ownStyle[attribute]) {
-            const computedStyle = window.getComputedStyle(domList[nodeIndex]); // take style from real element in DOM
-            node.style[attribute] = computedStyle[attribute];
-          }
-        });
-
-        // convert color rgb -> hex
-        if (node.style && node.style.color) {
-          // parses rgb / rgba
-          const rgbData = /rgba?\((\d*),\s?(\d*),\s?(\d*)\)/gi.exec(node.style.color);
-          // if it is correct then converts
-          if (rgbData) {
-            // !!! NOTE if use <element>.style.color = '#ffffff' or <element>.style.cssText = <some css string> than color converted to 'rgb(255,255,255)' automatically
-            const hexColor = `#${convertRgbToHex(rgbData[1])}${convertRgbToHex(rgbData[2])}${convertRgbToHex(rgbData[3])}`;
-            let inlineStyle = node.style.cssText;
-            inlineStyle = inlineStyle.replace(node.style.color, hexColor);
-            node.setAttribute('style', inlineStyle);
-          }
-        }
-      });
-
-    this.editor.setContent(editDomString); */
   }
 
   destroy() {

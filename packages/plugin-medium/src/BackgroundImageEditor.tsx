@@ -1,8 +1,7 @@
 import { IPieceProps } from '@writeaway/core';
 import { boundMethod } from 'autobind-decorator';
 import ImageManager from 'imageManager/ImageManager';
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import { Component } from 'react';
 import { RedaxtorImageData } from 'types';
 import { imageManagerApi } from './imageManager/index';
 
@@ -21,19 +20,26 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
 
   static readonly label = 'Backgrounds';
 
-  static readonly applyEditor = function (node: HTMLElement, data: RedaxtorImageData) {
+  static readonly applyEditor = (node: HTMLElement, data: RedaxtorImageData) => {
     if (!node) {
       return;
     }
+    // eslint-disable-next-line no-param-reassign
     node.style.backgroundImage = `url(${data.src})`;
+    // eslint-disable-next-line no-param-reassign
     node.style.backgroundSize = data.bgSize || '';
+    // eslint-disable-next-line no-param-reassign
     node.style.backgroundRepeat = data.bgRepeat || '';
+    // eslint-disable-next-line no-param-reassign
     node.style.backgroundPosition = data.bgPosition || '';
+    // eslint-disable-next-line no-param-reassign
     node.style.backgroundColor = data.bgColor || '';
+    // eslint-disable-next-line no-param-reassign
     node.title = data.title || '';
   };
 
-  state: RedaxtorBackgroundEditorState = {};
+  // eslint-disable-next-line react/state-in-constructor
+  state: RedaxtorBackgroundEditorState;
 
   private active: boolean;
 
@@ -54,6 +60,7 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
     this.active = false;// TODO: Think how to do that more "react" way.
     // This flag allows to handle events bound to PARENT node. Ideally we should not have parent node at all.
     this.targetDiv = props.piece.node;
+    this.state = {};
   }
 
   componentDidMount() {
@@ -82,7 +89,7 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
     }
   }
 
-  componentWillReceiveProps(newProps: IPieceProps) {
+  UNSAFE_componentWillReceiveProps(newProps: IPieceProps) {
     if (newProps.piece.manualActivation) {
       this.actions.onManualActivation(this.piece.id);
       this.activateEditor();
@@ -156,9 +163,12 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
     }
   }
 
-  findRedaxtor(_el: Element) {
-    let el: Element | null = _el;
-    while (el && el.tagName.toLowerCase() != 'redaxtor' && (!el.className || (el.className.indexOf('r_modal-overlay') == -1 && el.className.indexOf('r_bar') == -1))) {
+  // eslint-disable-next-line class-methods-use-this
+  findRedaxtor(l: Element) {
+    let el: Element | null = l;
+    while (el && el.tagName.toLowerCase() !== 'redaxtor'
+    && (!el.className || (el.className.indexOf('r_modal-overlay') === -1
+      && el.className.indexOf('r_bar') === -1))) {
       el = el.parentElement;
     }
     return el;
@@ -234,7 +244,6 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
 
   componentWillUnmount() {
     this.die();
-    console.log(`Background editor ${this.piece.id} unmounted`);
   }
 
   render() {

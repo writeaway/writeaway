@@ -14,6 +14,7 @@ import './extensions/ColorPicker';
 
 const editor = MediumEditor as any;
 
+// eslint-disable-next-line func-names
 editor.extensions.toolbar.prototype.positionStaticToolbar = function (container: HTMLElement) {
   // position the toolbar at left 0, so we can get the real width of the toolbar
   this.getToolbarElement().style.left = '0';
@@ -22,6 +23,7 @@ editor.extensions.toolbar.prototype.positionStaticToolbar = function (container:
   const scrollTop = (this.document.documentElement && this.document.documentElement.scrollTop) || this.document.body.scrollTop;
   const windowWidth = this.window.innerWidth;
   const toolbarElement = this.getToolbarElement();
+  // eslint-disable-next-line no-underscore-dangle
   const containerRect = this.base.options.__getBoundingRect();
   const containerTop = containerRect.top + scrollTop;
   const containerHeight = containerRect.height;

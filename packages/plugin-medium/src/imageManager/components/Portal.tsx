@@ -22,6 +22,7 @@ export class Portal extends Component<any> {
   }
 
   componentDidUpdate() {
+    // eslint-disable-next-line react/jsx-props-no-spreading
     ReactDOM.render((<div {...this.props}>{this.props.children}</div>) as any, this.portalElement!);
   }
 }

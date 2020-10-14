@@ -52,14 +52,14 @@ function BackgroundInputs(
 ) {
   return (
     <div className="sizes item-form">
-      <label>Customize Background Tiling &amp; Fitting</label>
+      <label htmlFor="fake">Customize Background Tiling &amp; Fitting</label>
       <div className="input-container">
         <select
           name="background-size"
           value={bgSize}
           onChange={onChangeSize}
         >
-          <option value="">Don't Resize</option>
+          <option value="">Don&apos;t Resize</option>
           <option value="cover">Resize to Fill</option>
           <option value="contain">Resize to Fit</option>
         </select>
@@ -109,7 +109,7 @@ function BackgroundColor(
 ) {
   return (
     <div className="sizes item-form">
-      <label>Specify Background Color</label>
+      <label htmlFor="fake">Specify Background Color</label>
       <div className="input-container">
         <input
           ref={colorInput}
@@ -148,7 +148,7 @@ function ImageDimensions({
 }) {
   return (
     <div className="sizes item-form">
-      <label>Customize Image Dimensions</label>
+      <label htmlFor="fake">Customize Image Dimensions</label>
       <div className="input-container">
         <input
           onChange={onChange}
@@ -173,13 +173,14 @@ function ImageDimensions({
         tabIndex={-1}
       >
         <RxCheckBox checked={checked} />
-        <label>Constrain proportions</label>
+        <label htmlFor="fake">Constrain proportions</label>
       </div>
     </div>
   );
 }
 
 export default class ImageManager extends Component<ImageManagerProps, ImageManagerState> {
+  // eslint-disable-next-line react/state-in-constructor
   state: ImageManagerState = {
     isVisible: false,
     settings: {
@@ -203,18 +204,19 @@ export default class ImageManager extends Component<ImageManagerProps, ImageMana
   }
 
   updateImageList() {
-    this.props.api
-    && this.state.pieceRef
-    && this.props.api.getImageList
-    && this.props.api.getImageList(this.state.pieceRef).then(
-      (list: Array<GalleryItem>) => {
-        this.setState({ gallery: list });
-      },
-    );
+    if (this.props.api
+      && this.state.pieceRef
+      && this.props.api.getImageList) {
+      this.props.api.getImageList(this.state.pieceRef).then(
+        (list: Array<GalleryItem>) => {
+          this.setState({ gallery: list });
+        },
+      );
+    }
   }
 
   toggleImagePopup() {
-    this.setState({ isVisible: !this.state.isVisible });
+    this.setState((s) => ({ isVisible: !s.isVisible }));
   }
 
   @boundMethod
@@ -262,12 +264,16 @@ export default class ImageManager extends Component<ImageManagerProps, ImageMana
   getImageSize(imageData: RedaxtorImageData, getOriginalSizeOnly: boolean = false) {
     // if is image from gallery
     if (imageData.width && imageData.height) {
-      !getOriginalSizeOnly && this.updateData({ width: imageData.width, height: imageData.height });
+      if (!getOriginalSizeOnly) {
+        this.updateData({ width: imageData.width, height: imageData.height });
+      }
       this.updateData({ originalWidth: imageData.width, originalHeight: imageData.height });
     } else {
       const img = new Image();
       img.onload = () => {
-        !getOriginalSizeOnly && this.updateData({ width: img.width, height: img.height });
+        if (!getOriginalSizeOnly) {
+          this.updateData({ width: img.width, height: img.height });
+        }
         this.updateData({ originalWidth: img.width, originalHeight: img.height });
       };
       img.src = imageData.src || '';
@@ -293,7 +299,7 @@ export default class ImageManager extends Component<ImageManagerProps, ImageMana
   }
 
   @boundMethod
-  pickBgColor(e: React.MouseEvent<HTMLElement>) {
+  pickBgColor(/* e: React.MouseEvent<HTMLElement> */) {
     this.attachPickerAndInvoke();
   }
 
@@ -341,6 +347,7 @@ export default class ImageManager extends Component<ImageManagerProps, ImageMana
 
   @boundMethod
   onWidthChange(e: React.ChangeEvent<HTMLInputElement>) {
+    // eslint-disable-next-line no-restricted-globals
     if (e.target.value && !isNaN(Number(e.target.value))) {
       const newWidth: number = +e.target.value;
       this.updateData({ width: newWidth });
@@ -352,6 +359,7 @@ export default class ImageManager extends Component<ImageManagerProps, ImageMana
 
   @boundMethod
   onHeightChange(e: React.ChangeEvent<HTMLInputElement>) {
+    // eslint-disable-next-line no-restricted-globals
     if (e.target.value && !isNaN(Number(e.target.value))) {
       const newHeight = +e.target.value;
       this.updateData({ height: newHeight });
@@ -398,7 +406,7 @@ export default class ImageManager extends Component<ImageManagerProps, ImageMana
   }
 
   setImageData(data: Partial<ImageManagerState>) {
-    this.setState({ ...this.state, ...data });
+    this.setState((s) => ({ ...s, ...data }));
     if (data.data?.src) {
       this.getImageSize(data.data, !!data.data.width);
     }
@@ -418,9 +426,10 @@ export default class ImageManager extends Component<ImageManagerProps, ImageMana
           id: r.id,
         } as GalleryItem));
         this.onUrlChange(newImageData[0]);
-        this.setState({ uploading: false, uploadError: undefined, gallery: [...this.state.gallery, ...newImageData] });
+        this.setState((s) => ({ uploading: false, uploadError: undefined, gallery: [...s.gallery, ...newImageData] }));
       }).catch((e: Error) => {
         this.setState({ uploading: false, uploadError: 'Failed to Upload, Sorry' });
+        // eslint-disable-next-line no-console
         console.error(e);
       });
     }
@@ -467,7 +476,7 @@ export default class ImageManager extends Component<ImageManagerProps, ImageMana
         {this.state.isVisible && (
           <Popup>
             <div className="r_modal-title">
-              <div className="r_modal-close" onClick={this.onClose}>
+              <div role="button" tabIndex={-1} className="r_modal-close" onClick={this.onClose}>
                 <i className="rx_icon rx_icon-close">&nbsp;</i>
               </div>
               <span>Insert Image</span>
@@ -486,7 +495,9 @@ export default class ImageManager extends Component<ImageManagerProps, ImageMana
                 && (
                   <div className="item-form">
                     <label
-                      title="The term ALT tag is a common shorthand term used to refer to the ALT attribute within in the IMG tag. Any time you use an image, be sure to include an ALT tag or ALT text within the IMG tag. Doing so will provide a clear text alternative of the image for screen reader users. If you have an image that’s used as a button to buy product X, the alt text would say: “button to buy product X”"
+                      title="The term ALT tag is a common shorthand term used to refer to the ALT attribute within in the IMG tag.
+Any time you use an image, be sure to include an ALT tag or ALT text within the IMG tag. Doing so will provide a clear text alternative
+of the image for screen reader users. If you have an image that’s used as a button to buy product X, the alt text would say: “button to buy product X”"
                     >
                       Add
                       Image Alt Tag
@@ -515,8 +526,8 @@ export default class ImageManager extends Component<ImageManagerProps, ImageMana
                     height={data?.height}
                     width={data?.width}
                     onChangeHeight={this.onHeightChange}
-                    onClick={(e) => {
-                      this.setState({ proportions: !this.state.proportions });
+                    onClick={(/* e */) => {
+                      this.setState((s) => ({ proportions: !s.proportions }));
                     }}
                     checked={this.state.proportions}
                   />
@@ -560,7 +571,9 @@ export default class ImageManager extends Component<ImageManagerProps, ImageMana
                       className="upload"
                       title="Choose a file to upload"
                       onChange={(e) => {
-                        e.target.files && this.sendFile(e.target.files);
+                        if (e.target.files) {
+                          this.sendFile(e.target.files);
+                        }
                       }}
                     />
                   )}
@@ -573,7 +586,7 @@ export default class ImageManager extends Component<ImageManagerProps, ImageMana
             </div>
 
             <div className="r_modal-actions-bar r_modal-actions-bar-im">
-              <div className="button button-save" onClick={this.onSave}>Save</div>
+              <div role="button" tabIndex={-1} className="button button-save" onClick={this.onSave}>Save</div>
             </div>
 
             {

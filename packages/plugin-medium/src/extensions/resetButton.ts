@@ -15,7 +15,9 @@ export const ResetButton = (MediumEditor as any).Extension.extend({
     return this.button;
   },
   handleClick() {
-    (this.base.getContent() !== this.resetToHTML) && (this.base.setContent(this.resetToHTML));
+    if ((this.base.getContent() !== this.resetToHTML)) {
+      (this.base.setContent(this.resetToHTML));
+    }
   },
   destroy() {
     this.off(this.button, 'click', this.handleClickBinded);

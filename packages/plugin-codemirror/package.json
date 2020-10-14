@@ -26,7 +26,7 @@
   "author": "SpiralScout",
   "license": "MIT",
   "peerDependencies": {
-    "@writeaway/core": "2.0.0",
+    "@writeaway/core": "2.0.2",
     "autobind-decorator": "^2.4.0",
     "classnames": "^2.2.6",
     "js-beautify": "^1.13.0",

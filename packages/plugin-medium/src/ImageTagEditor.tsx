@@ -1,7 +1,6 @@
 import { boundMethod } from 'autobind-decorator';
 import ImageManager from 'imageManager/ImageManager';
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import type { IPieceProps, Rect } from '@writeaway/core';
 import { RedaxtorImageTagData } from 'types';
 import { imageManagerApi } from './imageManager/index';
@@ -205,6 +204,7 @@ export default class RedaxtorImageTag extends Component<IPieceProps> {
 
   componentWillUnmount() {
     this.die();
+    // eslint-disable-next-line no-console
     console.log(`Image editor ${this.piece.id} unmounted`);
   }
 
@@ -223,7 +223,9 @@ export default class RedaxtorImageTag extends Component<IPieceProps> {
     const rect = nodeRect.hover || nodeRect.node;
     if (this.changedBoundingRect(rect)) { // TODO was checking 'this.nodeWasUpdated' here that is never changed anywhere
       this.setBoundingRect(rect);
-      this.props.actions.onNodeResized && this.props.actions.onNodeResized(this.piece.id); // TODO: onNodeResized is never used anywhere
+      if (this.props.actions.onNodeResized) {
+        this.props.actions.onNodeResized(this.piece.id);
+      }
     }
   }
 

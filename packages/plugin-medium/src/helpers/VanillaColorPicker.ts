@@ -11,6 +11,7 @@
 //
 // Edited by SpiralScout
 
+// eslint-disable-next-line max-classes-per-file
 import { boundMethod } from 'autobind-decorator';
 
 function singleColorTpl(color: string, index: number, picked: boolean, noColor?: string) {
@@ -34,6 +35,7 @@ class MessageMediator {
 
   emit(eventName: string, ...args: any[]) {
     (this.subscribers[eventName] || []).forEach((callback: Function) => {
+      // eslint-disable-next-line prefer-spread
       callback.apply(null, args);
     });
   }
@@ -113,8 +115,8 @@ export class SinglePicker extends MessageMediator {
 
     const currentlyChosenColorIndex = this.colors.indexOf(this.targetElem.dataset.vanillaPickerColor!);
 
-    for (let i = 0; i < this.colors.length; i++) {
-      this.elem.innerHTML += singleColorTpl(this.colors[i], i + 1, i == currentlyChosenColorIndex, this.noColor);
+    for (let i = 0; i < this.colors.length; i += 1) {
+      this.elem.innerHTML += singleColorTpl(this.colors[i], i + 1, i === currentlyChosenColorIndex, this.noColor);
     }
     this.targetElem.parentNode!.parentNode!.appendChild(this.elem);
     this.elem.setAttribute('tabindex', '1');
@@ -142,10 +144,10 @@ export class SinglePicker extends MessageMediator {
       const ESC = 27;
       const keyCode = e.which || e.keyCode;
       const target = e.target as HTMLElement;
-      if (keyCode == ENTER) {
+      if (keyCode === ENTER) {
         this.emit('colorChosen', target.dataset.color);
       }
-      if (keyCode == ESC) {
+      if (keyCode === ESC) {
         this.emit('lostFocus');
       }
     });
