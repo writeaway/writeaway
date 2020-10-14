@@ -1,6 +1,6 @@
 {
   "name": "@writeaway/plugin-seo",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Redaxtor is a JavaScript library for editing CMS pieces, pages and internationalisation on the client side.",
   "main": "./dist/plugin-seo.js",
   "types": "./dist/index.d.ts",
