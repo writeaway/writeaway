@@ -1,6 +1,7 @@
 import { GetIWriteAwayState } from 'types';
+import { REDUCER_KEY } from '../constants';
 
-export const selectWA = (getter: GetIWriteAwayState) => getter()['@writeaway'];
+export const selectWA = (getter: GetIWriteAwayState) => getter()[REDUCER_KEY];
 
 export const selectPieces = (getter: GetIWriteAwayState) => selectWA(getter).pieces;
 

@@ -2,8 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import {
-  IPieceItem, IWriteAwayState, Dispatch, IOptions, IComponent, PieceActions, IWriteAwayStateExtension,
+  IPieceItem, Dispatch, IOptions, IComponent, PieceActions, IWriteAwayStateExtension,
 } from 'types';
+import { REDUCER_KEY } from '../constants';
 import {
   updatePiece,
   onEditorActive,
@@ -50,13 +51,13 @@ const PieceContainer = <T extends object = any>(props: PieceProps<T>) => {
 };
 
 const mapStateToProps = (state: IWriteAwayStateExtension, ownProps: { id: string }) => ({
-  piece: state['@writeaway'].pieces.byId[ownProps.id],
-  highlight: state['@writeaway'].pieces.highlight,
-  expert: state['@writeaway'].global.expert,
-  config: state['@writeaway'].config,
-  editorActive: !state['@writeaway'].pieces.byId[ownProps.id].destroy
-    && state['@writeaway'].pieces.editorActive
-    && (state['@writeaway'].pieces.editorEnabled[state['@writeaway'].pieces.byId[ownProps.id].type] ?? true),
+  piece: state[REDUCER_KEY as '@writeaway'].pieces.byId[ownProps.id],
+  highlight: state[REDUCER_KEY as '@writeaway'].pieces.highlight,
+  expert: state[REDUCER_KEY as '@writeaway'].global.expert,
+  config: state[REDUCER_KEY as '@writeaway'].config,
+  editorActive: !state[REDUCER_KEY as '@writeaway'].pieces.byId[ownProps.id].destroy
+    && state[REDUCER_KEY as '@writeaway'].pieces.editorActive
+    && (state[REDUCER_KEY as '@writeaway'].pieces.editorEnabled[state[REDUCER_KEY as '@writeaway'].pieces.byId[ownProps.id].type] ?? true),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

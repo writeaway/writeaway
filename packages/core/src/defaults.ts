@@ -15,6 +15,7 @@ import {
   PieceType,
   IPiecesAPI, IPiecesOptions, IWriteAwayStateExtension, IToastrStateExtension,
 } from 'types';
+import { REDUCER_KEY } from './constants';
 
 export const defaultPieces: IPiecesOptions = {
   nameGroupSeparator: ',',
@@ -114,7 +115,7 @@ export const defaultState: IWriteAwayState = {
 };
 
 export const defaultWrappedState: IWriteAwayStateExtension & IToastrStateExtension = {
-  '@writeaway': defaultState,
+  [REDUCER_KEY]: defaultState,
   toastr: undefined as any,
 };
 

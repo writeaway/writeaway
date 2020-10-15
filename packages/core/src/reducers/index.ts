@@ -3,7 +3,7 @@ import { reducer as toastr } from 'react-redux-toastr';
 import { IGlobalState, IOptions } from 'types';
 import { defaultGlobalState, defaultOptions } from '../defaults';
 
-import C from '../constants';
+import C, { REDUCER_KEY } from '../constants';
 import pieces from './pieces';
 
 const global: Reducer<IGlobalState> = (state: IGlobalState = defaultGlobalState, action: AnyAction) => {
@@ -29,7 +29,7 @@ export const writeAwayReducers = combineReducers({
 });
 
 const defaultReducers = combineReducers({
-  toastr, '@writeaway': writeAwayReducers,
+  toastr, [REDUCER_KEY]: writeAwayReducers,
 });
 
 export default defaultReducers;

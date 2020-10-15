@@ -24,8 +24,9 @@ import {
   PieceType,
   Rect,
   IPiecesAPI,
-  IPieceControllerState, Dispatch, Store, BarOptions, IWriteAwayStateExtension, IToastrStateExtension,
+  IPieceControllerState, Dispatch, Store, BarOptions, IWriteAwayStateExtension, IToastrStateExtension, INavBarProps,
 } from 'types';
+import { REDUCER_KEY } from './constants';
 import { piecesToggleNavBar, setExpert } from './actions';
 import {
   addPiece,
@@ -101,7 +102,7 @@ export class WriteAwayCore {
       reducers,
       {
         ...defaultWrappedState,
-        '@writeaway': state,
+        [REDUCER_KEY]: state,
       },
       composeEnhancers(
         applyMiddleware(thunk as ThunkMiddleware),
@@ -166,7 +167,7 @@ export class WriteAwayCore {
   }
 
   get state(): IWriteAwayState {
-    return this.store.getState()['@writeaway'];
+    return this.store.getState()[REDUCER_KEY as '@writeaway'];
   }
 
   get pieces() {
@@ -243,11 +244,12 @@ export class WriteAwayCore {
    */
   private showBar(options: BarOptions) {
     this.barNode = document.createElement('DIV');
+    this.barNode.classList.add('writeaway-navbar');
     ReactDOM.render(
       <Provider store={this.store}>
         <div>
           <RedaxtorContainer
-            options={options}
+            options={options as INavBarProps}
           />
           <ReduxToastr
             className="r_toast-container"
@@ -265,12 +267,10 @@ export class WriteAwayCore {
    * Renders tbe hover overlay
    */
   private showHoverOverlay(root: HTMLElement) {
-    this.overlayNode = document.createElement('redaxtor-overlay');
+    this.overlayNode = document.createElement('div');
     ReactDOM.render(
       <Provider store={this.store}>
-        <div>
-          <HoverOverlay components={this.options.piecesOptions.components} />
-        </div>
+        <HoverOverlay />
       </Provider>,
       this.overlayNode,
     );
@@ -448,7 +448,8 @@ export class WriteAwayCore {
   }
 
   private renderPieceEditors(container: HTMLElement) {
-    const div = document.createElement('redaxtor-editors');
+    const div = document.createElement('div');
+    div.classList.add('writeaway-editors');
     container.appendChild(div);
     ReactDOM.render(
       <Provider store={this.store}>

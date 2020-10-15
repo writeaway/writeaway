@@ -82,7 +82,7 @@ export const HoverOverlay = ({
   const overlayClass = `r_pointer-div ${className}`;
 
   return (
-    <div className="r_reset">
+    <div className="redaxtor-overlay r_reset">
       <div className={classNames({ r_overlay: true, 'r_active-editor': triggeredByActionId })}>
         <div className={overlayClass} style={style}>
           {!triggeredByActionId

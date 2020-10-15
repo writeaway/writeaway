@@ -1,5 +1,5 @@
 import { selectGlobal } from 'helpers/selectors';
-import { Dispatch, GetIWriteAwayState } from 'types';
+import { Dispatch, GetIWriteAwayState, IComponent, PieceType } from 'types';
 import C from '../constants';
 
 export const showMessage = (messageObject?: {content: string, type: string}) => ({ type: C.GLOBAL_SHOW_MESSAGE, message: messageObject });
@@ -18,3 +18,5 @@ export const piecesToggleNavBar = () => (dispatch: Dispatch, getState: GetIWrite
     dispatch(navBarCollapse());
   }
 };
+
+export const attachComponent = (type: PieceType, component: IComponent) => ({ type: C.EXPERT_MODE, payload: { component, type } });

@@ -52,6 +52,19 @@ export interface GalleryItem {
  */
 export interface IPiecesAPI {
   /**
+   * Subscribe to piece updates coming from external source, i.e. websockets
+   * @param fn - subscription function
+   * Should return an unsubscribe function
+   */
+  subscribe?: (fn: (piece: IPieceItem)=>boolean) => ()=>void;
+  /**
+   * Resolve conflicts between current in-state piece data and data coming from external source
+   * Should resolve as data that needs to be applied
+   * @param current - current state of piece
+   * @param external - external state of piece
+   */
+  resolveConflict?: (current: IPieceItem, external: IPieceItem)=>IPieceItem
+  /**
    * Resolve piece data from server or other source
    */
   getPieceData: PieceDataResolver,
@@ -90,7 +103,7 @@ export type PieceType = 'source' | 'background' | 'html' | 'image' | 'seo';
 /**
  * Base piece type
  */
-export interface IPiece<DataType = any> {
+export interface IPiece<DataType = any, Meta = any> {
   /**
    * Unique piece id
    */
@@ -108,6 +121,10 @@ export interface IPiece<DataType = any> {
    */
   data?: DataType;
   /**
+   * Meta data for resolving updates in concurrent mode, empty in non-concurrent mode
+   */
+  meta?: Meta;
+  /**
    * Human readable piece name
    */
   name: string,
@@ -116,7 +133,7 @@ export interface IPiece<DataType = any> {
 /**
  * Piece info state
  */
-export interface IPieceItem<DataType = any> extends IPiece<DataType> {
+export interface IPieceItem<DataType = any, Meta = any> extends IPiece<DataType, Meta> {
   /**
    * @deprecated
    */
@@ -329,6 +346,21 @@ export type PieceActions<DataType = any> = {
   setCurrentSourcePieceId: (id: string) => void,
 };
 
+export interface IReactProps {
+  /**
+   * Dynamically add component to support piece type
+   */
+  attachComponent: (type: PieceType, component: IComponent) => void,
+  /**
+   * Dynamically add piece
+   */
+  addPiece: (piece: IPieceItem) => void,
+  /**
+   * Dynamically remove piece
+   */
+  removePiece: (pieceId: string) => void,
+}
+
 /**
  * Props passed to editor component
  */
@@ -421,12 +453,15 @@ export type Action = AnyAction | ThunkAction<any, IWriteAwayStateExtension & ITo
  */
 export type Store = StoreRaw<IWriteAwayStateExtension & IToastrStateExtension> & { dispatch: Dispatch };
 
-/**
- * @private
- */
-export interface BarOptions {
-  navBarRoot: HTMLElement,
+export interface INavBarProps {
   navBarDraggable: boolean,
   navBarCollapsable: boolean,
   pieceNameGroupSeparator: string,
+}
+
+/**
+ * @private
+ */
+export interface BarOptions extends INavBarProps {
+  navBarRoot: HTMLElement,
 }

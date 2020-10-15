@@ -1,5 +1,9 @@
+import connectActions from 'containers/connectActions';
+import NavBar from 'containers/RedaxtorContainer';
+import HoverOverlay from 'containers/HoverOverlayContainer';
+import { REDUCER_KEY } from './constants';
 import { WriteAwayCore as core } from './WriteAwayCore';
-import { writeAwayReducers as reducer } from './reducers';
+import { writeAwayReducers } from './reducers';
 import 'styles/writeaway.less';
 
 export * from './types';
@@ -9,9 +13,17 @@ export const version = `Version ${process.env.VERSION}, built at ${process.env.B
 
 export const WriteAwayCore = core;
 
-export const writeAwayReducers = reducer;
+export const reducer = writeAwayReducers;
+
+export const reducerKey = REDUCER_KEY;
+
+export const WriteAwayNavBar = NavBar;
+
+export const WriteAwayOverlay = HoverOverlay;
+
+export const connectDynamicActions = connectActions;
 
 // eslint-disable-next-line import/no-extraneous-dependencies
-export { defaultMinimumApi, defaultOptions, defaultPieces } from 'defaults';
+export { defaultMinimumApi, defaultOptions, defaultPieces, defaultState } from 'defaults';
 
 export default WriteAwayCore;

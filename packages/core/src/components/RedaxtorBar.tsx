@@ -3,16 +3,13 @@ import React, {
 } from 'react';
 
 import classNames from 'classnames';
+import { INavBarProps } from 'types';
 
 import PanelHandler from './PanelHandler';
 import Pieces from './pieces/PiecesContainer';
 
 export interface RedaxtorBarProps {
-  options: {
-    navBarDraggable: boolean,
-    navBarCollapsable: boolean,
-    pieceNameGroupSeparator: string,
-  },
+  options: INavBarProps,
   message?: {
     content: string,
     type: string,

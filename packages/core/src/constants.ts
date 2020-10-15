@@ -1,3 +1,5 @@
+export const REDUCER_KEY: '@writeaway' = '@writeaway';
+
 export default {
   /* GLOBAL */
   GLOBAL_SHOW_MESSAGE: '@writeaway/GLOBAL_SHOW_MESSAGE',
@@ -5,6 +7,9 @@ export default {
   /* NAVBAR */
   NAVBAR_EXPAND: '@writeaway/NAVBAR_EXPAND',
   NAVBAR_COLLAPSE: '@writeaway/NAVBAR_COLLAPSE',
+
+  /* INJECTIONS */
+  ATTACH_COMPONENT: '@writeaway/ATTACH_COMPONENT',
 
   EXPERT_MODE: '@writeaway/EXPERT_MODE',
 
