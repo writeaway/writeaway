@@ -1,6 +1,6 @@
 {
   "name": "@writeaway/core",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "Redaxtor is a JavaScript library for editing CMS pieces, pages and internationalisation on the client side.",
   "main": "./dist/core.js",
   "types": "./dist/index.d.ts",
