@@ -75,7 +75,7 @@ const pieces: Reducer<IPieceControllerState> = (pState: IPieceControllerState = 
     case C.PIECES_ENABLE_EDIT:
       if (action.subType) {
         const data = { ...pState, initialized: true };
-        data.editorEnabled[action.subType as PieceType] = true;
+        data.editorEnabled = { ...data.editorEnabled, [action.subType as PieceType]: true };
         return data;
       }
       return { ...pState, editorActive: true, initialized: true };
@@ -83,7 +83,7 @@ const pieces: Reducer<IPieceControllerState> = (pState: IPieceControllerState = 
     case C.PIECES_DISABLE_EDIT:
       if (action.subType) {
         const data = { ...pState, initialized: true };
-        data.editorEnabled[action.subType as PieceType] = false;
+        data.editorEnabled = { ...data.editorEnabled, [action.subType as PieceType]: false };
         return data;
       }
       return { ...pState, editorActive: false };

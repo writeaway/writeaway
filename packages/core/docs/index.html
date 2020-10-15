@@ -66,17 +66,17 @@
 					<h1>WriteAway</h1>
 				</a>
 				<p>WriteAway is a JavaScript library for editing CMS pieces inline on pages on the client side.</p>
-				<p>Based on <a href="https://facebook.github.io/react/">React</a> and <a href="http://redux.js.org/">Redux</a></p>
-				<p>Created by <a href="http://spiralscout.com">SpiralScout</a>.</p>
+				<p>Based on <a href="https://facebook.github.io/react/">React</a> and <a href="https://redux.js.org/">Redux</a></p>
+				<p>Created by <a href="https://spiralscout.com">SpiralScout</a>.</p>
 				<p>WriteAway comes like a core controller with set of plugins for different types of media.</p>
-				<p><a href="/packages/core">@writeaway/core</a> - Core controller for all plugins, includes editor floating bar and manages state of editors</p>
-				<p><a href="/packages/plugin-medium">@writeaway/plugin-medium</a> - Plugin for supporting rich text editing, editing images and block backgrounds</p>
-				<p><a href="/packages/plugin-codemirror">@writeaway/plugin-coremirror</a> - Plugin for editing block&#39;s source code, i.e. for embedded iframes or scrips</p>
-				<p><a href="/packages/plugin-seo">@writeaway/plugin-seo</a> - Plugin for editing SEO meta tags</p>
+				<p><a href="https://github.com/writeaway/writeaway/blob/master/packages/core">@writeaway/core</a> - Core controller for all plugins, includes editor floating bar and manages state of editors</p>
+				<p><a href="https://github.com/writeaway/writeaway/blob/master/packages/plugin-medium">@writeaway/plugin-medium</a> - Plugin for supporting rich text editing, editing images and block backgrounds</p>
+				<p><a href="https://github.com/writeaway/writeaway/blob/master/packages/plugin-codemirror">@writeaway/plugin-coremirror</a> - Plugin for editing block&#39;s source code, i.e. for embedded iframes or scrips</p>
+				<p><a href="https://github.com/writeaway/writeaway/blob/master/packages/plugin-seo">@writeaway/plugin-seo</a> - Plugin for editing SEO meta tags</p>
 				<a href="#installation-on-top-of-existing-project" id="installation-on-top-of-existing-project" style="color: inherit; text-decoration: none;">
 					<h2>Installation On Top Of Existing Project</h2>
 				</a>
-				<p>To use on top of existing project you would need to create a custom bundle using your favorite packaging tool. You can see 2 samples of such bundles <a href="/packages/bundle">on demo website</a> and in <a href="/packages/spiral-bridge">spiral framework bridge</a></p>
+				<p>To use on top of existing project you would need to create a custom bundle using your favorite packaging tool. You can see 2 samples of such bundles <a href="https://github.com/writeaway/writeaway/blob/master/packages/bundle">on demo website</a> and in <a href="https://github.com/writeaway/writeaway/blob/master/packages/spiral-bridge">spiral framework bridge</a></p>
 				<p>This bundle will scan an existing page for specific selectors and will attach editors on them</p>
 				<pre><code><span class="hljs-built_in">npm</span> install --save @writeaway/core
 <span class="hljs-built_in">npm</span> install --save @writeaway/plugin-medium
@@ -124,7 +124,7 @@
 				<a href="#writeawaycore-constructor-options" id="writeawaycore-constructor-options" style="color: inherit; text-decoration: none;">
 					<h2>WriteAwayCore constructor options</h2>
 				</a>
-				<p>WriteAwayCore accepts <a href="/packages/core/src/types.ts#68">IOptions</a> object in constructor</p>
+				<p>WriteAwayCore accepts <a href="https://writeaway.github.io/docs/interfaces/_types_.galleryitem.html">IOptions</a> object in constructor</p>
 				<table>
 					<thead>
 						<tr>
@@ -135,12 +135,12 @@
 					</thead>
 					<tbody><tr>
 							<td align="left">api</td>
-							<td align="left"><a href="/packages/core/src/default.ts#27">defaultMinimumApi</a></td>
+							<td align="left"><a href="https://github.com/writeaway/writeaway/blob/master/packages/core/src/default.ts#27">defaultMinimumApi</a></td>
 							<td align="left">data API to work with pieces. See details in WriteAway API section.</td>
 						</tr>
 						<tr>
 							<td align="left">piecesOptions</td>
-							<td align="left"><a href="/packages/core/src/default.ts#21">defaultPieces</a></td>
+							<td align="left"><a href="https://github.com/writeaway/writeaway/blob/master/packages/core/src/default.ts#21">defaultPieces</a></td>
 							<td align="left">Options for pieces initialization</td>
 						</tr>
 						<tr>
@@ -166,7 +166,7 @@
 						<tr>
 							<td align="left">piecesOptions.components</td>
 							<td align="left">{}</td>
-							<td align="left">Maps piece type to <a href="/packages/core/src/types.ts">IComponent</a> that are launched as piece editor</td>
+							<td align="left">Maps piece type to <a href="https://writeaway.github.io/docs/interfaces/_types_.icomponent.html">IComponent</a> that are launched as piece editor</td>
 						</tr>
 						<tr>
 							<td align="left">piecesOptions.options</td>
@@ -237,7 +237,7 @@
 				<a href="#writeaway-api" id="writeaway-api" style="color: inherit; text-decoration: none;">
 					<h2>WriteAway API</h2>
 				</a>
-				<p>Specifying <code>api</code> params allows to customize where editors are taking data from and where data is saved. Additionally developer can customize how node position is calculated, see <a href="/packages/core/src/types.ts">advanced documentation</a> and code for that.</p>
+				<p>Specifying <code>api</code> params allows to customize where editors are taking data from and where data is saved. Additionally developer can customize how node position is calculated, see <a href="https://github.com/writeaway/writeaway/blob/master/packages/core/src/types.ts">source code</a> for that.</p>
 				<table>
 					<thead>
 						<tr>
@@ -248,22 +248,22 @@
 					</thead>
 					<tbody><tr>
 							<td align="left">getPieceData</td>
-							<td align="left">async (piece: <a href="/packages/core/src/types.ts">IPieceItem</a>) =&gt; <a href="/packages/core/src/types.ts">IPieceItem</a></td>
+							<td align="left">async (piece: <a href="https://writeaway.github.io/docs/interfaces/_types_.ipieceitem.html">IPieceItem</a>) =&gt; <a href="https://writeaway.github.io/docs/interfaces/_types_.ipieceitem.html">IPieceItem</a></td>
 							<td align="left">Async function to resolve complete piece data. Typically that means resolving <code>data</code> by <code>id</code> or extracting data directly from <code>node</code></td>
 						</tr>
 						<tr>
 							<td align="left">savePieceData</td>
-							<td align="left">async (piece: <a href="/packages/core/src/types.ts">IPieceItem</a>) =&gt; void</td>
+							<td align="left">async (piece: <a href="https://writeaway.github.io/docs/interfaces/_types_.ipieceitem.html">IPieceItem</a>) =&gt; void</td>
 							<td align="left">Async function to save complete piece data</td>
 						</tr>
 						<tr>
 							<td align="left">getImageList</td>
-							<td align="left">async (ref: {id: string, type: string, data: any, dataset: any}) =&gt; Array&lt;<a href="/packages/core/src/types.ts">IGalleryItem</a>&gt;</td>
+							<td align="left">async (ref: {id: string, type: string, data: any, dataset: any}) =&gt; Array&lt; <a href="https://writeaway.github.io/docs/interfaces/_types_.galleryitem.html">IGalleryItem</a> &gt;</td>
 							<td align="left">Optional. If specified will fetch images for this piece and show image options</td>
 						</tr>
 						<tr>
 							<td align="left">uploadImage</td>
-							<td align="left">async (file: File or FileList) =&gt; <a href="/packages/core/src/types.ts">IGalleryItem</a> or Array&lt;<a href="/packages/core/src/types.ts">IGalleryItem</a>&gt;</td>
+							<td align="left">async (file: File or FileList) =&gt; <a href="https://writeaway.github.io/docs/interfaces/_types_.galleryitem.html">IGalleryItem</a> or Array&lt; <a href="https://writeaway.github.io/docs/interfaces/_types_.galleryitem.html">IGalleryItem</a> &gt;</td>
 							<td align="left">Optional. If specified enable upload functionality</td>
 						</tr>
 						<tr>
@@ -276,7 +276,7 @@
 					<h2>Usage with Spiral Framework</h2>
 				</a>
 				<p>When using with spiral framework, use <code>@writeaway/spiral-bridge</code> bundle or pre-compiled scripts</p>
-				<p><a href="/packages/spiral-bridge">See documentation here</a></p>
+				<p><a href="https://github.com/writeaway/writeaway/blob/master/packages/spiral-bridge">See documentation here</a></p>
 				<a href="#developing-and-building" id="developing-and-building" style="color: inherit; text-decoration: none;">
 					<h2>Developing and building</h2>
 				</a>

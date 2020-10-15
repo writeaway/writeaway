@@ -112,7 +112,7 @@ export class RedaxtorSeo extends Component<IPieceProps<RedaxtorSeoData>, Redaxto
 
   shouldComponentUpdate(nextProps: IPieceProps, nextState: RedaxtorSeoState) {
     if (this.props.piece.data) {
-      if (nextProps.piece.data !== this.props.piece.data) {
+      if (!shallowEqual(nextProps.piece.data, this.props.piece.data)) {
         if (this.props.actions.setPieceMessage) {
           this.props.actions.setPieceMessage(this.props.piece.id, 'Page refresh is required', 'warning');
         }
