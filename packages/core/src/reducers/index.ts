@@ -24,8 +24,12 @@ const global: Reducer<IGlobalState> = (state: IGlobalState = defaultGlobalState,
   }
 };
 
-const reducers = combineReducers({
-  pieces, toastr, global, config: ((s: IOptions) => s || defaultOptions) as Reducer<IOptions>,
+export const writeAwayReducers = combineReducers({
+  pieces, global, config: ((s: IOptions) => s || defaultOptions) as Reducer<IOptions>,
 });
 
-export default reducers;
+const defaultReducers = combineReducers({
+  toastr, '@writeaway': writeAwayReducers,
+});
+
+export default defaultReducers;

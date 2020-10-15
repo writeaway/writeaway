@@ -13,7 +13,7 @@ import {
   IWriteAwayState,
   PieceDataResolver,
   PieceType,
-  IPiecesAPI, IPiecesOptions,
+  IPiecesAPI, IPiecesOptions, IWriteAwayStateExtension, IToastrStateExtension,
 } from 'types';
 
 export const defaultPieces: IPiecesOptions = {
@@ -111,6 +111,10 @@ export const defaultState: IWriteAwayState = {
   config: {
     ...defaultOptions,
   },
+};
+
+export const defaultWrappedState: IWriteAwayStateExtension & IToastrStateExtension = {
+  '@writeaway': defaultState,
   toastr: undefined as any,
 };
 

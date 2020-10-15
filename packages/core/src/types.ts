@@ -262,19 +262,32 @@ export interface IGlobalState {
 }
 
 /**
+ * State containing write-away specific data
+ */
+export interface IWriteAwayStateExtension {
+  '@writeaway': IWriteAwayState,
+}
+
+/**
+ * State containing toastr specific data
+ */
+export interface IToastrStateExtension {
+  toastr: ToastrState,
+}
+
+/**
  * Redux state of WriteAway controller
  */
 export interface IWriteAwayState {
   config: IOptions,
   global: IGlobalState,
-  toastr: ToastrState,
   pieces: IPieceControllerState,
 }
 
 /**
  * @private
  */
-export type GetIWriteAwayState = () => IWriteAwayState;
+export type GetIWriteAwayState = () => IWriteAwayStateExtension;
 
 /**
  * Available actions for a piece
@@ -396,17 +409,17 @@ export interface Rect {
 /**
  * @private
  */
-export type Dispatch = ThunkDispatch<IWriteAwayState, {}, AnyAction>;
+export type Dispatch = ThunkDispatch<IWriteAwayStateExtension & IToastrStateExtension, {}, AnyAction>;
 
 /**
  * @private
  */
-export type Action = AnyAction | ThunkAction<any, IWriteAwayState, any, any>;
+export type Action = AnyAction | ThunkAction<any, IWriteAwayStateExtension & IToastrStateExtension, any, any>;
 
 /**
  * @private
  */
-export type Store = StoreRaw<IWriteAwayState> & { dispatch: Dispatch };
+export type Store = StoreRaw<IWriteAwayStateExtension & IToastrStateExtension> & { dispatch: Dispatch };
 
 /**
  * @private

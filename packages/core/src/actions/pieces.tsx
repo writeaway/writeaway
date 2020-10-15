@@ -1,3 +1,4 @@
+import { selectConfig, selectPieces } from 'helpers/selectors';
 import { toastr } from 'react-redux-toastr';
 import {
   Dispatch, GetIWriteAwayState, IPieceControllerState, IPieceItem, PieceType, Rect,
@@ -17,7 +18,7 @@ const piecesRunInit = (dispatch: Dispatch, pieces: IPieceControllerState) => {
 };
 
 export const piecesInit = () => (dispatch: Dispatch, getState: GetIWriteAwayState) => {
-  const { pieces } = getState();
+  const pieces = selectPieces(getState);
   if (pieces.editorActive) {
     dispatch(piecesEnableEdit());
     piecesRunInit(dispatch, pieces);
@@ -25,7 +26,7 @@ export const piecesInit = () => (dispatch: Dispatch, getState: GetIWriteAwayStat
 };
 
 export const piecesToggleEdit = (subType?: PieceType) => (dispatch: Dispatch, getState: GetIWriteAwayState) => {
-  const { pieces } = getState();
+  const pieces = selectPieces(getState);
   let editorActive = !pieces.editorActive;
 
   if (subType) {
@@ -61,7 +62,9 @@ export const addPiece = (piece: IPieceItem) => ({ type: C.PIECE_ADD, id: piece.i
 export const hoverPiece = (pieceId?: string, rect?: Rect) => ({ type: C.PIECES_HOVERED, id: pieceId, rect });
 
 export const onEditorActive = (pieceId: string, active: boolean) => (dispatch: Dispatch, getState: GetIWriteAwayState) => {
-  const activeIds = getState().pieces.activeIds || [];
+  const pieces = selectPieces(getState);
+  const config = selectConfig(getState);
+  const activeIds = pieces.activeIds || [];
 
   /**
      * Before actually activating, check if we need to force a hover over elements becoming active
@@ -69,16 +72,16 @@ export const onEditorActive = (pieceId: string, active: boolean) => (dispatch: D
      */
   if (active && activeIds.length === 0) {
     // That editor is now the active editor, invoke hover
-    const piece = getState().pieces.byId[pieceId];
-    const nodeRect = getState().config.api.getNodeRect(piece);
+    const piece = pieces.byId[pieceId];
+    const nodeRect = config.api.getNodeRect(piece);
     dispatch(hoverPiece(pieceId, nodeRect.hover || nodeRect.node));
   }
 
   if (!active && activeIds.length === 2) {
     // That editor is `other` one, after disactivation, only one is left
     const newHoverId = (pieceId === activeIds[0]) ? activeIds[1] : activeIds[0];
-    const piece = getState().pieces.byId[newHoverId];
-    const nodeRect = getState().config.api.getNodeRect(piece);
+    const piece = pieces.byId[newHoverId];
+    const nodeRect = config.api.getNodeRect(piece);
     dispatch(hoverPiece(newHoverId, nodeRect.hover || nodeRect.node));
   }
 
@@ -91,11 +94,13 @@ export const onEditorActive = (pieceId: string, active: boolean) => (dispatch: D
 };
 
 export const onNodeResized = (pieceId: string) => (dispatch: Dispatch, getState: GetIWriteAwayState) => {
-  const piece = getState().pieces.byId[pieceId];
-  const { hoveredId } = getState().pieces;
+  const pieces = selectPieces(getState);
+  const config = selectConfig(getState);
+  const piece = pieces.byId[pieceId];
+  const { hoveredId } = pieces;
 
   if (hoveredId === pieceId) {
-    const nodeRect = getState().config.api.getNodeRect(piece);
+    const nodeRect = config.api.getNodeRect(piece);
     dispatch(hoverPiece(pieceId, nodeRect.hover || nodeRect.node));
   }
 };
@@ -123,11 +128,12 @@ export const setPieceMessage = (id: string, message: string, messageLevel: strin
   if (!['warning', 'info', 'error'].includes(messageLevel)) {
     throw new Error(`Wrong message level '${messageLevel}' for PieceId: ${id}`);
   }
+  const pieces = selectPieces(getState);
 
   // chaining actions
   Promise.resolve(dispatch(pieceMessageSetted(id, message, messageLevel)))
     .then(() => {
-      const piece = getState().pieces.byId[id];
+      const piece = pieces.byId[id];
       switch (messageLevel) {
         case 'error':
           toastr.error('Error', `Piece '${piece.name}': ${message}`);
@@ -146,10 +152,13 @@ export const setPieceMessage = (id: string, message: string, messageLevel: strin
  * TODO: Extract this to external API
  */
 export const savePiece = (id: string) => (dispatch: Dispatch, getState: GetIWriteAwayState) => {
-  const piece = getState().pieces.byId[id];
+  const pieces = selectPieces(getState);
+  const config = selectConfig(getState);
+
+  const piece = pieces.byId[id];
   // eslint-disable-next-line no-extra-boolean-cast
-  if (!!getState().config.api.savePieceData) {
-    getState().config.api.savePieceData(piece).then((data: unknown) => {
+  if (!!config.api.savePieceData) {
+    config.api.savePieceData(piece).then((data: unknown) => {
       dispatch(pieceSaved(id, data));
     }).catch((error: unknown) => {
       dispatch(pieceSavingFailed(id, error));
@@ -176,7 +185,9 @@ export const pieceFetchingError = (id: string, error: unknown) => ({ type: C.PIE
  * Triggers getting piece data by id
  */
 export const pieceGet = (id: string) => (dispatch: Dispatch, getState: GetIWriteAwayState) => {
-  const piece = getState().pieces.byId[id];
+  const pieces = selectPieces(getState);
+  const config = selectConfig(getState);
+  const piece = pieces.byId[id];
   if (!piece) {
     dispatch(pieceFetchingError(id, 'This piece does not exist'));
     return;
@@ -196,7 +207,7 @@ export const pieceGet = (id: string) => (dispatch: Dispatch, getState: GetIWrite
     data: piece.data ? { ...piece.data } : undefined,
   };
 
-  getState().config.api.getPieceData(mutableCopy).then((updatedPiece: IPieceItem) => {
+  config.api.getPieceData(mutableCopy).then((updatedPiece: IPieceItem) => {
     if (!updatedPiece.data) {
       dispatch(pieceFetchingError(id, 'Api method generated no data'));
     } else {

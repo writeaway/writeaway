@@ -1,6 +1,4 @@
 import { toastr } from 'react-redux-toastr'; // TODO: It might be a good idea to extract it so it works without react context
-import { showMessage } from '../actions';
-import { getStore } from '../store';
 
 export type FetchConfig = RequestInit & { url: string, data?: any };
 
@@ -22,13 +20,9 @@ export const configureFetch = (options: RequestInit) => {
 
 export const callFetch = (options: FetchConfig) => {
   const noUrlMessage = 'Undefined URL';
-  const store = getStore();
   if (!options.url) {
     // eslint-disable-next-line no-console
     console.error('Called fetch with no URL', options);
-    if (store) {
-      store.dispatch(showMessage({ content: noUrlMessage, type: 'error' }));
-    }
     return Promise.reject(noUrlMessage);
   }
 

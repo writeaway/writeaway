@@ -1,3 +1,4 @@
+import { selectGlobal } from 'helpers/selectors';
 import { Dispatch, GetIWriteAwayState } from 'types';
 import C from '../constants';
 
@@ -10,9 +11,8 @@ export const navBarCollapse = () => ({ type: C.NAVBAR_COLLAPSE });
 export const setExpert = (e: boolean) => ({ type: C.EXPERT_MODE, payload: e });
 
 export const piecesToggleNavBar = () => (dispatch: Dispatch, getState: GetIWriteAwayState) => {
-  const state = getState();
-
-  if (state.global.navBarCollapsed) {
+  const global = selectGlobal(getState);
+  if (global.navBarCollapsed) {
     dispatch(navBarExpand());
   } else {
     dispatch(navBarCollapse());

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import {
-  IPieceItem, IWriteAwayState, Dispatch, IOptions, IComponent, PieceActions,
+  IPieceItem, IWriteAwayState, Dispatch, IOptions, IComponent, PieceActions, IWriteAwayStateExtension,
 } from 'types';
 import {
   updatePiece,
@@ -49,14 +49,14 @@ const PieceContainer = <T extends object = any>(props: PieceProps<T>) => {
   );
 };
 
-const mapStateToProps = (state: IWriteAwayState, ownProps: { id: string }) => ({
-  piece: state.pieces.byId[ownProps.id],
-  highlight: state.pieces.highlight,
-  expert: state.global.expert,
-  config: state.config,
-  editorActive: !state.pieces.byId[ownProps.id].destroy
-    && state.pieces.editorActive
-    && (state.pieces.editorEnabled[state.pieces.byId[ownProps.id].type] ?? true),
+const mapStateToProps = (state: IWriteAwayStateExtension, ownProps: { id: string }) => ({
+  piece: state['@writeaway'].pieces.byId[ownProps.id],
+  highlight: state['@writeaway'].pieces.highlight,
+  expert: state['@writeaway'].global.expert,
+  config: state['@writeaway'].config,
+  editorActive: !state['@writeaway'].pieces.byId[ownProps.id].destroy
+    && state['@writeaway'].pieces.editorActive
+    && (state['@writeaway'].pieces.editorEnabled[state['@writeaway'].pieces.byId[ownProps.id].type] ?? true),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

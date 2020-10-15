@@ -6,7 +6,7 @@
 import { boundMethod } from 'autobind-decorator';
 import { PieceEditors } from 'containers/PieceEditors';
 import {
-  defaultMinimumApi, defaultOptions, defaultPieces, defaultState,
+  defaultMinimumApi, defaultOptions, defaultPieces, defaultState, defaultWrappedState,
 // eslint-disable-next-line import/no-extraneous-dependencies
 } from 'defaults';
 import React from 'react';
@@ -24,7 +24,7 @@ import {
   PieceType,
   Rect,
   IPiecesAPI,
-  IPieceControllerState, Dispatch, Store, BarOptions,
+  IPieceControllerState, Dispatch, Store, BarOptions, IWriteAwayStateExtension, IToastrStateExtension,
 } from 'types';
 import { piecesToggleNavBar, setExpert } from './actions';
 import {
@@ -40,7 +40,6 @@ import HoverOverlay from './containers/HoverOverlayContainer';
 import RedaxtorContainer from './containers/RedaxtorContainer';
 import { configureFetch } from './helpers/callFetch';
 import reducers from './reducers';
-import { setStore } from './store';
 
 export class WriteAwayCore {
   private readonly options: IOptions;
@@ -98,9 +97,12 @@ export class WriteAwayCore {
       name: 'WriteAway',
     });
 
-    this.store = createStore<IWriteAwayState, AnyAction, { dispatch: Dispatch }, {}>(
+    this.store = createStore<IWriteAwayStateExtension & IToastrStateExtension, AnyAction, { dispatch: Dispatch }, {}>(
       reducers,
-      state,
+      {
+        ...defaultWrappedState,
+        '@writeaway': state,
+      },
       composeEnhancers(
         applyMiddleware(thunk as ThunkMiddleware),
         // other store enhancers if any
@@ -113,7 +115,6 @@ export class WriteAwayCore {
      * Push to singletons
      */
     if (this.options.ajax) configureFetch(this.options.ajax);
-    setStore(this.store);
   }
 
   private start() {
@@ -165,7 +166,11 @@ export class WriteAwayCore {
   }
 
   get state(): IWriteAwayState {
-    return this.store.getState();
+    return this.store.getState()['@writeaway'];
+  }
+
+  get pieces() {
+    return this.state.pieces;
   }
 
   get config(): IOptions {
@@ -225,7 +230,7 @@ export class WriteAwayCore {
   }
 
   private onEscPress() {
-    const state = this.store.getState();
+    const { state } = this;
     if (state.pieces.activeIds && state.pieces.activeIds.length > 0) {
       this.store.dispatch(deactivatePiece(state.pieces.activeIds[0]));
     } else {
@@ -333,8 +338,8 @@ export class WriteAwayCore {
    * @param data {Data} `data` of the pieces
    */
   setData<Data>(pieceId: string, data: Data) {
-    const state = this.store.getState();
-    const currentPiece = state.pieces && state.pieces.byId && state.pieces.byId[pieceId];
+    const { pieces } = this;
+    const currentPiece = pieces && pieces.byId && pieces.byId[pieceId];
     if (!currentPiece) {
       throw new Error(`You are trying to set data to an unexisting piece. Piece id: ${pieceId}`);
     }
@@ -350,12 +355,12 @@ export class WriteAwayCore {
    * @returns {boolean}
    */
   isEditorActive(editorType?: PieceType) {
-    const state = this.store.getState();
+    const { pieces } = this;
 
     if (editorType) {
-      return state.pieces.editorEnabled[editorType] ?? false;
+      return pieces.editorEnabled[editorType] ?? false;
     }
-    return state.pieces.editorActive ?? false;
+    return pieces.editorActive ?? false;
   }
 
   /**
@@ -363,8 +368,8 @@ export class WriteAwayCore {
    * @returns {{ [pieceId: string]: IPieceItem}}
    */
   getPieceList() {
-    const state = this.store.getState();
-    const pieces = (state.pieces && state.pieces.byId) || {};
+    const piecesState = this.pieces;
+    const pieces = (piecesState && piecesState.byId) || {};
     const out: Record<string, IPieceItem> = {};
     Object.keys(pieces).forEach((pieceId) => {
       out[pieceId] = { // Clone piece, so outer code can't affect it
@@ -379,8 +384,8 @@ export class WriteAwayCore {
    * Destroy all existing pieces
    */
   destroyAllPieces() {
-    const state = this.store.getState();
-    const pieces = (state.pieces && state.pieces.byId) || {};
+    const piecesState = this.pieces;
+    const pieces = (piecesState && piecesState.byId) || {};
     Object.keys(pieces).forEach((pieceId: string) => this.destroyPiece(pieceId));
   }
 
@@ -389,8 +394,7 @@ export class WriteAwayCore {
    * @returns {boolean}
    */
   isNavBarCollapsed() {
-    const state = this.store.getState();
-    return state.global.navBarCollapsed ?? true;
+    return this.state.global.navBarCollapsed ?? true;
   }
 
   /**
@@ -398,8 +402,7 @@ export class WriteAwayCore {
    * @returns {boolean}
    */
   isExpertMode() {
-    const state = this.store.getState();
-    return state.global.expert ?? false;
+    return this.state.global.expert ?? false;
   }
 
   /**
