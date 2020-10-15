@@ -119,7 +119,7 @@ export const pieceSaved = (id: string, answer: unknown) => ({ type: C.PIECE_SAVE
 
 export const pieceSavingFailed = (id: string, error: unknown) => ({ type: C.PIECE_SAVING_FAILED, id, error });
 
-export const setPieceMessage = (id: string, message: string, messageLevel: string) => (dispatch: Dispatch) => {
+export const setPieceMessage = (id: string, message: string, messageLevel: string) => (dispatch: Dispatch, getState: GetIWriteAwayState) => {
   if (!['warning', 'info', 'error'].includes(messageLevel)) {
     throw new Error(`Wrong message level '${messageLevel}' for PieceId: ${id}`);
   }
@@ -127,12 +127,13 @@ export const setPieceMessage = (id: string, message: string, messageLevel: strin
   // chaining actions
   Promise.resolve(dispatch(pieceMessageSetted(id, message, messageLevel)))
     .then(() => {
+      const piece = getState().pieces.byId[id];
       switch (messageLevel) {
         case 'error':
-          toastr.error('Error', `Piece '${id}': ${message}`);
+          toastr.error('Error', `Piece '${piece.name}': ${message}`);
           break;
         case 'warning':
-          toastr.warning('Warning', `Piece '${id}': ${message}`);
+          toastr.warning('Warning', `Piece '${piece.name}': ${message}`);
           break;
         default:
           break;
@@ -152,7 +153,7 @@ export const savePiece = (id: string) => (dispatch: Dispatch, getState: GetIWrit
       dispatch(pieceSaved(id, data));
     }).catch((error: unknown) => {
       dispatch(pieceSavingFailed(id, error));
-      setPieceMessage(id, 'Couldn\'t save', 'error')(dispatch);
+      setPieceMessage(id, 'Failed to Save', 'error')(dispatch, getState);
     });
   } else {
     dispatch(pieceSaved(id, {}));

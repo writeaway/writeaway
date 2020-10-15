@@ -148,7 +148,7 @@ const writeaway = new WriteAwaySampleBundle({
         }, 100);
       }
     }),
-    getPieceData(piece: IPieceItem) {
+    getPieceData: async (piece: IPieceItem) => {
       return BasicApi.getPieceData(piece, BasicApi.resolvers).then((p: IPieceItem) => {
         if (p.id === 'pieceSource2') {
           // eslint-disable-next-line no-param-reassign
@@ -157,7 +157,7 @@ const writeaway = new WriteAwaySampleBundle({
         return p;
       });
     },
-    savePieceData(piece: IPieceItem) {
+    savePieceData: async (piece: IPieceItem) => {
       console.info('Saving to server', piece);
       if (piece.id === 'errorSample') {
         throw new Error('This is a sample error');

@@ -1,28 +1,8 @@
+@import "~react-redux-toastr/lib/css/react-redux-toastr.min.css";
 @import "~@writeaway/core/src/styles/writeaway";
-@import "medium";
+@import "~@writeaway/plugin-medium/src/medium-editor";
 @import "~@writeaway/plugin-medium/src/writeaway-medium";
 @import "~@writeaway/plugin-seo/src/google-preview";
-@import "~codemirror/lib/codemirror.css";
+@import "~@writeaway/plugin-seo/src/styles";
 
-.r_reset .r_list {
-  padding: 0;
-}
-.r_reset  .r_item-row {
-  display: none;
-}
-
-/* Hide SEO toggle */
-.r_reset  .r_bar .r_list-subheader-seo {
-  display: none;
-}
-
-.r_reset  .r_item-row.r_item-type-seo {
-  display: block;
-  padding: 10px;
-  margin: 10px;
-  padding-right: 16px;
-}
-
-.r_reset  .r_item-row.r_item-type-seo span{
-  font-size: 12px;
-}
+@import "spiral-specific.css";
