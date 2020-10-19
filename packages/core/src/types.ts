@@ -10,8 +10,8 @@ import type { ThunkAction, ThunkDispatch } from 'redux-thunk';
 
 export type PieceDataResolver<DataType = any> =
   (piece: IPieceItem<DataType>,
-    resolvers?: Partial<Record<PieceType, PieceDataResolver>>) =>
-  Promise<IPieceItem<DataType>>;
+   resolvers?: Partial<Record<PieceType, PieceDataResolver>>) =>
+    Promise<IPieceItem<DataType>>;
 
 /**
  * Image gallery item
@@ -48,6 +48,21 @@ export interface GalleryItem {
 }
 
 /**
+ * Subscribe to piece updates coming from external source, i.e. websockets
+ * @param fn - subscription function
+ * Should return an unsubscribe function
+ */
+export type PieceSubscription = (fn: (piece: IPieceItem) => boolean) => () => void;
+
+/**
+ * Resolve conflicts between current in-state piece data and data coming from external source
+ * Should resolve as data that needs to be applied
+ * @param current - current state of piece
+ * @param external - external state of piece
+ */
+export type PieceConflictResolver = (current: IPieceItem, external: IPieceItem) => IPieceItem;
+
+/**
  * Interface that should be implemented for editors
  */
 export interface IPiecesAPI {
@@ -56,14 +71,14 @@ export interface IPiecesAPI {
    * @param fn - subscription function
    * Should return an unsubscribe function
    */
-  subscribe?: (fn: (piece: IPieceItem)=>boolean) => ()=>void;
+  subscribe?: PieceSubscription;
   /**
    * Resolve conflicts between current in-state piece data and data coming from external source
    * Should resolve as data that needs to be applied
    * @param current - current state of piece
    * @param external - external state of piece
    */
-  resolveConflict?: (current: IPieceItem, external: IPieceItem)=>IPieceItem
+  resolveConflict?: PieceConflictResolver
   /**
    * Resolve piece data from server or other source
    */
@@ -91,7 +106,7 @@ export interface IPiecesAPI {
   /**
    * Get image gallery. If not specified gallery will be disabled
    */
-  getImageList?: (piece: { id: string, dataset?: { [k: string]: string }}) => Promise<Array<GalleryItem>>,
+  getImageList?: (piece: { id: string, dataset?: { [k: string]: string } }) => Promise<Array<GalleryItem>>,
   /**
    * Upload images. If not specified, upload will be disabled
    */
@@ -256,6 +271,11 @@ export interface IOptions {
    * Start with editors active
    */
   editorActive?: boolean;
+  /**
+   * Optional meta data that will be attached to pieces during saving
+   * to track who and when modified piece
+   */
+  meta?: Partial<IMeta>;
 }
 
 export interface IPieceControllerState {
@@ -464,4 +484,13 @@ export interface INavBarProps {
  */
 export interface BarOptions extends INavBarProps {
   navBarRoot: HTMLElement,
+}
+
+/**
+ * Meta data describing who and when modified particular piece
+ */
+export interface IMeta {
+  id: string,
+  label: string,
+  time: number,
 }

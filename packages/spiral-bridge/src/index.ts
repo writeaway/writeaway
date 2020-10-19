@@ -5,6 +5,7 @@ import {
   getCookie, globMeta, setCookie, VAR_E_ACTIVE, VAR_E_COLLAPSED, VAR_E_EXPERT,
 } from 'persist';
 import { startForSpiral } from 'startForSpiral';
+import { useSpiralWS } from 'concurrent';
 
 import 'style.less';
 
@@ -107,5 +108,7 @@ export class WriteAwaySpiralBundle extends WriteAwayCore {
 export const defaultApi = BasicApi;
 
 export const start = startForSpiral;
+
+export const useWS = useSpiralWS;
 
 export default WriteAwaySpiralBundle;

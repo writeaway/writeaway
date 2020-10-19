@@ -4,3 +4,5 @@ packages/*/yarn-error.log
 node_modules
 packages/*/node_modules
 packages/*/dist
+
+lerna-debug.log

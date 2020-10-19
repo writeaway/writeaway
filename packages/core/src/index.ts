@@ -23,7 +23,11 @@ export const WriteAwayOverlay = HoverOverlay;
 
 export const connectDynamicActions = connectActions;
 
-// eslint-disable-next-line import/no-extraneous-dependencies
-export { defaultMinimumApi, defaultOptions, defaultPieces, defaultState } from 'defaults';
+export {
+  defaultMinimumApi,
+  defaultOptions,
+  defaultPieces,
+  defaultState,
+} from './defaults';
 
 export default WriteAwayCore;

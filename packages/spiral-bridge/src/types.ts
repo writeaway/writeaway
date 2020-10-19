@@ -20,7 +20,4 @@ export interface Urls {
 }
 
 export interface IMetadataSaveRequest extends RedaxtorSeoData {
-  namespace?: string,
-  view?: string,
-  code?: string,
 }

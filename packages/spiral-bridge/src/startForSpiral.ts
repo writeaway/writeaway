@@ -1,5 +1,12 @@
 import {
-  defaultOptions, defaultPieces, defaultMinimumApi as BasicApi, GalleryItem, IPieceItem, IPiecesAPI,
+  defaultOptions,
+  defaultPieces,
+  defaultMinimumApi as BasicApi,
+  GalleryItem,
+  IPieceItem,
+  IPiecesAPI,
+  IMeta,
+  PieceSubscription,
 } from '@writeaway/core';
 import { components } from 'components';
 import WriteAwaySpiralBundle from 'index';
@@ -22,15 +29,24 @@ import * as fetchApi from 'fetch-api';
  * @param {string} urls.imageGalleryUrl url to get image list
  * @param {string} urls.uploadUrl url upload images
  * @param {string} seoHtml
+ * @param {IMeta} meta
+ * @param {PieceSubscription} wsSubsciption
  * @param {*} options - init options to override for WA
  */
-export const startForSpiral = (urls: Urls, seoHtml: string, options?: { [pieceType: string]: any }) => {
+export const startForSpiral = (
+  urls: Urls,
+  seoHtml: string,
+  options?: { [pieceType: string]: any },
+  meta?: Partial<IMeta>,
+  wsSubsciption?: PieceSubscription,
+) => {
   if ((window as any)[VAR_WA]) {
     throw new Error('Seems Redaxtor is already started');
   }
 
   const spiralApi: IPiecesAPI = {
     ...BasicApi,
+    subscribe: wsSubsciption,
     /**
      * Fetch RX details
      */
@@ -63,9 +79,7 @@ export const startForSpiral = (urls: Urls, seoHtml: string, options?: { [pieceTy
       if (piece.type === 'seo') {
         const metadata: IMetadataSaveRequest = {
           ...piece.data,
-          namespace: globMeta()?.namespace,
-          view: globMeta()?.view,
-          code: globMeta()?.code,
+          ...globMeta(),
         };
 
         return fetchApi.post(piece.dataset?.saveUrl || urls.saveMetaUrl, metadata);
@@ -160,10 +174,11 @@ export const startForSpiral = (urls: Urls, seoHtml: string, options?: { [pieceTy
       options: options || {},
     },
     api: spiralApi,
+    meta: meta || {},
   });
 
   writeaway.attachSeo({
-    header: seoHtml || globMeta()?.html || globMeta()?.header || '',
+    header: seoHtml || '',
   });
 
   (window as any)[VAR_WA] = writeaway;

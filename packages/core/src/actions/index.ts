@@ -1,14 +1,14 @@
 import { selectGlobal } from 'helpers/selectors';
 import { Dispatch, GetIWriteAwayState, IComponent, PieceType } from 'types';
-import C from '../constants';
+import { Actions } from '../constants';
 
-export const showMessage = (messageObject?: {content: string, type: string}) => ({ type: C.GLOBAL_SHOW_MESSAGE, message: messageObject });
+export const showMessage = (messageObject?: {content: string, type: string}) => ({ type: Actions.GLOBAL_SHOW_MESSAGE, message: messageObject });
 
-export const navBarExpand = () => ({ type: C.NAVBAR_EXPAND });
+export const navBarExpand = () => ({ type: Actions.NAVBAR_EXPAND });
 
-export const navBarCollapse = () => ({ type: C.NAVBAR_COLLAPSE });
+export const navBarCollapse = () => ({ type: Actions.NAVBAR_COLLAPSE });
 
-export const setExpert = (e: boolean) => ({ type: C.EXPERT_MODE, payload: e });
+export const setExpert = (e: boolean) => ({ type: Actions.EXPERT_MODE, payload: e });
 
 export const piecesToggleNavBar = () => (dispatch: Dispatch, getState: GetIWriteAwayState) => {
   const global = selectGlobal(getState);
@@ -19,4 +19,4 @@ export const piecesToggleNavBar = () => (dispatch: Dispatch, getState: GetIWrite
   }
 };
 
-export const attachComponent = (type: PieceType, component: IComponent) => ({ type: C.EXPERT_MODE, payload: { component, type } });
+export const attachComponent = (type: PieceType, component: IComponent) => ({ type: Actions.EXPERT_MODE, payload: { component, type } });

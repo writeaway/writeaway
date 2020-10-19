@@ -107,7 +107,14 @@ export const onNodeResized = (pieceId: string) => (dispatch: Dispatch, getState:
 
 export const removePiece = (id: string) => ({ type: C.PIECE_REMOVE, id });
 
-export const setPieceData = (id: string, data: any) => ({ type: C.PIECE_SET_DATA, id, data });
+export const setPieceData = (id: string, data: any, meta?: any) => (
+  {
+    type: C.PIECE_SET_DATA,
+    id,
+    data,
+    meta,
+  }
+);
 
 export const pieceMessageSetted = (id: string, message: string, messageLevel: string) => ({
   type: C.PIECE_SET_MESSAGE,
@@ -120,7 +127,7 @@ export const hasRemovedPiece = (id: string) => ({ type: C.PIECE_HAS_REMOVED, id 
 
 export const pieceSaving = (id: string) => ({ type: C.PIECE_SAVING, id });
 
-export const pieceSaved = (id: string, answer: unknown) => ({ type: C.PIECE_SAVED, id, answer });
+export const pieceSaved = (id: string, answer: Partial<IPieceItem>) => ({ type: C.PIECE_SAVED, id, answer });
 
 export const pieceSavingFailed = (id: string, error: unknown) => ({ type: C.PIECE_SAVING_FAILED, id, error });
 
@@ -158,8 +165,8 @@ export const savePiece = (id: string) => (dispatch: Dispatch, getState: GetIWrit
   const piece = pieces.byId[id];
   // eslint-disable-next-line no-extra-boolean-cast
   if (!!config.api.savePieceData) {
-    config.api.savePieceData(piece).then((data: unknown) => {
-      dispatch(pieceSaved(id, data));
+    config.api.savePieceData(piece).then((p: Partial<IPieceItem>) => {
+      dispatch(pieceSaved(id, p || {}));
     }).catch((error: unknown) => {
       dispatch(pieceSavingFailed(id, error));
       setPieceMessage(id, 'Failed to Save', 'error')(dispatch, getState);
