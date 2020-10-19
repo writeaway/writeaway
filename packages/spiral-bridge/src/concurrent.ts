@@ -1,4 +1,4 @@
-import type { SFSocket, ISFSocketEvent, Channel } from '@spiralscout/websockets';
+import type { NamesDict, SFSocket, ISFSocketEvent, Channel } from '@spiralscout/websockets';
 import { IPieceItem } from '@writeaway/core';
 
 export const DEFAULT_CHANNEL = 'writeaway';
@@ -15,7 +15,7 @@ export const useSpiralWS = (ws: SFSocket, channel: string = DEFAULT_CHANNEL) => 
     } catch (e) {
     }
   };
-  chan.subscribe('message', subscription);
+  chan.subscribe(<NamesDict.MESSAGE>'message', subscription);
   const unsubscribe = () => {
     chan.leave();
   };

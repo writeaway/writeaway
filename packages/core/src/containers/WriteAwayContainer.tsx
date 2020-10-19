@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { Dispatch, IWriteAwayStateExtension } from 'types';
 import { REDUCER_KEY } from '../constants';
 import { showMessage, piecesToggleNavBar } from '../actions';
-import { RedaxtorBar as RedaxtorBarComponent } from '../components/RedaxtorBar';
+import { WriteAwayBar as WriteAwayBarComponent } from '../components/WriteAwayBar';
 
 const mapStateToProps = (state: IWriteAwayStateExtension) => {
   const { global } = state[REDUCER_KEY];
@@ -23,9 +23,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   piecesToggleNavBar: () => dispatch(piecesToggleNavBar()),
 });
 
-const RedaxtorBar = connect(
+const WriteAwayBar = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(RedaxtorBarComponent);
+)(WriteAwayBarComponent);
 
-export default RedaxtorBar;
+export default WriteAwayBar;

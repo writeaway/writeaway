@@ -8,7 +8,7 @@ import { INavBarProps } from 'types';
 import PanelHandler from './PanelHandler';
 import Pieces from './pieces/PiecesContainer';
 
-export interface RedaxtorBarProps {
+export interface WriteAwayBarProps {
   options: INavBarProps,
   message?: {
     content: string,
@@ -19,14 +19,14 @@ export interface RedaxtorBarProps {
   piecesToggleNavBar: () => void,
 }
 
-export const RedaxtorBar = (
+export const WriteAwayBar = (
   {
     message,
     navBarCollapsed,
     piecesToggleNavBar,
     options,
     expert,
-  }: RedaxtorBarProps,
+  }: WriteAwayBarProps,
 ) => {
   const [dragging, setDragging] = useState<boolean>(false);
   const [dragged, setDragged] = useState<boolean>(false);

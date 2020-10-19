@@ -41,7 +41,7 @@ export const startForSpiral = (
   wsSubsciption?: PieceSubscription,
 ) => {
   if ((window as any)[VAR_WA]) {
-    throw new Error('Seems Redaxtor is already started');
+    throw new Error('Seems WriteAway is already started');
   }
 
   const spiralApi: IPiecesAPI = {
@@ -154,7 +154,7 @@ export const startForSpiral = (
     /**
      * Delete image
      * @param {string} id id or url of image
-     * @return {Promise<IRedaxtorResource>}
+     * @return {Promise<IWriteAwayResource>}
      */
     deleteImage: urls.deleteImageUrl ? async (id) => {
       // formData is FormData with image field. Add rest to formData if needed and submit.

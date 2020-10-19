@@ -1,34 +1,41 @@
-import { IReactProps } from '@writeaway/core';
+import { connectDynamicActions, IReactActionProps, IReactPieceProps } from '@writeaway/core';
 import React, { useCallback, useEffect, useState } from 'react';
-import { RedaxtorCodeMirrorData } from 'types';
-import RedaxtorCodemirror from './RedaxtorCodemirror';
+import { WriteAwayCodeMirrorData } from 'types';
+import WriteAwayCodemirror from './WriteAwayCodemirror';
 
-export const WriteAwayReactCode = ({
+export const WriteAwayReactCodeUnconnected = ({
   id, name, html, updateNode, attachComponent, addPiece, removePiece,
-}: RedaxtorCodeMirrorData & IReactProps) => {
+}: WriteAwayCodeMirrorData & IReactActionProps<WriteAwayCodeMirrorData> & IReactPieceProps) => {
   const [node, setNode] = useState<HTMLDivElement | undefined>(undefined);
   useEffect(() => {
-    attachComponent('seo', RedaxtorCodemirror);
+    attachComponent('source', WriteAwayCodemirror);
     return () => {
       removePiece(id);
     };
-  }, []);
+  }, [id]);
 
-  const setElement = useCallback((el: HTMLDivElement) => {
-    setNode(el);
-    if (el) {
+  useEffect(() => {
+    if (node) {
       addPiece({
         id,
-        type: 'seo',
+        type: 'source',
         name,
-        node: el,
+        node,
         data: {
           html, updateNode,
         },
+        message: '',
+        messageLevel: '',
       });
     }
+  }, [id, node]);
+
+  const setElement = useCallback((el: HTMLDivElement) => {
+    setNode(el);
   }, [node]);
 
   // eslint-disable-next-line react/no-danger
   return <div ref={setElement} dangerouslySetInnerHTML={{ __html: html }} />;
 };
+
+export const WriteAwayReactCode = connectDynamicActions(WriteAwayReactCodeUnconnected);

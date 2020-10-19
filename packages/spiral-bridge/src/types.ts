@@ -1,4 +1,4 @@
-import { RedaxtorSeoData } from '@writeaway/plugin-seo';
+import { WriteAwaySeoData } from '@writeaway/plugin-seo';
 
 export interface IPieceGetRequest {
   id: string;
@@ -19,5 +19,5 @@ export interface Urls {
   getPieceUrl: string,
 }
 
-export interface IMetadataSaveRequest extends RedaxtorSeoData {
+export interface IMetadataSaveRequest extends WriteAwaySeoData {
 }

@@ -4,7 +4,7 @@ import { boundMethod } from 'autobind-decorator';
 import { html as html_beautify } from 'js-beautify';
 import React, { Component } from 'react';
 import Modal from 'react-modal';
-import { RedaxtorCodeMirrorData, RedaxtorCodeMirrorState } from 'types';
+import { WriteAwayCodeMirrorData, WriteAwayCodeMirrorState } from 'types';
 
 import Editor from 'react-simple-code-editor';
 // @ts-ignore
@@ -14,7 +14,7 @@ import 'prismjs/components/prism-css';
 import 'prismjs/components/prism-markup';
 import 'prismjs/components/prism-javascript';
 
-export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirrorData>, RedaxtorCodeMirrorState> {
+export default class CodeMirror extends Component<IPieceProps<WriteAwayCodeMirrorData>, WriteAwayCodeMirrorState> {
   /**
    * Specify component should be rendered inside target node and capture all inside html
    * @type {string}
@@ -25,7 +25,7 @@ export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirror
 
   static readonly label = 'Source code';
 
-  static readonly applyEditor = (node: HTMLElement, data: RedaxtorCodeMirrorData) => {
+  static readonly applyEditor = (node: HTMLElement, data: WriteAwayCodeMirrorData) => {
     if (node) {
       const content = node.innerHTML;
       const needRender = data.updateNode ?? true;
@@ -43,11 +43,11 @@ export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirror
   };
 
   // eslint-disable-next-line react/state-in-constructor
-  state: RedaxtorCodeMirrorState;
+  state: WriteAwayCodeMirrorState;
 
   private modalNode!: HTMLElement;
 
-  private initDataKeys: Array<keyof RedaxtorCodeMirrorData>;
+  private initDataKeys: Array<keyof WriteAwayCodeMirrorData>;
 
   private nodeWasUpdated: boolean = false;
 
@@ -57,7 +57,7 @@ export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirror
     super(props);
 
     if (this.props.piece.data) {
-      this.initDataKeys = Object.keys(this.props.piece.data) as Array<keyof RedaxtorCodeMirrorData>;
+      this.initDataKeys = Object.keys(this.props.piece.data) as Array<keyof WriteAwayCodeMirrorData>;
     } else {
       this.initDataKeys = [];
     }

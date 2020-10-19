@@ -1,5 +1,5 @@
 import { AnyAction, Reducer } from 'redux';
-import { IPieceControllerState, IPieceItem, PieceType } from 'types';
+import { IComponent, IPieceControllerState, IPieceItem, PieceType } from 'types';
 import { Actions } from '../constants';
 
 const piece = (pItem: IPieceItem, action: AnyAction) => {
@@ -72,6 +72,18 @@ export const defaultPiecesState: IPieceControllerState = {
 
 const pieces: Reducer<IPieceControllerState> = (pState: IPieceControllerState = defaultPiecesState, action: AnyAction) => {
   switch (action.type) {
+    case Actions.ATTACH_COMPONENT: {
+      const enabled = pState.editorEnabled[action.payload.type as PieceType];
+      if (typeof enabled === 'undefined') {
+        return {
+          ...pState,
+          editorEnabled: {
+            [action.payload.type]: true,
+          },
+        };
+      }
+      return pState;
+    }
     case Actions.PIECES_ENABLE_EDIT:
       if (action.subType) {
         const data = { ...pState, initialized: true };

@@ -2,6 +2,7 @@ import { App } from 'containers/App';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { startStore } from 'startStore';
+import './style.less';
 
 const store = startStore();
 

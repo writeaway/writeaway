@@ -5,7 +5,7 @@ const config = {
   ...baseConfig,
 
   entry: {
-    react: ['./src/index.ts'],
+    react: ['./src/index.tsx'],
   },
 
   output: {

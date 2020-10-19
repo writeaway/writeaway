@@ -1,4 +1,6 @@
-import React, { CSSProperties, useMemo } from 'react';
+import React, {
+  CSSProperties, useCallback, useEffect, useMemo,
+} from 'react';
 import classNames from 'classnames';
 import {
   IComponent, IPieceItem, PieceType, Rect,
@@ -10,6 +12,12 @@ export interface OverlayProps {
   hoveredId?: string,
   hoveredRect?: Rect,
   enabled: boolean,
+  isNodeVisible: (piece: IPieceItem) => boolean,
+  getNodeRect: (piece: IPieceItem) => { node: Rect, hover?: Rect },
+  byId: { [id: string]: IPieceItem },
+  hoverPiece: (foundId?: string, foundRect?: Rect)=>void,
+  activeIds?: string[],
+  editorEnabled: Partial<Record<PieceType, boolean | undefined>>,
   components: Partial<Record<PieceType, IComponent>>
 }
 
@@ -52,7 +60,18 @@ export const HoverOverlayComponent = ({
 );
 
 export const HoverOverlay = ({
-  components, hoveredId, hoveredRect, enabled, hoveredPiece, triggeredByActionId,
+  components,
+  hoveredId,
+  hoveredRect,
+  enabled,
+  hoveredPiece,
+  byId,
+  getNodeRect,
+  isNodeVisible,
+  hoverPiece,
+  editorEnabled,
+  triggeredByActionId,
+  activeIds,
 }: OverlayProps) => {
   const { style, className } = useMemo(() => {
     // let shrinked = false;
@@ -120,6 +139,45 @@ export const HoverOverlay = ({
 
   const overlayClass = `r_pointer-div ${className}`;
   const overlayWrapClass = classNames({ r_overlay: true, 'r_active-editor': triggeredByActionId });
+
+  const onHoverTrack = useCallback((e: MouseEvent) => {
+    if (activeIds && activeIds.length) {
+      return;
+    }
+    if (!byId) {
+      return;
+    }
+    let foundId: string | undefined;
+    let foundRect: Rect | undefined;
+    let foundNode: HTMLElement | undefined;
+    Object.keys(byId).forEach((pieceId) => {
+      const piece = byId[pieceId];
+      if (editorEnabled[piece.type]) {
+        const nodeVisible = isNodeVisible(piece);
+        if (nodeVisible) {
+          const nodeRect = getNodeRect(piece);
+          const rect = nodeRect.hover || nodeRect.node;
+          if (rect.top + window.scrollY <= e.pageY && rect.bottom + window.scrollY >= e.pageY
+            && rect.left <= e.pageX && rect.right >= e.pageX) {
+            if (!foundNode || foundNode.contains(piece.node)) {
+              foundId = pieceId;
+              foundRect = rect;
+              foundNode = piece.node;
+            }
+          }
+        }
+      }
+    });
+
+    if (hoveredId !== foundId) {
+      hoverPiece(foundId, foundRect);
+    }
+  }, [byId, editorEnabled, activeIds, hoveredId]);
+
+  useEffect(() => {
+    document.addEventListener('mousemove', onHoverTrack);
+    return () => { document.removeEventListener('mousemove', onHoverTrack); };
+  }, [onHoverTrack]);
 
   return (
     <HoverOverlayComponent

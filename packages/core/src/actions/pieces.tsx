@@ -93,6 +93,20 @@ export const onEditorActive = (pieceId: string, active: boolean) => (dispatch: D
   dispatch({ type: Actions.PIECES_EDITOR_ACTIVE, id: pieceId, active });
 };
 
+export const externalPieceUpdate = (piece: Partial<IPieceItem>) => (dispatch: Dispatch, getState: GetIWriteAwayState) => {
+  const pieces = selectPieces(getState);
+  const config = selectConfig(getState);
+  if (!piece.id) {
+    return;
+  }
+  const current = pieces.byId[piece.id];
+  if (current) {
+    const target = { ...current, ...piece };
+    const update = config.api.resolveConflict ? config.api.resolveConflict(current, target) : target;
+    dispatch(updatePiece(target.id, update));
+  }
+};
+
 export const onNodeResized = (pieceId: string) => (dispatch: Dispatch, getState: GetIWriteAwayState) => {
   const pieces = selectPieces(getState);
   const config = selectConfig(getState);

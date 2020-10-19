@@ -3,10 +3,12 @@ import {
   defaultState as writeAwayState,
   reducerKey as writeAwayReducerKey,
   reducer as writeAwayReducer,
-  IWriteAwayState,
+  IWriteAwayState, externalPieceUpdateAction,
 } from '@writeaway/core';
 import thunk, { ThunkMiddleware } from 'redux-thunk';
-import { applyMiddleware, combineReducers, AnyAction, createStore, Reducer } from 'redux';
+import {
+  applyMiddleware, combineReducers, AnyAction, createStore, Reducer,
+} from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { IApplicationState } from 'types';
 
@@ -50,6 +52,17 @@ export const startStore = () => {
 
   // Run custom middleware
   // sagaMiddleware.run(rootSaga);
+
+  // If your application supports real-time updates of content, you can call `externalPieceUpdateAction` on store
+  // to forcefully update specific piece on page
+  // Conflicts are resolved with `resolveConflict` method of API, default takes piece with more recent time of update.
+  setInterval(() => {
+    store.dispatch(externalPieceUpdateAction({
+      id: 'pieceId',
+      data: { html: 'I will revert to this string every 10 seconds ' },
+      meta: { id: 'timer', label: 'Timer', time: Date.now() },
+    }) as any);
+  }, 10000);
 
   return store;
 };

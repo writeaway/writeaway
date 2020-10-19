@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 
 import Modal from 'react-modal';
 import { shallowEqual } from 'react-redux';
-import { RedaxtorSeoData, RedaxtorSeoKeyField, RedaxtorSeoState } from 'types';
+import { WriteAwaySeoData, WriteAwaySeoKeyField, WriteAwaySeoState } from 'types';
 
 import Editor from 'react-simple-code-editor';
 // @ts-ignore
@@ -16,7 +16,7 @@ import 'prismjs/components/prism-css';
 import 'prismjs/components/prism-markup';
 import 'prismjs/components/prism-javascript';
 
-export class RedaxtorSeo extends Component<IPieceProps<RedaxtorSeoData>, RedaxtorSeoState> {
+export class WriteAwaySeo extends Component<IPieceProps<WriteAwaySeoData>, WriteAwaySeoState> {
   /**
    * Specify component should be rendered inside target node and capture all inside html
    * @type {string}
@@ -110,7 +110,7 @@ export class RedaxtorSeo extends Component<IPieceProps<RedaxtorSeoData>, Redaxto
     }
   }
 
-  shouldComponentUpdate(nextProps: IPieceProps, nextState: RedaxtorSeoState) {
+  shouldComponentUpdate(nextProps: IPieceProps, nextState: WriteAwaySeoState) {
     if (this.props.piece.data) {
       if (!shallowEqual(nextProps.piece.data, this.props.piece.data)) {
         if (this.props.actions.setPieceMessage) {
@@ -128,7 +128,7 @@ export class RedaxtorSeo extends Component<IPieceProps<RedaxtorSeoData>, Redaxto
    * @param valueKey
    * @param value
    */
-  updateValue(valueKey: RedaxtorSeoKeyField, value: string) {
+  updateValue(valueKey: WriteAwaySeoKeyField, value: string) {
     this.setState({
       [valueKey]: (value || '').trim(),
     } as any);

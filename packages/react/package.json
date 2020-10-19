@@ -2,7 +2,7 @@
   "name": "@writeaway/react",
   "version": "2.0.4",
   "private": true,
-  "description": "Redaxtor is a JavaScript library for editing CMS pieces, pages and internationalisation on the client side.",
+  "description": "WriteAway is a JavaScript library for editing CMS pieces, pages and internationalisation on the client side.",
   "main": "./dist/react.js",
   "types": "./dist/index.d.ts",
   "files": [
@@ -22,6 +22,7 @@
     "build:prod": "cross-env NODE_ENV=production webpack",
     "build:dev": "cross-env NODE_ENV=development webpack",
     "watch": "cross-env NODE_ENV=development webpack --watch",
+    "serve": "http-server dist",
     "prepublishOnly": "npm run lint && npm run build"
   },
   "author": "SpiralScout",
@@ -51,6 +52,7 @@
     "@types/react-modal": "^3.10.6",
     "@types/react-redux": "^7.1.9",
     "@types/react-redux-toastr": "^7.6.0",
-    "@types/webpack-env": "^1.15.3"
+    "@types/webpack-env": "^1.15.3",
+    "html-webpack-plugin": "^4.5.0"
   }
 }

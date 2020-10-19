@@ -1,7 +1,7 @@
 {
   "name": "@writeaway/plugin-codemirror",
   "version": "2.0.3",
-  "description": "Redaxtor is a JavaScript library for editing CMS pieces, pages and internationalisation on the client side.",
+  "description": "WriteAway is a JavaScript library for editing CMS pieces, pages and internationalisation on the client side.",
   "main": "./dist/plugin-codemirror.js",
   "types": "./dist/index.d.ts",
   "files": [

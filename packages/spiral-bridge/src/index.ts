@@ -1,5 +1,5 @@
 import { defaultMinimumApi as BasicApi, IOptions, WriteAwayCore } from '@writeaway/core';
-import { RedaxtorSeoData } from '@writeaway/plugin-seo';
+import { WriteAwaySeoData } from '@writeaway/plugin-seo';
 import { boundMethod } from 'autobind-decorator';
 import {
   getCookie, globMeta, setCookie, VAR_E_ACTIVE, VAR_E_COLLAPSED, VAR_E_EXPERT,
@@ -10,7 +10,7 @@ import { useSpiralWS } from 'concurrent';
 import 'style.less';
 
 /**
- * Redaxtor bundle specific for SpiralScout
+ * WriteAway bundle specific for SpiralScout
  */
 export class WriteAwaySpiralBundle extends WriteAwayCore {
   static startForSpiral = startForSpiral;
@@ -18,7 +18,7 @@ export class WriteAwaySpiralBundle extends WriteAwayCore {
   /**
    * Attaches invisible div handling SEO editing
    */
-  attachSeo(data: Partial<RedaxtorSeoData>) {
+  attachSeo(data: Partial<WriteAwaySeoData>) {
     setTimeout(() => {
       const div = document.createElement('div');
       const meta = globMeta();
@@ -36,7 +36,7 @@ export class WriteAwaySpiralBundle extends WriteAwayCore {
       div.innerHTML = 'Edit SEO Meta';
       div.className = 'edit-seo-div';
       div.style.display = 'none';
-      this.addPiece<RedaxtorSeoData>(div, {
+      this.addPiece<WriteAwaySeoData>(div, {
         id: 'seo',
         name: 'Edit SEO',
         type: 'seo',

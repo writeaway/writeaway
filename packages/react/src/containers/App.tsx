@@ -1,4 +1,4 @@
-import { WriteAwayNavBar, WriteAwayOverlay } from '@writeaway/core';
+import { WriteAwayEditors, WriteAwayNavBar, WriteAwayOverlay } from '@writeaway/core';
 import { WriteAwayReactCode } from '@writeaway/plugin-codemirror';
 import * as React from 'react';
 import { Provider } from 'react-redux';
@@ -26,6 +26,7 @@ export const App = ({ store }:{store: Store}) => (
           }
         }
         />
+        <WriteAwayEditors />
         <ReduxToastr
           className="r_toast-container"
           timeOut={4000}

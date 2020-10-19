@@ -1,11 +1,11 @@
 import { IComponent } from '@writeaway/core';
-import { RedaxtorSeoData } from 'types';
-import { RedaxtorSeo } from './RedaxtorSeo';
+import { WriteAwaySeoData } from 'types';
+import { WriteAwaySeo as Editor } from './WriteAwaySeo';
 
 import 'google-preview.less';
 
 export * from 'types';
 
-export const WriteAwaySeo: IComponent<RedaxtorSeoData> = RedaxtorSeo;
+export const WriteAwaySeo: IComponent<WriteAwaySeoData> = Editor;
 
 export default WriteAwaySeo;

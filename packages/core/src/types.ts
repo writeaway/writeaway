@@ -52,7 +52,7 @@ export interface GalleryItem {
  * @param fn - subscription function
  * Should return an unsubscribe function
  */
-export type PieceSubscription = (fn: (piece: IPieceItem) => boolean) => () => void;
+export type PieceSubscription = (fn: (piece: Partial<IPieceItem>) => boolean) => () => void;
 
 /**
  * Resolve conflicts between current in-state piece data and data coming from external source
@@ -228,7 +228,7 @@ export interface IOptions {
    */
   enableEdit: boolean,
   /**
-   * Optional. Default: document.body, Set place for the Redaxtor bar
+   * Optional. Default: document.body, Set place for the WriteAway bar
    */
   navBarRoot: HTMLElement,
   /**
@@ -366,7 +366,7 @@ export type PieceActions<DataType = any> = {
   setCurrentSourcePieceId: (id: string) => void,
 };
 
-export interface IReactProps {
+export interface IReactActionProps<DataType = any> {
   /**
    * Dynamically add component to support piece type
    */
@@ -374,11 +374,16 @@ export interface IReactProps {
   /**
    * Dynamically add piece
    */
-  addPiece: (piece: IPieceItem) => void,
+  addPiece: (piece: IPieceItem<DataType>) => void,
   /**
    * Dynamically remove piece
    */
   removePiece: (pieceId: string) => void,
+}
+
+export interface IReactPieceProps {
+  id: string,
+  name: string,
 }
 
 /**
