@@ -1,17 +1,55 @@
-import React, { useMemo } from 'react';
+import React, { CSSProperties, useMemo } from 'react';
 import classNames from 'classnames';
 import {
-  IComponent, IPiece, PieceType, Rect,
+  IComponent, IPieceItem, PieceType, Rect,
 } from 'types';
 
 export interface OverlayProps {
   triggeredByActionId: boolean,
-  hoveredPiece?: IPiece,
+  hoveredPiece?: IPieceItem,
   hoveredId?: string,
   hoveredRect?: Rect,
   enabled: boolean,
   components: Partial<Record<PieceType, IComponent>>
 }
+
+export interface HoverOverlayComponentProps {
+  overlayWrapClass: string,
+  overlayClass: string,
+  style: CSSProperties,
+  triggeredByActionId: boolean,
+  componentLabel?: string,
+  componentMessage?: { message: string; type?: string }
+}
+
+export const HoverOverlayComponent = ({
+  overlayWrapClass,
+  overlayClass,
+  style,
+  triggeredByActionId,
+  componentLabel,
+  componentMessage,
+}: HoverOverlayComponentProps) => (
+  <div className="redaxtor-overlay r_reset">
+    <div className={overlayWrapClass}>
+      <div className={overlayClass} style={style}>
+        {!triggeredByActionId
+        && (
+          <div className="r_pointer-div-label">
+            {componentLabel}
+            {componentMessage
+            && (
+              <div className={`r_pointer-div-message r_pointer-div-message-${componentMessage.type}`}>
+                {componentMessage.message}
+              </div>
+            )}
+          </div>
+        )}
+        <div className="r_pointer-edit-icon" />
+      </div>
+    </div>
+  </div>
+);
 
 export const HoverOverlay = ({
   components, hoveredId, hoveredRect, enabled, hoveredPiece, triggeredByActionId,
@@ -77,23 +115,20 @@ export const HoverOverlay = ({
     };
   }, [enabled, hoveredId, hoveredRect]);
 
-  const componentLabel = hoveredPiece ? (components[hoveredPiece.type]?.editLabel) : false;
+  const componentLabel = hoveredPiece ? (components[hoveredPiece.type]?.editLabel) : undefined;
+  const componentMessage = (hoveredPiece?.message) ? { message: hoveredPiece?.message, type: hoveredPiece?.messageLevel } : undefined;
 
   const overlayClass = `r_pointer-div ${className}`;
+  const overlayWrapClass = classNames({ r_overlay: true, 'r_active-editor': triggeredByActionId });
 
   return (
-    <div className="redaxtor-overlay r_reset">
-      <div className={classNames({ r_overlay: true, 'r_active-editor': triggeredByActionId })}>
-        <div className={overlayClass} style={style}>
-          {!triggeredByActionId
-          && (
-          <div className="r_pointer-div-label">
-            {componentLabel}
-          </div>
-          )}
-          <div className="r_pointer-edit-icon" />
-        </div>
-      </div>
-    </div>
+    <HoverOverlayComponent
+      overlayWrapClass={overlayWrapClass}
+      overlayClass={overlayClass}
+      style={style}
+      triggeredByActionId={triggeredByActionId}
+      componentLabel={componentLabel}
+      componentMessage={componentMessage}
+    />
   );
 };

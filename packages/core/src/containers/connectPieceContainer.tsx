@@ -51,13 +51,13 @@ const PieceContainer = <T extends object = any>(props: PieceProps<T>) => {
 };
 
 const mapStateToProps = (state: IWriteAwayStateExtension, ownProps: { id: string }) => ({
-  piece: state[REDUCER_KEY as '@writeaway'].pieces.byId[ownProps.id],
-  highlight: state[REDUCER_KEY as '@writeaway'].pieces.highlight,
-  expert: state[REDUCER_KEY as '@writeaway'].global.expert,
-  config: state[REDUCER_KEY as '@writeaway'].config,
-  editorActive: !state[REDUCER_KEY as '@writeaway'].pieces.byId[ownProps.id].destroy
-    && state[REDUCER_KEY as '@writeaway'].pieces.editorActive
-    && (state[REDUCER_KEY as '@writeaway'].pieces.editorEnabled[state[REDUCER_KEY as '@writeaway'].pieces.byId[ownProps.id].type] ?? true),
+  piece: state[REDUCER_KEY].pieces.byId[ownProps.id],
+  highlight: state[REDUCER_KEY].pieces.highlight,
+  expert: state[REDUCER_KEY].global.expert,
+  config: state[REDUCER_KEY].config,
+  editorActive: !state[REDUCER_KEY].pieces.byId[ownProps.id].destroy
+    && state[REDUCER_KEY].pieces.editorActive
+    && (state[REDUCER_KEY].pieces.editorEnabled[state[REDUCER_KEY].pieces.byId[ownProps.id].type] ?? true),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
