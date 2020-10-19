@@ -8,8 +8,8 @@ export * from './types';
 // Includes version and time in bundle
 export const version = `Version ${process.env.VERSION}, built at ${process.env.BUILD_TIME}`;
 
-export const WriteAwayCodeMirror: IComponent<WriteAwayCodeMirrorData> = WriteAwayCodemirror;
+export const EditorSourceCode: IComponent<WriteAwayCodeMirrorData> = WriteAwayCodemirror;
 
-export const WriteAwayReactCode = ReactCode;
+export const ReactPieceSourceCode = ReactCode;
 
-export default WriteAwayCodeMirror;
+export default EditorSourceCode;

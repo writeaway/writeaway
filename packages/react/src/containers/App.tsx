@@ -1,5 +1,6 @@
 import { WriteAwayEditors, WriteAwayNavBar, WriteAwayOverlay } from '@writeaway/core';
-import { WriteAwayReactCode } from '@writeaway/plugin-codemirror';
+import { ReactPieceSourceCode } from '@writeaway/plugin-codemirror';
+import { ReactPieceSeo } from '@writeaway/plugin-seo';
 import * as React from 'react';
 import { Provider } from 'react-redux';
 import ReduxToastr from 'react-redux-toastr';
@@ -10,11 +11,20 @@ export const App = ({ store }:{store: Store}) => (
     <Provider store={store}>
       <>
         <main>
-          <WriteAwayReactCode
+          <ReactPieceSourceCode
             id="source-1"
             name="Source edit"
             html="<div>Editable Source code</div>"
             updateNode={false}
+          />
+          <ReactPieceSeo
+            id="seo-1"
+            name="SEO Data"
+            label="Click to Edit SEO Meta Data"
+            header="<meta></meta>"
+            title="Page Title"
+            description="Page Descriptions"
+            keywords="Page Keywords"
           />
         </main>
         <WriteAwayOverlay />
