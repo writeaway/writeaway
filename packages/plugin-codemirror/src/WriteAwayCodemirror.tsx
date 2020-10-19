@@ -89,7 +89,7 @@ export default class CodeMirror extends Component<IPieceProps<WriteAwayCodeMirro
         this.initDataKeys.forEach((key) => {
           isChanged = isChanged && (nextProps.piece.data![key] !== this.props.piece.data![key]);
         });
-        if (this.props.actions.setPieceMessage) {
+        if (isChanged && this.props.actions.setPieceMessage) {
           this.props.actions.setPieceMessage(this.props.piece.id, 'Page refresh is required', 'warning');
         }
       }

@@ -97,6 +97,18 @@ export class WriteAwayCore {
     };
     const composeEnhancers = composeWithDevTools({
       name: 'WriteAway',
+      serialize: {
+        // eslint-disable-next-line consistent-return
+        replacer: (key: string, value: any) => {
+          if (value instanceof HTMLElement) { // use your custom data type checker
+            return `HTMLElement:${value.tagName}`;
+          }
+          if (value && value.prototype && value.prototype.isReactComponent) { // use your custom data type checker
+            return `IComponent:${(value as any).label}`;
+          }
+          return value;
+        },
+      } as any,
     });
 
     this.store = createStore<IWriteAwayStateExtension & IToastrStateExtension, AnyAction, { dispatch: Dispatch }, {}>(

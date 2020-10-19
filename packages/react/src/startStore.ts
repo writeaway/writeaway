@@ -1,9 +1,10 @@
+import React from 'react';
 import { reducer as toastr } from 'react-redux-toastr';
 import {
   defaultState as writeAwayState,
   reducerKey as writeAwayReducerKey,
   reducer as writeAwayReducer,
-  IWriteAwayState, externalPieceUpdateAction,
+  IWriteAwayState, externalPieceUpdateAction, IComponent,
 } from '@writeaway/core';
 import thunk, { ThunkMiddleware } from 'redux-thunk';
 import {
@@ -43,10 +44,22 @@ export const startStore = () => {
   ];
   const enhancers = [applyMiddleware(...middlewares)];
   const store = createStore<IApplicationState, AnyAction, {}, unknown>(
-    reducers,
+    reducers as any,
     initialState,
     composeWithDevTools({
       name: 'WriteAway React Demo',
+      serialize: {
+        // eslint-disable-next-line consistent-return
+        replacer: (key: string, value: any) => {
+          if (value instanceof HTMLElement) { // use your custom data type checker
+            return `HTMLElement:${value.tagName}`;
+          }
+          if (value && value.prototype && value.prototype.isReactComponent) { // use your custom data type checker
+            return `IComponent:${(value as any).label}`;
+          }
+          return value;
+        },
+      } as any,
     })(...enhancers),
   );
 
