@@ -1,6 +1,6 @@
 {
   "name": "@writeaway/react",
-  "version": "2.0.4",
+  "version": "2.1.0",
   "private": true,
   "description": "WriteAway is a JavaScript library for editing CMS pieces, pages and internationalisation on the client side.",
   "main": "./dist/react.js",
@@ -28,10 +28,10 @@
   "author": "SpiralScout",
   "license": "MIT",
   "dependencies": {
-    "@writeaway/core": "2.0.5",
-    "@writeaway/plugin-codemirror": "^2.0.3",
-    "@writeaway/plugin-medium": "^2.0.3",
-    "@writeaway/plugin-seo": "^2.0.4",
+    "@writeaway/core": "^2.1.0",
+    "@writeaway/plugin-codemirror": "^2.1.0",
+    "@writeaway/plugin-medium": "^2.1.0",
+    "@writeaway/plugin-seo": "^2.1.0",
     "autobind-decorator": "^2.4.0",
     "classnames": "^2.2.6",
     "js-beautify": "^1.13.0",
@@ -40,11 +40,11 @@
     "react-dom": "^16.13.1",
     "react-modal": "^3.11.2",
     "react-redux": "^7.2.1",
-    "react-simple-code-editor": "^0.11.0",
     "react-redux-toastr": "^7.6.5",
+    "react-simple-code-editor": "^0.11.0",
+    "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
-    "redux-thunk": "^2.3.0",
-    "redux": "^4.0.5"
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.10",

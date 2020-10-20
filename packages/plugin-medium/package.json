@@ -1,6 +1,6 @@
 {
   "name": "@writeaway/plugin-medium",
-  "version": "2.0.3",
+  "version": "2.1.0",
   "description": "WriteAway is a JavaScript library for editing CMS pieces, pages and internationalisation on the client side.",
   "main": "./dist/plugin-medium.js",
   "types": "./dist/index.d.ts",
