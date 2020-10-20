@@ -94,8 +94,10 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.ipiecesapi.html#getnoderect" class="tsd-kind-icon">get<wbr>Node<wbr>Rect</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.ipiecesapi.html#getpiecedata" class="tsd-kind-icon">get<wbr>Piece<wbr>Data</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.ipiecesapi.html#isnodevisible" class="tsd-kind-icon">is<wbr>Node<wbr>Visible</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.ipiecesapi.html#resolveconflict" class="tsd-kind-icon">resolve<wbr>Conflict</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.ipiecesapi.html#resolvers" class="tsd-kind-icon">resolvers</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.ipiecesapi.html#savepiecedata" class="tsd-kind-icon">save<wbr>Piece<wbr>Data</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.ipiecesapi.html#subscribe" class="tsd-kind-icon">subscribe</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_types_.ipiecesapi.html#uploadimage" class="tsd-kind-icon">upload<wbr>Image</a></li>
 							</ul>
 						</section>
@@ -215,6 +217,27 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="resolveconflict" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> resolve<wbr>Conflict</h3>
+					<div class="tsd-signature tsd-kind-icon">resolve<wbr>Conflict<span class="tsd-signature-symbol">:</span> <a href="../modules/_types_.html#piececonflictresolver" class="tsd-signature-type">PieceConflictResolver</a></div>
+					<aside class="tsd-sources">
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Resolve conflicts between current in-state piece data and data coming from external source
+							Should resolve as data that needs to be applied</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>param</dt>
+							<dd><p>current state of piece</p>
+							</dd>
+							<dt>param</dt>
+							<dd><p>external state of piece</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="resolvers" class="tsd-anchor"></a>
 					<h3>resolvers</h3>
 					<div class="tsd-signature tsd-kind-icon">resolvers<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_types_.html#piecetype" class="tsd-signature-type">PieceType</a><span class="tsd-signature-symbol">, </span><a href="../modules/_types_.html#piecedataresolver" class="tsd-signature-type">PieceDataResolver</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
@@ -257,6 +280,24 @@
 								</ul>
 							</li>
 						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="subscribe" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> subscribe</h3>
+					<div class="tsd-signature tsd-kind-icon">subscribe<span class="tsd-signature-symbol">:</span> <a href="../modules/_types_.html#piecesubscription" class="tsd-signature-type">PieceSubscription</a></div>
+					<aside class="tsd-sources">
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Subscribe to piece updates coming from external source, i.e. websockets</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>param</dt>
+							<dd><p>subscription function
+								Should return an unsubscribe function</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">

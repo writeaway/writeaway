@@ -3,7 +3,9 @@ import {
   addPiece, removePiece,
 } from 'actions/pieces';
 import { connect } from 'react-redux';
-import { Dispatch, IComponent, IPieceItem, PieceType } from 'types';
+import {
+  Dispatch, IComponent, IPieceItem, PieceType,
+} from 'types';
 
 const mapStateToProps = () => ({});
 

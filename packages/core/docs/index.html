@@ -120,7 +120,205 @@
 				<a href="#integrating-in-react-application" id="integrating-in-react-application" style="color: inherit; text-decoration: none;">
 					<h2>Integrating in React application</h2>
 				</a>
-				<p>TBD:</p>
+				<a href="#setup-store" id="setup-store" style="color: inherit; text-decoration: none;">
+					<h3>Setup Store</h3>
+				</a>
+				<p>WriteAway uses <code>redux</code> and <code>redux-thunk</code> middleware so you need to add <code>redux</code> provider on top level of your application</p>
+				<pre><code class="language-typescript">  <span class="hljs-keyword">import</span> {
+    defaultState <span class="hljs-keyword">as</span> writeAwayState,
+    reducerKey <span class="hljs-keyword">as</span> writeAwayReducerKey,
+    reducer <span class="hljs-keyword">as</span> writeAwayReducer,
+    IWriteAwayState
+  } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@writeaway/core&#x27;</span>;
+
+  <span class="hljs-comment">/**
+   * Configure reducers
+   */</span>
+  <span class="hljs-keyword">const</span> reducers = combineReducers({
+    <span class="hljs-comment">// Required: Add WriteAway reducer</span>
+    [writeAwayReducerKey <span class="hljs-keyword">as</span> <span class="hljs-string">&#x27;@writeaway&#x27;</span>]: writeAwayReducer <span class="hljs-keyword">as</span> Reducer&lt;IWriteAwayState&gt;,
+    <span class="hljs-comment">// Options: Add toastr reducer if you use react-redux-toastr. If not, handle react-redux-toastr actions manually in your app to show toasts from WriteAway.  </span>
+    toastr, 
+    <span class="hljs-comment">// Add any other application specific reducers</span>
+    app: appReducer,
+  });
+
+  <span class="hljs-keyword">const</span> defaultAppState = {};
+
+  <span class="hljs-comment">/**
+   * Configure initial default state
+   */</span>
+  <span class="hljs-keyword">const</span> initialState: IApplicationState = {
+    [writeAwayReducerKey]: writeAwayState <span class="hljs-keyword">as</span> IWriteAwayState,
+    toastr: <span class="hljs-literal">undefined</span> <span class="hljs-keyword">as</span> <span class="hljs-built_in">any</span>,
+    app: defaultAppState,
+  };
+
+  <span class="hljs-comment">// Compose middlewares</span>
+  <span class="hljs-keyword">const</span> middlewares = [
+    <span class="hljs-comment">// WriteAway relies on thunk middleware</span>
+    thunk <span class="hljs-keyword">as</span> ThunkMiddleware,
+    <span class="hljs-comment">// Add other middlewares if you need them </span>
+    <span class="hljs-comment">// sagaMiddleware, </span>
+    <span class="hljs-comment">// routerMiddleware(history)</span>
+  ];
+
+  <span class="hljs-keyword">const</span> enhancers = [applyMiddleware(...middlewares)];
+  <span class="hljs-keyword">const</span> store = createStore&lt;IApplicationState, AnyAction, {}, unknown&gt;(
+    reducers <span class="hljs-keyword">as</span> <span class="hljs-built_in">any</span>,
+    initialState,
+    composeWithDevTools({
+      name: <span class="hljs-string">&#x27;WriteAway React Demo&#x27;</span>,
+      serialize: {
+        <span class="hljs-comment">// If you are using redux devtools you may want to add this snippet to</span>
+        <span class="hljs-comment">// serialize section as WriteAway stores node refences in store</span>
+        replacer: <span class="hljs-function">(<span class="hljs-params">key: <span class="hljs-built_in">string</span>, value: <span class="hljs-built_in">any</span></span>) =&gt;</span> {
+          <span class="hljs-keyword">if</span> (value <span class="hljs-keyword">instanceof</span> HTMLElement) { <span class="hljs-comment">// use your custom data type checker</span>
+            <span class="hljs-keyword">return</span> <span class="hljs-string">`HTMLElement:<span class="hljs-subst">${value.tagName}</span>`</span>;
+          }
+          <span class="hljs-keyword">if</span> (value &amp;&amp; value.prototype &amp;&amp; value.prototype.isReactComponent) { <span class="hljs-comment">// use your custom data type checker</span>
+            <span class="hljs-keyword">return</span> <span class="hljs-string">`IComponent:<span class="hljs-subst">${(value <span class="hljs-keyword">as</span> <span class="hljs-built_in">any</span>).label}</span>`</span>;
+          }
+          <span class="hljs-keyword">return</span> value;
+        },
+      } <span class="hljs-keyword">as</span> <span class="hljs-built_in">any</span>,
+    })(...enhancers),
+  );</code></pre>
+				<pre><code class="language-typescript">&lt;&gt;
+    &lt;Provider store={store}&gt;
+      &lt;MyApplication /&gt;
+    &lt;/Provider&gt;
+&lt;/&gt;</code></pre>
+				<a href="#use-react-pieces" id="use-react-pieces" style="color: inherit; text-decoration: none;">
+					<h3>Use React Pieces</h3>
+				</a>
+				<p>When enabling edit mode, render editable pieces with react components from plugins and to render editors.</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { ReactPieceSourceCode } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@writeaway/plugin-codemirror&#x27;</span>;
+<span class="hljs-keyword">import</span> { ReactPieceBlockBackground, ReactPieceImage, ReactPieceRichText } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@writeaway/plugin-medium&#x27;</span>;
+<span class="hljs-keyword">import</span> { ReactPieceSeo } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@writeaway/plugin-seo&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> App = <span class="hljs-function">() =&gt;</span> (
+  &lt;main&gt;
+          &lt;ReactPieceBlockBackground
+            id=<span class="hljs-string">&quot;bg-1&quot;</span>
+            name=<span class="hljs-string">&quot;Background For Rich Text&quot;</span>
+            bgColor=<span class="hljs-string">&quot;#FFcccc&quot;</span>
+            className=<span class="hljs-string">&quot;p-4&quot;</span>
+          &gt;
+            &lt;article&gt;
+              &lt;h2&gt;Rich Text Block&lt;/h2&gt;
+              &lt;ReactPieceRichText
+                id=<span class="hljs-string">&quot;rich-1&quot;</span>
+                name=<span class="hljs-string">&quot;Rich Text&quot;</span>
+                html=<span class="hljs-string">&quot;&lt;div&gt;Editable Rich Text&lt;/div&gt;&quot;</span>
+              /&gt;
+            &lt;/article&gt;
+          &lt;/ReactPieceBlockBackground&gt;
+          &lt;ReactPieceBlockBackground
+            id=<span class="hljs-string">&quot;bg-2&quot;</span>
+            name=<span class="hljs-string">&quot;Background For Image&quot;</span>
+            bgColor=<span class="hljs-string">&quot;#ccFFcc&quot;</span>
+            className=<span class="hljs-string">&quot;p-4&quot;</span>
+          &gt;
+            &lt;article&gt;
+              &lt;h2&gt;Image Block&lt;/h2&gt;
+              &lt;ReactPieceImage
+                id=<span class="hljs-string">&quot;image-1&quot;</span>
+                name=<span class="hljs-string">&quot;image&quot;</span>
+                src=<span class="hljs-string">&quot;https://writeaway.github.io/images/image-06.jpg&quot;</span>
+                title=<span class="hljs-string">&quot;Editable Image&quot;</span>
+                alt=<span class="hljs-string">&quot;Sample Image&quot;</span>
+              /&gt;
+            &lt;/article&gt;
+          &lt;/ReactPieceBlockBackground&gt;
+          &lt;ReactPieceBlockBackground
+            id=<span class="hljs-string">&quot;bg-3&quot;</span>
+            bgColor=<span class="hljs-string">&quot;#ccccff&quot;</span>
+            name=<span class="hljs-string">&quot;Background For Source Code Block&quot;</span>
+            className=<span class="hljs-string">&quot;p-4&quot;</span>
+            src=<span class="hljs-string">&quot;https://writeaway.github.io/images/sayagata-400px.png&quot;</span>
+          &gt;
+            &lt;article&gt;
+              &lt;h2&gt;Source Code Block&lt;/h2&gt;
+              &lt;ReactPieceSourceCode
+                id=<span class="hljs-string">&quot;source-1&quot;</span>
+                name=<span class="hljs-string">&quot;Source edit&quot;</span>
+                html={codeStr}
+                updateNode
+              /&gt;
+            &lt;/article&gt;
+          &lt;/ReactPieceBlockBackground&gt;
+          &lt;article className=<span class="hljs-string">&quot;p-4&quot;</span>&gt;
+            &lt;h2&gt;SEO data block&lt;/h2&gt;
+            &lt;div className=<span class="hljs-string">&quot;btn&quot;</span>&gt;
+              &lt;ReactPieceSeo
+                id=<span class="hljs-string">&quot;seo-1&quot;</span>
+                name=<span class="hljs-string">&quot;SEO Data&quot;</span>
+                label=<span class="hljs-string">&quot;Click to Edit SEO Meta Data&quot;</span>
+                header=<span class="hljs-string">&quot;&lt;meta&gt;&lt;/meta&gt;&quot;</span>
+                title=<span class="hljs-string">&quot;Page Title&quot;</span>
+                description=<span class="hljs-string">&quot;Page Descriptions&quot;</span>
+                keywords=<span class="hljs-string">&quot;Page Keywords&quot;</span>
+              /&gt;
+            &lt;/div&gt;
+          &lt;/article&gt;
+&lt;/main&gt;);</code></pre>
+				<p>In the body, render navbar, toast controller, overlay and editors</p>
+				<pre><code class="language-typescript">        &lt;WriteAwayOverlay /&gt;
+        &lt;WriteAwayNavBar options={
+          {
+            navBarDraggable: <span class="hljs-literal">true</span>,
+            navBarCollapsable: <span class="hljs-literal">true</span>,
+            pieceNameGroupSeparator: <span class="hljs-string">&#x27;:&#x27;</span>,
+          }
+        }
+        /&gt;
+        &lt;WriteAwayEditors /&gt;
+        &lt;ReduxToastr
+          className=<span class="hljs-string">&quot;r_toast-container&quot;</span>
+          timeOut={<span class="hljs-number">4000</span>}
+          position=<span class="hljs-string">&quot;top-right&quot;</span>
+        /&gt;</code></pre>
+				<p><code>WriteAwayEditors</code> is mandatory for editor functionalities as it renders popups and required overlays for editing inside.</p>
+				<p><code>WriteAwayOverlay</code> is optional and renders hover effect for nodes</p>
+				<p><code>WriteAwayNavBar</code> is optional and renders control panel that has switches for editors</p>
+				<p><code>ReduxToastr</code> container is needed if you need to render redux toast messages from WriteAway</p>
+				<a href="#special-actions" id="special-actions" style="color: inherit; text-decoration: none;">
+					<h3>Special Actions</h3>
+				</a>
+				<p>Few special redux actions are exposed </p>
+				<pre><code class="language-typescript">    <span class="hljs-keyword">import</span> {
+      externalPieceUpdateAction, setAPIAction, setMetaAction
+    } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@writeaway/core&#x27;</span>;</code></pre>
+				<p>externalPieceUpdateAction - explicitly updates data of specific node. You can use it for real-time updates of content from WebSockets connection. Note funtionality relies on <code>api.resolveConflicts</code> method that decides if update should be applied.</p>
+				<pre><code class="language-typescript">    <span class="hljs-comment">// There is a server update of `source-1` node by John Doe </span>
+    dispatch(externalPieceUpdateAction(
+        {
+          id: <span class="hljs-string">&#x27;source-1&#x27;</span>,
+          data: { html: <span class="hljs-string">&quot;&lt;div&gt;New HTML&lt;/div&gt;&quot;</span> },
+          meta: { id: <span class="hljs-string">&#x27;user-b&#x27;</span>, label: <span class="hljs-string">&#x27;John Doe&#x27;</span>, time: <span class="hljs-built_in">Date</span>.now() }
+        }
+    ));</code></pre>
+				<p>setAPIAction - sets pieces api dynamically. Usefull when you need to create HTTP instances asyncrously.</p>
+				<pre><code class="language-typescript">    <span class="hljs-comment">// There is a server update of `source-1` node by John Doe </span>
+    dispatch(setAPIAction(
+        {
+          getPieceData: <span class="hljs-keyword">async</span> (piece: IPieceItem) =&gt; fetchPieceFromServer(piece.id),
+          <span class="hljs-comment">/* ... */</span>
+        }
+    ));</code></pre>
+				<p>setMetaAction - sets piece meta, that will be attached to pieces updated in this WriteAway editing session. Typically that&#39;s info of user who is editing content.</p>
+				<pre><code class="language-typescript">    <span class="hljs-comment">// There is a server update of `source-1` node by John Doe </span>
+    dispatch(setMetaAction(
+        {
+          id: <span class="hljs-string">&#x27;user-a&#x27;</span>,
+          label: <span class="hljs-string">&#x27;John Smith&#x27;</span>,
+        }
+    ));</code></pre>
+				<a href="#sample" id="sample" style="color: inherit; text-decoration: none;">
+					<h3>Sample</h3>
+				</a>
+				<p>See fully working <a href="https://github.com/writeaway/writeaway/blob/master/packages/react">React SPA sample here</a>.</p>
 				<a href="#writeawaycore-constructor-options" id="writeawaycore-constructor-options" style="color: inherit; text-decoration: none;">
 					<h2>WriteAwayCore constructor options</h2>
 				</a>

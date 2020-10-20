@@ -11,6 +11,7 @@ export enum Actions {
   /* INJECTIONS */
   ATTACH_COMPONENT = '@writeaway/ATTACH_COMPONENT',
   SET_API = '@writeaway/SET_API',
+  SET_META = '@writeaway/SET_META',
 
   EXPERT_MODE = '@writeaway/EXPERT_MODE',
 

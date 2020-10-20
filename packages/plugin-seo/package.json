@@ -47,5 +47,6 @@
     "@types/react-modal": "^3.10.6",
     "@types/react-redux": "^7.1.9",
     "@types/react-redux-toastr": "^7.6.0"
-  }
+  },
+  "gitHead": "cd3eeb07d64acaf0c080fd78607d09c228e6da21"
 }

@@ -284,7 +284,7 @@ externalPieceUpdateAction - explicitly updates data of specific node. You can us
 setAPIAction - sets pieces api dynamically. Usefull when you need to create HTTP instances asyncrously.
 
 ```typescript
-    // There is a server update of `source-1` node by John Doe 
+ 
     dispatch(setAPIAction(
         {
           getPieceData: async (piece: IPieceItem) => fetchPieceFromServer(piece.id),
@@ -296,7 +296,7 @@ setAPIAction - sets pieces api dynamically. Usefull when you need to create HTTP
 setMetaAction - sets piece meta, that will be attached to pieces updated in this WriteAway editing session. Typically that's info of user who is editing content.
 
 ```typescript
-    // There is a server update of `source-1` node by John Doe 
+     
     dispatch(setMetaAction(
         {
           id: 'user-a',

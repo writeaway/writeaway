@@ -1,5 +1,7 @@
 import { AnyAction, Reducer } from 'redux';
-import { IComponent, IPieceControllerState, IPieceItem, PieceType } from 'types';
+import {
+  IPieceControllerState, IPieceItem, PieceType,
+} from 'types';
 import { Actions } from '../constants';
 
 const piece = (pItem: IPieceItem, action: AnyAction) => {

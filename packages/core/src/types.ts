@@ -10,8 +10,8 @@ import type { ThunkAction, ThunkDispatch } from 'redux-thunk';
 
 export type PieceDataResolver<DataType = any> =
   (piece: IPieceItem<DataType>,
-   resolvers?: Partial<Record<PieceType, PieceDataResolver>>) =>
-    Promise<IPieceItem<DataType>>;
+    resolvers?: Partial<Record<PieceType, PieceDataResolver>>) =>
+  Promise<IPieceItem<DataType>>;
 
 /**
  * Image gallery item

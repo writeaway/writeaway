@@ -83,6 +83,8 @@
 								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_types_.galleryitem.html" class="tsd-kind-icon">Gallery<wbr>Item</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/_types_.icomponent.html" class="tsd-kind-icon">IComponent</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_types_.iglobalstate.html" class="tsd-kind-icon">IGlobal<wbr>State</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_types_.imeta.html" class="tsd-kind-icon">IMeta</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_types_.inavbarprops.html" class="tsd-kind-icon">INav<wbr>Bar<wbr>Props</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_types_.ioptions.html" class="tsd-kind-icon">IOptions</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/_types_.ipiece.html" class="tsd-kind-icon">IPiece</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_types_.ipiececontrollerstate.html" class="tsd-kind-icon">IPiece<wbr>Controller<wbr>State</a></li>
@@ -90,14 +92,20 @@
 								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/_types_.ipieceprops.html" class="tsd-kind-icon">IPiece<wbr>Props</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_types_.ipiecesapi.html" class="tsd-kind-icon">IPiecesAPI</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_types_.ipiecesoptions.html" class="tsd-kind-icon">IPieces<wbr>Options</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/_types_.ireactactionprops.html" class="tsd-kind-icon">IReact<wbr>Action<wbr>Props</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_types_.ireactpieceprops.html" class="tsd-kind-icon">IReact<wbr>Piece<wbr>Props</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_types_.itoastrstateextension.html" class="tsd-kind-icon">IToastr<wbr>State<wbr>Extension</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_types_.iwriteawaystate.html" class="tsd-kind-icon">IWrite<wbr>Away<wbr>State</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_types_.iwriteawaystateextension.html" class="tsd-kind-icon">IWrite<wbr>Away<wbr>State<wbr>Extension</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="_types_.html#pieceactions" class="tsd-kind-icon">Piece<wbr>Actions</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="_types_.html#piececonflictresolver" class="tsd-kind-icon">Piece<wbr>Conflict<wbr>Resolver</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="_types_.html#piecedataresolver" class="tsd-kind-icon">Piece<wbr>Data<wbr>Resolver</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="_types_.html#piecesubscription" class="tsd-kind-icon">Piece<wbr>Subscription</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="_types_.html#piecetype" class="tsd-kind-icon">Piece<wbr>Type</a></li>
 							</ul>
 						</section>
@@ -376,6 +384,51 @@
 						</ul>
 					</div>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="piececonflictresolver" class="tsd-anchor"></a>
+					<h3>Piece<wbr>Conflict<wbr>Resolver</h3>
+					<div class="tsd-signature tsd-kind-icon">Piece<wbr>Conflict<wbr>Resolver<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>current<span class="tsd-signature-symbol">: </span><a href="../interfaces/_types_.ipieceitem.html" class="tsd-signature-type">IPieceItem</a>, external<span class="tsd-signature-symbol">: </span><a href="../interfaces/_types_.ipieceitem.html" class="tsd-signature-type">IPieceItem</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="../interfaces/_types_.ipieceitem.html" class="tsd-signature-type">IPieceItem</a></div>
+					<aside class="tsd-sources">
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Resolve conflicts between current in-state piece data and data coming from external source
+							Should resolve as data that needs to be applied</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>param</dt>
+							<dd><p>current state of piece</p>
+							</dd>
+							<dt>param</dt>
+							<dd><p>external state of piece</p>
+							</dd>
+						</dl>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>current<span class="tsd-signature-symbol">: </span><a href="../interfaces/_types_.ipieceitem.html" class="tsd-signature-type">IPieceItem</a>, external<span class="tsd-signature-symbol">: </span><a href="../interfaces/_types_.ipieceitem.html" class="tsd-signature-type">IPieceItem</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_types_.ipieceitem.html" class="tsd-signature-type">IPieceItem</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>current: <a href="../interfaces/_types_.ipieceitem.html" class="tsd-signature-type">IPieceItem</a></h5>
+											</li>
+											<li>
+												<h5>external: <a href="../interfaces/_types_.ipieceitem.html" class="tsd-signature-type">IPieceItem</a></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../interfaces/_types_.ipieceitem.html" class="tsd-signature-type">IPieceItem</a></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 					<a name="piecedataresolver" class="tsd-anchor"></a>
 					<h3>Piece<wbr>Data<wbr>Resolver</h3>
@@ -407,6 +460,75 @@
 											</li>
 										</ul>
 										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_types_.ipieceitem.html" class="tsd-signature-type">IPieceItem</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">DataType</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="piecesubscription" class="tsd-anchor"></a>
+					<h3>Piece<wbr>Subscription</h3>
+					<div class="tsd-signature tsd-kind-icon">Piece<wbr>Subscription<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>piece<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_types_.ipieceitem.html" class="tsd-signature-type">IPieceItem</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
+					<aside class="tsd-sources">
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Subscribe to piece updates coming from external source, i.e. websockets</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>param</dt>
+							<dd><p>subscription function
+								Should return an unsubscribe function</p>
+							</dd>
+						</dl>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>piece<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_types_.ipieceitem.html" class="tsd-signature-type">IPieceItem</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>fn: <span class="tsd-signature-symbol">(</span>piece<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_types_.ipieceitem.html" class="tsd-signature-type">IPieceItem</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">boolean</span></h5>
+												<ul class="tsd-parameters">
+													<li class="tsd-parameter-signature">
+														<ul class="tsd-signatures tsd-kind-type-literal">
+															<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>piece<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_types_.ipieceitem.html" class="tsd-signature-type">IPieceItem</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+														</ul>
+														<ul class="tsd-descriptions">
+															<li class="tsd-description">
+																<h4 class="tsd-parameters-title">Parameters</h4>
+																<ul class="tsd-parameters">
+																	<li>
+																		<h5>piece: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_types_.ipieceitem.html" class="tsd-signature-type">IPieceItem</a><span class="tsd-signature-symbol">&gt;</span></h5>
+																	</li>
+																</ul>
+																<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+															</li>
+														</ul>
+													</li>
+												</ul>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h4>
+										<ul class="tsd-parameters">
+											<li class="tsd-parameter-signature">
+												<ul class="tsd-signatures tsd-kind-type-literal">
+													<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+												</ul>
+												<ul class="tsd-descriptions">
+													<li class="tsd-description">
+														<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+													</li>
+												</ul>
+											</li>
+										</ul>
 									</li>
 								</ul>
 							</li>

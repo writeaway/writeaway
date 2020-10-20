@@ -1,7 +1,7 @@
 import { AnyAction, combineReducers, Reducer } from 'redux';
 import { reducer as toastr } from 'react-redux-toastr';
 import {
-  IComponent, IGlobalState, IOptions, IPiecesAPI, PieceType,
+  IComponent, IGlobalState, IOptions, PieceType,
 } from 'types';
 import { defaultGlobalState, defaultOptions } from '../defaults';
 

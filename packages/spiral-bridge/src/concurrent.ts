@@ -1,4 +1,6 @@
-import type { NamesDict, SFSocket, ISFSocketEvent, Channel } from '@spiralscout/websockets';
+import type {
+  NamesDict, SFSocket, ISFSocketEvent, Channel,
+} from '@spiralscout/websockets';
 import { IPieceItem } from '@writeaway/core';
 
 export const DEFAULT_CHANNEL = 'writeaway';

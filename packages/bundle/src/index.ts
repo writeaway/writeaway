@@ -7,7 +7,7 @@ import {
 } from '@writeaway/core';
 import 'style.less';
 import { WriteAwaySeoData, EditorSeo } from '@writeaway/plugin-seo';
-import { EditorSourceCode} from '@writeaway/plugin-codemirror';
+import { EditorSourceCode } from '@writeaway/plugin-codemirror';
 import { EditorBlockBackground, EditorImage, EditorRichText } from '@writeaway/plugin-medium';
 import { getCookie, setCookie } from 'persist';
 

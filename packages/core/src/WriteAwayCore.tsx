@@ -22,7 +22,6 @@ import {
   IPieceItem,
   IWriteAwayState,
   PieceType,
-  Rect,
   IPiecesAPI,
   IPieceControllerState, Dispatch, Store, BarOptions, IWriteAwayStateExtension, IToastrStateExtension, INavBarProps,
 } from 'types';
