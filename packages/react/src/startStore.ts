@@ -1,9 +1,12 @@
+import { setAPI, setMeta } from '@writeaway/core/dist/actions';
+import { api } from 'api';
+import { meta } from 'meta';
 import { reducer as toastr } from 'react-redux-toastr';
 import {
   defaultState as writeAwayState,
   reducerKey as writeAwayReducerKey,
   reducer as writeAwayReducer,
-  IWriteAwayState, externalPieceUpdateAction,
+  IWriteAwayState, externalPieceUpdateAction, setAPIAction,
 } from '@writeaway/core';
 import thunk, { ThunkMiddleware } from 'redux-thunk';
 import {
@@ -76,6 +79,16 @@ export const startStore = () => {
       meta: { id: 'timer', label: 'Timer', time: Date.now() },
     }) as any);
   }, 10000);
+  /**
+   * Setup API
+   * Can be done later, but should happen before any editor is activated
+   */
+  store.dispatch(setAPIAction(api));
+  /**
+   * Setup user
+   * Can be done later, but should happen before any editor is activated
+   */
+  store.dispatch(setMeta(meta));
 
   return store;
 };

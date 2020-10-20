@@ -1,0 +1,27 @@
+{
+  "status": 200,
+  "data": {
+    "list": [
+      {
+        "src": "./images/sakura.png",
+        "thumbnailSrc": "./images/sakura.png"
+      },
+      {
+        "src": "./images/weather.png",
+        "thumbnailSrc": "./images/weather.png"
+      },
+      {
+        "src": "./images/wov.png",
+        "thumbnailSrc": "./images/wov.png"
+      },
+      {
+        "src": "./images/sayagata-400px.png",
+        "thumbnailSrc": "./images/sayagata-400px.png"
+      },
+      {
+        "src": "./images/ep_naturalwhite.png",
+        "thumbnailSrc": "./images/ep_naturalwhite.png"
+      }
+    ]
+  }
+}

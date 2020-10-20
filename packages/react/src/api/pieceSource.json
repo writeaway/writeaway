@@ -1,0 +1,8 @@
+{
+  "status": 200,
+  "piece": {
+    "data": {
+      "html": "<h2>Edit source</h2><p>If you use <pre>data-piece=\"source\"</pre> attribute, WriteAway will call source editor</p>"
+    }
+  }
+}
