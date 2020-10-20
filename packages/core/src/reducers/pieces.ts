@@ -78,6 +78,7 @@ const pieces: Reducer<IPieceControllerState> = (pState: IPieceControllerState = 
         return {
           ...pState,
           editorEnabled: {
+            ...pState.editorEnabled,
             [action.payload.type]: true,
           },
         };

@@ -29,6 +29,9 @@
   "license": "MIT",
   "dependencies": {
     "@writeaway/core": "2.0.5",
+    "@writeaway/plugin-codemirror": "^2.0.3",
+    "@writeaway/plugin-medium": "^2.0.3",
+    "@writeaway/plugin-seo": "^2.0.4",
     "autobind-decorator": "^2.4.0",
     "classnames": "^2.2.6",
     "js-beautify": "^1.13.0",
@@ -40,7 +43,8 @@
     "react-simple-code-editor": "^0.11.0",
     "react-redux-toastr": "^7.6.5",
     "redux-devtools-extension": "^2.13.8",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "redux": "^4.0.5"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.10",

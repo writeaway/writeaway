@@ -215,8 +215,7 @@ export default class CodeMirror extends Component<IPieceProps<WriteAwayCodeMirro
     // if there is no this.props.node, it means this component is invoked manually with custom html directly in props and should be just rendered
     // if this.state.sourceEditorActive and this.props.node presents,
     // it means that is a regular piece with control over node and sourceEditorActive means modal is open
-    if (this.state.sourceEditorActive || !this.props.piece.node) {
-      console.log('That');
+    if (this.state.sourceEditorActive) {
       const { html } = this.state;
       codemirror = (
         <Modal
@@ -261,8 +260,6 @@ export default class CodeMirror extends Component<IPieceProps<WriteAwayCodeMirro
           </div>
         </Modal>
       );
-    } else {
-      codemirror = <div data-editor-for={this.props.piece.name} />;
     }
 
     this.renderNonReactAttributes();

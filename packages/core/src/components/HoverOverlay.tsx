@@ -74,7 +74,6 @@ export const HoverOverlay = ({
   activeIds,
 }: OverlayProps) => {
   const { style, className } = useMemo(() => {
-    // let shrinked = false;
     const labelHeight = 27;
 
     if (enabled && hoveredId && hoveredRect) {
@@ -95,7 +94,6 @@ export const HoverOverlay = ({
         /**
          * We are touching edges, switch to shrinked styles
          */
-        // shrinked = true;
         base.className = 'shrinked';
       }
 
