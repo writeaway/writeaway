@@ -15,6 +15,7 @@ import {
   PieceType,
   IPiecesAPI, IPiecesOptions, IWriteAwayStateExtension, IToastrStateExtension,
 } from 'types';
+import { REDUCER_KEY } from './constants';
 
 export const defaultPieces: IPiecesOptions = {
   nameGroupSeparator: ',',
@@ -34,6 +35,12 @@ export const defaultPieces: IPiecesOptions = {
 export const defaultMinimumApi: IPiecesAPI = {
   getNodeRect,
   isNodeVisible,
+  resolveConflict: (a: IPieceItem, b: IPieceItem) => {
+    if (!a.meta?.time || !b.meta?.time || b.meta?.time > a.meta?.time) {
+      return b;
+    }
+    return a;
+  },
   resolvers: {
     background: async (piece: IPieceItem) => {
       const computedStyle = getComputedStyle(piece.node);
@@ -91,6 +98,7 @@ export const defaultMinimumApi: IPiecesAPI = {
 
 export const defaultOptions: IOptions = {
   piecesOptions: defaultPieces,
+  meta: {},
   ajax: {},
   enableEdit: true,
   navBarCollapsable: true,
@@ -114,7 +122,7 @@ export const defaultState: IWriteAwayState = {
 };
 
 export const defaultWrappedState: IWriteAwayStateExtension & IToastrStateExtension = {
-  '@writeaway': defaultState,
+  [REDUCER_KEY]: defaultState,
   toastr: undefined as any,
 };
 

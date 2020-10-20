@@ -1,23 +1,79 @@
-import React, { useMemo } from 'react';
+import React, {
+  CSSProperties, useCallback, useEffect, useMemo,
+} from 'react';
 import classNames from 'classnames';
 import {
-  IComponent, IPiece, PieceType, Rect,
+  IComponent, IPieceItem, PieceType, Rect,
 } from 'types';
 
 export interface OverlayProps {
   triggeredByActionId: boolean,
-  hoveredPiece?: IPiece,
+  hoveredPiece?: IPieceItem,
   hoveredId?: string,
   hoveredRect?: Rect,
   enabled: boolean,
+  isNodeVisible: (piece: IPieceItem) => boolean,
+  getNodeRect: (piece: IPieceItem) => { node: Rect, hover?: Rect },
+  byId: { [id: string]: IPieceItem },
+  hoverPiece: (foundId?: string, foundRect?: Rect)=>void,
+  activeIds?: string[],
+  editorEnabled: Partial<Record<PieceType, boolean | undefined>>,
   components: Partial<Record<PieceType, IComponent>>
 }
 
+export interface HoverOverlayComponentProps {
+  overlayWrapClass: string,
+  overlayClass: string,
+  style: CSSProperties,
+  triggeredByActionId: boolean,
+  componentLabel?: string,
+  componentMessage?: { message: string; type?: string }
+}
+
+export const HoverOverlayComponent = ({
+  overlayWrapClass,
+  overlayClass,
+  style,
+  triggeredByActionId,
+  componentLabel,
+  componentMessage,
+}: HoverOverlayComponentProps) => (
+  <div className="redaxtor-overlay r_reset">
+    <div className={overlayWrapClass}>
+      <div className={overlayClass} style={style}>
+        {!triggeredByActionId
+        && (
+          <div className="r_pointer-div-label">
+            {componentLabel}
+            {componentMessage
+            && (
+              <div className={`r_pointer-div-message r_pointer-div-message-${componentMessage.type}`}>
+                {componentMessage.message}
+              </div>
+            )}
+          </div>
+        )}
+        <div className="r_pointer-edit-icon" />
+      </div>
+    </div>
+  </div>
+);
+
 export const HoverOverlay = ({
-  components, hoveredId, hoveredRect, enabled, hoveredPiece, triggeredByActionId,
+  components,
+  hoveredId,
+  hoveredRect,
+  enabled,
+  hoveredPiece,
+  byId,
+  getNodeRect,
+  isNodeVisible,
+  hoverPiece,
+  editorEnabled,
+  triggeredByActionId,
+  activeIds,
 }: OverlayProps) => {
   const { style, className } = useMemo(() => {
-    // let shrinked = false;
     const labelHeight = 27;
 
     if (enabled && hoveredId && hoveredRect) {
@@ -38,7 +94,6 @@ export const HoverOverlay = ({
         /**
          * We are touching edges, switch to shrinked styles
          */
-        // shrinked = true;
         base.className = 'shrinked';
       }
 
@@ -77,23 +132,59 @@ export const HoverOverlay = ({
     };
   }, [enabled, hoveredId, hoveredRect]);
 
-  const componentLabel = hoveredPiece ? (components[hoveredPiece.type]?.editLabel) : false;
+  const componentLabel = hoveredPiece ? (components[hoveredPiece.type]?.editLabel) : undefined;
+  const componentMessage = (hoveredPiece?.message) ? { message: hoveredPiece?.message, type: hoveredPiece?.messageLevel } : undefined;
 
   const overlayClass = `r_pointer-div ${className}`;
+  const overlayWrapClass = classNames({ r_overlay: true, 'r_active-editor': triggeredByActionId });
+
+  const onHoverTrack = useCallback((e: MouseEvent) => {
+    if (activeIds && activeIds.length) {
+      return;
+    }
+    if (!byId) {
+      return;
+    }
+    let foundId: string | undefined;
+    let foundRect: Rect | undefined;
+    let foundNode: HTMLElement | undefined;
+    Object.keys(byId).forEach((pieceId) => {
+      const piece = byId[pieceId];
+      if (editorEnabled[piece.type]) {
+        const nodeVisible = isNodeVisible(piece);
+        if (nodeVisible) {
+          const nodeRect = getNodeRect(piece);
+          const rect = nodeRect.hover || nodeRect.node;
+          if (rect.top + window.scrollY <= e.pageY && rect.bottom + window.scrollY >= e.pageY
+            && rect.left <= e.pageX && rect.right >= e.pageX) {
+            if (!foundNode || foundNode.contains(piece.node)) {
+              foundId = pieceId;
+              foundRect = rect;
+              foundNode = piece.node;
+            }
+          }
+        }
+      }
+    });
+
+    if (hoveredId !== foundId) {
+      hoverPiece(foundId, foundRect);
+    }
+  }, [byId, editorEnabled, activeIds, hoveredId]);
+
+  useEffect(() => {
+    document.addEventListener('mousemove', onHoverTrack);
+    return () => { document.removeEventListener('mousemove', onHoverTrack); };
+  }, [onHoverTrack]);
 
   return (
-    <div className="r_reset">
-      <div className={classNames({ r_overlay: true, 'r_active-editor': triggeredByActionId })}>
-        <div className={overlayClass} style={style}>
-          {!triggeredByActionId
-          && (
-          <div className="r_pointer-div-label">
-            {componentLabel}
-          </div>
-          )}
-          <div className="r_pointer-edit-icon" />
-        </div>
-      </div>
-    </div>
+    <HoverOverlayComponent
+      overlayWrapClass={overlayWrapClass}
+      overlayClass={overlayClass}
+      style={style}
+      triggeredByActionId={triggeredByActionId}
+      componentLabel={componentLabel}
+      componentMessage={componentMessage}
+    />
   );
 };

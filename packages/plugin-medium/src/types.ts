@@ -1,4 +1,8 @@
-export type RedaxtorImageTagData = { src?: string, title?: string, alt?: string};
-export type RedaxtorImageTagDimensionData = { width?: number, height?: number, originalWidth?: number, originalHeight?: number};
-export type RedaxtorImageTagBGData = { bgColor?: string, bgRepeat?: string, bgPosition?: string, bgSize?: string };
-export type RedaxtorImageData = RedaxtorImageTagData & RedaxtorImageTagDimensionData & RedaxtorImageTagBGData;
+export type WriteAwayImageTagData = { src?: string, title?: string, alt?: string};
+export type WriteAwayImageTagDimensionData = { width?: number, height?: number, originalWidth?: number, originalHeight?: number};
+export type WriteAwayImageTagBGData = { bgColor?: string, bgRepeat?: string, bgPosition?: string, bgSize?: string };
+export type WriteAwayImageData = WriteAwayImageTagData & WriteAwayImageTagDimensionData & WriteAwayImageTagBGData;
+
+export type WriteAwayBackgroundBlockData = Omit<WriteAwayImageTagData, 'alt'> & WriteAwayImageTagBGData;
+
+export type WriteAwayRichTextData = { html: string };

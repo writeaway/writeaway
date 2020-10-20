@@ -4,7 +4,7 @@ import { boundMethod } from 'autobind-decorator';
 import { html as html_beautify } from 'js-beautify';
 import React, { Component } from 'react';
 import Modal from 'react-modal';
-import { RedaxtorCodeMirrorData, RedaxtorCodeMirrorState } from 'types';
+import { WriteAwayCodeMirrorData, WriteAwayCodeMirrorState } from 'types';
 
 import Editor from 'react-simple-code-editor';
 // @ts-ignore
@@ -14,7 +14,7 @@ import 'prismjs/components/prism-css';
 import 'prismjs/components/prism-markup';
 import 'prismjs/components/prism-javascript';
 
-export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirrorData>, RedaxtorCodeMirrorState> {
+export default class CodeMirror extends Component<IPieceProps<WriteAwayCodeMirrorData>, WriteAwayCodeMirrorState> {
   /**
    * Specify component should be rendered inside target node and capture all inside html
    * @type {string}
@@ -25,7 +25,7 @@ export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirror
 
   static readonly label = 'Source code';
 
-  static readonly applyEditor = (node: HTMLElement, data: RedaxtorCodeMirrorData) => {
+  static readonly applyEditor = (node: HTMLElement, data: WriteAwayCodeMirrorData) => {
     if (node) {
       const content = node.innerHTML;
       const needRender = data.updateNode ?? true;
@@ -43,11 +43,11 @@ export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirror
   };
 
   // eslint-disable-next-line react/state-in-constructor
-  state: RedaxtorCodeMirrorState;
+  state: WriteAwayCodeMirrorState;
 
   private modalNode!: HTMLElement;
 
-  private initDataKeys: Array<keyof RedaxtorCodeMirrorData>;
+  private initDataKeys: Array<keyof WriteAwayCodeMirrorData>;
 
   private nodeWasUpdated: boolean = false;
 
@@ -57,7 +57,7 @@ export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirror
     super(props);
 
     if (this.props.piece.data) {
-      this.initDataKeys = Object.keys(this.props.piece.data) as Array<keyof RedaxtorCodeMirrorData>;
+      this.initDataKeys = Object.keys(this.props.piece.data) as Array<keyof WriteAwayCodeMirrorData>;
     } else {
       this.initDataKeys = [];
     }
@@ -89,7 +89,7 @@ export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirror
         this.initDataKeys.forEach((key) => {
           isChanged = isChanged && (nextProps.piece.data![key] !== this.props.piece.data![key]);
         });
-        if (this.props.actions.setPieceMessage) {
+        if (isChanged && this.props.actions.setPieceMessage) {
           this.props.actions.setPieceMessage(this.props.piece.id, 'Page refresh is required', 'warning');
         }
       }
@@ -215,8 +215,7 @@ export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirror
     // if there is no this.props.node, it means this component is invoked manually with custom html directly in props and should be just rendered
     // if this.state.sourceEditorActive and this.props.node presents,
     // it means that is a regular piece with control over node and sourceEditorActive means modal is open
-    if (this.state.sourceEditorActive || !this.props.piece.node) {
-      console.log('That');
+    if (this.state.sourceEditorActive) {
       const { html } = this.state;
       codemirror = (
         <Modal
@@ -261,8 +260,6 @@ export default class CodeMirror extends Component<IPieceProps<RedaxtorCodeMirror
           </div>
         </Modal>
       );
-    } else {
-      codemirror = <div data-editor-for={this.props.piece.name} />;
     }
 
     this.renderNonReactAttributes();

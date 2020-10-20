@@ -6,34 +6,34 @@ import {
   IPieceItem, IOptions,
 } from '@writeaway/core';
 import 'style.less';
-import { RedaxtorSeoData, WriteAwaySeo } from '@writeaway/plugin-seo';
-import { WriteAwayCodeMirror } from '@writeaway/plugin-codemirror';
-import { WriteAwayBackground, WriteAwayImageTag, WriteAwayMedium } from '@writeaway/plugin-medium';
+import { WriteAwaySeoData, EditorSeo } from '@writeaway/plugin-seo';
+import { EditorSourceCode} from '@writeaway/plugin-codemirror';
+import { EditorBlockBackground, EditorImage, EditorRichText } from '@writeaway/plugin-medium';
 import { getCookie, setCookie } from 'persist';
 
 const imageListBg = require('api/imagesBg');
 const imageList = require('api/images');
 
 export const components = {
-  html: WriteAwayMedium,
-  image: WriteAwayImageTag,
-  background: WriteAwayBackground,
-  source: WriteAwayCodeMirror,
-  seo: WriteAwaySeo,
+  html: EditorRichText,
+  image: EditorImage,
+  background: EditorBlockBackground,
+  source: EditorSourceCode,
+  seo: EditorSeo,
 };
 
 class WriteAwaySampleBundle extends WriteAwayCore {
   /**
    * Attaches invisible div handling SEO editing
    */
-  attachSeo(data: Partial<RedaxtorSeoData>) {
+  attachSeo(data: Partial<WriteAwaySeoData>) {
     setTimeout(() => {
       const div = document.createElement('div');
 
       div.innerHTML = 'Edit SEO Meta';
       div.className = 'edit-seo-div';
       div.style.display = 'none';
-      this.addPiece<RedaxtorSeoData>(div, {
+      this.addPiece<WriteAwaySeoData>(div, {
         id: 'seo',
         name: 'Edit SEO',
         type: 'seo',
@@ -122,6 +122,21 @@ const writeaway = new WriteAwaySampleBundle({
     ...BasicApi,
     /* api for get gallery image list */
     getImageList: (data: any) => ((data && data.type === 'background') ? Promise.resolve(imageListBg.data.list) : Promise.resolve(imageList.data.list)),
+    /* example of api for real-time updates */
+    subscribe: (fn) => {
+      const interval = setInterval(() => {
+        fn({
+          id: 'html-rt',
+          data: {
+            html: ''
+              + '<p>WriteAway support real-time updates. This block will revert itself'
+              + ' automatically every 30 seconds simulating updates coming from server.</p>',
+          },
+          meta: { id: 'timer', label: 'Timer', time: Date.now() },
+        });
+      }, 30000);
+      return () => clearInterval(interval);
+    },
     /* example of api for delete images */
     deleteImage: () => Promise.resolve(true),
     uploadImage: (file: File | FileList) => new Promise((resolve) => {
@@ -136,6 +151,7 @@ const writeaway = new WriteAwaySampleBundle({
         };
         reader.readAsDataURL((file as FileList).item(0)!);
       } else {
+        // eslint-disable-next-line no-alert
         alert('Try file smaller than 200Kb to see it directly, demo one will be used instead');
         setTimeout(() => {
           resolve({
@@ -148,16 +164,15 @@ const writeaway = new WriteAwaySampleBundle({
         }, 100);
       }
     }),
-    getPieceData: async (piece: IPieceItem) => {
-      return BasicApi.getPieceData(piece, BasicApi.resolvers).then((p: IPieceItem) => {
-        if (p.id === 'pieceSource2') {
-          // eslint-disable-next-line no-param-reassign
-          p.data.updateNode = false;
-        }
-        return p;
-      });
-    },
+    getPieceData: async (piece: IPieceItem) => BasicApi.getPieceData(piece, BasicApi.resolvers).then((p: IPieceItem) => {
+      if (p.id === 'pieceSource2') {
+        // eslint-disable-next-line no-param-reassign
+        p.data.updateNode = false;
+      }
+      return p;
+    }),
     savePieceData: async (piece: IPieceItem) => {
+      // eslint-disable-next-line no-console
       console.info('Saving to server', piece);
       if (piece.id === 'errorSample') {
         throw new Error('This is a sample error');
@@ -165,6 +180,7 @@ const writeaway = new WriteAwaySampleBundle({
       return Promise.resolve(piece);
     },
   },
+  meta: { id: 'user', label: 'User' },
 });
 
 writeaway.attachSeo({ header: '' });

@@ -1,11 +1,11 @@
-import { WriteAwayCodeMirror } from '@writeaway/plugin-codemirror';
-import { WriteAwayBackground, WriteAwayImageTag, WriteAwayMedium } from '@writeaway/plugin-medium';
-import { WriteAwaySeo } from '@writeaway/plugin-seo';
+import { EditorSourceCode } from '@writeaway/plugin-codemirror';
+import { EditorBlockBackground, EditorImage, EditorRichText } from '@writeaway/plugin-medium';
+import { EditorSeo } from '@writeaway/plugin-seo';
 
 export const components = {
-  html: WriteAwayMedium,
-  image: WriteAwayImageTag,
-  background: WriteAwayBackground,
-  source: WriteAwayCodeMirror,
-  seo: WriteAwaySeo,
+  html: EditorRichText,
+  image: EditorImage,
+  background: EditorBlockBackground,
+  source: EditorSourceCode,
+  seo: EditorSeo,
 };

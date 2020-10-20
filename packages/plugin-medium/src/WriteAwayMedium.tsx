@@ -2,14 +2,14 @@ import { IPieceProps, Rect } from '@writeaway/core';
 import { boundMethod } from 'autobind-decorator';
 import ImageManager from 'imageManager/ImageManager';
 import React, { Component } from 'react';
-import { RedaxtorImageData } from 'types';
+import { WriteAwayImageData } from 'types';
 import _MediumEditor from './HTMLEditor';
 import i18n from './i18n';
 import { imageManagerApi } from './imageManager/index';
 
-export interface RedaxtorMediumState { codeEditorActive: boolean }
+export interface WriteAwayMediumState { codeEditorActive: boolean }
 
-export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediumState> {
+export default class WriteAwayMedium extends Component<IPieceProps, WriteAwayMediumState> {
   /**
    * Specify component should be rendered inside target node and capture all inside html
    * @type {string}
@@ -84,7 +84,7 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
   }
 
   onToggleImagePopup() {
-    let imageData: RedaxtorImageData = {};
+    let imageData: WriteAwayImageData = {};
     if (this.img) {
       imageData = {
         src: this.img.getAttribute('src') || '',
@@ -121,7 +121,7 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
   }
 
   @boundMethod
-  saveCallback(data: RedaxtorImageData) {
+  saveCallback(data: WriteAwayImageData) {
     this.medium.editor.restoreSelection();
 
     if (this.img) {
@@ -282,7 +282,7 @@ export default class RedaxtorMedium extends Component<IPieceProps, RedaxtorMediu
         toolbar.toolbar.classList.add('rx_non-expert');
       }
     } else if (data) {
-      this.nodeWasUpdated = RedaxtorMedium.applyEditor(this.piece.node, data);
+      this.nodeWasUpdated = WriteAwayMedium.applyEditor(this.piece.node, data);
     }
   }
 

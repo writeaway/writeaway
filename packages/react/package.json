@@ -1,0 +1,62 @@
+{
+  "name": "@writeaway/react",
+  "version": "2.0.4",
+  "private": true,
+  "description": "WriteAway is a JavaScript library for editing CMS pieces, pages and internationalisation on the client side.",
+  "main": "./dist/react.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/redaxtor/redaxtor.git"
+  },
+  "scripts": {
+    "clean": "rimraf lib dist",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "prebuild": "npm run clean",
+    "build": "npm run build:prod",
+    "build:prod": "cross-env NODE_ENV=production webpack",
+    "build:dev": "cross-env NODE_ENV=development webpack",
+    "watch": "cross-env NODE_ENV=development webpack --watch",
+    "serve": "http-server dist",
+    "prepublishOnly": "npm run lint && npm run build"
+  },
+  "author": "SpiralScout",
+  "license": "MIT",
+  "dependencies": {
+    "@writeaway/core": "2.0.5",
+    "@writeaway/plugin-codemirror": "^2.0.3",
+    "@writeaway/plugin-medium": "^2.0.3",
+    "@writeaway/plugin-seo": "^2.0.4",
+    "autobind-decorator": "^2.4.0",
+    "classnames": "^2.2.6",
+    "js-beautify": "^1.13.0",
+    "prismjs": "^1.21.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-modal": "^3.11.2",
+    "react-redux": "^7.2.1",
+    "react-simple-code-editor": "^0.11.0",
+    "react-redux-toastr": "^7.6.5",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-thunk": "^2.3.0",
+    "redux": "^4.0.5"
+  },
+  "devDependencies": {
+    "@types/classnames": "^2.2.10",
+    "@types/js-beautify": "^1.11.0",
+    "@types/medium-editor": "^5.0.3",
+    "@types/node": "^14.11.8",
+    "@types/react": "^16.9.51",
+    "@types/react-dom": "^16.9.8",
+    "@types/react-modal": "^3.10.6",
+    "@types/react-redux": "^7.1.9",
+    "@types/react-redux-toastr": "^7.6.0",
+    "@types/webpack-env": "^1.15.3",
+    "html-webpack-plugin": "^4.5.0"
+  }
+}

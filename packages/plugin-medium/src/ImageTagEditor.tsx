@@ -2,10 +2,10 @@ import { boundMethod } from 'autobind-decorator';
 import ImageManager from 'imageManager/ImageManager';
 import React, { Component } from 'react';
 import type { IPieceProps, Rect } from '@writeaway/core';
-import { RedaxtorImageTagData } from 'types';
+import { WriteAwayImageTagData } from 'types';
 import { imageManagerApi } from './imageManager/index';
 
-export default class RedaxtorImageTag extends Component<IPieceProps> {
+export default class WriteAwayImageTag extends Component<IPieceProps> {
   /**
    * Specify component should have a separate node and is not modifying insides or outsides of target node
    * @type {string}
@@ -16,7 +16,7 @@ export default class RedaxtorImageTag extends Component<IPieceProps> {
 
   static readonly label: string = 'Images';
 
-  static readonly applyEditor = (node: HTMLElement, data: RedaxtorImageTagData) => {
+  static readonly applyEditor = (node: HTMLElement, data: WriteAwayImageTagData) => {
     if (!node) {
       return;
     }
@@ -127,7 +127,7 @@ export default class RedaxtorImageTag extends Component<IPieceProps> {
   }
 
   @boundMethod
-  saveCallback(data: RedaxtorImageTagData) {
+  saveCallback(data: WriteAwayImageTagData) {
     this.renderNonReactAttributes(data);
     this.actions.updatePiece(this.piece.id, { data: { src: data.src, alt: data.alt, title: data.title } });
     this.actions.savePiece(this.piece.id);
@@ -196,9 +196,9 @@ export default class RedaxtorImageTag extends Component<IPieceProps> {
    * Updates rendering of props that are not updated by react
    * Here that updates IMG tag src and alt
    */
-  renderNonReactAttributes(data?: RedaxtorImageTagData) {
+  renderNonReactAttributes(data?: WriteAwayImageTagData) {
     if (data) {
-      RedaxtorImageTag.applyEditor((this.piece.node as HTMLImageElement), data);
+      WriteAwayImageTag.applyEditor((this.piece.node as HTMLImageElement), data);
     }
   }
 

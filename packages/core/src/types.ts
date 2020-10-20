@@ -10,8 +10,8 @@ import type { ThunkAction, ThunkDispatch } from 'redux-thunk';
 
 export type PieceDataResolver<DataType = any> =
   (piece: IPieceItem<DataType>,
-    resolvers?: Partial<Record<PieceType, PieceDataResolver>>) =>
-  Promise<IPieceItem<DataType>>;
+   resolvers?: Partial<Record<PieceType, PieceDataResolver>>) =>
+    Promise<IPieceItem<DataType>>;
 
 /**
  * Image gallery item
@@ -48,9 +48,37 @@ export interface GalleryItem {
 }
 
 /**
+ * Subscribe to piece updates coming from external source, i.e. websockets
+ * @param fn - subscription function
+ * Should return an unsubscribe function
+ */
+export type PieceSubscription = (fn: (piece: Partial<IPieceItem>) => boolean) => () => void;
+
+/**
+ * Resolve conflicts between current in-state piece data and data coming from external source
+ * Should resolve as data that needs to be applied
+ * @param current - current state of piece
+ * @param external - external state of piece
+ */
+export type PieceConflictResolver = (current: IPieceItem, external: IPieceItem) => IPieceItem;
+
+/**
  * Interface that should be implemented for editors
  */
 export interface IPiecesAPI {
+  /**
+   * Subscribe to piece updates coming from external source, i.e. websockets
+   * @param fn - subscription function
+   * Should return an unsubscribe function
+   */
+  subscribe?: PieceSubscription;
+  /**
+   * Resolve conflicts between current in-state piece data and data coming from external source
+   * Should resolve as data that needs to be applied
+   * @param current - current state of piece
+   * @param external - external state of piece
+   */
+  resolveConflict?: PieceConflictResolver
   /**
    * Resolve piece data from server or other source
    */
@@ -78,7 +106,7 @@ export interface IPiecesAPI {
   /**
    * Get image gallery. If not specified gallery will be disabled
    */
-  getImageList?: (piece: { id: string, dataset?: { [k: string]: string }}) => Promise<Array<GalleryItem>>,
+  getImageList?: (piece: { id: string, dataset?: { [k: string]: string } }) => Promise<Array<GalleryItem>>,
   /**
    * Upload images. If not specified, upload will be disabled
    */
@@ -90,7 +118,7 @@ export type PieceType = 'source' | 'background' | 'html' | 'image' | 'seo';
 /**
  * Base piece type
  */
-export interface IPiece<DataType = any> {
+export interface IPiece<DataType = any, Meta = any> {
   /**
    * Unique piece id
    */
@@ -108,6 +136,10 @@ export interface IPiece<DataType = any> {
    */
   data?: DataType;
   /**
+   * Meta data for resolving updates in concurrent mode, empty in non-concurrent mode
+   */
+  meta?: Meta;
+  /**
    * Human readable piece name
    */
   name: string,
@@ -116,7 +148,7 @@ export interface IPiece<DataType = any> {
 /**
  * Piece info state
  */
-export interface IPieceItem<DataType = any> extends IPiece<DataType> {
+export interface IPieceItem<DataType = any, Meta = any> extends IPiece<DataType, Meta> {
   /**
    * @deprecated
    */
@@ -196,7 +228,7 @@ export interface IOptions {
    */
   enableEdit: boolean,
   /**
-   * Optional. Default: document.body, Set place for the Redaxtor bar
+   * Optional. Default: document.body, Set place for the WriteAway bar
    */
   navBarRoot: HTMLElement,
   /**
@@ -239,6 +271,11 @@ export interface IOptions {
    * Start with editors active
    */
   editorActive?: boolean;
+  /**
+   * Optional meta data that will be attached to pieces during saving
+   * to track who and when modified piece
+   */
+  meta?: Partial<IMeta>;
 }
 
 export interface IPieceControllerState {
@@ -328,6 +365,26 @@ export type PieceActions<DataType = any> = {
    */
   setCurrentSourcePieceId: (id: string) => void,
 };
+
+export interface IReactActionProps<DataType = any> {
+  /**
+   * Dynamically add component to support piece type
+   */
+  attachComponent: (type: PieceType, component: IComponent) => void,
+  /**
+   * Dynamically add piece
+   */
+  addPiece: (piece: IPieceItem<DataType>) => void,
+  /**
+   * Dynamically remove piece
+   */
+  removePiece: (pieceId: string) => void,
+}
+
+export interface IReactPieceProps {
+  id: string,
+  name: string,
+}
 
 /**
  * Props passed to editor component
@@ -421,12 +478,24 @@ export type Action = AnyAction | ThunkAction<any, IWriteAwayStateExtension & ITo
  */
 export type Store = StoreRaw<IWriteAwayStateExtension & IToastrStateExtension> & { dispatch: Dispatch };
 
-/**
- * @private
- */
-export interface BarOptions {
-  navBarRoot: HTMLElement,
+export interface INavBarProps {
   navBarDraggable: boolean,
   navBarCollapsable: boolean,
   pieceNameGroupSeparator: string,
+}
+
+/**
+ * @private
+ */
+export interface BarOptions extends INavBarProps {
+  navBarRoot: HTMLElement,
+}
+
+/**
+ * Meta data describing who and when modified particular piece
+ */
+export interface IMeta {
+  id: string,
+  label: string,
+  time: number,
 }

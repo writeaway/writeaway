@@ -1,12 +1,12 @@
-export interface RedaxtorSeoData {
+export interface WriteAwaySeoData {
   title: string,
   description: string,
   keywords: string,
   header: string,
 }
 
-export type RedaxtorSeoKeyField = keyof RedaxtorSeoData;
+export type WriteAwaySeoKeyField = keyof WriteAwaySeoData;
 
-export interface RedaxtorSeoState extends RedaxtorSeoData {
+export interface WriteAwaySeoState extends WriteAwaySeoData {
   sourceEditorActive: boolean
 }

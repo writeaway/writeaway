@@ -3,7 +3,7 @@ import { boundMethod } from 'autobind-decorator';
 import { pickerColors } from 'contants';
 import vanillaColorPicker, { PickerHolder } from 'helpers/VanillaColorPicker';
 import React, { Component } from 'react';
-import { RedaxtorImageData } from 'types';
+import { WriteAwayImageData } from 'types';
 import Popup from './components/Popup';
 import Gallery from './components/Gallery';
 import { RxCheckBox } from './components/RxCheckBox';
@@ -18,19 +18,19 @@ export interface ImageManagerState {
     editBackground: boolean,
     editDimensions: boolean,
   },
-  data?: RedaxtorImageData,
+  data?: WriteAwayImageData,
   proportions: boolean,
   uploading: boolean,
   uploadError?: string,
   gallery: Array<GalleryItem>
   pieceRef?: {
     type: string,
-    data: RedaxtorImageData,
+    data: WriteAwayImageData,
     id: string,
     dataset?: { [k: string]: string }
   },
   onClose?: () => unknown,
-  onSave?: (data: RedaxtorImageData) => unknown,
+  onSave?: (data: WriteAwayImageData) => unknown,
 }
 
 function BackgroundInputs(
@@ -238,7 +238,7 @@ export default class ImageManager extends Component<ImageManagerProps, ImageMana
   }
 
   @boundMethod
-  onUrlChange(imageData: RedaxtorImageData) {
+  onUrlChange(imageData: WriteAwayImageData) {
     this.updateData(
       {
         src: imageData.src,
@@ -250,7 +250,7 @@ export default class ImageManager extends Component<ImageManagerProps, ImageMana
     );
   }
 
-  updateData(data: Partial<RedaxtorImageData>, callback?: ()=>void) {
+  updateData(data: Partial<WriteAwayImageData>, callback?: ()=>void) {
     this.setState((state) => ({
       ...state,
       data: {
@@ -261,7 +261,7 @@ export default class ImageManager extends Component<ImageManagerProps, ImageMana
     ), callback);
   }
 
-  getImageSize(imageData: RedaxtorImageData, getOriginalSizeOnly: boolean = false) {
+  getImageSize(imageData: WriteAwayImageData, getOriginalSizeOnly: boolean = false) {
     // if is image from gallery
     if (imageData.width && imageData.height) {
       if (!getOriginalSizeOnly) {
@@ -378,7 +378,7 @@ export default class ImageManager extends Component<ImageManagerProps, ImageMana
   }
 
   getImageData() {
-    const data: RedaxtorImageData = {
+    const data: WriteAwayImageData = {
       alt: this.state.data?.alt || '',
       title: this.state.data?.title || '',
       src: this.state.data?.src || '',
@@ -440,7 +440,7 @@ export default class ImageManager extends Component<ImageManagerProps, ImageMana
    * @param data {object} new image data
    */
   @boundMethod
-  selectGalleryItem(data: RedaxtorImageData) {
+  selectGalleryItem(data: WriteAwayImageData) {
     this.updateData(data, () => {
       if (data?.src) {
         this.getImageSize(data, !!data.width);

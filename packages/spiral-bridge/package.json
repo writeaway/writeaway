@@ -1,7 +1,7 @@
 {
   "name": "@writeaway/spiral-bridge",
   "version": "2.0.5",
-  "description": "Redaxtor is a JavaScript library for editing CMS pieces, pages and internationalisation on the client side.",
+  "description": "WriteAway is a JavaScript library for editing CMS pieces, pages and internationalisation on the client side.",
   "main": "./dist/writeaway-spiral.js",
   "types": "./dist/index.d.ts",
   "files": [
@@ -47,6 +47,7 @@
     "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
+    "@spiralscout/websockets": "0.0.5",
     "@types/classnames": "^2.2.10",
     "@types/medium-editor": "^5.0.3",
     "@types/react": "^16.9.51",

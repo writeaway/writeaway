@@ -1,14 +1,21 @@
 import { IComponent } from '@writeaway/core';
-import { RedaxtorImageData } from 'types';
-import RedaxtorMedium from './RedaxtorMedium';
+import { WriteAwayImageData } from 'types';
+import WriteAwayMediumEditor from './WriteAwayMedium';
 import ImageTag from './ImageTagEditor';
 import BackgroundImageEditor from './BackgroundImageEditor';
+import { BlockBackgroundReact } from './BlockBackgroundReact';
+import { ImageReact } from './ImageReact';
+import { RichTextReact } from './RichTextRect';
 
 import 'writeaway-medium.less';
 
-export const WriteAwayImageTag: IComponent<RedaxtorImageData> = ImageTag;
-export const WriteAwayBackground: IComponent<RedaxtorImageData> = BackgroundImageEditor;
-export const WriteAwayMedium: IComponent<{ html: string }> = RedaxtorMedium;
+export const EditorImage: IComponent<WriteAwayImageData> = ImageTag;
+export const EditorBlockBackground: IComponent<WriteAwayImageData> = BackgroundImageEditor;
+export const EditorRichText: IComponent<{ html: string }> = WriteAwayMediumEditor;
+
+export const ReactPieceBlockBackground = BlockBackgroundReact;
+export const ReactPieceImage = ImageReact;
+export const ReactPieceRichText = RichTextReact;
 
 export * from './types';
 
@@ -16,7 +23,7 @@ export * from './types';
 export const version = `Version ${process.env.VERSION}, built at ${process.env.BUILD_TIME}`;
 
 export default {
-  HTMLEditor: RedaxtorMedium,
-  IMGTagEditor: ImageTag,
-  BackgroundImageEditor,
+  EditorImage,
+  EditorBlockBackground,
+  EditorRichText,
 };

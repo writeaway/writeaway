@@ -15,14 +15,24 @@ Typical Spiral Framework PHP initialization sample.
          */
         WriteAwayBridge.start({
             imageGalleryUrl: "<?= uri('api_images_list') ?>", // Url to fetch images list
+            getPieceBulkUrl: "<?= uri('api_pieces_list', ['action' => 'get']) ?>", // Url to fetch piece data by multiple ids
             getPieceUrl: "<?= uri('api_pieces', ['action' => 'get']) ?>", // Url to fetch piece data. This is fired only for pieces that can't be read directly from DOM
             saveMetaUrl: "<?= uri('api_seo', ['action' => 'save']) ?>", // Url to save SEO data from SEO editor
             savePieceUrl: "<?= uri('api_pieces', ['action' => 'save']) ?>", // Url to save piece. This may be overrided by piece container 'data-save-url' attribute
             uploadUrl: "<?= uri('api_images_upload') ?>", // Url to upload image resources
             deleteImageUrl: "<?= uri('api_images_delete') ?>" // Url to delete image
         },
-         "" // Specify HTML for custom meta page headers here for SEO Editor
-        );
+         "<meta></meta>", // Specify HTML for custom meta page headers here for SEO Editor,
+         {
+            html: { // Options per editor type, if any
+                pickerColors: ["red", "blue"]
+            }   
+         },
+         { // Meta data to attach to pieces when editing them
+            id: "user-id",
+            label: "John Smith",    
+         }          
+     );
     </script>
 ````
 
@@ -75,6 +85,7 @@ Response should have `data` field of following structures:
 | id | string | Piece id |
 | type | string | Piece type |
 | data | any | Optional. Piece data, type is specific for piece type. If not returned piece may not start. |
+| meta | IMeta | Optional. Piece meta data to control who and when modified piece last. Required for concurrent edit mode, optional otherwise. |
 | message | string | Optional. message to show for piece visible in expert mode |
 | messageType | string | Optional. Message error level: 'error' or 'warning' |
 
@@ -101,6 +112,11 @@ When `type=seo` id can be missing, but all data from `SEO_META` variable will pr
        "type": "html",
        "data": {
           "html": "<div>Content</div>"
+       },   
+       "meta": {
+          "id": "user id",
+          "label": "Anna",
+          "time": 12345
        }      
     }
   }
@@ -113,6 +129,7 @@ When `type=seo` id can be missing, but all data from `SEO_META` variable will pr
 | id | string | Unique piece id, extracted from `data-id` attribute |
 | type | string | Editor type, extracted from `data-type` attribute |
 | data | any | Optionally has current data of a piece |
+| meta | IMeta | Optional. Piece meta data to control who and when modified piece last. Required for concurrent edit mode, optional otherwise. |
 | dataset | any | Has all data attributes of a node |
 
 `data` and `dataset` are passed, but will be deprecated and should be ignored on server
@@ -125,9 +142,14 @@ When `type=seo` id can be missing, but all data from `SEO_META` variable will pr
   {
      "id": "unique-id",
      "type": "html",
-      "data": {
+     "data": {
           "html": "<div>Content</div>"
-      }     
+     },   
+     "meta": {
+        "id": "user id",
+        "label": "Anna",
+        "time": 12345
+     }      
   }
 ```
 
@@ -141,7 +163,13 @@ When `type=seo` id can be missing, but all data from `SEO_META` variable will pr
          "type": "html",
          "data": {
               "html": "<div>Modified Content</div>"
-          }      
+          },   
+          "meta": {
+             "id": "user id",
+             "label": "Anna",
+             "time": 12345
+          } 
+     
       }
   }
 ```
@@ -153,6 +181,7 @@ When `type=seo` id can be missing, but all data from `SEO_META` variable will pr
 | id | string | Unique piece id, extracted from `data-id` attribute |
 | type | string | Editor type, extracted from `data-type` attribute |
 | data | any | Optionally has current data of a piece |
+| meta | IMeta | Optional. Piece meta data to control who and when modified piece last. Required for concurrent edit mode, optional otherwise. |
 | dataset | any | Has all data attributes of a node |
 
 `data` and `dataset` are passed, but will be deprecated and should be ignored on server
@@ -181,7 +210,12 @@ When `type=seo` id can be missing, but all data from `SEO_META` variable will pr
          "type": "html",
          "data": {
               "html": "<div>Modified Content</div>"
-          }      
+          },   
+          "meta": {
+             "id": "user id",
+             "label": "Anna",
+             "time": 12345
+          }       
       }
   }
 ```
@@ -203,6 +237,7 @@ Response should have `data` field as array of following structures:
 | id | string | Piece id |
 | type | string | Piece type |
 | data | any | Optional. Piece data, type is specific for piece type. If not returned piece may not start. |
+| meta | IMeta | Optional. Piece meta data to control who and when modified piece last. Required for concurrent edit mode, optional otherwise. |
 | message | string | Optional. message to show for piece visible in expert mode |
 | messageType | string | Optional. Message error level: 'error' or 'warning' |
 
@@ -351,6 +386,68 @@ Response should have `data` field as array of following structures:
   {
      "id": "unique-id",
   }
+```
+
+## Concurrent Edits
+
+To enable concurrent edits in Spiral WriteAway project 
+
+1. Include [Spiral Websockets Client](https://github.com/spiral/websocket-client) to project
+
+2. Implement `writeaway` channel on server that should produce `message` events with [IPiece](https://writeaway.github.io/docs/interfaces/_types_.ipiece.html) payloads having real-time updates from other users
+
+```json
+    {
+         "id": "unique-id",
+         "type": "html",
+         "data": {
+              "html": "<div>Modified Content</div>"
+          },   
+          "meta": {
+             "id": "user id",
+             "label": "Anna",
+             "time": 12345
+          }       
+      }
+```
+
+3. Add writeaway adapter script   
+
+```html
+    <script src="https://cdn.jsdelivr.net/gh/spiral/websockets/build/socket.js"></script>
+    <script type="text/javascript">
+        var Socket = SFSocket.SFSocket;
+        var connection = new Socket({ host: 'localhost'});
+    </script>
+
+    <script src="@writeaway/spiral-bridge/dist/writeaway-spiral.js" type="text/javascript">
+    
+    <script type="text/javascript">
+        /**
+         * WriteAwayBridge variable is put in global scope in application entry point by front end engineer
+         */
+        WriteAwayBridge.start({
+            imageGalleryUrl: "<?= uri('api_images_list') ?>", // Url to fetch images list
+            getPieceUrl: "<?= uri('api_pieces', ['action' => 'get']) ?>", // Url to fetch piece data. This is fired only for pieces that can't be read directly from DOM
+            getPieceBulkUrl: "<?= uri('api_pieces_list', ['action' => 'get']) ?>", // Url to fetch piece data by multiple ids
+            saveMetaUrl: "<?= uri('api_seo', ['action' => 'save']) ?>", // Url to save SEO data from SEO editor
+            savePieceUrl: "<?= uri('api_pieces', ['action' => 'save']) ?>", // Url to save piece. This may be overrided by piece container 'data-save-url' attribute
+            uploadUrl: "<?= uri('api_images_upload') ?>", // Url to upload image resources
+            deleteImageUrl: "<?= uri('api_images_delete') ?>" // Url to delete image
+        },
+         "<meta></meta>", // Specify HTML for custom meta page headers here for SEO Editor,
+         {
+            html: { // Options per editor type, if any
+                pickerColors: ["red", "blue"]
+            }   
+         },
+         { // Meta data to attach to pieces when editing them
+            id: "user-id",
+            label: "John Smith",    
+         },
+         WriteAwayBridge.useWS(connection)          
+     );
+    </script>
 ```
 
 ## Advanced usage

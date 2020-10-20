@@ -1,23 +1,23 @@
 # WriteAway
 WriteAway is a JavaScript library for editing CMS pieces inline on pages on the client side.
 
-Based on [React](https://facebook.github.io/react/) and [Redux](http://redux.js.org/)
+Based on [React](https://facebook.github.io/react/) and [Redux](https://redux.js.org/)
 
-Created by [SpiralScout](http://spiralscout.com).
+Created by [SpiralScout](https://spiralscout.com).
 
 WriteAway comes like a core controller with set of plugins for different types of media.
 
-[@writeaway/core](/packages/core) - Core controller for all plugins, includes editor floating bar and manages state of editors
+[@writeaway/core](https://github.com/writeaway/writeaway/blob/master/packages/core) - Core controller for all plugins, includes editor floating bar and manages state of editors
 
-[@writeaway/plugin-medium](/packages/plugin-medium) - Plugin for supporting rich text editing, editing images and block backgrounds
+[@writeaway/plugin-medium](https://github.com/writeaway/writeaway/blob/master/packages/plugin-medium) - Plugin for supporting rich text editing, editing images and block backgrounds
 
-[@writeaway/plugin-coremirror](/packages/plugin-codemirror) - Plugin for editing block's source code, i.e. for embedded iframes or scrips
+[@writeaway/plugin-coremirror](https://github.com/writeaway/writeaway/blob/master/packages/plugin-codemirror) - Plugin for editing block's source code, i.e. for embedded iframes or scrips
 
-[@writeaway/plugin-seo](/packages/plugin-seo) - Plugin for editing SEO meta tags
+[@writeaway/plugin-seo](https://github.com/writeaway/writeaway/blob/master/packages/plugin-seo) - Plugin for editing SEO meta tags
 
 ## Installation On Top Of Existing Project
 
-To use on top of existing project you would need to create a custom bundle using your favorite packaging tool. You can see 2 samples of such bundles [on demo website](/packages/bundle) and in [spiral framework bridge](/packages/spiral-bridge)
+To use on top of existing project you would need to create a custom bundle using your favorite packaging tool. You can see 2 samples of such bundles [on demo website](https://github.com/writeaway/writeaway/blob/master/packages/bundle) and in [spiral framework bridge](https://github.com/writeaway/writeaway/blob/master/packages/spiral-bridge)
 
 This bundle will scan an existing page for specific selectors and will attach editors on them
 
@@ -78,21 +78,252 @@ Alternatively, include compiled CSS files
 
 ## Integrating in React application
 
-TBD:
+### Setup Store
+
+WriteAway uses `redux` and `redux-thunk` middleware so you need to add `redux` provider on top level of your application
+
+```typescript jsx
+  import {
+    defaultState as writeAwayState,
+    reducerKey as writeAwayReducerKey,
+    reducer as writeAwayReducer,
+    IWriteAwayState
+  } from '@writeaway/core';
+
+  /**
+   * Configure reducers
+   */
+  const reducers = combineReducers({
+    // Required: Add WriteAway reducer
+    [writeAwayReducerKey as '@writeaway']: writeAwayReducer as Reducer<IWriteAwayState>,
+    // Options: Add toastr reducer if you use react-redux-toastr. If not, handle react-redux-toastr actions manually in your app to show toasts from WriteAway.  
+    toastr, 
+    // Add any other application specific reducers
+    app: appReducer,
+  });
+
+  const defaultAppState = {};
+
+  /**
+   * Configure initial default state
+   */
+  const initialState: IApplicationState = {
+    [writeAwayReducerKey]: writeAwayState as IWriteAwayState,
+    toastr: undefined as any,
+    app: defaultAppState,
+  };
+
+  // Compose middlewares
+  const middlewares = [
+    // WriteAway relies on thunk middleware
+    thunk as ThunkMiddleware,
+    // Add other middlewares if you need them 
+    // sagaMiddleware, 
+    // routerMiddleware(history)
+  ];
+
+  const enhancers = [applyMiddleware(...middlewares)];
+  const store = createStore<IApplicationState, AnyAction, {}, unknown>(
+    reducers as any,
+    initialState,
+    composeWithDevTools({
+      name: 'WriteAway React Demo',
+      serialize: {
+        // If you are using redux devtools you may want to add this snippet to
+        // serialize section as WriteAway stores node refences in store
+        replacer: (key: string, value: any) => {
+          if (value instanceof HTMLElement) { // use your custom data type checker
+            return `HTMLElement:${value.tagName}`;
+          }
+          if (value && value.prototype && value.prototype.isReactComponent) { // use your custom data type checker
+            return `IComponent:${(value as any).label}`;
+          }
+          return value;
+        },
+      } as any,
+    })(...enhancers),
+  );
+```
+
+```typescript jsx
+<>
+    <Provider store={store}>
+      <MyApplication />
+    </Provider>
+</>
+```
+
+### Use React Pieces
+
+When enabling edit mode, render editable pieces with react components from plugins and to render editors.
+
+```typescript jsx
+import { ReactPieceSourceCode } from '@writeaway/plugin-codemirror';
+import { ReactPieceBlockBackground, ReactPieceImage, ReactPieceRichText } from '@writeaway/plugin-medium';
+import { ReactPieceSeo } from '@writeaway/plugin-seo';
+
+export const App = () => (
+  <main>
+          <ReactPieceBlockBackground
+            id="bg-1"
+            name="Background For Rich Text"
+            bgColor="#FFcccc"
+            className="p-4"
+          >
+            <article>
+              <h2>Rich Text Block</h2>
+              <ReactPieceRichText
+                id="rich-1"
+                name="Rich Text"
+                html="<div>Editable Rich Text</div>"
+              />
+            </article>
+          </ReactPieceBlockBackground>
+          <ReactPieceBlockBackground
+            id="bg-2"
+            name="Background For Image"
+            bgColor="#ccFFcc"
+            className="p-4"
+          >
+            <article>
+              <h2>Image Block</h2>
+              <ReactPieceImage
+                id="image-1"
+                name="image"
+                src="https://writeaway.github.io/images/image-06.jpg"
+                title="Editable Image"
+                alt="Sample Image"
+              />
+            </article>
+          </ReactPieceBlockBackground>
+          <ReactPieceBlockBackground
+            id="bg-3"
+            bgColor="#ccccff"
+            name="Background For Source Code Block"
+            className="p-4"
+            src="https://writeaway.github.io/images/sayagata-400px.png"
+          >
+            <article>
+              <h2>Source Code Block</h2>
+              <ReactPieceSourceCode
+                id="source-1"
+                name="Source edit"
+                html={codeStr}
+                updateNode
+              />
+            </article>
+          </ReactPieceBlockBackground>
+          <article className="p-4">
+            <h2>SEO data block</h2>
+            <div className="btn">
+              <ReactPieceSeo
+                id="seo-1"
+                name="SEO Data"
+                label="Click to Edit SEO Meta Data"
+                header="<meta></meta>"
+                title="Page Title"
+                description="Page Descriptions"
+                keywords="Page Keywords"
+              />
+            </div>
+          </article>
+</main>);
+```
+
+In the body, render navbar, toast controller, overlay and editors
+
+```typescript jsx
+        <WriteAwayOverlay />
+        <WriteAwayNavBar options={
+          {
+            navBarDraggable: true,
+            navBarCollapsable: true,
+            pieceNameGroupSeparator: ':',
+          }
+        }
+        />
+        <WriteAwayEditors />
+        <ReduxToastr
+          className="r_toast-container"
+          timeOut={4000}
+          position="top-right"
+        />
+```
+
+`WriteAwayEditors` is mandatory for editor functionalities as it renders popups and required overlays for editing inside.
+
+`WriteAwayOverlay` is optional and renders hover effect for nodes
+
+`WriteAwayNavBar` is optional and renders control panel that has switches for editors
+
+`ReduxToastr` container is needed if you need to render redux toast messages from WriteAway
+
+### Special Actions
+
+Few special redux actions are exposed 
+
+```typescript
+    import {
+      externalPieceUpdateAction, setAPIAction, setMetaAction
+    } from '@writeaway/core';
+```
+
+externalPieceUpdateAction - explicitly updates data of specific node. You can use it for real-time updates of content from WebSockets connection. Note funtionality relies on `api.resolveConflicts` method that decides if update should be applied.
+
+```typescript
+    // There is a server update of `source-1` node by John Doe 
+    dispatch(externalPieceUpdateAction(
+        {
+          id: 'source-1',
+          data: { html: "<div>New HTML</div>" },
+          meta: { id: 'user-b', label: 'John Doe', time: Date.now() }
+        }
+    ));
+``` 
+
+setAPIAction - sets pieces api dynamically. Usefull when you need to create HTTP instances asyncrously.
+
+```typescript
+    // There is a server update of `source-1` node by John Doe 
+    dispatch(setAPIAction(
+        {
+          getPieceData: async (piece: IPieceItem) => fetchPieceFromServer(piece.id),
+          /* ... */
+        }
+    ));
+``` 
+
+setMetaAction - sets piece meta, that will be attached to pieces updated in this WriteAway editing session. Typically that's info of user who is editing content.
+
+```typescript
+    // There is a server update of `source-1` node by John Doe 
+    dispatch(setMetaAction(
+        {
+          id: 'user-a',
+          label: 'John Smith',
+        }
+    ));
+``` 
+
+
+### Sample
+
+See fully working [React SPA sample here](https://github.com/writeaway/writeaway/blob/master/packages/react).
+    
 
 ## WriteAwayCore constructor options
 
-WriteAwayCore accepts [IOptions](/packages/core/src/types.ts#68) object in constructor
+WriteAwayCore accepts [IOptions](https://writeaway.github.io/docs/interfaces/_types_.galleryitem.html) object in constructor
 
 | Option      | Default | Description  |
 | :---        |    :---   |          :--- |
-| api      | [defaultMinimumApi](/packages/core/src/default.ts#27) | data API to work with pieces. See details in WriteAway API section.   |
-| piecesOptions   | [defaultPieces](/packages/core/src/default.ts#21) | Options for pieces initialization  |
+| api      | [defaultMinimumApi](https://github.com/writeaway/writeaway/blob/master/packages/core/src/default.ts#27) | data API to work with pieces. See details in WriteAway API section.   |
+| piecesOptions   | [defaultPieces](https://github.com/writeaway/writeaway/blob/master/packages/core/src/default.ts#21) | Options for pieces initialization  |
 | piecesOptions.selector   | `[data-piece]` | Selector that will be looked for during initialization for auto-attaching to nodes |
 | piecesOptions.attribute   | `data-piece` | Attribute having `type` property for Piece initialization |
 | piecesOptions.attributeId   | `data-id` | Attribute having `id` property for Piece initialization |
 | piecesOptions.attributeName   | `data-name` | Attribute having `name` property for Piece initialization |
-| piecesOptions.components   | {} | Maps piece type to [IComponent](/packages/core/src/types.ts) that are launched as piece editor |
+| piecesOptions.components   | {} | Maps piece type to [IComponent](https://writeaway.github.io/docs/interfaces/_types_.icomponent.html) that are launched as piece editor |
 | piecesOptions.options   | {} | Maps piece type to options that will be passed to each of editor instances |
 | piecesOptions.nameGroupSeparator   | `,` | Name separator for piece names, i.e. if separator is ':' names like 'Body:Article' and 'Body:About' will be grouped under 'Body' with 'Article' and 'About' names |
 | piecesRoot   | `document.body` | DOM Element where nodes matching `piecesOptions.selector` will be searched for |
@@ -109,14 +340,14 @@ WriteAwayCore accepts [IOptions](/packages/core/src/types.ts#68) object in const
 
 ## WriteAway API
 
-Specifying `api` params allows to customize where editors are taking data from and where data is saved. Additionally developer can customize how node position is calculated, see [advanced documentation](/packages/core/src/types.ts) and code for that.
+Specifying `api` params allows to customize where editors are taking data from and where data is saved. Additionally developer can customize how node position is calculated, see [source code](https://github.com/writeaway/writeaway/blob/master/packages/core/src/types.ts) for that.
 
 | Option | Type | Description  |
 | :--- | :--- | :--- |
-| getPieceData | async (piece: [IPieceItem](/packages/core/src/types.ts)) => [IPieceItem](/packages/core/src/types.ts) | Async function to resolve complete piece data. Typically that means resolving `data` by `id` or extracting data directly from `node`  |
-| savePieceData | async (piece: [IPieceItem](/packages/core/src/types.ts)) => void | Async function to save complete piece data  |
-| getImageList | async (ref: {id: string, type: string, data: any, dataset: any}) => Array<[IGalleryItem](/packages/core/src/types.ts)> | Optional. If specified will fetch images for this piece and show image options |
-| uploadImage | async (file: File or FileList) => [IGalleryItem](/packages/core/src/types.ts) or Array<[IGalleryItem](/packages/core/src/types.ts)> | Optional. If specified enable upload functionality |
+| getPieceData | async (piece: [IPieceItem](https://writeaway.github.io/docs/interfaces/_types_.ipieceitem.html)) => [IPieceItem](https://writeaway.github.io/docs/interfaces/_types_.ipieceitem.html) | Async function to resolve complete piece data. Typically that means resolving `data` by `id` or extracting data directly from `node`  |
+| savePieceData | async (piece: [IPieceItem](https://writeaway.github.io/docs/interfaces/_types_.ipieceitem.html)) => void | Async function to save complete piece data  |
+| getImageList | async (ref: {id: string, type: string, data: any, dataset: any}) => Array< [IGalleryItem](https://writeaway.github.io/docs/interfaces/_types_.galleryitem.html) > | Optional. If specified will fetch images for this piece and show image options |
+| uploadImage | async (file: File or FileList) => [IGalleryItem](https://writeaway.github.io/docs/interfaces/_types_.galleryitem.html) or Array< [IGalleryItem](https://writeaway.github.io/docs/interfaces/_types_.galleryitem.html) > | Optional. If specified enable upload functionality |
 | deleteImage | async (id: string) => void | Optional. If specified will enable image deletion functionality and will be used to delete images from gallery  |
 
 
@@ -125,7 +356,7 @@ Specifying `api` params allows to customize where editors are taking data from a
 
 When using with spiral framework, use `@writeaway/spiral-bridge` bundle or pre-compiled scripts
 
-[See documentation here](/packages/spiral-bridge)
+[See documentation here](https://github.com/writeaway/writeaway/blob/master/packages/spiral-bridge)
 
 
 ## Developing and building

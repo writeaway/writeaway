@@ -3,7 +3,7 @@
  * @module WriteAway
  */
 
-import { boundMethod } from 'autobind-decorator';
+import autobind, { boundMethod } from 'autobind-decorator';
 import { PieceEditors } from 'containers/PieceEditors';
 import {
   defaultMinimumApi, defaultOptions, defaultPieces, defaultState, defaultWrappedState,
@@ -24,20 +24,20 @@ import {
   PieceType,
   Rect,
   IPiecesAPI,
-  IPieceControllerState, Dispatch, Store, BarOptions, IWriteAwayStateExtension, IToastrStateExtension,
+  IPieceControllerState, Dispatch, Store, BarOptions, IWriteAwayStateExtension, IToastrStateExtension, INavBarProps,
 } from 'types';
+import { REDUCER_KEY } from './constants';
 import { piecesToggleNavBar, setExpert } from './actions';
 import {
   addPiece,
-  deactivatePiece, hasRemovedPiece,
-  hoverPiece,
+  deactivatePiece, externalPieceUpdate, hasRemovedPiece,
   pieceGet,
   piecesToggleEdit,
   removePiece,
   setPieceData,
 } from './actions/pieces';
 import HoverOverlay from './containers/HoverOverlayContainer';
-import RedaxtorContainer from './containers/RedaxtorContainer';
+import WriteAwayContainer from './containers/WriteAwayContainer';
 import { configureFetch } from './helpers/callFetch';
 import reducers from './reducers';
 
@@ -49,6 +49,8 @@ export class WriteAwayCore {
   private overlayNode?: HTMLElement;
 
   private barNode?: HTMLElement;
+
+  private unsubscribe?: () => void;
 
   constructor(options: Partial<IOptions> = {}) {
     this.options = {
@@ -95,13 +97,25 @@ export class WriteAwayCore {
     };
     const composeEnhancers = composeWithDevTools({
       name: 'WriteAway',
+      serialize: {
+        // eslint-disable-next-line consistent-return
+        replacer: (key: string, value: any) => {
+          if (value instanceof HTMLElement) { // use your custom data type checker
+            return `HTMLElement:${value.tagName}`;
+          }
+          if (value && value.prototype && value.prototype.isReactComponent) { // use your custom data type checker
+            return `IComponent:${(value as any).label}`;
+          }
+          return value;
+        },
+      } as any,
     });
 
     this.store = createStore<IWriteAwayStateExtension & IToastrStateExtension, AnyAction, { dispatch: Dispatch }, {}>(
       reducers,
       {
         ...defaultWrappedState,
-        '@writeaway': state,
+        [REDUCER_KEY]: state,
       },
       composeEnhancers(
         applyMiddleware(thunk as ThunkMiddleware),
@@ -148,13 +162,24 @@ export class WriteAwayCore {
       this.store.dispatch(piecesToggleEdit());
     }
 
-    document.addEventListener('mousemove', this.onHoverTrack);
     document.addEventListener('keyup', this.handleKeyUp);
+
+    if (options.api.subscribe) {
+      this.unsubscribe = options.api.subscribe(this.handleRealTimeUpdate);
+    }
+  }
+
+  @autobind
+  private handleRealTimeUpdate(piece: Partial<IPieceItem>) {
+    this.store.dispatch(externalPieceUpdate(piece));
+    return true;
   }
 
   destroy() {
     document.removeEventListener('keyup', this.handleKeyUp);
-    document.removeEventListener('mousemove', this.onHoverTrack);
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
   }
 
   get api(): IPiecesAPI {
@@ -166,7 +191,7 @@ export class WriteAwayCore {
   }
 
   get state(): IWriteAwayState {
-    return this.store.getState()['@writeaway'];
+    return this.store.getState()[REDUCER_KEY as '@writeaway'];
   }
 
   get pieces() {
@@ -175,47 +200,6 @@ export class WriteAwayCore {
 
   get config(): IOptions {
     return this.state.config;
-  }
-
-  @boundMethod
-  private onHoverTrack(e: MouseEvent) {
-    const { pieces } = this.state;
-    const pieceHovered = pieces.hoveredId;
-    const pieceActive = pieces.activeIds;
-    let foundId: string | undefined;
-    let foundRect: Rect | undefined;
-    let foundNode: HTMLElement | undefined;
-
-    if (pieceActive && pieceActive.length) {
-      return;
-    }
-    if (!pieces.byId) {
-      return;
-    }
-    Object.keys(pieces.byId).forEach((pieceId) => {
-      const piece = pieces.byId[pieceId];
-      const enabled = pieces.editorEnabled[piece.type];
-
-      if (enabled) {
-        const nodeVisible = this.api.isNodeVisible(piece);
-        if (nodeVisible) {
-          const nodeRect = this.api.getNodeRect(piece);
-          const rect = nodeRect.hover || nodeRect.node;
-          if (rect.top + window.scrollY <= e.pageY && rect.bottom + window.scrollY >= e.pageY
-            && rect.left <= e.pageX && rect.right >= e.pageX) {
-            if (!foundNode || foundNode.contains(piece.node)) {
-              foundId = pieceId;
-              foundRect = rect;
-              foundNode = piece.node;
-            }
-          }
-        }
-      }
-    });
-
-    if (pieceHovered !== foundId) {
-      this.store.dispatch(hoverPiece(foundId, foundRect));
-    }
   }
 
   @boundMethod
@@ -239,15 +223,16 @@ export class WriteAwayCore {
   }
 
   /**
-   * Renders a top Redaxtor bar with controls and attach it to body
+   * Renders a top WriteAway bar with controls and attach it to body
    */
   private showBar(options: BarOptions) {
     this.barNode = document.createElement('DIV');
+    this.barNode.classList.add('writeaway-navbar');
     ReactDOM.render(
       <Provider store={this.store}>
         <div>
-          <RedaxtorContainer
-            options={options}
+          <WriteAwayContainer
+            options={options as INavBarProps}
           />
           <ReduxToastr
             className="r_toast-container"
@@ -265,12 +250,10 @@ export class WriteAwayCore {
    * Renders tbe hover overlay
    */
   private showHoverOverlay(root: HTMLElement) {
-    this.overlayNode = document.createElement('redaxtor-overlay');
+    this.overlayNode = document.createElement('div');
     ReactDOM.render(
       <Provider store={this.store}>
-        <div>
-          <HoverOverlay components={this.options.piecesOptions.components} />
-        </div>
+        <HoverOverlay />
       </Provider>,
       this.overlayNode,
     );
@@ -289,7 +272,7 @@ export class WriteAwayCore {
   /**
    * Add a piece from specific node
    * @param node HTMLElement
-   * @param options {RedaxtorPieceOptions}
+   * @param options {WriteAwayPieceOptions}
    * @param options.id {string} Mandatory unique identification id of piece. Should present in options OR in
    `this.options.pieces.attributeId` attribute of node, i.e. `data-id`
    * @param options.type {string} Mandatory type of piece. Should present in options OR in
@@ -448,7 +431,8 @@ export class WriteAwayCore {
   }
 
   private renderPieceEditors(container: HTMLElement) {
-    const div = document.createElement('redaxtor-editors');
+    const div = document.createElement('div');
+    div.classList.add('writeaway-editors');
     container.appendChild(div);
     ReactDOM.render(
       <Provider store={this.store}>

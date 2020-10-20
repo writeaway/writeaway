@@ -2,14 +2,14 @@ import { IPieceProps } from '@writeaway/core';
 import { boundMethod } from 'autobind-decorator';
 import ImageManager from 'imageManager/ImageManager';
 import { Component } from 'react';
-import { RedaxtorImageData } from 'types';
+import { WriteAwayImageData } from 'types';
 import { imageManagerApi } from './imageManager/index';
 
-export interface RedaxtorBackgroundEditorState {
+export interface WriteAwayBackgroundEditorState {
   firstRun?: boolean;
 }
 
-export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
+export default class WriteAwayBackgroundEditor extends Component<IPieceProps> {
   /**
    * Specify component should have a separate node and is not modifying insides or outsides of target node
    * @type {string}
@@ -20,7 +20,7 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
 
   static readonly label = 'Backgrounds';
 
-  static readonly applyEditor = (node: HTMLElement, data: RedaxtorImageData) => {
+  static readonly applyEditor = (node: HTMLElement, data: WriteAwayImageData) => {
     if (!node) {
       return;
     }
@@ -39,7 +39,7 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
   };
 
   // eslint-disable-next-line react/state-in-constructor
-  state: RedaxtorBackgroundEditorState;
+  state: WriteAwayBackgroundEditorState;
 
   private active: boolean;
 
@@ -138,7 +138,7 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
   }
 
   @boundMethod
-  saveCallback(data: RedaxtorImageData) {
+  saveCallback(data: WriteAwayImageData) {
     this.renderNonReactAttributes(data);
     this.actions.updatePiece(this.piece.id, {
       data: {
@@ -164,7 +164,7 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  findRedaxtor(l: Element) {
+  findWriteAway(l: Element) {
     let el: Element | null = l;
     while (el && el.tagName.toLowerCase() !== 'redaxtor'
     && (!el.className || (el.className.indexOf('r_modal-overlay') === -1
@@ -176,7 +176,7 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
 
   @boundMethod
   onClick(e: MouseEvent) {
-    if (this.findRedaxtor(e.target as Element)) {
+    if (this.findWriteAway(e.target as Element)) {
       // Here we try dealing with mix of native and React events
       // We find if event was triggered within redaxtor tag
       // This can only happen when this element is wrapped in editor that needs exclusive access to element
@@ -236,9 +236,9 @@ export default class RedaxtorBackgroundEditor extends Component<IPieceProps> {
    * Updates rendering of props that are not updated by react
    * Here that updates styles of background
    */
-  renderNonReactAttributes(data?: RedaxtorImageData) {
+  renderNonReactAttributes(data?: WriteAwayImageData) {
     if (data) {
-      RedaxtorBackgroundEditor.applyEditor(this.targetDiv, data);
+      WriteAwayBackgroundEditor.applyEditor(this.targetDiv, data);
     }
   }
 

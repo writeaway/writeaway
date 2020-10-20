@@ -4,11 +4,11 @@ import {
   Dispatch, GetIWriteAwayState, IPieceControllerState, IPieceItem, PieceType, Rect,
 } from 'types';
 
-import C from '../constants';
+import { Actions } from '../constants';
 
-export const piecesEnableEdit = (subType?: PieceType) => ({ type: C.PIECES_ENABLE_EDIT, subType });
+export const piecesEnableEdit = (subType?: PieceType) => ({ type: Actions.PIECES_ENABLE_EDIT, subType });
 
-export const piecesDisableEdit = (subType?: PieceType) => ({ type: C.PIECES_DISABLE_EDIT, subType });
+export const piecesDisableEdit = (subType?: PieceType) => ({ type: Actions.PIECES_DISABLE_EDIT, subType });
 
 const piecesRunInit = (dispatch: Dispatch, pieces: IPieceControllerState) => {
   Object.keys(pieces.byId || {}).forEach((id: string) => {
@@ -41,25 +41,25 @@ export const piecesToggleEdit = (subType?: PieceType) => (dispatch: Dispatch, ge
   }
 };
 
-export const setSourceId = (id?: string) => ({ type: C.PIECES_SET_SOURCE_ID, id });
+export const setSourceId = (id?: string) => ({ type: Actions.PIECES_SET_SOURCE_ID, id });
 
-export const activatePiece = (id: string) => ({ type: C.PIECES_ACTIVATE_PIECE, id });
+export const activatePiece = (id: string) => ({ type: Actions.PIECES_ACTIVATE_PIECE, id });
 
-export const onActivationSentPiece = (id: string) => ({ type: C.PIECES_ACTIVATION_SENT_PIECE, id });
+export const onActivationSentPiece = (id: string) => ({ type: Actions.PIECES_ACTIVATION_SENT_PIECE, id });
 
-export const deactivatePiece = (id: string) => ({ type: C.PIECES_DEACTIVATE_PIECE, id });
+export const deactivatePiece = (id: string) => ({ type: Actions.PIECES_DEACTIVATE_PIECE, id });
 
-export const onDeactivationSentPiece = (id: string) => ({ type: C.PIECES_DEACTIVATION_SENT_PIECE, id });
+export const onDeactivationSentPiece = (id: string) => ({ type: Actions.PIECES_DEACTIVATION_SENT_PIECE, id });
 
 export const updatePiece = (id: string, piece: Partial<IPieceItem>, notChanged?: boolean) => ({
-  type: C.PIECE_UPDATE, id, piece, notChanged,
+  type: Actions.PIECE_UPDATE, id, piece, notChanged,
 });
 
-export const resetPiece = (id: string) => ({ type: C.PIECE_RESET, id });
+export const resetPiece = (id: string) => ({ type: Actions.PIECE_RESET, id });
 
-export const addPiece = (piece: IPieceItem) => ({ type: C.PIECE_ADD, id: piece.id, piece });
+export const addPiece = (piece: IPieceItem) => ({ type: Actions.PIECE_ADD, id: piece.id, piece });
 
-export const hoverPiece = (pieceId?: string, rect?: Rect) => ({ type: C.PIECES_HOVERED, id: pieceId, rect });
+export const hoverPiece = (pieceId?: string, rect?: Rect) => ({ type: Actions.PIECES_HOVERED, id: pieceId, rect });
 
 export const onEditorActive = (pieceId: string, active: boolean) => (dispatch: Dispatch, getState: GetIWriteAwayState) => {
   const pieces = selectPieces(getState);
@@ -90,7 +90,21 @@ export const onEditorActive = (pieceId: string, active: boolean) => (dispatch: D
     dispatch(hoverPiece());
   }
 
-  dispatch({ type: C.PIECES_EDITOR_ACTIVE, id: pieceId, active });
+  dispatch({ type: Actions.PIECES_EDITOR_ACTIVE, id: pieceId, active });
+};
+
+export const externalPieceUpdate = (piece: Partial<IPieceItem>) => (dispatch: Dispatch, getState: GetIWriteAwayState) => {
+  const pieces = selectPieces(getState);
+  const config = selectConfig(getState);
+  if (!piece.id) {
+    return;
+  }
+  const current = pieces.byId[piece.id];
+  if (current) {
+    const target = { ...current, ...piece };
+    const update = config.api.resolveConflict ? config.api.resolveConflict(current, target) : target;
+    dispatch(updatePiece(target.id, update));
+  }
 };
 
 export const onNodeResized = (pieceId: string) => (dispatch: Dispatch, getState: GetIWriteAwayState) => {
@@ -105,24 +119,31 @@ export const onNodeResized = (pieceId: string) => (dispatch: Dispatch, getState:
   }
 };
 
-export const removePiece = (id: string) => ({ type: C.PIECE_REMOVE, id });
+export const removePiece = (id: string) => ({ type: Actions.PIECE_REMOVE, id });
 
-export const setPieceData = (id: string, data: any) => ({ type: C.PIECE_SET_DATA, id, data });
+export const setPieceData = (id: string, data: any, meta?: any) => (
+  {
+    type: Actions.PIECE_SET_DATA,
+    id,
+    data,
+    meta,
+  }
+);
 
 export const pieceMessageSetted = (id: string, message: string, messageLevel: string) => ({
-  type: C.PIECE_SET_MESSAGE,
+  type: Actions.PIECE_SET_MESSAGE,
   id,
   message,
   messageLevel,
 });
 
-export const hasRemovedPiece = (id: string) => ({ type: C.PIECE_HAS_REMOVED, id });
+export const hasRemovedPiece = (id: string) => ({ type: Actions.PIECE_HAS_REMOVED, id });
 
-export const pieceSaving = (id: string) => ({ type: C.PIECE_SAVING, id });
+export const pieceSaving = (id: string) => ({ type: Actions.PIECE_SAVING, id });
 
-export const pieceSaved = (id: string, answer: unknown) => ({ type: C.PIECE_SAVED, id, answer });
+export const pieceSaved = (id: string, answer: Partial<IPieceItem>) => ({ type: Actions.PIECE_SAVED, id, answer });
 
-export const pieceSavingFailed = (id: string, error: unknown) => ({ type: C.PIECE_SAVING_FAILED, id, error });
+export const pieceSavingFailed = (id: string, error: unknown) => ({ type: Actions.PIECE_SAVING_FAILED, id, error });
 
 export const setPieceMessage = (id: string, message: string, messageLevel: string) => (dispatch: Dispatch, getState: GetIWriteAwayState) => {
   if (!['warning', 'info', 'error'].includes(messageLevel)) {
@@ -158,8 +179,8 @@ export const savePiece = (id: string) => (dispatch: Dispatch, getState: GetIWrit
   const piece = pieces.byId[id];
   // eslint-disable-next-line no-extra-boolean-cast
   if (!!config.api.savePieceData) {
-    config.api.savePieceData(piece).then((data: unknown) => {
-      dispatch(pieceSaved(id, data));
+    config.api.savePieceData(piece).then((p: Partial<IPieceItem>) => {
+      dispatch(pieceSaved(id, p || {}));
     }).catch((error: unknown) => {
       dispatch(pieceSavingFailed(id, error));
       setPieceMessage(id, 'Failed to Save', 'error')(dispatch, getState);
@@ -173,13 +194,13 @@ export const savePieces = (pieces: Record<string, IPieceItem>) => (dispatch: Dis
   Object.keys(pieces).forEach((id: string) => dispatch(savePiece(id)));
 };
 
-export const pieceFetching = (id: string) => ({ type: C.PIECE_FETCHING, id });
+export const pieceFetching = (id: string) => ({ type: Actions.PIECE_FETCHING, id });
 
-export const pieceFetched = (id: string, piece: IPieceItem) => ({ type: C.PIECE_FETCHED, id, piece });
+export const pieceFetched = (id: string, piece: IPieceItem) => ({ type: Actions.PIECE_FETCHED, id, piece });
 
-export const pieceFetchingFailed = (id: string, answer: unknown) => ({ type: C.PIECE_FETCHING_FAILED, id, answer });
+export const pieceFetchingFailed = (id: string, answer: unknown) => ({ type: Actions.PIECE_FETCHING_FAILED, id, answer });
 
-export const pieceFetchingError = (id: string, error: unknown) => ({ type: C.PIECE_FETCHING_ERROR, id, error });
+export const pieceFetchingError = (id: string, error: unknown) => ({ type: Actions.PIECE_FETCHING_ERROR, id, error });
 
 /**
  * Triggers getting piece data by id

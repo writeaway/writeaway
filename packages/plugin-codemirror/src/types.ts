@@ -1,9 +1,9 @@
-export interface RedaxtorCodeMirrorData {
+export interface WriteAwayCodeMirrorData {
   updateNode: boolean,
   html: string
 }
 
-export interface RedaxtorCodeMirrorState {
+export interface WriteAwayCodeMirrorState {
   sourceEditorActive: boolean,
   html: string,
 }
