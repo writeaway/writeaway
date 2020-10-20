@@ -126,7 +126,7 @@ const writeaway = new WriteAwaySampleBundle({
     subscribe: (fn) => {
       const interval = setInterval(() => {
         fn({
-          id: 'html-rt',
+          id: 'html-1-rt',
           data: {
             html: ''
               + '<p>WriteAway support real-time updates. This block will revert itself'
