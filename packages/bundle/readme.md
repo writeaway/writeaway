@@ -32,17 +32,16 @@ And then in code of bundle
 
 ```typescript
     import { WriteAwayCore } from '@writeaway/core';
-    import { WriteAwaySeo } from '@writeaway/plugin-seo';
-    import { WriteAwayCodeMirror } from '@writeaway/plugin-codemirror';
-    import { WriteAwayBackground, WriteAwayImageTag, WriteAwayMedium } from '@writeaway/plugin-medium';
+    import { EditorSourceCode } from '@writeaway/plugin-codemirror';
+    import { EditorBlockBackground, EditorImage, EditorRichText } from '@writeaway/plugin-medium';
+    import { EditorSeo } from '@writeaway/plugin-seo';
     
-    // Define which piece type is handled by which editor
-    const components = {
-      html: WriteAwayMedium,
-      image: WriteAwayImageTag,
-      background: WriteAwayBackground,
-      source: WriteAwayCodeMirror,
-      seo: WriteAwaySeo,
+    export const components = {
+      html: EditorRichText,
+      image: EditorImage,
+      background: EditorBlockBackground,
+      source: EditorSourceCode,
+      seo: EditorSeo,
     };
     
     const writeaway = new WriteAwayCore({
@@ -82,17 +81,17 @@ TBD:
 
 ## WriteAwayCore constructor options
 
-WriteAwayCore accepts [IOptions](/packages/core/src/types.ts#68) object in constructor
+WriteAwayCore accepts [IOptions](./packages/core/src/types.ts#68) object in constructor
 
 | Option      | Default | Description  |
 | :---        |    :---   |          :--- |
-| api      | [defaultMinimumApi](/packages/core/src/default.ts#27) | data API to work with pieces. See details in WriteAway API section.   |
-| piecesOptions   | [defaultPieces](/packages/core/src/default.ts#21) | Options for pieces initialization  |
+| api      | [defaultMinimumApi](./packages/core/src/default.ts#27) | Pieces [API](https://writeaway.github.io/docs/interfaces/_types_.ipiecesapi.html) to work with pieces. See details in WriteAway API section.   |
+| piecesOptions   | [defaultPieces](./packages/core/src/default.ts#21) | Options for pieces initialization  |
 | piecesOptions.selector   | `[data-piece]` | Selector that will be looked for during initialization for auto-attaching to nodes |
 | piecesOptions.attribute   | `data-piece` | Attribute having `type` property for Piece initialization |
 | piecesOptions.attributeId   | `data-id` | Attribute having `id` property for Piece initialization |
 | piecesOptions.attributeName   | `data-name` | Attribute having `name` property for Piece initialization |
-| piecesOptions.components   | {} | Maps piece type to [IComponent](/packages/core/src/types.ts) that are launched as piece editor |
+| piecesOptions.components   | {} | Maps piece type to [IComponent](./packages/core/src/types.ts) that are launched as piece editor |
 | piecesOptions.options   | {} | Maps piece type to options that will be passed to each of editor instances |
 | piecesOptions.nameGroupSeparator   | `,` | Name separator for piece names, i.e. if separator is ':' names like 'Body:Article' and 'Body:About' will be grouped under 'Body' with 'Article' and 'About' names |
 | piecesRoot   | `document.body` | DOM Element where nodes matching `piecesOptions.selector` will be searched for |
@@ -113,10 +112,10 @@ Specifying `api` params allows to customize where editors are taking data from a
 
 | Option | Type | Description  |
 | :--- | :--- | :--- |
-| getPieceData | async (piece: [IPieceItem](/packages/core/src/types.ts)) => [IPieceItem](/packages/core/src/types.ts) | Async function to resolve complete piece data. Typically that means resolving `data` by `id` or extracting data directly from `node`  |
-| savePieceData | async (piece: [IPieceItem](/packages/core/src/types.ts)) => void | Async function to save complete piece data  |
-| getImageList | async (ref: {id: string, type: string, data: any, dataset: any}) => Array<[IGalleryItem](/packages/core/src/types.ts)> | Optional. If specified will fetch images for this piece and show image options |
-| uploadImage | async (file: File or FileList) => [IGalleryItem](/packages/core/src/types.ts) or Array<[IGalleryItem](/packages/core/src/types.ts)> | Optional. If specified enable upload functionality |
+| getPieceData | async (piece: [IPieceItem](./packages/core/src/types.ts)) => [IPieceItem](./packages/core/src/types.ts) | Async function to resolve complete piece data. Typically that means resolving `data` by `id` or extracting data directly from `node`  |
+| savePieceData | async (piece: [IPieceItem](./packages/core/src/types.ts)) => void | Async function to save complete piece data  |
+| getImageList | async (ref: {id: string, type: string, data: any, dataset: any}) => Array<[IGalleryItem](./packages/core/src/types.ts)> | Optional. If specified will fetch images for this piece and show image options |
+| uploadImage | async (file: File or FileList) => [IGalleryItem](./packages/core/src/types.ts) or Array<[IGalleryItem](./packages/core/src/types.ts)> | Optional. If specified enable upload functionality |
 | deleteImage | async (id: string) => void | Optional. If specified will enable image deletion functionality and will be used to delete images from gallery  |
 
 
@@ -125,7 +124,7 @@ Specifying `api` params allows to customize where editors are taking data from a
 
 When using with spiral framework, use `@writeaway/spiral-bridge` bundle or pre-compiled scripts
 
-[See documentation here](/packages/spiral-bridge)
+[See documentation here](./packages/spiral-bridge)
 
 
 ## Developing and building
