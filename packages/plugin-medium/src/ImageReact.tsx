@@ -5,7 +5,7 @@ import ImageTagEditor from './ImageTagEditor';
 
 export const ImageUnconnected = ({
   id, name, src, alt, title, attachComponent, addPiece, removePiece, className,
-}: WriteAwayImageTagData & IReactActionProps<WriteAwayImageTagData> & IReactPieceProps & { className: string }) => {
+}: WriteAwayImageTagData & IReactActionProps<WriteAwayImageTagData> & IReactPieceProps & { className?: string }) => {
   const [node, setNode] = useState<HTMLImageElement | undefined>(undefined);
   useEffect(() => {
     attachComponent('image', ImageTagEditor);

@@ -25,7 +25,7 @@ const mapStateToProps = (state: IWriteAwayStateExtension) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  hoverPiece: (foundId: string, foundRect: Rect) => dispatch(hoverPiece(foundId, foundRect)),
+  hoverPiece: (foundId?: string, foundRect?: Rect) => dispatch(hoverPiece(foundId, foundRect)),
 });
 
 const HoverOverlay = connect(

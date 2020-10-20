@@ -4,8 +4,8 @@ import { WriteAwayRichTextData } from 'types';
 import WriteAwayMedium from './WriteAwayMedium';
 
 export const RichTextUnconnected = ({
-  id, name, html, attachComponent, addPiece, removePiece,
-}: WriteAwayRichTextData & IReactActionProps<WriteAwayRichTextData> & IReactPieceProps) => {
+  id, name, html, attachComponent, addPiece, removePiece, className,
+}: WriteAwayRichTextData & IReactActionProps<WriteAwayRichTextData> & IReactPieceProps & { className?: string }) => {
   const [node, setNode] = useState<HTMLDivElement | undefined>(undefined);
   useEffect(() => {
     attachComponent('html', WriteAwayMedium);
@@ -35,7 +35,7 @@ export const RichTextUnconnected = ({
   }, [node]);
 
   // eslint-disable-next-line react/no-danger
-  return <div ref={setElement} dangerouslySetInnerHTML={{ __html: html }} />;
+  return <div ref={setElement} dangerouslySetInnerHTML={{ __html: html }} className={className} />;
 };
 
 export const RichTextReact = connectDynamicActions(RichTextUnconnected);

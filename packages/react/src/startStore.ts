@@ -1,10 +1,9 @@
-import React from 'react';
 import { reducer as toastr } from 'react-redux-toastr';
 import {
   defaultState as writeAwayState,
   reducerKey as writeAwayReducerKey,
   reducer as writeAwayReducer,
-  IWriteAwayState, externalPieceUpdateAction, IComponent,
+  IWriteAwayState, externalPieceUpdateAction,
 } from '@writeaway/core';
 import thunk, { ThunkMiddleware } from 'redux-thunk';
 import {
@@ -21,7 +20,8 @@ export const startStore = () => {
    */
   const reducers = combineReducers({
     [writeAwayReducerKey as '@writeaway']: writeAwayReducer as Reducer<IWriteAwayState>, // add WriteAway reducer
-    toastr, // Optionally add toastr reducer if you use react-redux-toastr. If not, handle react-redux-toastr actions manually in your app to show toasts from WriteAway
+    toastr, // Optionally add toastr reducer if you use react-redux-toastr.
+    // If not, handle react-redux-toastr actions manually in your app to show toasts from WriteAway
     app: appReducer, // Add application specific reducers
   });
 

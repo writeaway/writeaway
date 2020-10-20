@@ -5,7 +5,7 @@ import BackgroundImageEditor from './BackgroundImageEditor';
 
 export const BlockBackgroundUnconnected = ({
   id, name, attachComponent, addPiece, removePiece, className, title, src, bgColor, bgSize, bgRepeat, bgPosition, children,
-}: WriteAwayBackgroundBlockData & IReactActionProps<WriteAwayBackgroundBlockData> & IReactPieceProps & { className: string, children: any }) => {
+}: WriteAwayBackgroundBlockData & IReactActionProps<WriteAwayBackgroundBlockData> & IReactPieceProps & { className?: string, children: any }) => {
   const [node, setNode] = useState<HTMLDivElement | undefined>(undefined);
   useEffect(() => {
     attachComponent('background', BackgroundImageEditor);
@@ -47,7 +47,9 @@ export const BlockBackgroundUnconnected = ({
         backgroundSize: bgSize,
         backgroundRepeat: bgRepeat,
       }}
-    >{children}</div>
+    >
+      {children}
+    </div>
   );
 };
 

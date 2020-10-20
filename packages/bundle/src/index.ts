@@ -6,20 +6,20 @@ import {
   IPieceItem, IOptions,
 } from '@writeaway/core';
 import 'style.less';
-import { WriteAwaySeoData, WriteAwaySeo } from '@writeaway/plugin-seo';
-import { WriteAwayCodeMirror } from '@writeaway/plugin-codemirror';
-import { WriteAwayBackground, WriteAwayImageTag, WriteAwayMedium } from '@writeaway/plugin-medium';
+import { WriteAwaySeoData, EditorSeo } from '@writeaway/plugin-seo';
+import { EditorSourceCode} from '@writeaway/plugin-codemirror';
+import { EditorBlockBackground, EditorImage, EditorRichText } from '@writeaway/plugin-medium';
 import { getCookie, setCookie } from 'persist';
 
 const imageListBg = require('api/imagesBg');
 const imageList = require('api/images');
 
 export const components = {
-  html: WriteAwayMedium,
-  image: WriteAwayImageTag,
-  background: WriteAwayBackground,
-  source: WriteAwayCodeMirror,
-  seo: WriteAwaySeo,
+  html: EditorRichText,
+  image: EditorImage,
+  background: EditorBlockBackground,
+  source: EditorSourceCode,
+  seo: EditorSeo,
 };
 
 class WriteAwaySampleBundle extends WriteAwayCore {
