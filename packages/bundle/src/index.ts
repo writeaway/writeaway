@@ -11,9 +11,15 @@ import { EditorSourceCode } from '@writeaway/plugin-codemirror';
 import { EditorBlockBackground, EditorImage, EditorRichText } from '@writeaway/plugin-medium';
 import { getCookie, setCookie } from 'persist';
 
+/**
+ * Fake API responses
+ */
 const imageListBg = require('api/imagesBg');
 const imageList = require('api/images');
 
+/**
+ * Declare which editors will be controlling which piece types
+ */
 export const components = {
   html: EditorRichText,
   image: EditorImage,
@@ -24,7 +30,7 @@ export const components = {
 
 class WriteAwaySampleBundle extends WriteAwayCore {
   /**
-   * Attaches invisible div handling SEO editing
+   * Creates a fake div handling SEO editing. Alternatively a button can be rendered in that div to show SEO editor.
    */
   attachSeo(data: Partial<WriteAwaySeoData>) {
     setTimeout(() => {
@@ -33,6 +39,7 @@ class WriteAwaySampleBundle extends WriteAwayCore {
       div.innerHTML = 'Edit SEO Meta';
       div.className = 'edit-seo-div';
       div.style.display = 'none';
+
       this.addPiece<WriteAwaySeoData>(div, {
         id: 'seo',
         name: 'Edit SEO',
@@ -52,6 +59,7 @@ class WriteAwaySampleBundle extends WriteAwayCore {
     WriteAwaySampleBundle.checkHtmlPiecesCompartibility(document);
     super(options);
 
+    /** We can store some of settings in cookies */
     this.setEditorActive(getCookie('r_editorActive') === 'true');
     this.setNavBarCollapsed(getCookie('r_navBarCollapsed') === 'true');
 
@@ -64,7 +72,7 @@ class WriteAwaySampleBundle extends WriteAwayCore {
   }
 
   /**
-   * Scans html pieces for invalid internal html and reverts them to source editor if needed
+   * Scans html for invalid internal html and reverts them to source editor if needed
    */
   static checkHtmlPiecesCompartibility(node: Element | Document) {
     /**

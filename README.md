@@ -284,7 +284,7 @@ externalPieceUpdateAction - explicitly updates data of specific node. You can us
 setAPIAction - sets pieces api dynamically. Usefull when you need to create HTTP instances asyncrously.
 
 ```typescript
-    // There is a server update of `source-1` node by John Doe 
+ 
     dispatch(setAPIAction(
         {
           getPieceData: async (piece: IPieceItem) => fetchPieceFromServer(piece.id),
@@ -296,7 +296,7 @@ setAPIAction - sets pieces api dynamically. Usefull when you need to create HTTP
 setMetaAction - sets piece meta, that will be attached to pieces updated in this WriteAway editing session. Typically that's info of user who is editing content.
 
 ```typescript
-    // There is a server update of `source-1` node by John Doe 
+     
     dispatch(setMetaAction(
         {
           id: 'user-a',
@@ -313,12 +313,12 @@ See fully working [React SPA sample here](https://github.com/writeaway/writeaway
 
 ## WriteAwayCore constructor options
 
-WriteAwayCore accepts [IOptions](https://writeaway.github.io/docs/interfaces/_types_.galleryitem.html) object in constructor
+WriteAwayCore accepts [IOptions](https://writeaway.github.io/docs/interfaces/_types_.ioptions.html) object in constructor
 
 | Option      | Default | Description  |
 | :---        |    :---   |          :--- |
-| api      | [defaultMinimumApi](https://github.com/writeaway/writeaway/blob/master/packages/core/src/default.ts#27) | data API to work with pieces. See details in WriteAway API section.   |
-| piecesOptions   | [defaultPieces](https://github.com/writeaway/writeaway/blob/master/packages/core/src/default.ts#21) | Options for pieces initialization  |
+| api      | [defaultMinimumApi](https://writeaway.github.io/docs/interfaces/_types_.ipiecesapi.html) | data [API](https://writeaway.github.io/docs/interfaces/_types_.ipiecesapi.html) to work with pieces. See details in WriteAway API section.   |
+| piecesOptions   | [defaultPieces](https://writeaway.github.io/docs/interfaces/_types_.ipiecesoptions.html) | Options for pieces initialization  |
 | piecesOptions.selector   | `[data-piece]` | Selector that will be looked for during initialization for auto-attaching to nodes |
 | piecesOptions.attribute   | `data-piece` | Attribute having `type` property for Piece initialization |
 | piecesOptions.attributeId   | `data-id` | Attribute having `id` property for Piece initialization |
@@ -338,7 +338,7 @@ WriteAwayCore accepts [IOptions](https://writeaway.github.io/docs/interfaces/_ty
 | ajax | `undefined` | If specified, will be passed to default callFetch helper implementation. Refer to code for details. |
 | state | `undefined` | If specified, will be used as initial redux state |
 
-## WriteAway API
+## [WriteAway API](https://writeaway.github.io/docs/interfaces/_types_.ipiecesapi.html)
 
 Specifying `api` params allows to customize where editors are taking data from and where data is saved. Additionally developer can customize how node position is calculated, see [source code](https://github.com/writeaway/writeaway/blob/master/packages/core/src/types.ts) for that.
 
