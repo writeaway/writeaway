@@ -300,7 +300,7 @@
         }
     ));</code></pre>
 				<p>setAPIAction - sets pieces api dynamically. Usefull when you need to create HTTP instances asyncrously.</p>
-				<pre><code class="language-typescript">    <span class="hljs-comment">// There is a server update of `source-1` node by John Doe </span>
+				<pre><code class="language-typescript">
     dispatch(setAPIAction(
         {
           getPieceData: <span class="hljs-keyword">async</span> (piece: IPieceItem) =&gt; fetchPieceFromServer(piece.id),
@@ -308,7 +308,7 @@
         }
     ));</code></pre>
 				<p>setMetaAction - sets piece meta, that will be attached to pieces updated in this WriteAway editing session. Typically that&#39;s info of user who is editing content.</p>
-				<pre><code class="language-typescript">    <span class="hljs-comment">// There is a server update of `source-1` node by John Doe </span>
+				<pre><code class="language-typescript">
     dispatch(setMetaAction(
         {
           id: <span class="hljs-string">&#x27;user-a&#x27;</span>,

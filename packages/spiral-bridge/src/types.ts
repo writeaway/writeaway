@@ -17,6 +17,7 @@ export interface Urls {
   uploadUrl: string,
   savePieceUrl: string,
   getPieceUrl: string,
+  getPieceBulkUrl?: string,
 }
 
 export interface IMetadataSaveRequest extends WriteAwaySeoData {
