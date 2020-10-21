@@ -1,4 +1,3 @@
-import { setAPI, setMeta } from '@writeaway/core/dist/actions';
 import { api } from 'api';
 import { meta } from 'meta';
 import { reducer as toastr } from 'react-redux-toastr';
@@ -6,7 +5,7 @@ import {
   defaultState as writeAwayState,
   reducerKey as writeAwayReducerKey,
   reducer as writeAwayReducer,
-  IWriteAwayState, externalPieceUpdateAction, setAPIAction,
+  IWriteAwayState, externalPieceUpdateAction, setAPIAction, setMetaAction,
 } from '@writeaway/core';
 import thunk, { ThunkMiddleware } from 'redux-thunk';
 import {
@@ -88,7 +87,7 @@ export const startStore = () => {
    * Setup user
    * Can be done later, but should happen before any editor is activated
    */
-  store.dispatch(setMeta(meta));
+  store.dispatch(setMetaAction(meta));
 
   return store;
 };

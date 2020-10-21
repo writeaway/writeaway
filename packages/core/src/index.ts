@@ -1,5 +1,5 @@
 import { externalPieceUpdate } from 'actions/pieces';
-import { setAPI } from 'actions/index';
+import { setAPI, setMeta } from 'actions/index';
 import connectActions from 'containers/connectActions';
 import { PieceEditors } from 'containers/PieceEditors';
 import NavBar from 'containers/WriteAwayContainer';
@@ -29,6 +29,8 @@ export const connectDynamicActions = connectActions;
 export const externalPieceUpdateAction = externalPieceUpdate;
 
 export const setAPIAction = setAPI;
+
+export const setMetaAction = setMeta;
 
 /**
  * Defaults
