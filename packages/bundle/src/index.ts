@@ -135,14 +135,17 @@ const writeaway = new WriteAwaySampleBundle({
       const getBlock = () => ({
         id: 'html-1-rt',
         data: {
-          html: `<p>WriteAway support updates pushed from server in real time. This block will update itself 
-automatically every 60 seconds simulating this functionality. Current time is ${(new Date()).toLocaleTimeString()}</p>`,
+          html: `<p>WriteAway support updates pushed from server in real time.</p>
+                <p>If other user modifies some block, you are able to push this update immediately for other editors to see it.</p>
+                <p>&nbsp;</p>
+                <p>This block will update itself automatically every 30 seconds simulating this functionality. 
+                Current time is ${(new Date()).toLocaleTimeString()}</p>`,
         },
         meta: { id: 'timer', label: 'Demo Timer', time: Date.now() },
       });
       const interval = setInterval(() => {
         fn(getBlock());
-      }, 60000);
+      }, 30000);
       setTimeout(() => {
         fn(getBlock());
       }, 1000);
