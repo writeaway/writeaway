@@ -1,4 +1,5 @@
 import { defaultMinimumApi as BasicApi, IPieceItem, IPiecesAPI } from '@writeaway/core';
+
 const imageListBg = require('api/imagesBg');
 const imageList = require('api/images');
 
