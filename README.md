@@ -32,17 +32,17 @@ And then in code of bundle
 
 ```typescript
     import { WriteAwayCore } from '@writeaway/core';
-    import { WriteAwaySeo } from '@writeaway/plugin-seo';
-    import { WriteAwayCodeMirror } from '@writeaway/plugin-codemirror';
-    import { WriteAwayBackground, WriteAwayImageTag, WriteAwayMedium } from '@writeaway/plugin-medium';
+    import { WriteAwaySeoData, EditorSeo } from '@writeaway/plugin-seo';
+    import { EditorSourceCode } from '@writeaway/plugin-codemirror';
+    import { EditorBlockBackground, EditorImage, EditorRichText } from '@writeaway/plugin-medium';
     
     // Define which piece type is handled by which editor
     const components = {
-      html: WriteAwayMedium,
-      image: WriteAwayImageTag,
-      background: WriteAwayBackground,
-      source: WriteAwayCodeMirror,
-      seo: WriteAwaySeo,
+      html: EditorRichText,
+      image: EditorImage,
+      background: EditorBlockBackground,
+      source: EditorSourceCode,
+      seo: EditorSeo,
     };
     
     const writeaway = new WriteAwayCore({

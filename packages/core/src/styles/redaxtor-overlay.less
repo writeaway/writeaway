@@ -1,3 +1,28 @@
+.r_node_update_hover {
+  pointer-events: none;
+  border: 1px solid fade(@rx-blue, 50%);
+  position: absolute;
+  transition-duration: 2s;
+  transition-timing-function: ease;
+  transition-property: opacity;
+  opacity: 0;
+
+  &.r_node_was_updated {
+    transition-duration: 0s;
+    opacity: 1;
+  }
+  .r_node_update_label {
+    background: fade(@rx-blue, 50%);
+    padding: 0 5px;
+    position: absolute;
+    bottom: -24px;
+    line-height: 24px;
+    left: -1px;
+    color: white;
+    font-size: 12px;
+  }
+}
+
 .r_overlay {
   .r_pointer-div {
     pointer-events: none;

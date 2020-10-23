@@ -132,17 +132,20 @@ const writeaway = new WriteAwaySampleBundle({
     getImageList: (data: any) => ((data && data.type === 'background') ? Promise.resolve(imageListBg.data.list) : Promise.resolve(imageList.data.list)),
     /* example of api for real-time updates */
     subscribe: (fn) => {
+      const getBlock = () => ({
+        id: 'html-1-rt',
+        data: {
+          html: `<p>WriteAway support updates pushed from server in real time. This block will update itself 
+automatically every 60 seconds simulating this functionality. Current time is ${(new Date()).toLocaleTimeString()}</p>`,
+        },
+        meta: { id: 'timer', label: 'Demo Timer', time: Date.now() },
+      });
       const interval = setInterval(() => {
-        fn({
-          id: 'html-1-rt',
-          data: {
-            html: ''
-              + '<p>WriteAway support real-time updates. This block will revert itself'
-              + ' automatically every 30 seconds simulating updates coming from server.</p>',
-          },
-          meta: { id: 'timer', label: 'Timer', time: Date.now() },
-        });
-      }, 30000);
+        fn(getBlock());
+      }, 60000);
+      setTimeout(() => {
+        fn(getBlock());
+      }, 1000);
       return () => clearInterval(interval);
     },
     /* example of api for delete images */

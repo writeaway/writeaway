@@ -2,7 +2,7 @@ import { defaultMinimumApi as BasicApi, IPieceItem, IPiecesAPI } from '@writeawa
 const imageListBg = require('api/imagesBg');
 const imageList = require('api/images');
 
-export const api: IPiecesAPI = {
+export const api: Partial<IPiecesAPI> = {
   /* api for get gallery image list */
   getImageList: (data: any) => ((data && data.type === 'background') ? Promise.resolve(imageListBg.data.list) : Promise.resolve(imageList.data.list)),
   /* example of api for real-time updates */

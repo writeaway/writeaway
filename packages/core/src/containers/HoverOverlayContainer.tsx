@@ -8,6 +8,7 @@ const mapStateToProps = (state: IWriteAwayStateExtension) => {
   const { pieces } = state[REDUCER_KEY];
   const { config } = state[REDUCER_KEY];
   return ({
+    meta: config.meta || {},
     components: config.piecesOptions.components,
     enabled: pieces.editorActive,
     isNodeVisible: config.api.isNodeVisible,

@@ -1,12 +1,14 @@
+import { PieceUpdateIndicator } from 'components/pieces/PieceUpdateIndicator';
 import React, {
   CSSProperties, useCallback, useEffect, useMemo,
 } from 'react';
 import classNames from 'classnames';
 import {
-  IComponent, IPieceItem, PieceType, Rect,
+  IComponent, IMeta, IPieceItem, PieceType, Rect,
 } from 'types';
 
 export interface OverlayProps {
+  meta: Partial<IMeta>,
   triggeredByActionId: boolean,
   hoveredPiece?: IPieceItem,
   hoveredId?: string,
@@ -19,6 +21,7 @@ export interface OverlayProps {
   activeIds?: string[],
   editorEnabled: Partial<Record<PieceType, boolean | undefined>>,
   components: Partial<Record<PieceType, IComponent>>
+  showPieceUpdates?: boolean,
 }
 
 export interface HoverOverlayComponentProps {
@@ -68,10 +71,12 @@ export const HoverOverlay = ({
   byId,
   getNodeRect,
   isNodeVisible,
+  meta,
   hoverPiece,
   editorEnabled,
   triggeredByActionId,
   activeIds,
+  showPieceUpdates,
 }: OverlayProps) => {
   const { style, className } = useMemo(() => {
     const labelHeight = 27;
@@ -178,13 +183,27 @@ export const HoverOverlay = ({
   }, [onHoverTrack]);
 
   return (
-    <HoverOverlayComponent
-      overlayWrapClass={overlayWrapClass}
-      overlayClass={overlayClass}
-      style={style}
-      triggeredByActionId={triggeredByActionId}
-      componentLabel={componentLabel}
-      componentMessage={componentMessage}
-    />
+    <>
+      <HoverOverlayComponent
+        overlayWrapClass={overlayWrapClass}
+        overlayClass={overlayClass}
+        style={style}
+        triggeredByActionId={triggeredByActionId}
+        componentLabel={componentLabel}
+        componentMessage={componentMessage}
+      />
+      {!!showPieceUpdates
+      && Object.keys(byId).map(
+        (pId) => (
+          <PieceUpdateIndicator
+            piece={byId[pId]}
+            meta={meta}
+            isNodeVisible={isNodeVisible}
+            getNodeRect={getNodeRect}
+            key={pId}
+          />
+        ),
+      ) }
+    </>
   );
 };

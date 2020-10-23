@@ -252,7 +252,7 @@ export class WriteAwayCore {
     this.overlayNode = document.createElement('div');
     ReactDOM.render(
       <Provider store={this.store}>
-        <HoverOverlay />
+        <HoverOverlay showPieceUpdates />
       </Provider>,
       this.overlayNode,
     );

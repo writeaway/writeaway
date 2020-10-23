@@ -54,6 +54,16 @@ const config: Reducer<IOptions> = (state: IOptions = defaultOptions, action: Any
       }
       return state;
     }
+    case Actions.SET_META: {
+      const { meta } = state;
+      if (meta !== action.payload && action.payload) {
+        return {
+          ...state,
+          meta: { ...meta, ...action.payload },
+        };
+      }
+      return state;
+    }
     default:
       return state;
   }

@@ -23,6 +23,6 @@ export const piecesToggleNavBar = () => (dispatch: Dispatch, getState: GetIWrite
 
 export const attachComponent = (type: PieceType, component: IComponent) => ({ type: Actions.ATTACH_COMPONENT, payload: { component, type } });
 
-export const setAPI = (api: IPiecesAPI) => ({ type: Actions.SET_API, payload: api });
+export const setAPI = (api: Partial<IPiecesAPI>) => ({ type: Actions.SET_API, payload: api });
 
-export const setMeta = (meta: IMeta) => ({ type: Actions.SET_META, payload: meta });
+export const setMeta = (meta: Partial<IMeta>) => ({ type: Actions.SET_META, payload: meta });
