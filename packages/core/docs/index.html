@@ -84,17 +84,17 @@
 <span class="hljs-built_in">npm</span> install --save @writeaway/plugin-seo</code></pre>
 				<p>And then in code of bundle</p>
 				<pre><code class="language-typescript">    <span class="hljs-keyword">import</span> { WriteAwayCore } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@writeaway/core&#x27;</span>;
-    <span class="hljs-keyword">import</span> { WriteAwaySeo } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@writeaway/plugin-seo&#x27;</span>;
-    <span class="hljs-keyword">import</span> { WriteAwayCodeMirror } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@writeaway/plugin-codemirror&#x27;</span>;
-    <span class="hljs-keyword">import</span> { WriteAwayBackground, WriteAwayImageTag, WriteAwayMedium } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@writeaway/plugin-medium&#x27;</span>;
+    <span class="hljs-keyword">import</span> { WriteAwaySeoData, EditorSeo } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@writeaway/plugin-seo&#x27;</span>;
+    <span class="hljs-keyword">import</span> { EditorSourceCode } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@writeaway/plugin-codemirror&#x27;</span>;
+    <span class="hljs-keyword">import</span> { EditorBlockBackground, EditorImage, EditorRichText } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@writeaway/plugin-medium&#x27;</span>;
 
     <span class="hljs-comment">// Define which piece type is handled by which editor</span>
-    <span class="hljs-keyword">const</span> components = {
-      html: WriteAwayMedium,
-      image: WriteAwayImageTag,
-      background: WriteAwayBackground,
-      source: WriteAwayCodeMirror,
-      seo: WriteAwaySeo,
+    <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> components = {
+      html: EditorRichText,
+      image: EditorImage,
+      background: EditorBlockBackground,
+      source: EditorSourceCode,
+      seo: EditorSeo,
     };
 
     <span class="hljs-keyword">const</span> writeaway = <span class="hljs-keyword">new</span> WriteAwayCore({
@@ -322,7 +322,7 @@
 				<a href="#writeawaycore-constructor-options" id="writeawaycore-constructor-options" style="color: inherit; text-decoration: none;">
 					<h2>WriteAwayCore constructor options</h2>
 				</a>
-				<p>WriteAwayCore accepts <a href="https://writeaway.github.io/docs/interfaces/_types_.galleryitem.html">IOptions</a> object in constructor</p>
+				<p>WriteAwayCore accepts <a href="https://writeaway.github.io/docs/interfaces/_types_.ioptions.html">IOptions</a> object in constructor</p>
 				<table>
 					<thead>
 						<tr>
@@ -333,12 +333,12 @@
 					</thead>
 					<tbody><tr>
 							<td align="left">api</td>
-							<td align="left"><a href="https://github.com/writeaway/writeaway/blob/master/packages/core/src/default.ts#27">defaultMinimumApi</a></td>
-							<td align="left">data API to work with pieces. See details in WriteAway API section.</td>
+							<td align="left"><a href="https://writeaway.github.io/docs/interfaces/_types_.ipiecesapi.html">defaultMinimumApi</a></td>
+							<td align="left">data <a href="https://writeaway.github.io/docs/interfaces/_types_.ipiecesapi.html">API</a> to work with pieces. See details in WriteAway API section.</td>
 						</tr>
 						<tr>
 							<td align="left">piecesOptions</td>
-							<td align="left"><a href="https://github.com/writeaway/writeaway/blob/master/packages/core/src/default.ts#21">defaultPieces</a></td>
+							<td align="left"><a href="https://writeaway.github.io/docs/interfaces/_types_.ipiecesoptions.html">defaultPieces</a></td>
 							<td align="left">Options for pieces initialization</td>
 						</tr>
 						<tr>
@@ -433,7 +433,7 @@
 						</tr>
 				</tbody></table>
 				<a href="#writeaway-api" id="writeaway-api" style="color: inherit; text-decoration: none;">
-					<h2>WriteAway API</h2>
+					<h2><a href="https://writeaway.github.io/docs/interfaces/_types_.ipiecesapi.html">WriteAway API</a></h2>
 				</a>
 				<p>Specifying <code>api</code> params allows to customize where editors are taking data from and where data is saved. Additionally developer can customize how node position is calculated, see <a href="https://github.com/writeaway/writeaway/blob/master/packages/core/src/types.ts">source code</a> for that.</p>
 				<table>
