@@ -9,11 +9,10 @@ const config = {
 
   output: {
     ...baseConfig.output,
-    libraryExport: 'default',
     library: {
       amd: '@writeaway/spiral',
       commonjs: '@writeaway/spiral',
-      root: 'WriteAwaySpiral',
+      root: 'WriteAwayBridge',
     },
   },
 

@@ -121,9 +121,9 @@ export const startForSpiral = (
      * Get image list
      * @return {Promise}
      */
-    getImageList() {
+    getImageList(piece: {id?: string, type?: string}) {
       return new Promise((resolve, reject) => {
-        fetchApi.get(urls.imageGalleryUrl, {}).then((data) => {
+        fetchApi.get(urls.imageGalleryUrl, piece).then((data) => {
           resolve((data.data || data).map(
             (image: GalleryItem & {
               url?: string,

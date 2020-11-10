@@ -285,8 +285,8 @@ Response should have `data` field as array of following structures:
 
 | Field | Type | Description  |
 | :--- | :--- | :--- |
-| id | string | Piece id |
-| type | string | Piece type |
+| id | string | Optional. Piece id. If specified, return image uploads only of that piece. |
+| type | string | Optional. Piece type. If specified, return image uploads only of that type. |
 
 **Response**
 
@@ -308,6 +308,13 @@ Response should have `data` field as array of following structures:
   {
      "id": "unique-id",
      "type": "image"
+  }
+```
+
+or without payload to fetch all
+
+```json
+  {
   }
 ```
 
