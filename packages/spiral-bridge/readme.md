@@ -226,7 +226,7 @@ When `type=seo` id can be missing, but all data from `SEO_META` variable will pr
 
 | Field | Type | Description  |
 | :--- | :--- | :--- |
-| id | string[] | string array of piece ids |
+| pieces | PieceGetRequest[] | array of requests same as in single piece `{ id: 'id of piece', type: 'type of piece' }` |
 
 **Response**
 
@@ -245,7 +245,7 @@ Response should have `data` field as array of following structures:
 
 ```json
   {
-     "id": ["unique-id", "unique-id-2", "unique-id-3"]
+     "pieces": [ { "id": "unique-id", "type":  "html" }, { "id": "unique-id-2", "type": "image" }]
   }
 ```
 

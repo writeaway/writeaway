@@ -44,13 +44,13 @@ export const startForSpiral = (
     throw new Error('Seems WriteAway is already started');
   }
 
-  let batchToLoad: { [id: string]: { resolve: (p: IPieceItem)=>void, reject: (err: Error)=>void }} = { };
+  let batchToLoad: { [id: string]: { resolve: (p: IPieceItem)=>void, reject: (err: Error)=>void, piece: IPieceGetRequest }} = { };
   // eslint-disable-next-line no-undef
   let batchTimeout: NodeJS.Timeout | undefined;
   const batchLoad = async () => {
     const batch = { ...batchToLoad };
     batchToLoad = {};
-    const { data } = await fetchApi.post(urls.getPieceBulkUrl!, { ids: Object.keys(batch) });
+    const { data } = await fetchApi.post(urls.getPieceBulkUrl!, { pieces: Object.keys(batch).map((id) => batchToLoad[id].piece) });
     Object.keys(batch).forEach((id) => {
       const piece = data.find((p: IPieceItem) => p.id === id);
       if (piece) {
@@ -64,8 +64,8 @@ export const startForSpiral = (
       }
     });
   };
-  const batchFetch = async (pieceId: string) => new Promise((resolve, reject) => {
-    batchToLoad[pieceId] = { resolve, reject };
+  const batchFetch = async (piece: IPieceGetRequest) => new Promise((resolve, reject) => {
+    batchToLoad[piece.id] = { resolve, reject, piece };
     if (batchTimeout) {
       clearTimeout(batchTimeout);
     }
@@ -91,7 +91,7 @@ export const startForSpiral = (
         data: piece.data,
       };
       const url = piece.dataset?.getUrl || urls.getPieceUrl;
-      const resp = urls.getPieceBulkUrl ? (await batchFetch(piece.id)) : (await fetchApi.post(url, request));
+      const resp = urls.getPieceBulkUrl ? (await batchFetch(request)) : (await fetchApi.post(url, request));
       return ({
         ...piece,
         data: {
