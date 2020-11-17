@@ -105,15 +105,13 @@ export const startForSpiral = (
      * @return {Promise<IPieceItem>}
      */
     savePieceData: async (piece) => {
-      if (piece.type === 'seo') {
-        const metadata: IMetadataSaveRequest = {
-          ...piece.data,
-          ...globMeta(),
-        };
-
-        return fetchApi.post(piece.dataset?.saveUrl || urls.saveMetaUrl, metadata);
-      }
-      const data: IPieceSaveRequest = { id: piece.id, ...piece.dataset, data: piece.data };
+      const data: IPieceSaveRequest = {
+        id: piece.id,
+        type: piece.type,
+        ...piece.dataset,
+        data: piece.data,
+      };
+      delete data.piece;
       return fetchApi.post(piece.dataset?.saveUrl || urls.savePieceUrl, data);
     },
 
@@ -124,6 +122,7 @@ export const startForSpiral = (
     getImageList(piece: {id?: string, type?: string}) {
       return new Promise((resolve, reject) => {
         fetchApi.get(urls.imageGalleryUrl, piece).then((data) => {
+          console.log(data);
           resolve((data.data || data).map(
             (image: GalleryItem & {
               url?: string,
@@ -155,6 +154,8 @@ export const startForSpiral = (
       const formData = new FormData();
       if ((file as File).name) {
         formData.append('image', file as File);
+      } else if ((file as FileList).length === 1) {
+        formData.append('image', (file as FileList).item(0) as File);
       } else {
         for (let i = 0; i < (file as FileList).length; i += 1) {
           const f = (file as FileList).item(i);

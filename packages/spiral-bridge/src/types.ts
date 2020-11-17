@@ -7,6 +7,8 @@ export interface IPieceGetRequest {
 
 export interface IPieceSaveRequest {
   id: string;
+  type: string;
+  piece?: any;
   data: any;
 }
 

@@ -62,12 +62,9 @@ export function postFile(path: string, data: FormData) {
 export function get(path: string, data?: any) {
   const appendGetData: string[] = [];
   if (data) {
-    // eslint-disable-next-line no-restricted-syntax
-    for (const key of data) {
-      appendGetData.push(`${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`);
-    }
+    Object.keys(data).forEach((key) => appendGetData.push(`${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`));
   }
-  return fetch(path + appendGetData.join('&'), {
+  return fetch(`${path}?${appendGetData.join('&')}`, {
     method: 'get',
     credentials: 'same-origin',
     headers: {
