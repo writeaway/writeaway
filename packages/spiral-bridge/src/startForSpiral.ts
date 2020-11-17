@@ -10,9 +10,9 @@ import {
 } from '@writeaway/core';
 import { components } from 'components';
 import WriteAwaySpiralBundle from 'index';
-import { globMeta, VAR_WA } from 'persist';
+import { VAR_WA } from 'persist';
 import {
-  IMetadataSaveRequest, IPieceGetRequest, IPieceSaveRequest, Urls,
+  IPieceGetRequest, IPieceSaveRequest, Urls,
 } from 'types';
 import * as fetchApi from 'fetch-api';
 
