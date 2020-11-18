@@ -168,11 +168,15 @@ export const startForSpiral = (
       // formData is FormData with image field. Add rest to formData if needed and submit.
       const resp = await fetchApi.postFile(urls.uploadUrl, formData);
 
-      const data = resp.image || resp.data || resp;
-      const thumb = data.thumbnailSrc || data.thumbnailUrl || data.thumbnail_uri || data.src || data.url || data.uri;
+      let data = resp.image || resp.data || resp;
+      if (Array.isArray(data)) {
+        // eslint-disable-next-line prefer-destructuring
+        data = data[0];
+      }
+      const thumb = data.thumbnailSrc || data.src;
       return ({
-        id: data.id || data.url || data.uri,
-        src: data.src || data.url || data.uri,
+        id: data.id || data.src,
+        src: data.src,
         alt: data.alt ?? '',
         title: data.title ?? '',
         thumbnailSrc: thumb,
