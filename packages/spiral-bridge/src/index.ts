@@ -22,22 +22,11 @@ export class WriteAwaySpiralBundle extends WriteAwayCore {
     setTimeout(() => {
       const div = document.createElement('div');
       const meta = globMeta();
-
-      if (meta && meta['meta-save-url']) {
-        div.setAttribute('data-save-url', meta['meta-save-url']);
-        // delete meta['meta-save-url'];
-      }
-
-      if (data && (data as any)['meta-save-url']) {
-        div.setAttribute('data-save-url', (data as any)['meta-save-url']); // TODO: deprecate
-        // delete data['meta-save-url'];
-      }
-
       div.innerHTML = 'Edit SEO Meta';
       div.className = 'edit-seo-div';
       div.style.display = 'none';
       this.addPiece<WriteAwaySeoData>(div, {
-        id: 'seo',
+        id: meta?.id || 'seo',
         name: 'Edit SEO',
         type: 'seo',
         data: {
@@ -46,6 +35,7 @@ export class WriteAwaySpiralBundle extends WriteAwayCore {
           description: data?.description || document.querySelector('meta[name="description"]')?.getAttribute('content') || '',
           keywords: data?.keywords || document.querySelector('meta[name="keywords"]')?.getAttribute('content') || '',
         },
+        dataset: meta,
       });
       document.querySelector('body')!.appendChild(div);
     });
