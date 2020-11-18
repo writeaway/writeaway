@@ -1,6 +1,6 @@
 {
   "name": "@writeaway/spiral-bridge",
-  "version": "2.1.6",
+  "version": "2.1.7",
   "description": "WriteAway is a JavaScript library for editing CMS pieces, pages and internationalisation on the client side.",
   "main": "./dist/writeaway-spiral.js",
   "types": "./dist/index.d.ts",
