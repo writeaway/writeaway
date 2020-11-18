@@ -56,5 +56,5 @@
     "@types/react-redux-toastr": "^7.6.0",
     "typescript": "^4.0.3"
   },
-  "gitHead": "347fd573ef8e740e4ae4ac88c26cd09bbd39dc96"
+  "gitHead": "9f69c47d666941fdd40e8fda82a36fec0873afb5"
 }
